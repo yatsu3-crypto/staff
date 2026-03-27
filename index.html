@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>生活指導アシスタント</title>
+<style>
+:root{
+  --g:#3d6b5e;--g2:#5a9e8a;--gl:#d4ebe4;--gd:#2b4f45;
+  --bg:#f5f2ed;--card:#fff;--bd:#e2dbd0;
+  --tx:#1a1714;--tx2:#5a5450;--tx3:#9a928a;
+  --tc:#0f6e56;--wbg:#fff8f2;--wbd:#f0c8a0;--wtx:#7a3a10;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+
+/* ヘッダー */
+.hdr{background:var(--g);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.18);}
+.hdr-icon{width:38px;height:38px;background:rgba(255,255,255,.16);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.hdr h1{font-size:16px;font-weight:600;}
+.hdr p{font-size:11px;opacity:.75;margin-top:1px;}
+
+/* ページ切り替え */
+.page{display:none;padding:14px 13px;max-width:540px;margin:0 auto;}
+.page.active{display:block;}
+
+/* カード */
+.card{background:var(--card);border-radius:13px;border:.5px solid var(--bd);overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.06);margin-bottom:13px;}
+.card-hd{padding:10px 15px;background:#f0ece4;border-bottom:.5px solid var(--bd);font-size:12px;font-weight:600;color:var(--g);display:flex;align-items:center;gap:6px;}
+.dot{width:7px;height:7px;background:var(--g);border-radius:50%;}
+.card-body{padding:14px 15px;}
+
+/* 疾患ボタングリッド */
+.dis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+@media(max-width:380px){.dis-grid{grid-template-columns:repeat(2,1fr);}}
+.dis-btn{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 6px;font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;text-align:center;line-height:1.3;transition:all .15s;min-height:44px;display:flex;align-items:center;justify-content:center;}
+.dis-btn:active{transform:scale(.96);}
+.dis-btn.sel{background:var(--g);color:#fff;border-color:var(--g);}
+
+/* 追加入力 */
+.extra-row{display:flex;flex-direction:column;gap:10px;}
+.field-lbl{font-size:11px;font-weight:600;color:var(--tx2);letter-spacing:.04em;margin-bottom:5px;}
+.tag-box{border:1px solid var(--bd);border-radius:8px;padding:7px 9px;min-height:60px;background:#faf9f6;display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start;cursor:text;}
+.tag-box:focus-within{border-color:var(--g2);background:#fff;}
+.tag{display:inline-flex;align-items:center;gap:3px;background:var(--gl);color:var(--tc);border-radius:20px;padding:3px 8px 3px 10px;font-size:12px;font-weight:500;}
+.tdel{background:none;border:none;color:var(--tc);font-size:14px;opacity:.5;cursor:pointer;padding:0 1px;line-height:1;}
+.tdel:active{opacity:1;}
+.tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
+
+/* タブナビ */
+.tab-nav{display:flex;background:var(--gd);padding:0 13px;}
+.tab-btn{flex:1;padding:11px 6px;font-size:13px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:.03em;}
+.tab-btn.active{color:#fff;border-bottom-color:#fff;}
+/* 生成ボタン */
+.gen-btn{width:100%;background:var(--g);color:#fff;border:none;border-radius:50px;padding:15px;font-size:15px;font-weight:600;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;margin-top:4px;}
+.gen-btn:active{background:var(--gd);transform:scale(.98);}
+/* 製品グリッド */
+.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;}
+.prod-btn{background:var(--card);border:1px solid var(--bd);border-radius:11px;padding:13px 10px;font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;text-align:center;line-height:1.4;transition:all .15s;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.prod-btn:active{transform:scale(.96);}
+.prod-icon{font-size:22px;display:block;margin-bottom:5px;}
+.prod-tag{display:inline-block;background:var(--gl);color:var(--tc);border-radius:4px;padding:2px 8px;font-size:10.5px;font-weight:600;margin-right:4px;margin-bottom:4px;}
+.prod-section{margin-bottom:14px;}
+.prod-section-ttl{font-size:12px;font-weight:600;color:var(--g);margin-bottom:6px;padding-bottom:4px;border-bottom:.5px solid var(--bd);}
+.prod-item{display:flex;gap:7px;font-size:12.5px;line-height:1.65;color:var(--tx);margin-bottom:5px;}
+.prod-item::before{content:"✓";color:var(--g2);flex-shrink:0;font-weight:600;}
+.prod-name{font-size:16px;font-weight:700;color:var(--g);margin-bottom:4px;}
+.prod-sub{font-size:11.5px;color:var(--tx2);margin-bottom:12px;line-height:1.5;}
+
+/* 結果 */
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px;padding-bottom:12px;border-bottom:.5px solid var(--bd);}
+.chip{background:#f0ece4;border-radius:5px;padding:3px 9px;font-size:11px;color:var(--tx2);}
+.chip b{color:var(--g);}
+.sec{border-left:3px solid var(--g2);padding-left:13px;margin-bottom:15px;}
+.sec-ttl{font-size:14px;font-weight:600;color:var(--g);margin-bottom:7px;}
+.sec ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.sec li{display:flex;gap:7px;font-size:13px;line-height:1.65;color:var(--tx);}
+.sec li::before{content:"▸";color:var(--g2);flex-shrink:0;margin-top:2px;}
+.add-box{background:#eef6f2;border-radius:8px;padding:12px 13px;margin-bottom:14px;}
+.add-ttl{font-size:13px;font-weight:600;color:var(--g);margin-bottom:8px;}
+.add-row{display:flex;align-items:flex-start;gap:7px;margin-bottom:6px;font-size:12.5px;line-height:1.55;}
+.add-row:last-child{margin-bottom:0;}
+.badge{background:var(--gl);color:var(--tc);border-radius:4px;padding:1px 7px;font-size:10.5px;font-weight:600;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+.warn{background:var(--wbg);border:.5px solid var(--wbd);border-radius:8px;padding:10px 13px;font-size:11.5px;color:var(--wtx);line-height:1.65;margin-top:4px;}
+.warn b{display:block;margin-bottom:3px;}
+.back-btn{width:100%;background:none;border:1px solid var(--bd);border-radius:50px;padding:12px;font-size:13px;color:var(--tx2);cursor:pointer;margin-top:4px;}
+.back-btn:active{background:var(--bg);}
+.err{padding:10px 13px;background:#fff0f0;border:.5px solid #f5c0c0;border-radius:8px;font-size:12px;color:#c0392b;margin-bottom:10px;display:none;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-icon">🩺</div>
+  <div><h1>やまもと皮膚科・漢方クリニック</h1><p>スタッフ向け診療サポートツール</p></div>
+</div>
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('guidance')">⚕ 生活指導</button>
+  <button class="tab-btn" onclick="switchTab('products')">🌿 当院製品</button>
+</div>
+
+<!-- 入力ページ -->
+<div class="page active" id="pg-input">
+
+  <div class="card">
+    <div class="card-hd"><span class="dot"></span>疾患を選択（複数可）</div>
+    <div class="card-body">
+      <div class="dis-grid" id="dis-grid"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><span class="dot"></span>追加情報（任意）</div>
+    <div class="card-body">
+      <div class="extra-row">
+        <div>
+          <div class="field-lbl">症状・部位</div>
+          <div class="tag-box" id="wb-s" onclick="fi('s')"><input class="tinp" id="ti-s" placeholder="例：頭皮の痒み　Enterで追加"></div>
+        </div>
+        <div>
+          <div class="field-lbl">原因・誘因</div>
+          <div class="tag-box" id="wb-c" onclick="fi('c')"><input class="tinp" id="ti-c" placeholder="例：汗、マラセチア"></div>
+        </div>
+        <div>
+          <div class="field-lbl">現在の治療</div>
+          <div class="tag-box" id="wb-t" onclick="fi('t')"><input class="tinp" id="ti-t" placeholder="例：ステロイド外用"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="err" id="err-msg"></div>
+  <button class="gen-btn" onclick="generate()">⚕ 生活指導を生成する</button>
+</div>
+
+<!-- 製品一覧ページ -->
+<div class="page" id="pg-products">
+  <div class="card">
+    <div class="card-hd"><span class="dot"></span>当院採用製品</div>
+    <div class="card-body">
+      <div class="prod-grid" id="prod-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 製品詳細ページ -->
+<div class="page" id="pg-prod-detail">
+  <div class="card">
+    <div class="card-hd"><span class="dot"></span>製品詳細</div>
+    <div class="card-body" id="prod-detail-body"></div>
+    <div style="padding:4px 15px 15px;">
+      <button class="back-btn" onclick="goBackProd()">← 製品一覧に戻る</button>
+    </div>
+  </div>
+</div>
+
+<!-- 結果ページ -->
+<div class="page" id="pg-result">
+  <div class="card">
+    <div class="card-hd"><span class="dot"></span>生活指導・患者指導</div>
+    <div class="card-body">
+      <div class="chips" id="r-chips"></div>
+      <div id="r-body"></div>
+      <div class="warn"><b>⚠ 医師・医療者向け補助ツール</b>この内容はルールベースで生成した参考情報です。実際の診療・患者指導は医師の判断に基づき行ってください。</div>
+    </div>
+    <div style="padding:4px 15px 15px;">
+      <button class="back-btn" onclick="goBack()">← 入力に戻る</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==============================================
+// 疾患データ（27疾患）
+// ==============================================
+var DB = {
+  'にきび':{
+    care:['洗顔は朝晩2回、泡立てた低刺激石けんで優しく行う。ゴシゴシこすらない','油分の多いスキンケア・化粧品は避け、ノンコメドジェニック製品を選ぶ','患部を触ったり潰したりしない（色素沈着・瘢痕の原因）'],
+    life:['高GI食品（白米・パン・砂糖）や乳製品の過剰摂取は悪化と関連する可能性がある','十分な睡眠（7〜8時間）でホルモンバランスを整える','ストレスはホルモン分泌を乱す。リラクゼーションを意識する'],
+    night:['枕カバーは週2〜3回交換し清潔を保つ','就寝前に薬を塗布し、その後触れない'],
+    env:['スマートフォンの画面を定期的に拭く。頬・顎への接触を減らす','マスクによる摩擦・蒸れを避けるため清潔な綿素材マスクを使用する'],
+    add:[{b:'外用',t:'過酸化ベンゾイル（ベピオ）・アダパレン（ディフェリン）を検討'},{b:'外用',t:'クリンダマイシン配合薬（ダラシンTゲル等）を検討'},{b:'内服',t:'重症例では抗菌薬内服（ミノサイクリン等）を検討'},{b:'漢方',t:'十味敗毒湯：面靤（顔のにきび）がメインの場合に考慮'},{b:'漢方',t:'桂枝茯苓丸加薏苡仁：月経周期に伴い悪化する場合に考慮'},{b:'漢方',t:'荊芥連翹湯：やや深めのざ瘡に考慮'},{b:'漢方',t:'柴苓湯：嚢腫型のにきびに考慮'}]
+  },
+  'じんましん':{
+    care:['入浴は37℃前後（人肌）のシャワーにとどめる。熱いお湯は悪化させる','患部を掻かない。冷やすことで痒みを緩和できる'],
+    life:['原因食物（魚介・ナッツ・卵等）を特定し除去する。食物日記をつけると有用','アルコール・香辛料は血管拡張作用があり悪化させることがある','ストレス・過労・睡眠不足は誘発因子。十分な休息をとる'],
+    night:['就寝時は抗ヒスタミン薬を服用すると夜間の痒みを軽減できる'],
+    env:['タイト・化学繊維の衣類は機械的刺激となる。綿素材・ゆったりした服装を選ぶ'],
+    add:[{b:'内服',t:'非鎮静性抗ヒスタミン薬（ビラノア等）の定期内服を継続'},{b:'内服',t:'慢性じんましんにはオマリズマブ（ゾレア）・デュピルマブ（デュピクセント）の適応を検討'},{b:'検査',t:'原因検索：血液検査（IgE・好酸球等）'},{b:'漢方',t:'補中益気湯：疲労で悪化する場合に考慮'},{b:'漢方',t:'加味逍遙散：月経前後に悪化する場合に考慮'},{b:'漢方',t:'茵蔯五苓散：水滞が関与する場合に考慮'},{b:'漢方',t:'麻黄附子細辛湯：寒冷蕁麻疹に考慮'}]
+  },
+  '水虫':{
+    care:['毎日入浴・足洗いを行い、指の間まで丁寧に洗い完全に乾燥させる','抗真菌外用薬は症状が消えても4週間以上継続する（再発予防）','患部に触れた後は手洗いを徹底する'],
+    life:['足の爪を短く切り、指間を清潔に保つ'],
+    night:['就寝時は素足または通気性の良い5本指ソックスを着用して就寝する'],
+    env:['靴は複数用意してローテーションし、毎日乾燥させる','プール・銭湯のシャワールームではビーチサンダルを着用する','バスマット・スリッパは家族と共有しない'],
+    add:[{b:'外用',t:'テルビナフィン（ラミシール）・ルリコナゾール（ルリコン）等'},{b:'内服',t:'難治例・爪水虫合併例ではホスラブコナゾール（ネイリン）内服を検討'}]
+  },
+  '爪水虫':{
+    care:['爪を短く切り、清潔に保つ。爪切りは専用のものを使い家族と共有しない','外用薬は爪全体に丁寧に塗布し、乾燥させてから靴を履く','治療期間は数ヶ月〜1年以上。自己判断で中止しない'],
+    life:['足の免疫低下を防ぐため糖尿病のコントロールを良好に保つ'],
+    night:['就寝前に外用薬を塗布し、そのまま就寝する（最も吸収しやすいタイミング）'],
+    env:['靴の中に抗菌・防臭インソールを使用する','靴下は綿素材・5本指タイプが理想。毎日交換する'],
+    add:[{b:'外用',t:'エフィナコナゾール（クレナフィン）・ルリコナゾール（ルコナック）'},{b:'内服',t:'重症・広範囲例ではホスラブコナゾール（ネイリン）内服（12週）を検討'},{b:'注意',t:'内服中は肝機能検査を定期的に行う'}]
+  },
+  'アトピー性皮膚炎':{
+    care:['保湿は1日2回（入浴後5分以内＋朝）を基本とし、全身に丁寧に塗布する','洗浄は泡立てた低刺激石けんで指の腹を使い優しく洗う（ナイロンタオル不可）','爪を短く切り、掻破による皮膚損傷・感染を防ぐ'],
+    life:['ダニ・カビ・ホコリ対策：掃除を週2回以上行い、布団は週1回干す','ペット（特に猫・犬）のアレルゲンを避ける','ストレス管理を意識する'],
+    night:['就寝前にステロイドまたはタクロリムス外用薬を塗布する','就寝時は綿100%パジャマ・シーツを使用する','室温は冬場18〜20℃・夏場25℃前後、湿度50〜60%に保つ'],
+    env:['衣類は綿・シルク等の天然素材を選ぶ。ウール・化学繊維は避ける','汗をかいたら早めに拭き取り・シャワーを行う'],
+    add:[{b:'外用',t:'ステロイド外用薬：症状に応じたランクの適切な使用'},{b:'外用',t:'タクロリムス（プロトピック）・デルゴシチニブ（コレクチム）を検討'},{b:'内服',t:'抗ヒスタミン薬の夜間内服'},{b:'注射',t:'デュピルマブ（デュピクセント）等の生物学的製剤の適応を検討'},{b:'内服',t:'バリシチニブ・アブロシチニブ（JAK阻害薬）の適応を検討'},{b:'漢方',t:'黄連解毒湯・白虎加人参湯：熱状が強いときに考慮'},{b:'漢方',t:'温清飲加減（温清飲・柴胡清肝湯・竜胆瀉肝湯など）：熱状が長引き乾燥を伴う場合に考慮'}]
+  },
+  'しみ':{
+    care:['日焼け止めは毎日塗布（SPF30以上、PA+++以上）。外出前30分に塗り2〜3時間ごとに塗り直す','洗顔・スキンケアは優しく行い、摩擦でメラニン産生を刺激しない'],
+    life:['ビタミンC・E・B群を食事で積極的に摂取する（抗酸化・メラニン抑制）','喫煙はコラーゲン分解・色素沈着を促進する。禁煙を推奨'],
+    night:['夜間はレチノール・ハイドロキノン配合の薬剤を使用すると効果的','十分な睡眠（7〜8時間）でターンオーバーを促進する'],
+    env:['帽子・サングラス・UVカット衣類を日常的に活用する','室内でも窓越しの紫外線（UVA）対策が必要'],
+    add:[{b:'外用',t:'ハイドロキノン外用：夜間使用'},{b:'外用',t:'トレチノイン外用：ターンオーバー促進（刺激が強いため少量から）'},{b:'内服',t:'トラネキサム酸内服（肝斑・色素沈着に有効）'},{b:'施術',t:'レーザー治療の適応を検討'},{b:'施術',t:'ケミカルピーリング（グリコール酸・サリチル酸等）の適応を検討'}]
+  },
+  '手湿疹':{
+    care:['手洗い後は毎回必ず保湿剤（ワセリン・ヒルドイド等）を塗布する','洗い物・水仕事はビニール手袋を着用し、内側に綿手袋を重ねて行う','石けんは低刺激・無香料のものを使用する'],
+    life:['手洗い回数を必要最小限にとどめる（過剰な手洗いは皮膚バリアを破壊する）'],
+    night:['就寝前に保湿剤（またはステロイド外用薬）を塗布し、綿手袋をして就寝する'],
+    env:['ゴムアレルギーがある場合はニトリル・ビニール手袋を使用する','冬場は防寒手袋で乾燥・冷気から保護する','洗剤・シャンプー等の原因物質を特定し接触を避ける'],
+    add:[{b:'外用',t:'ステロイド外用薬（塗布後手袋で密封するとより効果的）'},{b:'外用',t:'ヘパリン類似物質（ヒルドイド）での保湿強化'},{b:'検査',t:'接触アレルゲンのパッチテストを検討'},{b:'漢方',t:'温清飲：炎症と乾燥を伴う手湿疹に考慮'}]
+  },
+  'やけど':{
+    care:['受傷直後は患部を流水で15〜20分冷やす（氷は直接当てない）','水疱が破れた場合は清潔に保ちガーゼで保護する','保湿・創傷保護のためワセリンまたは処方外用薬を塗布する'],
+    life:['治癒促進のためタンパク質・ビタミンC・亜鉛を積極的に摂取する','禁煙：喫煙は血行を悪化させ治癒を遅延させる'],
+    night:['ドレッシング材で覆い、衣類との摩擦を防いで就寝する'],
+    env:['瘢痕予防のためUV対策（日焼け止め・遮光）を必ず行う（1年以上継続）','治癒後も皮膚が乾燥しやすいため保湿を継続する'],
+    add:[{b:'外用',t:'瘢痕治療：シリコンジェルシート・ステロイドテープを検討'},{b:'受診',t:'Ⅱ度以上・顔面・手・広範囲は必ず医療機関を受診する'}]
+  },
+  'ほくろ':{
+    care:['形・色・大きさの変化を定期的に自己チェックする（ABCDEルール：非対称・辺縁不整・色むら・直径6mm以上・拡大）','紫外線による刺激を避けるため日焼け止めを使用する'],
+    life:['定期的に全身のほくろを写真で記録しておくと変化に気づきやすい'],
+    night:[],
+    env:['露出部位のほくろは日焼け止め・衣類で保護する','衣類・ベルト等による継続的な物理刺激を避ける'],
+    add:[{b:'受診',t:'形状・色の変化・急激な拡大・出血・瘙痒があれば皮膚科を受診'},{b:'検査',t:'悪性黒色腫が疑われる場合、ダーモスコピー・生検を検討'}]
+  },
+  'しもやけ':{
+    care:['患部を急激に温めない（入浴でのお湯への急な浸漬は禁忌）','ゆっくりとマッサージして血行を改善する','保湿クリームをこまめに塗布してバリア機能を維持する'],
+    life:['禁煙：喫煙は末梢血行を著しく悪化させる','食事でビタミンE・ビタミンB群・鉄分を積極的に摂取する','貧血・低血圧等の基礎疾患を治療する'],
+    night:['就寝時に靴下・手袋を着用して保温する。就寝前に軽くマッサージする'],
+    env:['外出時は手袋・靴下・温かい靴でしっかり保温する','濡れた手足はすぐに拭いて乾燥させる','1日1回は室内で足浴・手浴（ぬるめのお湯）を行い血行を促進する'],
+    add:[{b:'外用',t:'ヘパリン類似物質（ヒルドイド）で保湿と血行改善'},{b:'内服',t:'ビタミンE製剤（ユベラ等）で末梢循環を改善'},{b:'内服',t:'症状強い場合、漢方（当帰四逆加呉茱萸生姜湯）を検討'}]
+  },
+  '肝斑':{
+    care:['日焼け止めは毎日塗布（SPF30以上、PA+++以上）。洗顔後すぐに塗る習慣を','洗顔・スキンケアは摩擦を最小限にする（こすり過ぎない）'],
+    life:['ストレス・睡眠不足はホルモンバランスを乱し肝斑を悪化させる','経口避妊薬（ピル）使用中は肝斑が悪化しやすい。担当医に相談する'],
+    night:['ハイドロキノン外用は夜間のみ使用（光で分解されるため）'],
+    env:['帽子・日傘・サングラスを日常的に活用する','室内でも窓越しのUVA対策が必要（UVAはガラスを透過する）'],
+    add:[{b:'内服',t:'トラネキサム酸内服（肝斑に最も有効な内服治療）'},{b:'外用',t:'ハイドロキノン外用（夜のみ、刺激が出たら中止）'},{b:'注意',t:'レーザー治療は肝斑を悪化させることがあるため慎重に適応を検討'}]
+  },
+  '白斑':{
+    care:['日焼け止めを白斑部位に必ず塗布する（メラニンがないため日焼けしやすい）','患部の摩擦・外傷を避ける（ケブネル現象：外傷部に白斑が拡大することがある）'],
+    life:['ストレスは自己免疫反応を亢進させ悪化につながる可能性がある','甲状腺疾患・膠原病等の自己免疫疾患との合併が多いため定期検査を受ける'],
+    night:[],
+    env:['化学物質（フェノール・カテコール含有の洗剤・ゴム製品）への接触を避ける','カバーメイク・セルフタンニング剤で目立ちにくくすることも可能'],
+    add:[{b:'外用',t:'タクロリムス（プロトピック）外用：顔・頸部に有効'},{b:'外用',t:'ステロイド外用薬：限局性の白斑に使用'},{b:'光線',t:'ナローバンドUVB療法・エキシマレーザーの適応を検討'}]
+  },
+  '金属アレルギー':{
+    care:['原因金属（ニッケル・コバルト・クロム等）を特定しパッチテストを受ける','金属と皮膚の間には必ずコーティング・布を挟む','汗をかいた後は金属との接触部位を速やかに洗い保湿する'],
+    life:['ニッケルアレルギーの場合、ニッケルを多く含む食品（チョコレート・ナッツ・豆類）を過剰摂取しない'],
+    night:['就寝時はアクセサリー・時計をすべて外す'],
+    env:['アクセサリー・時計・ベルトのバックルはチタン・プラスチックを選ぶ','歯科金属が原因の場合、セラミック等への交換を歯科医師に相談する'],
+    add:[{b:'検査',t:'パッチテストで原因金属を特定することが最重要'},{b:'外用',t:'皮疹にはステロイド外用薬を使用'},{b:'内服',t:'強い痒みには抗ヒスタミン薬内服を併用'}]
+  },
+  'イボ':{
+    care:['患部を清潔に保つ。自分で削ったり切ったりしない（ウイルス拡散の原因）','イボに触れた後は手洗いを徹底する'],
+    life:['免疫力の低下（睡眠不足・ストレス・栄養不足）はウイルスへの抵抗力を下げる'],
+    night:[],
+    env:['足底のイボ（足底疣贅）はプール・銭湯でうつりやすい。ビーチサンダルを着用する','タオル・靴・靴下の共有を避ける'],
+    add:[{b:'治療',t:'液体窒素による冷凍凝固療法（標準治療・複数回要）'},{b:'外用',t:'サリチル酸外用（スピール膏等）を自宅で使用'},{b:'内服',t:'難治性にはヨクイニン内服（ハトムギエキス）を検討'}]
+  },
+  '水イボ':{
+    care:['患部を引っかかない。掻き壊すと数が増える','兄弟・友達との直接皮膚接触・タオル共有を避ける'],
+    life:['アトピー性皮膚炎がある場合は保湿を継続してバリア機能を保つ'],
+    night:['就寝時は綿手袋を着用して掻破を防ぐ'],
+    env:['プールでは患部を防水フィルムで覆う','タオル・浮き輪・ビート板の共有を避ける'],
+    add:[{b:'治療',t:'ピンセットによる摘除（最も確実）'},{b:'方針',t:'免疫が発達すれば自然消退（数ヶ月〜2年）するため、経過観察も選択肢'},{b:'漢方',t:'ヨクイニン：難治例に考慮'}]
+  },
+  'たこ・魚の目':{
+    care:['入浴後に軽石で優しくケアする。自分で削りすぎると出血・感染の原因になる','保湿クリームを毎日塗布して角質の乾燥・硬化を防ぐ'],
+    life:['肥満は足への荷重を増やし悪化させる。適正体重を維持する'],
+    night:['就寝前にサリチル酸外用を塗布する'],
+    env:['サイズの合った靴（幅広・つま先に余裕）を選ぶ。ヒールの高い靴は避ける','クッション性の高いインソールを使用して圧力を分散する'],
+    add:[{b:'外用',t:'サリチル酸外用薬（角質軟化）を使用'},{b:'処置',t:'医師による削りを検討'}]
+  },
+  '多汗症':{
+    care:['汗をかいたらすぐに拭き、清潔を保つ','塩化アルミニウム制汗剤は夜、完全に乾燥した状態で塗布する'],
+    life:['カフェイン・アルコール・辛い食べ物は発汗を促進するため控える','ストレス・緊張は精神性発汗を増強させる。リラクゼーション法を実践する'],
+    night:['塩化アルミニウム制汗剤は就寝前に乾燥した皮膚に塗布し、翌朝洗い流す方法が効果的'],
+    env:['通気性の良い天然素材の衣類（綿・麻）を選ぶ','市販の制汗剤（デオナチュレ・ドライシャブ等）を使用する'],
+    add:[{b:'外用',t:'エクロック・ラピフォート・アポハイドローションの処方'},{b:'治療',t:'イオントフォレーシス（手掌・足底多汗症）の適応を検討'}]
+  },
+  '円形脱毛症':{
+    care:['頭皮を清潔に保ち、低刺激シャンプーで優しく洗う（強くこすらない）','処方された外用薬（ステロイド等）を指示通りに使用する'],
+    life:['ストレスは自己免疫反応を亢進させ悪化・再発につながる。ストレス管理が重要','鉄・亜鉛・ビタミンD・タンパク質を積極的に摂取する（毛髪の栄養素）'],
+    night:['就寝前に外用薬を塗布し、頭皮に成分が浸透しやすい状態で就寝する'],
+    env:['帽子・ウィッグを活用してQOLを維持する'],
+    add:[{b:'外用',t:'ステロイド外用（局面）を使用'},{b:'注射',t:'ステロイド局所注射（トリアムシノロン）：単発型に有効'},{b:'内服',t:'バリシチニブ（オルミエント）等のJAK阻害薬の適応を検討（重症例）'},{b:'治療',t:'SADBE局所免疫療法の適応を検討'},{b:'漢方',t:'柴胡加竜骨牡蛎湯：ストレスで悪化する場合に考慮'},{b:'漢方',t:'桂枝加竜骨牡蛎湯・柴胡桂枝乾姜湯：ストレス・自律神経の乱れが関与する場合に考慮'}]
+  },
+  '口唇ヘルペス':{
+    care:['患部を触らない。触れた場合は直後に手洗いを徹底する','処方された抗ウイルス薬外用を早期から使用する','水疱を潰さない'],
+    life:['再発誘因を避ける：紫外線・ストレス・疲労・発熱・月経・外傷','十分な睡眠・栄養で免疫力を維持する'],
+    night:['就寝前に外用薬を塗布する。乾燥は悪化因子のため保湿も忘れずに'],
+    env:['食器・タオル・リップ等の共有を絶対に避ける（接触感染予防）','口唇部の紫外線対策としてSPF配合リップを日常的に使用する'],
+    add:[{b:'外用',t:'アシクロビル軟膏'},{b:'内服',t:'症状強い場合・頻回再発はバラシクロビル（バルトレックス）内服'},{b:'内服',t:'再発を繰り返す場合はPIT療法（次の再発に備えた内服治療）を考慮'}]
+  },
+  '帯状疱疹':{
+    care:['患部を清潔に保ち、掻かない。水疱が破れたら清潔なガーゼで保護する','抗ウイルス薬は発症後72時間以内に開始するのが最も有効','痛みは鎮痛剤で積極的にコントロールする（帯状疱疹後神経痛のリスクを下げる）'],
+    life:['免疫力を維持する：十分な睡眠・栄養・適度な運動','高齢者・免疫抑制状態では特に重症化リスクが高い。早期受診が重要'],
+    night:['患部は締め付けない衣類・ガーゼで保護して就寝する','痛みで眠れない場合は主治医に相談する'],
+    env:['免疫のない人（妊婦・新生児・免疫不全者）への接触を避ける','患部を水で洗い流す程度の入浴は可能だが、長時間の浸漬は避ける'],
+    add:[{b:'内服',t:'抗ウイルス薬（バラシクロビル・ファムシクロビル・アメナリーフ）を72時間以内に開始'},{b:'内服',t:'帯状疱疹後神経痛予防：プレガバリン・三環系抗うつ薬を検討'},{b:'ワクチン',t:'帯状疱疹ワクチン（シングリックス）は再発予防に有効'}]
+  },
+  '乾癬':{
+    care:['保湿は1日2回行い、皮膚の乾燥・亀裂を予防する','病変部を強くこすらない。鱗屑（フケ状の皮膚）は無理に剥がさない'],
+    life:['禁煙：喫煙は乾癬の最大の悪化因子の一つ。強く禁煙を勧める','節酒：アルコールは免疫応答を変化させ悪化させる','適正体重の維持：肥満は乾癬を悪化させる','ストレスは悪化因子。リラクゼーション・運動療法を取り入れる'],
+    night:['就寝前にビタミンD3外用薬・ステロイド外用薬を塗布する','就寝時は綿素材パジャマを着用し、掻破を防ぐ'],
+    env:['皮膚への外傷・擦り傷はケブネル現象（傷跡に皮疹出現）の原因になる'],
+    add:[{b:'外用',t:'ステロイド外用薬・ビタミンD3外用薬（ドボネックス・ボンアルファ）を基本外用薬として使用'},{b:'光線',t:'ナローバンドUVB・エキシマレーザーの適応を検討'},{b:'内服',t:'アプレミラスト（オテズラ）・シクロスポリン・ソーティクツを検討'},{b:'注射',t:'TNF-α・IL-17・IL-23阻害薬等の生物学的製剤の適応を検討'}]
+  },
+  '掌蹠膿疱症':{
+    care:['手足を清潔に保ち、保湿を行う','膿疱は潰さない'],
+    life:['禁煙：掌蹠膿疱症の最大の悪化因子。禁煙で改善例も多い','扁桃炎・虫歯・副鼻腔炎・歯科金属等の病巣感染が原因となることがある','グルテン過敏性との関連が報告されている。小麦制限が有効な場合がある'],
+    night:['就寝前に外用薬（ステロイド・ビタミンD3）を塗布し、サランラップ・手袋で密封するとより効果的'],
+    env:['歯科金属アレルギーが関与する場合は金属除去を検討（金属パッチテストで確認）'],
+    add:[{b:'外用',t:'ステロイド外用薬・ビタミンD3外用薬を使用'},{b:'光線',t:'PUVA療法・ナローバンドUVBの適応を検討'},{b:'内服',t:'アプレミラスト（オテズラ）の適応を検討'},{b:'対応',t:'病巣感染の除去（扁桃摘出・歯科治療・金属除去）を検討'},{b:'漢方',t:'温清飲：炎症と乾燥を伴う場合に考慮'},{b:'漢方',t:'桂枝茯苓丸加薏苡仁：血瘀が関与する場合に考慮'}]
+  },
+  '皮膚潰瘍':{
+    care:['創部を適切な創傷被覆材（ハイドロコロイド・ポリウレタンフォーム等）で保護する','壊死組織・感染組織は医師による適切なデブリードメントを行う','創部の観察：大きさ・深さ・浸出液量・感染徴候（発赤・腫脹・熱感・臭い）を毎日確認する'],
+    life:['栄養管理：タンパク質・ビタミンC・亜鉛・鉄分を積極的に摂取する','禁煙：喫煙は血行不全を悪化させ治癒を著しく遅延させる','糖尿病のコントロール：高血糖は治癒を遅延させ感染リスクを高める'],
+    night:['就寝時は創部への圧迫を避ける（除圧マット・ポジショニング）','静脈性潰瘍は患肢挙上を行う'],
+    env:['下肢静脈瘤・浮腫が原因の場合、弾性ストッキングを着用する','褥瘡の場合、2時間ごとの体位変換・除圧マットの使用を徹底する'],
+    add:[{b:'治療',t:'創傷被覆材の適切な選択・定期的な処置を行う'},{b:'内服',t:'感染合併時は培養結果に基づいた抗菌薬治療'},{b:'治療',t:'難治性には陰圧閉鎖療法（VAC）・PRP・皮膚移植を検討'}]
+  },
+  '陥入爪・巻き爪':{
+    care:['爪は深爪しない。爪の角（端）を丸めず、まっすぐに切る（スクエアカット）','患部を清潔に保ち、感染（化膿）が起きた場合は早めに受診する'],
+    life:['爪への圧力を減らすため適正体重を維持する'],
+    night:['患部の炎症・痛みが強い場合は就寝前にステロイド外用薬・抗菌外用薬を塗布する'],
+    env:['つま先に余裕のある幅広の靴を選ぶ。先が細い靴・ヒールは禁忌'],
+    add:[{b:'処置',t:'コットンパッキング・テーピング法（軽症例）'},{b:'処置',t:'矯正具（ワイヤー法・コレクティオ・巻き爪マイスター）の装着を検討'},{b:'処置',t:'フェノール法（爪母の部分的焼灼）・外科的切除を検討'}]
+  },
+  '粉瘤':{
+    care:['自分で潰したり絞ったりしない（炎症・感染・瘢痕拡大の原因）','患部への強い圧迫・摩擦を避ける','炎症を起こしている場合（赤い・熱い・痛い）は早めに受診する'],
+    life:['清潔を保つ。ただし患部を過度にこすらない'],
+    night:[],
+    env:['衣類・下着による摩擦・圧迫を避ける'],
+    add:[{b:'治療',t:'根治は外科的摘出術（炎症のない時期に行うのが理想）'},{b:'処置',t:'炎症期は切開排膿・抗菌薬投与で炎症を鎮静させる'},{b:'注意',t:'炎症を繰り返すと摘出が困難になるため、早期の手術を検討する'}]
+  },
+  '脂肪腫':{
+    care:['患部への圧迫・外傷を避ける','大きさ・硬さ・痛みに変化があれば受診する'],
+    life:[],
+    night:[],
+    env:['衣類・ベルト等による持続的な圧迫を避ける'],
+    add:[{b:'治療',t:'症状がなければ経過観察が基本（悪性化はほぼない）'},{b:'治療',t:'大きい・痛みがある・増大する場合は外科的摘出術を検討'},{b:'検査',t:'深部・非典型的な場合はMRIで悪性脂肪肉腫との鑑別を検討'}]
+  },
+  '蜂窩織炎':{
+    care:['患肢をクーリングし、心臓より高く挙上する（浮腫・炎症軽減のため）','患部を安静に保ち、歩行・運動を制限する','皮膚の乾燥・亀裂・水虫・虫刺されなどの入口となる皮膚病変を治療する'],
+    life:['糖尿病・リンパ浮腫・慢性静脈不全等の基礎疾患を治療し、免疫・循環を改善する','再発予防：足の清潔・保湿・爪のケア・水虫治療を徹底する'],
+    night:['患肢を枕等で挙上して就寝する','発熱・悪寒・患部の急速な拡大があれば夜間でも救急受診する'],
+    env:['再発性蜂窩織炎はペニシリン系抗菌薬の予防内服を検討する'],
+    add:[{b:'内服',t:'セファレキシン・アモキシシリン等の経口抗菌薬（軽症〜中等症）'},{b:'点滴',t:'重症・発熱高度・基礎疾患あり→入院の上、抗菌薬点滴を検討'},{b:'予防',t:'再発性（年3回以上）はペニシリンVの予防内服を検討'}]
+  },
+  '皮膚がん':{
+    care:['日焼け止め（SPF50+・PA++++）を毎日塗布する','皮膚の変化を定期的に自己チェックする（ABCDEルール：非対称・辺縁不整・色むら・直径6mm以上・拡大）','ホクロ・シミの変化に気づいたら早めに受診する'],
+    life:['禁煙：特に口唇・口腔の扁平上皮がんリスクを下げる','免疫抑制剤服用中・臓器移植後は皮膚がんリスクが高い。定期的な皮膚科受診を'],
+    night:[],
+    env:['帽子（つば広）・サングラス・UV遮光衣類・日傘を日常的に使用する','真夏の10〜14時の強い日光への長時間露出を避ける'],
+    add:[{b:'検査',t:'ダーモスコピー・生検による組織診断が必須'},{b:'治療',t:'基底細胞がん・扁平上皮がんは外科的切除が第一選択'},{b:'治療',t:'メラノーマはセンチネルリンパ節生検・免疫チェックポイント阻害薬を検討'}]
+  }
+};
+
+var COMMON_TREAT = [
+  '処方された薬は清潔な状態で、指定のタイミング・量で使用する',
+  '症状が改善しても自己判断で中止せず、医師の指示に従う'
+];
+var COMMON_LIFE = [
+  '十分な睡眠（7〜8時間）を確保する',
+  'ストレスは皮膚症状を悪化させる。リラクゼーションを意識する'
+];
+
+// ==============================================
+// 状態
+// ==============================================
+var selected = {};
+var tags = {s:[],c:[],t:[]};
+
+// ==============================================
+// 疾患ボタン初期化
+// ==============================================
+function initButtons(){
+  var grid = document.getElementById('dis-grid');
+  Object.keys(DB).forEach(function(d){
+    var btn = document.createElement('button');
+    btn.className = 'dis-btn';
+    btn.textContent = d;
+    btn.dataset.dis = d;
+    btn.addEventListener('click', function(){
+      if(selected[d]){ delete selected[d]; btn.classList.remove('sel'); }
+      else { selected[d] = true; btn.classList.add('sel'); }
+    });
+    grid.appendChild(btn);
+  });
+}
+
+// ==============================================
+// タグ入力
+// ==============================================
+['s','c','t'].forEach(function(f){
+  var inp = document.getElementById('ti-' + f);
+  inp.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); commitTag(f); }
+    else if(e.key === 'Backspace' && inp.value === '' && tags[f].length){
+      tags[f].pop(); renderTags(f);
+    }
+  });
+  inp.addEventListener('input', function(){
+    var v = inp.value;
+    if(/[、，,\n]/.test(v)){
+      v.split(/[、，,\n]/).forEach(function(p){ p = p.trim(); if(p && tags[f].indexOf(p)<0) tags[f].push(p); });
+      inp.value = ''; renderTags(f);
+    }
+  });
+});
+function fi(f){ document.getElementById('ti-'+f).focus(); }
+function commitTag(f){
+  var inp = document.getElementById('ti-'+f);
+  var v = inp.value.replace(/[、，,\s]/g,'').trim();
+  if(v && tags[f].indexOf(v)<0) tags[f].push(v);
+  inp.value = ''; renderTags(f);
+}
+function renderTags(f){
+  var wrap = document.getElementById('wb-'+f);
+  var inp = document.getElementById('ti-'+f);
+  wrap.querySelectorAll('.tag').forEach(function(el){ el.remove(); });
+  tags[f].forEach(function(t,i){
+    var el = document.createElement('span');
+    el.className = 'tag';
+    el.innerHTML = esc(t) + '<button class="tdel" onclick="delTag(\''+f+'\','+i+')">×</button>';
+    wrap.insertBefore(el, inp);
+  });
+}
+function delTag(f,i){ tags[f].splice(i,1); renderTags(f); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ==============================================
+// 生成
+// ==============================================
+function dedup(a){ var s=[]; a.forEach(function(x){ if(s.indexOf(x)<0) s.push(x); }); return s; }
+
+function generate(){
+  ['s','c','t'].forEach(function(f){ commitTag(f); });
+  var disList = Object.keys(selected);
+  var hasInput = disList.length || tags.s.length || tags.c.length || tags.t.length;
+  if(!hasInput){
+    var err = document.getElementById('err-msg');
+    err.textContent = '疾患を選択するか、症状・原因・治療を入力してください。';
+    err.style.display = '';
+    return;
+  }
+  document.getElementById('err-msg').style.display = 'none';
+
+  var care=[], life=[], night=[], env=[], add=[], treat=COMMON_TREAT.slice();
+
+  disList.forEach(function(d){
+    var r = DB[d];
+    if(r.care) r.care.forEach(function(x){ care.push(x); });
+    if(r.life) r.life.forEach(function(x){ life.push(x); });
+    if(r.night) r.night.forEach(function(x){ night.push(x); });
+    if(r.env) r.env.forEach(function(x){ env.push(x); });
+    if(r.add) r.add.forEach(function(x){ add.push(x); });
+  });
+
+  // 自由入力テキストから治療ヒント追加
+  var free = tags.s.concat(tags.c).concat(tags.t).join(' ');
+  if(free.indexOf('ステロイド')>=0)
+    treat.push('ステロイド外用：入浴後清潔な状態で塗布。1FTU（人差し指第一関節分）= 手のひら2枚分が目安。改善後はプロアクティブ療法（週2〜3回）へ移行を検討');
+  if(free.indexOf('保湿')>=0)
+    treat.push('保湿剤は1日2回（入浴後5分以内＋朝）。少しテカテカする程度の量が目安');
+  if(free.indexOf('抗ヒスタミン')>=0)
+    treat.push('抗ヒスタミン薬：眠気が出る場合は就寝前服用。自己判断で中止しない');
+
+  if(night.length===0) night=['就寝時は通気性の良い綿素材のパジャマ・寝具を使用する','爪を短く切り、掻破による皮膚損傷・感染を予防する'];
+  life = life.concat(COMMON_LIFE);
+
+  // チップ
+  var chips = '';
+  disList.forEach(function(v){ chips += '<span class="chip"><b>疾患</b> '+esc(v)+'</span>'; });
+  tags.s.forEach(function(v){ chips += '<span class="chip"><b>症状</b> '+esc(v)+'</span>'; });
+  tags.c.forEach(function(v){ chips += '<span class="chip"><b>原因</b> '+esc(v)+'</span>'; });
+  tags.t.forEach(function(v){ chips += '<span class="chip"><b>治療</b> '+esc(v)+'</span>'; });
+  document.getElementById('r-chips').innerHTML = chips;
+
+  // 本文
+  var html = '';
+  html += sec('🧼','日常ケア（清潔・保湿）', dedup(care).slice(0,6));
+  html += sec('💊','薬の使い方・タイミング', dedup(treat).slice(0,5));
+  html += sec('🌙','夜間・睡眠中の注意点', dedup(night).slice(0,4));
+  html += sec('🏃','生活習慣', dedup(life).slice(0,5));
+  html += sec('🏠','環境調整', dedup(env).slice(0,5));
+
+  // 追加治療（重複除去）
+  var addKeys = []; var addDedup = [];
+  add.forEach(function(a){
+    var k = a.b+'|'+a.t;
+    if(addKeys.indexOf(k)<0){ addKeys.push(k); addDedup.push(a); }
+  });
+  addDedup = addDedup.slice(0,8);
+  if(addDedup.length){
+    html += '<div class="add-box"><div class="add-ttl">➕ 追加で考慮すべき治療・薬剤</div>';
+    addDedup.forEach(function(a){
+      html += '<div class="add-row"><span class="badge">'+esc(a.b)+'</span><span>'+esc(a.t)+'</span></div>';
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('r-body').innerHTML = html;
+  document.getElementById('pg-input').classList.remove('active');
+  document.getElementById('pg-result').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function sec(icon, title, items){
+  if(!items||!items.length) return '';
+  var h = '<div class="sec"><div class="sec-ttl">'+icon+' '+esc(title)+'</div><ul>';
+  items.forEach(function(it){ h += '<li>'+esc(it)+'</li>'; });
+  return h + '</ul></div>';
+}
+
+function goBack(){
+  document.getElementById('pg-result').classList.remove('active');
+  document.getElementById('pg-input').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ==============================================
+// 製品データベース
+// ==============================================
+var PRODUCTS = [
+  {
+    id: 'stemlash',
+    icon: '✨',
+    name: 'ステムラッシュ',
+    sub: '国産ヒト幹細胞培養上清液配合\nまつ毛・眉毛美容液',
+    tags: ['まつ毛','眉毛','エイジングケア'],
+    features: [
+      '国産ヒト幹細胞培養上清液（純度100%）配合：根元に栄養を運び健やかな毛を育む',
+      'キャピキシル＆ワイドラッシュ配合：まつ毛・眉毛にハリとコシを与える',
+      '醗酵ローズハチミツエキス：目元の古い角質を優しく除去しくすみをケア',
+      '加水分解ケラチン：傷んだキューティクルを補修・保護',
+      '無香料・低刺激処方：敏感な目元にも使いやすい',
+    ],
+    usage: [
+      '夜の洗顔後、スキンケアの一番最初に使用する',
+      'アイラインを引く要領で、上下まつ毛の生え際に優しく塗布する',
+      '眉毛の薄い部分・ハリを出したい部分の地肌に直接塗布する',
+      '液が乾いてから通常のスキンケア（化粧水等）を行う',
+      '使用頻度：1日1回（夜）',
+    ],
+    recommend: [
+      'まつ毛パーマ・エクステで傷んでいる方',
+      'まつ毛が短く、ボリュームが減ってきた方',
+      '眉毛が薄くなりメイクが決まらない方',
+      '目元の乾燥ケアも一緒にしたい方',
+      '従来の美容液で目元のくすみが気になった方',
+    ],
+    points: [
+      '色素沈着の原因となる成分（ビマトプロスト等）は含まない',
+      'まつ毛・眉毛の両方に使用できる',
+      '醗酵ローズハチミツエキスがくすみもケアする点を説明するとよい',
+    ],
+  },
+  {
+    id: 'hydroquinone',
+    icon: '⚪',
+    name: 'ハイドロキノンクリーム',
+    sub: 'メラニン産生抑制・美白外用薬\nしみ・色素沈着・レーザー後ケアに',
+    tags: ['しみ','美白','色素沈着'],
+    features: [
+      'メラニンの産生を抑えるしみ治療薬',
+      'トレチノインクリームとの併用でより高い効果が期待できる',
+      '炎症後色素沈着の予防・レーザー治療後のケアにも使用',
+    ],
+    usage: [
+      '洗顔後20分程度待ってから、または化粧水・乳液を塗った上から使用する（洗顔直後は浸透しすぎることがある）',
+      '綿棒などでシミの部分に少し広めに塗布する',
+      '最初は1日1回のみ。問題なければ朝夜1日2回に増やすことができる',
+      'トレチノインと併用する場合：先にハイドロキノンを薄く塗り2〜3分なじませてからトレチノインを重ねる',
+      '必ず冷蔵庫で保管する。冷蔵保存で約2ヶ月の有効期限',
+    ],
+    recommend: [
+      'しみ・肝斑・色素沈着が気になる方',
+      'レーザー治療後のアフターケアが必要な方',
+      'トレチノインと組み合わせたしみ治療を行う方',
+    ],
+    points: [
+      '洗顔後すぐではなく20分待つか化粧水後に塗布する点を必ず説明する',
+      'まれにアレルギー反応（赤み・腫れ・ぶつぶつ）が出ることがある。気になる方は上腕内側でパッチテストを勧める',
+      'SPF30以上の日焼け止めの併用が必須。紫外線でしみが濃くなる可能性を説明する',
+      '変色したものは使用しないよう伝える',
+    ],
+  },
+  {
+    id: 'tretinoin',
+    icon: '🔬',
+    name: 'トレチノインクリーム（ゲル）',
+    sub: 'ビタミンA誘導体・ターンオーバー促進\nしみ・小じわ・にきびに',
+    tags: ['しみ','小じわ','にきび','ターンオーバー'],
+    features: [
+      '表皮の細胞分裂・増殖を促し、皮膚の再生・角質剥離を促進する',
+      '皮脂腺の働きを抑え、皮脂分泌を抑制する（にきびに有効）',
+      '真皮のコラーゲン産生を高め、皮膚のハリ・小じわを改善する',
+      '表皮内のヒアルロン酸分泌を高め、皮膚をみずみずしくする',
+    ],
+    usage: [
+      'ハイドロキノンと併用する場合：先にハイドロキノンを薄く塗り2〜3分なじませてからトレチノインを綿棒でごく薄く重ねて塗る',
+      '綿棒でできるだけ狭く・広がらないように丁寧に塗布する',
+      'レーザー照射後：かさぶたがとれてから塗布する',
+      '使用開始2〜3日後から塗った部分とその周辺が赤くなり皮がむけてくる（正常な反応）',
+      '皮は無理にはがさず自然にはがれるのを待つ',
+      '必ず冷蔵庫で保管する。1ヶ月ごとに新しいものを購入する',
+    ],
+    recommend: [
+      'しみ・色素沈着の治療を行う方',
+      '小じわ・ハリ不足が気になる方',
+      'にきび治療に取り組む方',
+      'ハイドロキノンと組み合わせた本格的なしみ治療を行う方',
+    ],
+    points: [
+      '使用開始2〜3日後の赤み・皮むけは正常な反応であることを必ず事前に説明する',
+      '紫外線でしみが濃くなることがある。使用中は日焼け止め必須と伝える',
+      '保湿ケアを強化するよう指導する（角質が剥がれて乾燥しやすくなる）',
+      '痛みが強い・血がにじむ場合は使用を中断して受診するよう伝える',
+      '1週間使っても赤くならない場合は濃度が合っていない可能性があり、早めに受診を促す',
+      '分解が早いため1ヶ月ごとに新しいものを購入・冷蔵保存を徹底する',
+    ],
+  },
+  {
+    id: 'bakuchiol',
+    icon: '🌿',
+    name: 'コラージュリペア バクチセラムDR',
+    sub: '医療機関専売エイジングケア美容液\n次世代レチノール「バクチオール」配合',
+    tags: ['エイジングケア','低刺激','朝夜OK'],
+    features: [
+      'バクチオール配合：植物由来の次世代レチノール。レチノールと同等のエイジングケア効果',
+      'プロテオグリカン＋浸透型セラミド：肌の水分保持とバリア機能を強化',
+      '無香料・無着色・アルコールフリー：デリケートな肌にも安心',
+      '各種安全性テスト済み（アレルギー・パッチ・ノンコメドジェニック等）',
+      '持田ヘルスケア（製薬会社グループ）開発の医療機関専売品',
+    ],
+    usage: [
+      '朝・夜どちらも使用可能（紫外線に強いため朝のメイク前にも使える）',
+      '洗顔後、化粧水の前に塗布する',
+      '顔全体に均一になじませる',
+      '朝使用後は必ず日焼け止めを塗布する',
+    ],
+    recommend: [
+      'レチノール化粧品で赤み・皮むけが出て続けられなかった方',
+      'レーザー等の美容施術後で肌がデリケートになっている方',
+      '妊娠中・授乳中でレチノールの使用を控えている方',
+      '乾燥による小ジワを目立たなくしたい方',
+      '無理なくシンプルにエイジングケアを続けたい方',
+    ],
+    points: [
+      'レチノールの副作用（赤み・皮むけ・ヒリヒリ）が非常に少ない点を強調する',
+      '妊娠中・授乳中の方に安心してすすめられる',
+      '朝夜どちらにも使える利便性をアピールする',
+      'A反応（レチノール反応）が心配な患者さんへの切り替え提案に最適',
+    ],
+  },
+];
+
+// ==============================================
+// タブ切り替え
+// ==============================================
+function switchTab(tab) {
+  var tabs = document.querySelectorAll('.tab-btn');
+  tabs[0].classList.toggle('active', tab === 'guidance');
+  tabs[1].classList.toggle('active', tab === 'products');
+
+  if (tab === 'guidance') {
+    document.getElementById('pg-input').classList.add('active');
+    document.getElementById('pg-result').classList.remove('active');
+    document.getElementById('pg-products').classList.remove('active');
+    document.getElementById('pg-prod-detail').classList.remove('active');
+  } else {
+    document.getElementById('pg-input').classList.remove('active');
+    document.getElementById('pg-result').classList.remove('active');
+    document.getElementById('pg-prod-detail').classList.remove('active');
+    document.getElementById('pg-products').classList.add('active');
+  }
+  window.scrollTo(0, 0);
+}
+
+// ==============================================
+// 製品ボタン初期化
+// ==============================================
+function initProducts() {
+  var grid = document.getElementById('prod-grid');
+  PRODUCTS.forEach(function(p) {
+    var btn = document.createElement('button');
+    btn.className = 'prod-btn';
+    btn.innerHTML = '<span class="prod-icon">' + p.icon + '</span>' + p.name;
+    btn.onclick = function() { showProduct(p.id); };
+    grid.appendChild(btn);
+  });
+}
+
+// ==============================================
+// 製品詳細表示
+// ==============================================
+function showProduct(id) {
+  var p = null;
+  PRODUCTS.forEach(function(x) { if (x.id === id) p = x; });
+  if (!p) return;
+
+  var html = '';
+  html += '<div class="prod-name">' + p.icon + ' ' + esc(p.name) + '</div>';
+  html += '<div class="prod-sub">' + esc(p.sub).replace(/\n/g,'<br>') + '</div>';
+  p.tags.forEach(function(t) { html += '<span class="prod-tag">' + esc(t) + '</span>'; });
+  html += '<div style="margin-bottom:14px;"></div>';
+
+  html += '<div class="prod-section"><div class="prod-section-ttl">✨ 特長・成分</div>';
+  p.features.forEach(function(f) { html += '<div class="prod-item">' + esc(f) + '</div>'; });
+  html += '</div>';
+
+  html += '<div class="prod-section"><div class="prod-section-ttl">📋 使い方</div>';
+  p.usage.forEach(function(u) { html += '<div class="prod-item">' + esc(u) + '</div>'; });
+  html += '</div>';
+
+  html += '<div class="prod-section"><div class="prod-section-ttl">👤 こんな方におすすめ</div>';
+  p.recommend.forEach(function(r) { html += '<div class="prod-item">' + esc(r) + '</div>'; });
+  html += '</div>';
+
+  html += '<div class="add-box"><div class="add-ttl">💬 スタッフへのポイント</div>';
+  p.points.forEach(function(pt) {
+    html += '<div class="add-row"><span class="badge">POINT</span><span>' + esc(pt) + '</span></div>';
+  });
+  html += '</div>';
+
+  document.getElementById('prod-detail-body').innerHTML = html;
+  document.getElementById('pg-products').classList.remove('active');
+  document.getElementById('pg-prod-detail').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goBackProd() {
+  document.getElementById('pg-prod-detail').classList.remove('active');
+  document.getElementById('pg-products').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+initButtons();
+initProducts();
+</script>
+</body>
+</html>
