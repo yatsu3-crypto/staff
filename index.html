@@ -97,7 +97,8 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   .sec{border-left:2px solid #3d6b5e;margin-bottom:12px;}
   .print-header{display:block!important;}
 }
-.print-header{display:none;font-size:13px;color:#333;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #ccc;}
+.print-header{display:none;margin-bottom:14px;}
+@media print{.print-header{display:block!important;}}
 .add-box{background:#eef6f2;border-radius:8px;padding:12px 13px;margin-bottom:14px;}
 .add-ttl{font-size:13px;font-weight:600;color:var(--g);margin-bottom:8px;}
 .add-row{display:flex;align-items:flex-start;gap:7px;margin-bottom:6px;font-size:12.5px;line-height:1.55;}
@@ -697,10 +698,9 @@ function toggleChk(uid){
 }
 
 function printResult(){
-  // 印刷ヘッダーに疾患名を設定
   var chips = document.getElementById('r-chips');
   var ph = document.getElementById('print-header');
-  ph.innerHTML = '<strong>やまもと皮膚科・漢方クリニック　生活指導</strong><br>' + (chips ? chips.innerText : '');
+  ph.innerHTML = '<div style="font-size:15px;font-weight:700;color:#3d6b5e;margin-bottom:4px;">やまもと皮膚科・漢方クリニック</div><div style="font-size:12px;color:#555;margin-bottom:6px;">生活指導　― ' + (chips ? chips.innerText.replace(/\n/g,'　') : '') + ' ―</div><hr style="border:none;border-top:1px solid #ccc;margin-bottom:10px;">';
   window.print();
 }
 
