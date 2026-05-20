@@ -120,6 +120,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 <div class="tab-nav">
   <button class="tab-btn active" onclick="switchTab('guidance')">⚕ 生活指導</button>
   <button class="tab-btn" onclick="switchTab('products')">🌿 当院製品</button>
+  <button class="tab-btn" onclick="switchTab('staff')">👨‍⚕️ 医師・看護師</button>
 </div>
 
 <!-- 入力ページ -->
@@ -162,6 +163,27 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
     <div class="card-hd"><span class="dot"></span>当院採用製品</div>
     <div class="card-body">
       <div class="prod-grid" id="prod-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 医師・看護師向けページ -->
+<div class="page" id="pg-staff">
+  <div class="card">
+    <div class="card-hd"><span class="dot"></span>新薬・専門薬剤ガイド（医師・看護師向け）</div>
+    <div class="card-body">
+      <div class="prod-grid" id="staff-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 薬剤詳細ページ -->
+<div class="page" id="pg-staff-detail">
+  <div class="card">
+    <div class="card-hd"><span class="dot"></span>薬剤詳細</div>
+    <div class="card-body" id="staff-detail-body"></div>
+    <div style="padding:4px 15px 15px;">
+      <button class="back-btn" onclick="goBackStaff()">← 薬剤一覧に戻る</button>
     </div>
   </div>
 </div>
@@ -1008,18 +1030,14 @@ function switchTab(tab) {
   var tabs = document.querySelectorAll('.tab-btn');
   tabs[0].classList.toggle('active', tab === 'guidance');
   tabs[1].classList.toggle('active', tab === 'products');
+  tabs[2].classList.toggle('active', tab === 'staff');
 
-  if (tab === 'guidance') {
-    document.getElementById('pg-input').classList.add('active');
-    document.getElementById('pg-result').classList.remove('active');
-    document.getElementById('pg-products').classList.remove('active');
-    document.getElementById('pg-prod-detail').classList.remove('active');
-  } else {
-    document.getElementById('pg-input').classList.remove('active');
-    document.getElementById('pg-result').classList.remove('active');
-    document.getElementById('pg-prod-detail').classList.remove('active');
-    document.getElementById('pg-products').classList.add('active');
-  }
+  document.getElementById('pg-input').classList.toggle('active', tab === 'guidance');
+  document.getElementById('pg-result').classList.remove('active');
+  document.getElementById('pg-products').classList.toggle('active', tab === 'products');
+  document.getElementById('pg-prod-detail').classList.remove('active');
+  document.getElementById('pg-staff').classList.toggle('active', tab === 'staff');
+  document.getElementById('pg-staff-detail').classList.remove('active');
   window.scrollTo(0, 0);
 }
 
@@ -1081,8 +1099,261 @@ function goBackProd() {
   window.scrollTo(0, 0);
 }
 
+// ==============================================
+// 薬剤データベース（医師・看護師向け）
+// ==============================================
+var DRUGS = [
+  {
+    id: 'dupixent',
+    icon: '💉',
+    name: 'デュピクセント',
+    sub: 'デュピルマブ（dupilumab）\nIL-4/IL-13阻害・生物学的製剤',
+    tags: ['アトピー','じんましん','生物学的製剤'],
+    indications: [
+      'アトピー性皮膚炎（既存治療で効果不十分な中等症〜重症）',
+      '慢性蕁麻疹（既存治療で効果不十分な場合）',
+      '結節性痒疹',
+    ],
+    dosage: [
+      '【アトピー】初回600mg（300mg×2本）皮下注射、以後300mgを2週ごと',
+      '【慢性蕁麻疹】初回600mg（300mg×2本）皮下注射、以後300mgを2週ごと',
+      '【小児（6〜17歳）】体重により用量が異なる（15kg未満：200mg4週ごと／15〜30kg未満：300mg4週ごと／30kg以上：200mg2週ごと or 300mg4週ごと）',
+      '腹部・大腿・上腕外側への皮下注射。毎回注射部位をローテーションする',
+    ],
+    cautions: [
+      '注射部位反応（発赤・腫脹）が最も多い副作用',
+      '結膜炎・眼瞼炎が出現することがある。眼科受診を検討',
+      '生ワクチン接種は投与中避ける',
+      '感染症合併時は慎重に使用。活動性の感染症がある場合は投与しない',
+      '妊婦・授乳婦への投与は慎重に（動物実験では胎盤通過が確認されている）',
+      '冷蔵保存（2〜8℃）。投与30分前に室温に戻す',
+    ],
+    points: [
+      '投与前にアトピーの重症度スコア（EASI・IGA・ADCT等）を記録する',
+      '効果判定は投与開始16週を目安に行う',
+      'ステロイド外用薬・保湿剤との併用が基本',
+      '自己注射指導も可能（外来での指導後）',
+    ],
+  },
+  {
+    id: 'mitchga',
+    icon: '💊',
+    name: 'ミチーガ',
+    sub: 'ネモリズマブ（nemolizumab）\nIL-31受容体A阻害・生物学的製剤',
+    tags: ['アトピー','痒み','生物学的製剤'],
+    indications: [
+      'アトピー性皮膚炎に伴う痒みの改善（既存治療で効果不十分な場合）',
+      '結節性痒疹',
+    ],
+    dosage: [
+      '【アトピー】60mgを4週ごとに皮下注射',
+      '【結節性痒疹】60mgを4週ごとに皮下注射',
+      '腹部・大腿・上腕外側への皮下注射。毎回注射部位をローテーションする',
+      'ステロイド外用薬・保湿剤との併用が基本',
+    ],
+    cautions: [
+      '注射部位反応（発赤・腫脹・疼痛）に注意',
+      '頭痛・関節痛の報告あり',
+      '生ワクチン接種は投与中避ける',
+      '感染症合併時は慎重に使用',
+      '冷蔵保存（2〜8℃）。投与前に室温に戻す',
+    ],
+    points: [
+      'デュピクセントと異なりIL-31受容体を標的とするため「痒み」に特化した作用',
+      'VAS・NRS等の痒みスコアで効果を評価する',
+      '効果判定は投与開始16週を目安に行う',
+      'デュピクセントと作用機序が異なるため、効果不十分例での切り替えも検討可',
+    ],
+  },
+  {
+    id: 'neoral',
+    icon: '💊',
+    name: 'ネオーラル',
+    sub: 'シクロスポリン（cyclosporine）\nカルシニューリン阻害・免疫抑制薬',
+    tags: ['アトピー','乾癬','免疫抑制'],
+    indications: [
+      'アトピー性皮膚炎（既存治療で効果不十分な重症例）',
+      '乾癬（尋常性乾癬・関節症性乾癬・膿疱性乾癬・乾癬性紅皮症）',
+    ],
+    dosage: [
+      '【アトピー】1日量3mg/kg（最大5mg/kg）を2回に分けて内服',
+      '【乾癬】1日量3mg/kg（最大5mg/kg）を2回に分けて内服',
+      '原則として連続投与は12週以内。必要に応じて休薬・再投与を繰り返す',
+      '食後服用。グレープフルーツジュースとの同時摂取は禁忌',
+    ],
+    cautions: [
+      '腎毒性：定期的な腎機能検査（BUN・Cr）が必須',
+      '高血圧：血圧のモニタリングが必要。降圧薬が必要になることがある',
+      '感染症リスク：免疫抑制による日和見感染に注意',
+      '悪性腫瘍リスク：長期投与・高用量で皮膚がんリスクが上昇',
+      '多数の薬物相互作用あり（CYP3A4阻害薬・誘導薬）',
+      '生ワクチン接種は禁忌',
+      '妊婦・授乳婦への投与は禁忌',
+    ],
+    points: [
+      '投与開始前：腎機能・肝機能・血圧・血算・尿酸を確認',
+      '投与中：2〜4週ごとに腎機能・血圧をモニタリング',
+      '長期連用は避け、寛解後は漸減・休薬を検討する',
+      'グレープフルーツジュースとの相互作用を患者に必ず説明する',
+    ],
+  },
+  {
+    id: 'otezla',
+    icon: '💊',
+    name: 'オテズラ',
+    sub: 'アプレミラスト（apremilast）\nPDE4阻害薬・内服',
+    tags: ['乾癬','掌蹠膿疱症','内服'],
+    indications: [
+      '尋常性乾癬（既存治療で効果不十分な場合）',
+      '関節症性乾癬',
+      '掌蹠膿疱症',
+      'ベーチェット病に伴う口腔潰瘍',
+    ],
+    dosage: [
+      '初週は増量スキームに従い1日目10mg朝のみから開始し、6日目以降30mgを1日2回（朝・夕）内服',
+      '増量スキーム：1日目10mg朝／2日目10mg朝夕／3日目10mg朝+20mg夕／4日目20mg朝夕／5日目20mg朝+30mg夕／6日目以降30mg朝夕',
+      '食事の影響を受けないため、食前・食後どちらでも服用可',
+    ],
+    cautions: [
+      '消化器症状（悪心・下痢・腹痛）：投与開始初期に多い。増量スキームで軽減される',
+      '体重減少：定期的な体重測定が必要',
+      '抑うつ・自殺念慮の報告あり：精神症状に注意し、患者・家族への説明が必要',
+      '腎機能障害（eGFR<30）では30mg×1回/日に減量',
+      '妊婦・授乳婦への投与は禁忌',
+    ],
+    points: [
+      '生物学的製剤と異なり注射不要・定期検査が少ないため、注射を嫌がる患者に勧めやすい',
+      '消化器症状は投与開始4週以降に改善することが多い。初期に説明しておく',
+      '効果判定は投与開始16〜24週を目安に行う',
+      '免疫抑制作用が比較的弱く、感染症リスクが低い点も特長',
+    ],
+  },
+  {
+    id: 'sotyktu',
+    icon: '💊',
+    name: 'ソーティクツ',
+    sub: 'デュークラバシチニブ（deucravacitinib）\nTYK2阻害薬・内服',
+    tags: ['乾癬','TYK2阻害','内服'],
+    indications: [
+      '尋常性乾癬（既存治療で効果不十分な中等症〜重症）',
+      '関節症性乾癬',
+    ],
+    dosage: [
+      '6mgを1日1回内服',
+      '食事の影響を受けないため、食前・食後どちらでも服用可',
+      '服用を忘れた場合はできるだけ早く服用する。次回服用まで12時間未満の場合は飛ばす',
+    ],
+    cautions: [
+      '感染症リスク：上気道炎・口腔咽頭炎・毛包炎に注意',
+      '口唇ヘルペスの再活性化の報告あり',
+      '悪性腫瘍リスク：長期使用での評価継続中',
+      '生ワクチン接種は投与中避ける',
+      '妊婦・授乳婦への投与は禁忌',
+      'JAK阻害薬（バリシチニブ等）とは作用機序が異なり、TYK2選択的阻害薬',
+    ],
+    points: [
+      'JAK阻害薬より選択性が高く、血栓症・脂質異常等のJAKクラスエフェクトが少ないとされる',
+      '乾癬治療の新たな内服選択肢として、ネオーラル・オテズラが効果不十分な場合に考慮',
+      '投与前：感染症・結核のスクリーニングが必要',
+      '効果判定は投与開始16週を目安に行う',
+    ],
+  },
+  {
+    id: 'wyikyans',
+    icon: '💧',
+    name: 'ワイキャンス',
+    sub: 'カンタリジン外用液0.71%\n伝染性軟属腫（水イボ）治療薬',
+    tags: ['水イボ','伝染性軟属腫','外用液'],
+    indications: [
+      '伝染性軟属腫（水イボ）',
+    ],
+    dosage: [
+      '【手順1】アプリケータのラベルをミシン目に沿って剥がし、破損・異常がないことを確認する',
+      '【手順2】ブレイクツールを平らな場所に置き、アプリケータキャップが外れていないことを確認してセット。破砕音（パチンという音）が聞こえるまでブレイクツール上部をしっかり押し下げてガラスアンプルを破砕する。使用後はブレイクツールをアルコール綿で消毒する',
+      '【手順3】アプリケータキャップを下に向けて約10秒間優しくタッピング（軽くたたく）し、薬液をアプリケータフィルターの上に集める',
+      '【手順4】アプリケータキャップを取り外し、ペーパータオルまたはガーゼにチップ先端を付けて薬液が適切に塗布できるか確認する',
+      '【手順5】伝染性軟属腫病変部位にアプリケータチップ（先端）で薬液を適量塗布する。病変1つあたり直径約1〜2mmを目安にごく薄く（薄いフィルム状）塗布する。アプリケータ角度は45°以下。はみ出した薬液は綿棒・ガーゼで直ちに拭き取る',
+      '【手順6】薬液を完全に乾燥させる（約5分）。乾燥まで塗布部位を水平に保つ',
+    ],
+    cautions: [
+      '手袋・保護メガネを必ず着用して使用する',
+      'ガラスアンプル破砕前にアプリケータキャップを取り外さない',
+      '眼・眼の周囲・粘膜には使用しない。薬液が眼に入った場合は直ちに流水で15分以上洗浄する',
+      '薬液が皮膚に付着した場合は直ちに石鹸と水で洗い流す',
+      '1本のアプリケータを複数の患者に使用しない（1患者1本）',
+      '可燃性（アセトン・無水エタノール50%以上含有）のため保存・使用時は火気を避ける',
+      '外箱開封後は遮光して保存する',
+      'アプリケータキャップを上向きにして保管しない',
+    ],
+    points: [
+      '【次回受診】初回処置後は1週間後に来院。慣れてきたら3週間ごとに来院し、残っていれば最大4回まで繰り返す',
+      'ガラスアンプル破砕は何度も行わない（フィルターが目詰まりし薬液が出なくなる）',
+      'タッピングが強すぎるとキャップ内に薬液が集まってしまうため注意',
+      '塗布時は病変部位からはみ出さないよう注意。はみ出した薬液は即座に拭き取る',
+      '薬液が詰まって出ない場合はそのアプリケータは使用しない',
+      '摘除不要で患児への負担が少ない新しい治療選択肢',
+    ],
+  },
+];
+
+// ==============================================
+// 医師・看護師タブ初期化
+// ==============================================
+function initStaff(){
+  var grid = document.getElementById('staff-grid');
+  DRUGS.forEach(function(d){
+    var btn = document.createElement('button');
+    btn.className = 'prod-btn';
+    btn.innerHTML = '<span class="prod-icon">'+d.icon+'</span>'+d.name;
+    btn.onclick = function(){ showDrug(d.id); };
+    grid.appendChild(btn);
+  });
+}
+
+function showDrug(id){
+  var d = null;
+  DRUGS.forEach(function(x){ if(x.id===id) d=x; });
+  if(!d) return;
+
+  var html = '';
+  html += '<div class="prod-name">'+d.icon+' '+esc(d.name)+'</div>';
+  html += '<div class="prod-sub">'+esc(d.sub).replace(/\n/g,'<br>')+'</div>';
+  d.tags.forEach(function(t){ html += '<span class="prod-tag">'+esc(t)+'</span>'; });
+  html += '<div style="margin-bottom:14px;"></div>';
+
+  html += '<div class="prod-section"><div class="prod-section-ttl">📋 適応</div>';
+  d.indications.forEach(function(i){ html += '<div class="prod-item">'+esc(i)+'</div>'; });
+  html += '</div>';
+
+  html += '<div class="prod-section"><div class="prod-section-ttl">💉 用法・用量</div>';
+  d.dosage.forEach(function(i){ html += '<div class="prod-item">'+esc(i)+'</div>'; });
+  html += '</div>';
+
+  html += '<div class="prod-section"><div class="prod-section-ttl">⚠️ 注意事項・副作用</div>';
+  d.cautions.forEach(function(i){ html += '<div class="prod-item">'+esc(i)+'</div>'; });
+  html += '</div>';
+
+  html += '<div class="add-box"><div class="add-ttl">💬 使用上のポイント</div>';
+  d.points.forEach(function(p){
+    html += '<div class="add-row"><span class="badge">POINT</span><span>'+esc(p)+'</span></div>';
+  });
+  html += '</div>';
+
+  document.getElementById('staff-detail-body').innerHTML = html;
+  document.getElementById('pg-staff').classList.remove('active');
+  document.getElementById('pg-staff-detail').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goBackStaff(){
+  document.getElementById('pg-staff-detail').classList.remove('active');
+  document.getElementById('pg-staff').classList.add('active');
+  window.scrollTo(0,0);
+}
+
 initButtons();
 initProducts();
+initStaff();
 </script>
 </body>
 </html>
