@@ -109,6 +109,271 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .back-btn{width:100%;background:none;border:1px solid var(--bd);border-radius:50px;padding:12px;font-size:13px;color:var(--tx2);cursor:pointer;margin-top:4px;}
 .back-btn:active{background:var(--bg);}
 .err{padding:10px 13px;background:#fff0f0;border:.5px solid #f5c0c0;border-radius:8px;font-size:12px;color:#c0392b;margin-bottom:10px;display:none;}
+
+/* ===== 外用薬ガイド スコープCSS ===== */
+#topguide{
+    --bg:#f4f1ea;
+    --paper:#fffdf8;
+    --ink:#23302e;
+    --ink-soft:#52615e;
+    --line:#e2dccf;
+    --accent:#2f7d6f;
+    --accent-deep:#1f5a4f;
+    --accent-soft:#e4efe9;
+    --nurse:#b06a3a;
+    --nurse-soft:#f6ece1;
+    --warn:#b23b3b;
+    --shadow:0 2px 12px rgba(38,52,49,.07);
+    --shadow-lg:0 8px 30px rgba(38,52,49,.12);
+    --r1:#9b2c3c; --r2:#bd6b2b; --r3:#2f7d6f; --r4:#3f6f9b; --r5:#6b7280;
+  }
+#topguide *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+#topguide{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+    line-height:1.7;
+    -webkit-text-size-adjust:100%;
+    padding-bottom:env(safe-area-inset-bottom);
+    font-size:15px;
+  }
+#topguide .serif{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","HGS明朝E",serif;}
+#topguide /* Header */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:linear-gradient(180deg,var(--accent-deep),var(--accent));
+    color:#f4f1ea;
+    padding:calc(env(safe-area-inset-top) + 14px) 18px 14px;
+    box-shadow:var(--shadow);
+  }
+#topguide .kicker{font-size:11px;letter-spacing:.22em;opacity:.8;font-weight:600;}
+#topguide header h1{margin:2px 0 0;font-size:21px;font-weight:700;letter-spacing:.02em;}
+#topguide header h1 .sub{font-size:12px;font-weight:400;opacity:.85;letter-spacing:.04em;display:block;margin-top:3px;}
+#topguide .modebar{
+    display:flex;align-items:center;gap:10px;margin-top:13px;
+    background:rgba(255,255,255,.12);border-radius:12px;padding:9px 12px;
+  }
+#topguide .modebar label{font-size:13px;flex:1;display:flex;align-items:center;gap:7px;}
+#topguide .switch{position:relative;width:46px;height:26px;flex:0 0 auto;}
+#topguide .switch input{opacity:0;width:0;height:0;}
+#topguide .slider{position:absolute;inset:0;background:rgba(0,0,0,.25);border-radius:26px;transition:.25s;}
+#topguide .slider:before{content:"";position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s;}
+#topguide .switch input:checked + .slider{background:var(--nurse);}
+#topguide .switch input:checked + .slider:before{transform:translateX(20px);}
+#topguide /* Search */
+  .searchwrap{padding:12px 16px 0;background:var(--bg);position:sticky;top:0;z-index:40;}
+#topguide .searchwrap.stick{top:0;}
+#topguide .search{
+    width:100%;border:1px solid var(--line);background:var(--paper);
+    border-radius:12px;padding:11px 14px;font-size:15px;color:var(--ink);
+    box-shadow:var(--shadow);
+  }
+#topguide .search:focus{outline:none;border-color:var(--accent);}
+#topguide /* Tabs */
+  nav.tabs{
+    display:flex;gap:6px;overflow-x:auto;padding:12px 16px 4px;
+    background:var(--bg);scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+#topguide nav.tabs::-webkit-scrollbar{display:none;}
+#topguide .tab{
+    flex:0 0 auto;border:1px solid var(--line);background:var(--paper);
+    color:var(--ink-soft);padding:8px 15px;border-radius:20px;font-size:13.5px;
+    font-weight:600;cursor:pointer;white-space:nowrap;transition:.18s;
+  }
+#topguide .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:var(--shadow);}
+#topguide main{padding:8px 16px 60px;max-width:760px;margin:0 auto;}
+#topguide .panel{display:none;animation:fade .3s ease;}
+#topguide .panel.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+#topguide .sectitle{font-size:13px;letter-spacing:.16em;color:var(--accent-deep);font-weight:700;margin:22px 2px 10px;text-transform:uppercase;}
+#topguide .lead{color:var(--ink-soft);font-size:14px;margin:4px 2px 16px;}
+#topguide /* Drug cards */
+  .card{
+    background:var(--paper);border:1px solid var(--line);border-radius:16px;
+    margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden;
+  }
+#topguide .card-head{display:flex;align-items:flex-start;gap:11px;padding:15px 16px;cursor:pointer;}
+#topguide .pill{
+    flex:0 0 auto;font-size:11px;font-weight:700;color:#fff;border-radius:7px;
+    padding:4px 8px;line-height:1.3;text-align:center;min-width:42px;letter-spacing:.02em;
+  }
+#topguide .c-r1{background:var(--r1);}
+#topguide .c-r2{background:var(--r2);}
+#topguide .c-r3{background:var(--r3);}
+#topguide .c-r4{background:var(--r4);}
+#topguide .c-r5{background:var(--r5);}
+#topguide .c-tci{background:#7a5aa8;}
+#topguide .c-jak{background:#2f7d6f;}
+#topguide .c-pde4{background:#3f6f9b;}
+#topguide .c-ahr{background:#a8662f;}
+#topguide .c-moist{background:#5b8c7a;}
+#topguide .c-mix{background:#1f5a4f;}
+#topguide .card-title{flex:1;min-width:0;}
+#topguide .card-title h3{margin:0;font-size:16.5px;font-weight:700;letter-spacing:.01em;}
+#topguide .card-title .generic{font-size:12.5px;color:var(--ink-soft);margin-top:1px;}
+#topguide .chev{flex:0 0 auto;color:var(--ink-soft);transition:.25s;font-size:13px;margin-top:4px;}
+#topguide .card.open .chev{transform:rotate(180deg);}
+#topguide .card-body{display:none;padding:0 16px 16px;border-top:1px solid var(--line);}
+#topguide .card.open .card-body{display:block;animation:fade .25s ease;}
+#topguide .row{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px;}
+#topguide .row:last-child{border-bottom:none;}
+#topguide .row .k{flex:0 0 78px;color:var(--accent-deep);font-weight:700;font-size:12.5px;padding-top:1px;}
+#topguide .row .v{flex:1;}
+#topguide .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;}
+#topguide .tag{font-size:11.5px;background:var(--accent-soft);color:var(--accent-deep);padding:3px 9px;border-radius:12px;font-weight:600;}
+#topguide .nursebox{
+    margin-top:13px;background:var(--nurse-soft);border:1px solid #ecd9c5;border-left:4px solid var(--nurse);
+    border-radius:10px;padding:11px 13px;font-size:13.5px;display:none;
+  }
+#topguide.nurse-on .nursebox{display:block;}
+#topguide .nursebox .nh{font-size:11px;letter-spacing:.12em;color:var(--nurse);font-weight:700;margin-bottom:5px;}
+#topguide .nursebox ul{margin:0;padding-left:18px;}
+#topguide .nursebox li{margin:3px 0;}
+#topguide .caution{color:var(--warn);font-weight:600;}
+#topguide /* Generic info blocks */
+  .block{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 17px;margin-bottom:14px;box-shadow:var(--shadow);}
+#topguide .block h3{margin:0 0 8px;font-size:17px;}
+#topguide .block p{margin:7px 0;font-size:14px;}
+#topguide .block ul{margin:7px 0;padding-left:20px;font-size:14px;}
+#topguide .block li{margin:5px 0;}
+#topguide .big{font-size:15px;}
+#topguide /* FTU table */
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px;}
+#topguide th, #topguide td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--line);}
+#topguide th{color:var(--accent-deep);font-size:12px;letter-spacing:.04em;}
+#topguide td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent-deep);white-space:nowrap;}
+#topguide /* Calculator */
+  .calc-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);}
+#topguide .calc-item .name{flex:1;font-size:14px;}
+#topguide .calc-item .ftu{font-size:11.5px;color:var(--ink-soft);}
+#topguide .stepper{display:flex;align-items:center;gap:0;flex:0 0 auto;}
+#topguide .stepper button{
+    width:34px;height:34px;border:1px solid var(--line);background:var(--paper);
+    font-size:19px;color:var(--accent);border-radius:9px;cursor:pointer;line-height:1;font-weight:700;
+  }
+#topguide .stepper button:active{background:var(--accent-soft);}
+#topguide .stepper .cnt{width:34px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;}
+#topguide .calc-total{
+    margin-top:14px;background:var(--accent-deep);color:#f4f1ea;border-radius:14px;padding:14px 16px;
+    display:flex;justify-content:space-around;text-align:center;
+  }
+#topguide .calc-total .t{font-size:11px;letter-spacing:.1em;opacity:.8;}
+#topguide .calc-total .n{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums;}
+#topguide .calc-total .u{font-size:12px;opacity:.85;}
+#topguide .reset{margin-top:10px;width:100%;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);padding:9px;border-radius:10px;font-size:13px;cursor:pointer;font-weight:600;}
+#topguide .presc{margin-top:14px;}
+#topguide .presc-row{display:flex;align-items:center;gap:12px;padding:8px 0;}
+#topguide .presc-k{flex:0 0 72px;font-size:12.5px;font-weight:700;color:var(--accent-deep);}
+#topguide .seg{display:flex;gap:6px;flex:1;}
+#topguide .seg button{flex:1;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);padding:8px 4px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;}
+#topguide .seg button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+#topguide .presc-total{background:var(--nurse);}
+#topguide .presc-total .n{font-size:25px;}
+#topguide .ladder{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+#topguide .rung{display:flex;align-items:center;gap:11px;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:9px 12px;}
+#topguide .rung .lv{font-size:11px;font-weight:700;color:#fff;border-radius:6px;padding:3px 7px;flex:0 0 auto;min-width:54px;text-align:center;}
+#topguide .rung .meds{font-size:13px;}
+#topguide .note{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.6;}
+#topguide .disclaimer{font-size:11.5px;color:var(--ink-soft);background:#efe9dc;border-radius:12px;padding:12px 14px;margin-top:24px;line-height:1.65;}
+#topguide .empty{text-align:center;color:var(--ink-soft);padding:40px 0;font-size:14px;}
+#topguide /* ranking */
+  .tierhead{display:flex;align-items:center;gap:9px;margin:22px 2px 11px;}
+#topguide .tierhead .tb{font-size:11px;font-weight:700;color:#fff;border-radius:7px;padding:4px 10px;letter-spacing:.04em;}
+#topguide .tierhead .td{font-size:12.5px;color:var(--ink-soft);}
+#topguide .t1 .tb, #topguide .rk-t1 .rk-num{background:var(--accent-deep);}
+#topguide .t2 .tb, #topguide .rk-t2 .rk-num{background:var(--nurse);}
+#topguide .t3 .tb, #topguide .rk-t3 .rk-num{background:var(--r5);}
+#topguide .rk{display:flex;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow);align-items:flex-start;}
+#topguide .rk.clinic{border-color:var(--nurse);background:var(--nurse-soft);}
+#topguide .rk-num{flex:0 0 auto;width:30px;height:30px;border-radius:9px;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;margin-top:2px;}
+#topguide .rk-main{flex:1;min-width:0;}
+#topguide .rk-name{font-weight:700;font-size:15px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+#topguide .rk-class{font-size:11.5px;color:var(--accent-deep);font-weight:600;background:var(--accent-soft);border-radius:10px;padding:2px 8px;}
+#topguide .rk-clinic-badge{font-size:10.5px;color:#fff;background:var(--nurse);border-radius:10px;padding:2px 8px;font-weight:700;}
+#topguide .rk-metrics{display:flex;flex-wrap:wrap;gap:5px 14px;margin-top:7px;font-size:12.5px;color:var(--ink-soft);}
+#topguide .rk-metrics b{color:var(--ink);font-weight:600;}
+#topguide footer{text-align:center;font-size:11px;color:var(--ink-soft);padding:18px 0 4px;}
+#topguide .anchor{font-size:11px;color:var(--accent);text-decoration:none;}
+/* integrated overrides */
+#pg-topical{padding:0;max-width:600px;margin:0 auto;}
+#topguide{font-size:15px;}
+#topguide .modebar{background:var(--accent-soft);margin:12px 16px 0;}
+#topguide .modebar label{color:var(--ink);}
+#topguide .searchwrap{position:static;background:transparent;}
+#topguide nav.tabs{position:static;background:transparent;}
+#topguide .tab{background:#fff;}
+#topguide .tab.active{background:var(--accent);color:#fff;}
+#topguide .tag{display:inline-block;}
+
+
+/* ===== ビタミン剤タブ ===== */
+.tab-nav{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{font-size:12px;padding:11px 4px;letter-spacing:0;white-space:nowrap;}
+#pg-vitamin .vit-seg{display:flex;gap:6px;background:#fff;border:.5px solid var(--bd);border-radius:11px;padding:4px;margin-bottom:12px;box-shadow:0 1px 5px rgba(0,0,0,.06);}
+#pg-vitamin .vit-seg button{flex:1;border:none;background:none;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--tx2);padding:9px 4px;border-radius:8px;cursor:pointer;transition:.2s;}
+#pg-vitamin .vit-seg button.on{background:var(--g);color:#fff;}
+#pg-vitamin .vit-search{position:relative;margin-bottom:11px;}
+#pg-vitamin .vit-search input{width:100%;font-family:inherit;font-size:14px;padding:11px 13px 11px 38px;border-radius:10px;border:1px solid var(--bd);background:#fff;color:var(--tx);outline:none;}
+#pg-vitamin .vit-search input:focus{border-color:var(--g2);}
+#pg-vitamin .vit-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--tx3);}
+#pg-vitamin .vit-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px;}
+#pg-vitamin .vit-chip{font-family:inherit;font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:20px;border:1px solid var(--bd);background:#fff;color:var(--tx2);cursor:pointer;transition:.2s;}
+#pg-vitamin .vit-chip.on{background:var(--gl);color:var(--tc);border-color:var(--gl);}
+#pg-vitamin .vit-card{background:#fff;border-radius:13px;border:.5px solid var(--bd);box-shadow:0 1px 5px rgba(0,0,0,.06);margin-bottom:11px;overflow:hidden;}
+#pg-vitamin .vit-head{display:flex;align-items:flex-start;gap:11px;padding:13px 14px;cursor:pointer;}
+#pg-vitamin .vit-sw{flex:none;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;}
+#pg-vitamin .vit-tt{flex:1;min-width:0;}
+#pg-vitamin .vit-tt h3{font-size:15px;font-weight:600;color:var(--tx);line-height:1.3;margin:0;}
+#pg-vitamin .vit-tt .sub{font-size:11px;color:var(--tx3);margin-top:3px;}
+#pg-vitamin .vit-star{flex:none;background:none;border:none;font-size:19px;color:#d8d2c8;cursor:pointer;padding:0;line-height:1;}
+#pg-vitamin .vit-star.on{color:#d9a426;}
+#pg-vitamin .vit-chev{flex:none;align-self:center;width:16px;height:16px;stroke:var(--tx3);transition:.3s;}
+#pg-vitamin .vit-card.open .vit-chev{transform:rotate(180deg);}
+#pg-vitamin .vit-body{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+#pg-vitamin .vit-card.open .vit-body{max-height:3200px;}
+#pg-vitamin .vit-inner{padding:0 14px 15px;}
+#pg-vitamin .vit-sec{margin-top:14px;}
+#pg-vitamin .vit-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--g);display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+#pg-vitamin .vit-lbl::after{content:"";flex:1;height:1px;background:var(--bd);}
+#pg-vitamin .vit-txt{font-size:12.5px;line-height:1.7;color:var(--tx2);}
+#pg-vitamin ul.vit-dl{margin:0;padding:0;list-style:none;}
+#pg-vitamin ul.vit-dl li{font-size:12.5px;line-height:1.55;color:var(--tx2);padding:7px 0;border-bottom:1px dashed var(--bd);display:flex;gap:8px;align-items:flex-start;}
+#pg-vitamin ul.vit-dl li:last-child{border-bottom:none;}
+#pg-vitamin ul.vit-dl li .dz{font-weight:600;color:var(--tx);}
+#pg-vitamin .ev{flex:none;font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;align-self:center;letter-spacing:.04em;}
+#pg-vitamin .ev.hi{background:#dff0ea;color:#0a6b52;}
+#pg-vitamin .ev.mid{background:#fdf0d8;color:#9a6a17;}
+#pg-vitamin .ev.low{background:#eef1f3;color:#5a6b73;}
+#pg-vitamin .vit-dose{background:var(--gl);border-radius:10px;padding:11px 13px;}
+#pg-vitamin .vit-dline{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid rgba(61,107,94,.14);font-size:12.5px;}
+#pg-vitamin .vit-dline:last-child{border-bottom:none;}
+#pg-vitamin .vit-dline .k{color:var(--gd);}
+#pg-vitamin .vit-dline .v{font-weight:600;color:var(--tc);text-align:right;}
+#pg-vitamin .vit-warn{background:var(--wbg);border-left:3px solid var(--wbd);border-radius:7px;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--wtx);}
+#pg-vitamin .vit-warn b{color:var(--wtx);}
+#pg-vitamin .vit-memo textarea{width:100%;min-height:58px;resize:vertical;font-family:inherit;font-size:12.5px;line-height:1.6;color:var(--tx);border:1px dashed var(--g2);border-radius:9px;padding:9px 11px;background:#faf9f6;outline:none;}
+#pg-vitamin .vit-memo .hint{font-size:10px;color:var(--tx3);margin-top:5px;}
+#pg-vitamin .vit-dcard{background:#fff;border-radius:12px;border:.5px solid var(--bd);box-shadow:0 1px 5px rgba(0,0,0,.06);padding:13px 15px;margin-bottom:10px;}
+#pg-vitamin .vit-dcard h4{margin:0 0 9px;font-size:14px;font-weight:600;color:var(--tx);display:flex;align-items:center;gap:8px;}
+#pg-vitamin .vit-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:20px;margin:3px 5px 3px 0;border:1px solid var(--bd);background:#faf9f6;color:var(--tx2);}
+#pg-vitamin .vit-pill .d{width:8px;height:8px;border-radius:50%;flex:none;}
+#pg-vitamin .vit-tablewrap{background:#fff;border-radius:13px;border:.5px solid var(--bd);box-shadow:0 1px 5px rgba(0,0,0,.06);overflow:hidden;}
+#pg-vitamin table{width:100%;border-collapse:collapse;}
+#pg-vitamin thead th{background:var(--gd);color:#dff0ea;font-size:11px;font-weight:600;padding:11px 11px;text-align:left;}
+#pg-vitamin tbody td{padding:11px;font-size:12px;line-height:1.5;border-bottom:.5px solid var(--bd);color:var(--tx2);vertical-align:top;}
+#pg-vitamin tbody tr:nth-child(even){background:#faf9f6;}
+#pg-vitamin tbody td:first-child{font-weight:600;color:var(--tx);}
+#pg-vitamin tbody td .nm{display:flex;align-items:center;gap:6px;}
+#pg-vitamin tbody td .d{width:8px;height:8px;border-radius:50%;flex:none;}
+#pg-vitamin tbody td .bd{font-size:10px;color:var(--tx3);font-weight:400;margin-top:2px;}
+#pg-vitamin .vit-empty{text-align:center;color:var(--tx3);font-size:13px;padding:36px 0;}
+#pg-vitamin .vit-legend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;font-size:10.5px;color:var(--tx3);margin:2px 0 13px;}
+#pg-vitamin .vit-legend span{display:inline-flex;align-items:center;gap:4px;}
+#pg-vitamin .vit-legend .ev{align-self:center;}
+#pg-vitamin .vit-view{display:none;}
+#pg-vitamin .vit-view.on{display:block;}
+#pg-vitamin .vit-note{font-size:10.5px;color:var(--tx3);line-height:1.6;text-align:center;padding:14px 6px 4px;}
 </style>
 </head>
 <body>
@@ -121,6 +386,8 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   <button class="tab-btn active" onclick="switchTab('guidance')">⚕ 生活指導</button>
   <button class="tab-btn" onclick="switchTab('products')">🌿 当院製品</button>
   <button class="tab-btn" onclick="switchTab('staff')">👨‍⚕️ 医師・看護師</button>
+  <button class="tab-btn" onclick="switchTab('topical')">💊 外用薬</button>
+  <button class="tab-btn" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
 </div>
 
 <!-- 入力ページ -->
@@ -188,6 +455,225 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   </div>
 </div>
 
+<!-- ビタミン剤(内服)ページ -->
+<div class="page" id="pg-vitamin">
+  <div class="vit-seg">
+    <button class="on" onclick="vitView('agents',this)">成分別</button>
+    <button onclick="vitView('dis',this)">疾患別</button>
+    <button onclick="vitView('table',this)">用量早見</button>
+  </div>
+  <div class="vit-view on" id="vit-v-agents">
+    <div class="vit-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="vit-search" placeholder="成分名・商品名・疾患で検索…" oninput="vitSearch(this.value)">
+    </div>
+    <div class="vit-filters" id="vit-filters">
+      <button class="vit-chip on" onclick="vitFilter('all',this)">すべて</button>
+      <button class="vit-chip" onclick="vitFilter('fav',this)">★ お気に入り</button>
+      <button class="vit-chip" onclick="vitFilter('色素沈着',this)">色素沈着</button>
+      <button class="vit-chip" onclick="vitFilter('アトピー',this)">アトピー</button>
+      <button class="vit-chip" onclick="vitFilter('乾癬',this)">乾癬</button>
+      <button class="vit-chip" onclick="vitFilter('痤瘡',this)">痤瘡</button>
+    </div>
+    <div id="vit-agentlist"></div>
+  </div>
+  <div class="vit-view" id="vit-v-dis">
+    <div class="vit-legend"><span>疾患から根拠となる内服成分を逆引き</span></div>
+    <div id="vit-dislist"></div>
+  </div>
+  <div class="vit-view" id="vit-v-table">
+    <div class="vit-legend">
+      <span><span class="ev hi">HIGH</span> RCT/メタ</span>
+      <span><span class="ev mid">MID</span> 臨床/観察</span>
+      <span><span class="ev low">LOW</span> 基礎/限定</span>
+    </div>
+    <div class="vit-tablewrap">
+      <table><thead><tr><th>成分(商品名)</th><th>代表用量</th><th>主適応</th></tr></thead><tbody id="vit-tablebody"></tbody></table>
+    </div>
+  </div>
+  <div class="vit-note">院内教育用リファレンス。用量・適応は最新の添付文書・各ガイドラインで必ず確認してください。美白／抗老化目的の一部は保険適応外です。メモは端末内に保存されます。</div>
+</div>
+
+<!-- 外用薬ガイドページ -->
+<div class="page" id="pg-topical">
+<div id="topguide"><div class="modebar"><label for="nurseToggle">看護師モード（患者説明ポイントを表示）</label><span class="switch"><input type="checkbox" id="nurseToggle"><span class="slider"></span></span></div><div class="searchwrap" id="searchwrap" style="display:none">
+  <input class="search" id="search" type="search" placeholder="薬剤名で検索（例：プロトピック、コレクチム）" autocomplete="off">
+</div>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="drugs">外用薬一覧</button>
+  <button class="tab" data-tab="rank">ランキング</button>
+  <button class="tab" data-tab="basics">塗り方の基本</button>
+  <button class="tab" data-tab="calc">塗布量 計算</button>
+  <button class="tab" data-tab="proactive">プロアクティブ</button>
+  <button class="tab" data-tab="site">部位別ガイド</button>
+  <button class="tab" data-tab="mix">当院製剤</button>
+</nav>
+
+<main>
+  <!-- ===== DRUGS ===== -->
+  <section class="panel active" id="drugs">
+    <div id="drugList"></div>
+    <div class="empty" id="noResult" style="display:none">該当する薬剤が見つかりません</div>
+    <div class="disclaimer">
+      ※ 当院スタッフ向けの院内参照ツールです。用量・適応・禁忌・塗布量上限は必ず最新の<strong>添付文書</strong>で確認してください。記載は一般的な目安であり、個々の患者・医師の指示が優先されます。
+    </div>
+  </section>
+
+  <!-- ===== RANK ===== -->
+  <section class="panel" id="rank">
+    <div class="sectitle">痒み抑制効果ランキング</div>
+    <div class="lead">資料に基づく痒み抑制効果の目安（全16段階・Tier 1〜3）。<strong>当院製剤</strong>を含みます。</div>
+    <div id="rankList"></div>
+    <div class="disclaimer">
+      ※ レビュー／ネットワークメタ解析および院内資料に基づく相対的な目安です。RR・OR・SMD等は出典文献に由来し、リドメックス・メサデルム・当院製剤などは推定値を含みます。実際の選択は重症度・部位・患者背景を総合して判断してください。
+    </div>
+  </section>
+
+  <!-- ===== BASICS ===== -->
+  <section class="panel" id="basics">
+    <div class="sectitle">塗り方の基本</div>
+
+    <div class="block">
+      <h3>FTU（フィンガー・チップ・ユニット）</h3>
+      <p class="big">大人の人差し指の先から第1関節まで、チューブ（口径5mm）から出した量＝<strong>1 FTU ≒ 0.5g</strong>。</p>
+      <p>1 FTU で<strong>手のひら2枚分</strong>の面積に塗れます。これが「適量」の世界標準のものさしです。</p>
+      <ul>
+        <li>ローション・フォーム剤は<strong>1円玉大 ≒ 1 FTU相当</strong></li>
+        <li>5gチューブ＝約10 FTU、10gチューブ＝約20 FTU</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <h3>塗布量の目安（成人・1回）</h3>
+      <table>
+        <thead><tr><th>部位</th><th style="text-align:right">FTU</th><th style="text-align:right">≒g</th></tr></thead>
+        <tbody>
+          <tr><td>顔＋頸部</td><td class="num">2.5</td><td class="num">1.25</td></tr>
+          <tr><td>片手（手掌＋手背）</td><td class="num">1</td><td class="num">0.5</td></tr>
+          <tr><td>片腕（手を除く）</td><td class="num">3</td><td class="num">1.5</td></tr>
+          <tr><td>体幹（前面）</td><td class="num">7</td><td class="num">3.5</td></tr>
+          <tr><td>体幹（後面）</td><td class="num">7</td><td class="num">3.5</td></tr>
+          <tr><td>片脚（足を除く）</td><td class="num">6</td><td class="num">3</td></tr>
+          <tr><td>片足</td><td class="num">2</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+      <p class="note">全身1回 ≒ 約20 FTU ≒ 約10g。小児は体格に応じて減量（おおむね年齢別チャートを使用）。「塗布量 計算」タブで部位を選ぶと自動計算できます。</p>
+    </div>
+
+    <div class="block">
+      <h3>塗り方のコツ</h3>
+      <ul>
+        <li>すり込まず、<strong>のせて広げる</strong>。表面にうっすら光り、ティッシュが軽く貼り付く程度が適量。</li>
+        <li>毛の流れに沿って、やさしく。こすると刺激・悪化の原因に。</li>
+        <li><strong>入浴後できるだけ早く</strong>（5〜15分以内）。皮膚が清潔で水分のあるうちに。</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <h3>保湿剤と薬剤の塗る順番</h3>
+      <p>原則は <strong>① 全体に保湿剤 → ② 病変部に抗炎症薬</strong>。逆順でも効果差を示す明確なエビデンスは乏しく、<strong>間隔を空ける必要は基本的にありません</strong>。塗り分けが難しい患者には、保湿剤を全身→気になる部位に薬剤を重ねる方式が指導しやすいです。</p>
+    </div>
+  </section>
+
+  <!-- ===== CALC ===== -->
+  <section class="panel" id="calc">
+    <div class="sectitle">塗布量 計算（成人）</div>
+    <div class="lead">塗る部位の数を選ぶと、1回あたりの量と、処方期間ぶんの合計量・チューブ本数を自動計算します。</div>
+    <div class="block" style="padding:6px 16px 16px">
+      <div id="calcItems"></div>
+
+      <div class="calc-total">
+        <div><div class="t">FTU</div><div class="n" id="totFtu">0</div></div>
+        <div><div class="t">1回分</div><div class="n" id="totG">0</div><div class="u">g</div></div>
+      </div>
+
+      <div class="presc">
+        <div class="presc-row">
+          <div class="presc-k">1日の回数</div>
+          <div class="seg" id="segFreq">
+            <button data-v="1">1回</button>
+            <button data-v="2" class="on">2回</button>
+          </div>
+        </div>
+        <div class="presc-row">
+          <div class="presc-k">処方日数</div>
+          <div class="seg" id="segDays">
+            <button data-v="7">1週</button>
+            <button data-v="14" class="on">2週</button>
+            <button data-v="28">4週</button>
+            <button data-v="56">8週</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-total presc-total">
+        <div><div class="t" id="prescLabel">処方量（2週間分）</div><div class="n" id="totPg">0</div><div class="u">g</div></div>
+        <div><div class="t">5gチューブ</div><div class="n" id="totP5">0</div><div class="u">本</div></div>
+        <div><div class="t">10gチューブ</div><div class="n" id="totP10">0</div><div class="u">本</div></div>
+      </div>
+
+      <button class="reset" id="calcReset">部位をリセット</button>
+      <p class="note">1 FTU = 0.5g で換算。処方量 ＝ 1回分(g) × 1日の回数 × 日数。チューブ本数は切り上げ。実際の処方は病変範囲・剤形・残薬を加味して調整してください。</p>
+    </div>
+  </section>
+
+  <!-- ===== PROACTIVE ===== -->
+  <section class="panel" id="proactive">
+    <div class="sectitle">プロアクティブ療法</div>
+    <div class="block">
+      <h3>考え方</h3>
+      <p>見た目が治っても、皮膚には<strong>残った炎症（くすぶり）</strong>があります。これを抑えるため、<strong>寛解導入後も「以前に病変があった部位」へ抗炎症外用を週2〜3回 継続</strong>し、保湿は毎日続けます。再燃を有意に減らせます。</p>
+    </div>
+    <div class="block">
+      <h3>進め方</h3>
+      <ul>
+        <li><strong>① 寛解導入</strong>：炎症が強い間は適切なランクの薬剤を毎日しっかり塗り、皮膚をツルツルの状態まで戻す。</li>
+        <li><strong>② 維持（プロアクティブ）</strong>：ツルツルになった後も、再燃しやすい部位へ<strong>週2〜3回</strong>抗炎症外用。間の日は保湿のみ。</li>
+        <li><strong>③ 漸減</strong>：安定すれば週1回→保湿のみへ。</li>
+      </ul>
+    </div>
+    <div class="block">
+      <h3>維持に使う薬剤の目安</h3>
+      <ul>
+        <li><strong>ステロイド</strong>：週2回（最もエビデンスが厚く、コスト効率も良い）</li>
+        <li><strong>タクロリムス（プロトピック）</strong>：週2〜3回（成人0.1%／小児0.03%）。皮膚萎縮なく顔にも。</li>
+        <li><strong>デルゴシチニブ（コレクチム）</strong>：週2回。乾燥肌に向くが、TCSより維持効果はやや劣る報告あり。</li>
+        <li><strong>当院製剤（HPCr/HCCr）</strong>：保湿を兼ねた広範囲の維持に。詳細は「当院製剤」タブ。</li>
+      </ul>
+      <div class="nursebox">
+        <div class="nh">患者説明ポイント</div>
+        <ul>
+          <li>「治ったら全部やめる」ではなく「<strong>良くなっても週2回は続ける</strong>」のが再発を防ぐコツと伝える。</li>
+          <li>保湿は毎日。薬を塗らない日も必ず保湿。</li>
+          <li>カレンダーや曜日を決めて習慣化（例：月・木に塗る）。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SITE ===== -->
+  <section class="panel" id="site">
+    <div class="sectitle">部位別ガイド</div>
+    <div class="lead">皮膚の厚さ・吸収率・副作用リスクに応じた選択の目安。</div>
+    <div id="siteList"></div>
+  </section>
+
+  <!-- ===== MIX (当院製剤) ===== -->
+  <section class="panel" id="mix">
+    <div class="sectitle">当院オリジナル混合製剤</div>
+    <div class="lead">寛解維持（プロアクティブ）目的の希釈・保湿併用製剤。いずれも約1/6希釈。</div>
+    <div id="mixList"></div>
+    <div class="block" style="background:var(--accent-soft);border-color:#cfe3da;">
+      <h3 style="font-size:15px;">位置づけ（痒み抑制ランキング上の目安）</h3>
+      <p style="font-size:13.5px;">資料上、HPCr・HCCr は <strong>Tier 2（中等度に効果的）</strong>。原薬濃度はそれぞれタクロリムス0.03%・デルゴシチニブ0.25%より低いと推定され、抗炎症の即効性は単剤に劣りますが、<strong>保湿効果・刺激軽減・広範囲塗布の安全性</strong>という利点があり、特定の患者群（ステロイドの副作用を避けたい／乾燥肌／広範囲の維持）で有用です。</p>
+    </div>
+  </section>
+</main>
+
+<footer>やまもと皮膚科・漢方クリニック　院内資料 v1.0</footer></div>
+</div>
+
 <!-- 製品詳細ページ -->
 <div class="page" id="pg-prod-detail">
   <div class="card">
@@ -213,6 +699,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
     </div>
     <div style="padding:4px 15px 15px;">
       <button class="print-btn no-print" onclick="printResult()">🖨 チェックした項目を印刷する</button>
+      <button class="back-btn no-print" onclick="switchTab('topical')" style="margin-bottom:8px;">💊 外用薬の使い方を見る</button>
       <button class="back-btn no-print" onclick="goBack()">← 入力に戻る</button>
     </div>
   </div>
@@ -1031,6 +1518,8 @@ function switchTab(tab) {
   tabs[0].classList.toggle('active', tab === 'guidance');
   tabs[1].classList.toggle('active', tab === 'products');
   tabs[2].classList.toggle('active', tab === 'staff');
+  if(tabs[3]) tabs[3].classList.toggle('active', tab === 'topical');
+  if(tabs[4]) tabs[4].classList.toggle('active', tab === 'vitamin');
 
   document.getElementById('pg-input').classList.toggle('active', tab === 'guidance');
   document.getElementById('pg-result').classList.remove('active');
@@ -1038,6 +1527,8 @@ function switchTab(tab) {
   document.getElementById('pg-prod-detail').classList.remove('active');
   document.getElementById('pg-staff').classList.toggle('active', tab === 'staff');
   document.getElementById('pg-staff-detail').classList.remove('active');
+  document.getElementById('pg-topical').classList.toggle('active', tab === 'topical');
+  document.getElementById('pg-vitamin').classList.toggle('active', tab === 'vitamin');
   window.scrollTo(0, 0);
 }
 
@@ -1351,9 +1842,544 @@ function goBackStaff(){
   window.scrollTo(0,0);
 }
 
+
+/* ===== 外用薬ガイド（統合・スコープ隔離） ===== */
+(function(){
+var __TG=document.getElementById("topguide");
+
+/* ---------- safe storage (works on GitHub Pages, degrades gracefully) ---------- */
+var mem={};
+var store={
+  get:function(k){try{return localStorage.getItem(k);}catch(e){return mem[k]||null;}},
+  set:function(k,v){try{localStorage.setItem(k,v);}catch(e){mem[k]=v;}}
+};
+
+/* ---------- DRUG DATA ---------- */
+var drugs=[
+  /* ===== TCS ranks ===== */
+  {cat:"ステロイド", pill:"I群", pclass:"c-r1", name:"ストロンゲスト（最強）",
+   generic:"デルモベート / ジフラール・ダイアコート",
+   freq:"1日1〜2回", amount:"FTU基準。漫然と続けない", site:"体幹・四肢・手掌足底など厚い皮膚／頑固な病変",
+   point:"短期間で炎症を抑える主力。顔・頸部・陰部・間擦部には原則使わない。長期連用で皮膚萎縮・毛細血管拡張・線条に注意。",
+   caution:"顔・陰部・乳幼児への安易な使用、長期漫然投与は避ける",
+   tags:["即効","強力","萎縮注意"],
+   nurse:["『一番強いお薬。指示された部位・期間だけ』と明確に。","顔やデリケート部位には使わないよう念押し。","良くなったら自己判断でやめず受診を。"]},
+
+  {cat:"ステロイド", pill:"II群", pclass:"c-r2", name:"ベリーストロング（非常に強い）",
+   generic:"マイザー / アンテベート / フルメタ / トプシム / ネリゾナ / パンデル / リンデロンDP",
+   freq:"1日1〜2回", amount:"FTU基準", site:"体幹・四肢の中等〜高度の病変",
+   point:"成人ADの体幹・四肢で最も使用頻度が高い実用域。寛解導入の主力。プロアクティブ移行時は週2回へ。",
+   caution:"顔・頸部は短期にとどめる",
+   tags:["即効","主力","週2維持"],
+   nurse:["『しっかり効くお薬、まずはきちんと毎日』と寛解導入を説明。","良くなってきたら塗る回数を減らす段階があることを予告。"]},
+
+  {cat:"ステロイド", pill:"III群", pclass:"c-r3", name:"ストロング（強い）",
+   generic:"リンデロンV / ボアラ / メサデルム / エクラー / フルコート",
+   freq:"1日1〜2回", amount:"FTU基準", site:"体幹・四肢の中等度病変、顔は短期のみ",
+   point:"中等度病変や、強いランクからの段階的減量（ステップダウン）に。週2回プロアクティブの代表例（リンデロンV・ボアラ）。",
+   caution:"顔・頸部は短期に限定",
+   tags:["中等度","ステップダウン","週2維持"],
+   nurse:["減量段階のお薬であることが多い。前のお薬との違いを丁寧に。"]},
+
+  {cat:"ステロイド", pill:"IV群", pclass:"c-r4", name:"ミディアム（中等度）",
+   generic:"ロコイド / キンダベート / リドメックス / アルメタ / レダコート",
+   freq:"1日1〜2回", amount:"FTU基準", site:"顔・頸部・小児・デリケート部位",
+   point:"顔や小児に使いやすいランク。ロコイド・キンダベートは顔の軽〜中等度病変に頻用。",
+   caution:"効果不十分なら漫然と続けずランク調整",
+   tags:["顔OK","小児","マイルド"],
+   nurse:["顔や子どもに使える比較的やさしいお薬と説明。","それでも長期ダラダラ使用は避けるよう伝える。"]},
+
+  {cat:"ステロイド", pill:"V群", pclass:"c-r5", name:"ウィーク（弱い）",
+   generic:"プレドニゾロン",
+   freq:"1日1〜2回", amount:"FTU基準", site:"ごく軽度・乳児・粘膜近傍",
+   point:"最も弱い。単独でAD病変を抑えきる力は限定的。",
+   caution:"効果不十分例が多い",
+   tags:["最弱","軽度のみ"],
+   nurse:["『一番やさしいお薬』。軽い部位向けと説明。"]},
+
+  /* ===== TCI ===== */
+  {cat:"カルシニューリン阻害剤(TCI)", pill:"TCI", pclass:"c-tci", name:"プロトピック軟膏",
+   generic:"タクロリムス　0.1%(成人) / 0.03%(小児2歳以上)",
+   freq:"1日1〜2回", amount:"成人0.1%は1回5gまで（添付文書確認）", site:"顔・頸部・眼囲に特に有用",
+   point:"皮膚萎縮を起こさないのが最大の利点。顔・首・まぶた周りの維持に最適。プロアクティブ（週2〜3回）の代表薬。",
+   caution:"びらん・潰瘍・粘膜には塗らない（吸収増大）／光発がん性の懸念から日中は遮光、または夜間塗布／初期の灼熱感・ほてり",
+   tags:["萎縮なし","顔OK","週2〜3維持","初期ヒリつき"],
+   nurse:["『最初の数日〜2週間はヒリヒリ・ほてることがあるが、続けるとおさまる』と必ず先に伝える（中断防止）。","冷蔵保存や保湿剤併用で刺激感が和らぐ。","塗った部位は強い日光・日焼けを避ける。","ジュクジュク・キズには塗らない。"]},
+
+  /* ===== JAK ===== */
+  {cat:"JAK阻害剤", pill:"JAK", pclass:"c-jak", name:"コレクチム軟膏",
+   generic:"デルゴシチニブ　0.5%(15歳以上) / 0.25%(生後6か月〜)",
+   freq:"1日2回", amount:"成人0.5%は1回5gまで（添付文書確認）", site:"体幹・四肢・顔いずれも、乾燥肌に好適",
+   point:"局所pan-JAK阻害。刺激感が少なくびらん面にも比較的使いやすい。皮膚萎縮なし。角層水分量を維持しやすい。",
+   caution:"塗布量上限を守る／効果不十分例の見極め",
+   tags:["萎縮なし","低刺激","乾燥肌向き","長期可"],
+   nurse:["『ステロイドではないお薬。ヒリつきが少なく、長く使える』と説明。","小児にも使えるタイプがある（年齢で濃度が違う）。"]},
+
+  /* ===== PDE4 ===== */
+  {cat:"PDE4阻害剤", pill:"PDE4", pclass:"c-pde4", name:"モイゼルト軟膏",
+   generic:"ジファミラスト　1%(15歳以上) / 0.3%(2歳以上)",
+   freq:"1日2回", amount:"添付文書の塗布量規定に従う", site:"顔を含め広く使いやすい",
+   point:"PDE4阻害。刺激が少なく顔にも使いやすい。軽〜中等度の維持・補助に。",
+   caution:"重症例の単独治療では力不足のことがある",
+   tags:["非ステロイド","低刺激","顔OK"],
+   nurse:["『しみにくいお薬』として顔にも使える点を伝える。"]},
+
+  /* ===== AhR ===== */
+  {cat:"AhR活性化剤", pill:"AhR", pclass:"c-ahr", name:"ブイタマークリーム",
+   generic:"タピナロフ　1%",
+   freq:"1日1回", amount:"FTU基準", site:"体幹・四肢（乾癬・ADに適応）",
+   point:"AhR活性化による新規機序。1日1回でよい。",
+   caution:"毛包炎・接触皮膚炎が比較的多い",
+   tags:["1日1回","新機序"],
+   nurse:["『1日1回でよいお薬』。毛穴の赤いブツブツ（毛包炎）が出たら受診を。"]},
+
+  /* ===== Moisturizer ===== */
+  {cat:"保湿剤・基剤", pill:"保湿", pclass:"c-moist", name:"保湿剤（ヘパリン類似物質ほか）",
+   generic:"ヒルドイド（軟膏/クリーム/ローション/フォーム） / 白色ワセリン / 尿素クリーム",
+   freq:"1日2回以上", amount:"たっぷり（ティッシュが貼り付く程度）", site:"全身（治療の土台）",
+   point:"スキンケアの基盤。毎日継続が再燃予防の核。入浴後早めに。剤形は季節・部位で使い分け（夏はローション/フォーム、冬は軟膏/クリーム）。",
+   caution:"尿素はびらん・亀裂部にしみる",
+   tags:["毎日","土台","プロアクティブの基本"],
+   nurse:["『薬を塗らない日も保湿だけは毎日』を最重要メッセージに。","入浴後すぐ、乾く前に塗ると効果的。","ケチらずたっぷり、を具体量（FTU）で示す。"]}
+];
+
+/* ---------- 当院製剤 ---------- */
+var mixes=[
+  {name:"HPCr", pill:"混合", pclass:"c-mix",
+   recipe:"ヒルドイドクリーム 75g ＋ プロトピック0.1% 15g",
+   conc:"タクロリムス 約0.017%（約1/6希釈）",
+   use:"寛解維持（プロアクティブ）。保湿を兼ねた広範囲塗布。顔・頸部・皮膚の薄い部位にも。",
+   merit:["保湿効果（バリア改善・TEWL低下）","希釈により初期の灼熱感が軽減","広範囲に安全に塗れる","ステロイドの副作用（萎縮等）を回避"],
+   demerit:["タクロリムス0.03%/0.1%単剤より抗炎症は弱い可能性","希釈製剤の直接的RCTは限定的"],
+   freq:"週2〜3回（維持）",
+   nurse:["『保湿剤と混ぜたやさしい維持のお薬』と説明。","顔・首にも使える。良くなっても週2〜3回続ける。"]},
+  {name:"HCCr", pill:"混合", pclass:"c-mix",
+   recipe:"ヒルドイドクリーム 75g ＋ コレクチム0.5% 15g",
+   conc:"デルゴシチニブ 約0.083%（約1/6希釈）",
+   use:"乾燥肌の寛解維持。角層水分量を保ちながら長期に。広範囲の維持。",
+   merit:["保湿効果＋角層水分量の維持","ステロイドの副作用を回避","低濃度で広範囲に安全","長期使用が可能"],
+   demerit:["デルゴシチニブ0.25%/0.5%単剤より弱い可能性","週2回プロアクティブではTCSの方が維持効果は高い報告あり"],
+   freq:"週2回（維持）",
+   nurse:["『乾燥しやすい人の維持向け、保湿しながら炎症を抑える』と説明。","ステロイドを避けたい患者に提案しやすい。"]}
+];
+
+/* ---------- 部位別 ---------- */
+var sites=[
+  {area:"顔・頸部・眼囲", rec:"TCI（プロトピック）／JAK（コレクチム）／PDE4（モイゼルト）／弱め〜中等度TCS（ロコイド・キンダベート）／HPCr", avoid:"強いステロイドの長期使用は避ける（萎縮・毛細血管拡張）"},
+  {area:"体幹・四肢", rec:"II〜III群TCS（寛解導入）→ 週2回プロアクティブ（リンデロンV/ボアラ）／コレクチム／HCCr・HPCr", avoid:"—"},
+  {area:"手掌・足底", rec:"I〜II群TCS／コレクチム／モイゼルト。角層が厚く吸収が低いため強めで開始", avoid:"効果不十分なら密封療法（ODT）も検討"},
+  {area:"間擦部・陰部", rec:"弱め〜中等度TCS短期／TCI／JAK（コレクチム）／PDE4。吸収が高い部位", avoid:"強いステロイドの連用は避ける"},
+  {area:"頭部（被髪部）", rec:"ローション／フォーム剤を選択", avoid:"軟膏はベタつき塗りにくい"}
+];
+
+/* ---------- RENDER ---------- */
+function r(s){return s?'<span class="caution">⚠ '+s+'</span>':'';}
+
+function renderDrugs(filter){
+  filter=(filter||"").trim().toLowerCase();
+  var html="", count=0, lastCat="";
+  drugs.forEach(function(d,i){
+    var hay=(d.name+" "+d.generic+" "+d.cat+" "+d.tags.join(" ")).toLowerCase();
+    if(filter && hay.indexOf(filter)===-1) return;
+    count++;
+    if(d.cat!==lastCat){ html+='<div class="sectitle" style="margin-top:'+(lastCat?'24px':'14px')+'">'+d.cat+'</div>'; lastCat=d.cat; }
+    html+=''
+    +'<div class="card" data-i="'+i+'">'
+    + '<div class="card-head" onclick="toggleCard(this)">'
+    +   '<span class="pill '+d.pclass+'">'+d.pill+'</span>'
+    +   '<div class="card-title"><h3>'+d.name+'</h3><div class="generic">'+d.generic+'</div></div>'
+    +   '<span class="chev">▼</span>'
+    + '</div>'
+    + '<div class="card-body">'
+    +   '<div class="row"><div class="k">用法</div><div class="v">'+d.freq+'</div></div>'
+    +   '<div class="row"><div class="k">塗布量</div><div class="v">'+d.amount+'</div></div>'
+    +   '<div class="row"><div class="k">主な部位</div><div class="v">'+d.site+'</div></div>'
+    +   '<div class="row"><div class="k">ポイント</div><div class="v">'+d.point+'</div></div>'
+    +   (d.caution?'<div class="row"><div class="k">注意</div><div class="v">'+rr(d.caution)+'</div></div>':'')
+    +   '<div class="tags">'+d.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join("")+'</div>'
+    +   '<div class="nursebox"><div class="nh">患者説明ポイント</div><ul>'+d.nurse.map(function(n){return '<li>'+n+'</li>';}).join("")+'</ul></div>'
+    + '</div>'
+    +'</div>';
+  });
+  document.getElementById("drugList").innerHTML=html;
+  document.getElementById("noResult").style.display=count?"none":"block";
+}
+function rr(s){return '<span class="caution">'+s+'</span>';}
+
+function toggleCard(el){ el.parentNode.classList.toggle("open"); }
+
+function renderSites(){
+  document.getElementById("siteList").innerHTML=sites.map(function(s){
+    return '<div class="block"><h3 style="font-size:15.5px;">'+s.area+'</h3>'
+      +'<div class="row"><div class="k">推奨</div><div class="v">'+s.rec+'</div></div>'
+      +(s.avoid!=="—"?'<div class="row" style="border-top:1px dashed var(--line)"><div class="k">注意</div><div class="v">'+s.avoid+'</div></div>':'')
+      +'</div>';
+  }).join("");
+}
+
+function renderMix(){
+  document.getElementById("mixList").innerHTML=mixes.map(function(m){
+    return '<div class="block">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span class="pill '+m.pclass+'">'+m.pill+'</span><h3 style="margin:0;font-size:18px;">'+m.name+'</h3></div>'
+      +'<div class="row"><div class="k">処方</div><div class="v">'+m.recipe+'</div></div>'
+      +'<div class="row"><div class="k">濃度</div><div class="v">'+m.conc+'</div></div>'
+      +'<div class="row"><div class="k">用途</div><div class="v">'+m.use+'</div></div>'
+      +'<div class="row"><div class="k">頻度</div><div class="v">'+m.freq+'</div></div>'
+      +'<div class="row"><div class="k">利点</div><div class="v">'+m.merit.map(function(x){return '・'+x;}).join("<br>")+'</div></div>'
+      +'<div class="row"><div class="k">留意</div><div class="v">'+m.demerit.map(function(x){return '・'+x;}).join("<br>")+'</div></div>'
+      +'<div class="nursebox"><div class="nh">患者説明ポイント</div><ul>'+m.nurse.map(function(n){return '<li>'+n+'</li>';}).join("")+'</ul></div>'
+      +'</div>';
+  }).join("");
+}
+
+/* ---------- RANKING (痒み抑制効果) ---------- */
+var ranking=[
+  {tier:1,no:1,name:"デルモベート",cls:"I群 / ストロンゲスト",eff:"SMD −1.99",onset:"3〜4日",maint:"週2回"},
+  {tier:1,no:2,name:"ネリゾナ・トプシム・マイザー・アンテベート・ダイアコート",cls:"II群 / ベリーストロング",eff:"OR 8.15 / SMD −1.37",onset:"3〜4日",maint:"週2回"},
+  {tier:1,no:3,name:"プロトピック0.1%",cls:"TCI",eff:"OR 8.06 / 36.8%改善",onset:"数日〜1週",maint:"週2〜3回"},
+  {tier:1,no:4,name:"コレクチム0.5%",cls:"Pan-JAK阻害剤",eff:"OR 7.61 / 47%改善",onset:"1週",maint:"週2回"},
+
+  {tier:2,no:5,name:"リンデロンV・ボアラ",cls:"III群 / ストロング",eff:"OR 8.15 / SMD −1.37",onset:"数日〜1週",maint:"週2回"},
+  {tier:2,no:6,name:"リドメックス",cls:"III群相当（推定）",eff:"OR 8.15相当（推定）",onset:"数日〜1週",maint:"週2回"},
+  {tier:2,no:7,name:"メサデルム",cls:"III群相当（推定）",eff:"OR 8.15相当（推定）",onset:"数日〜1週",maint:"週2回"},
+  {tier:2,no:8,name:"プロトピック0.03%",cls:"TCI",eff:"SMD −1.57 / 27.5%改善",onset:"数日〜1週",maint:"週2〜3回"},
+  {tier:2,no:9,name:"コレクチム0.25%",cls:"Pan-JAK阻害剤",eff:"有意な改善",onset:"1週",maint:"週2回"},
+  {tier:2,no:10,name:"HPCr",cls:"希釈TCI",clinic:true,eff:"タクロリムス0.03%より低い（推定）",onset:"1週",maint:"週2〜3回"},
+  {tier:2,no:11,name:"HCCr",cls:"希釈JAK阻害剤",clinic:true,eff:"デルゴシチニブ0.25%より低い（推定）",onset:"1週",maint:"週2回"},
+
+  {tier:3,no:12,name:"ロコイド",cls:"IV群 / ミディアム",eff:"限定的",onset:"数日〜1週",maint:"週2回"},
+  {tier:3,no:13,name:"キンダベート",cls:"IV群 / ミディアム",eff:"限定的",onset:"数日〜1週",maint:"週2回"},
+  {tier:3,no:14,name:"モイゼルト1%",cls:"PDE4阻害剤",eff:"IGA 38.46%（成人）",onset:"1週",maint:"—"},
+  {tier:3,no:15,name:"モイゼルト0.3%",cls:"PDE4阻害剤",eff:"IGA 44.6%（小児）",onset:"1週",maint:"—"},
+  {tier:3,no:16,name:"タピナロフ1%（ブイタマー）",cls:"AhR活性化剤",eff:"OR 2.45 / SMD −0.36",onset:"24時間〜2日",maint:"—"}
+];
+var tierMeta={1:{lbl:"TIER 1",desc:"最も効果的"},2:{lbl:"TIER 2",desc:"中等度に効果的"},3:{lbl:"TIER 3",desc:"効果が限定的"}};
+
+function renderRank(){
+  var html="", lastTier=0;
+  ranking.forEach(function(r){
+    if(r.tier!==lastTier){
+      var m=tierMeta[r.tier];
+      html+='<div class="tierhead t'+r.tier+'"><span class="tb">'+m.lbl+'</span><span class="td">'+m.desc+'</span></div>';
+      lastTier=r.tier;
+    }
+    html+='<div class="rk rk-t'+r.tier+(r.clinic?' clinic':'')+'">'
+      +'<div class="rk-num">'+r.no+'</div>'
+      +'<div class="rk-main">'
+      +  '<div class="rk-name">'+r.name+(r.clinic?'<span class="rk-clinic-badge">当院製剤</span>':'')+'<span class="rk-class">'+r.cls+'</span></div>'
+      +  '<div class="rk-metrics"><span>痒み改善：<b>'+r.eff+'</b></span><span>発現：<b>'+r.onset+'</b></span><span>維持：<b>'+r.maint+'</b></span></div>'
+      +'</div></div>';
+  });
+  document.getElementById("rankList").innerHTML=html;
+}
+
+/* ---------- CALCULATOR ---------- */
+var calcParts=[
+  {n:"顔＋頸部",f:2.5},{n:"片手 ×",f:1,each:true},{n:"片腕 ×",f:3,each:true},
+  {n:"体幹（前面）",f:7},{n:"体幹（後面）",f:7},{n:"片脚 ×",f:6,each:true},{n:"片足 ×",f:2,each:true}
+];
+var calcState={};
+var prescFreq=2, prescDays=14;
+function renderCalc(){
+  document.getElementById("calcItems").innerHTML=calcParts.map(function(p,i){
+    calcState[i]=calcState[i]||0;
+    return '<div class="calc-item"><div><div class="name">'+p.n+(p.each?'':'')+'</div><div class="ftu">'+p.f+' FTU'+(p.each?' /個':'')+'</div></div>'
+      +'<div class="stepper"><button onclick="calcStep('+i+',-1)">−</button><span class="cnt" id="cnt'+i+'">'+calcState[i]+'</span><button onclick="calcStep('+i+',1)">＋</button></div></div>';
+  }).join("");
+  updateCalc();
+}
+function calcStep(i,d){ calcState[i]=Math.max(0,(calcState[i]||0)+d); document.getElementById("cnt"+i).textContent=calcState[i]; updateCalc(); }
+function updateCalc(){
+  var ftu=0;
+  calcParts.forEach(function(p,i){ ftu+=p.f*(calcState[i]||0); });
+  var g=ftu*0.5;
+  document.getElementById("totFtu").textContent=(Math.round(ftu*10)/10);
+  document.getElementById("totG").textContent=(Math.round(g*10)/10);
+  // 処方量
+  var pg=g*prescFreq*prescDays;
+  var wk=prescDays/7;
+  document.getElementById("prescLabel").textContent="処方量（"+(wk%1===0?wk+"週間":prescDays+"日")+"分）";
+  document.getElementById("totPg").textContent=(pg>0?Math.round(pg):0);
+  document.getElementById("totP5").textContent=(pg>0?Math.ceil(pg/5):0);
+  document.getElementById("totP10").textContent=(pg>0?Math.ceil(pg/10):0);
+}
+function bindSeg(id,setter){
+  var seg=document.getElementById(id);
+  seg.querySelectorAll("button").forEach(function(b){
+    b.onclick=function(){
+      seg.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+      b.classList.add("on");
+      setter(parseInt(b.dataset.v,10));
+      updateCalc();
+    };
+  });
+}
+bindSeg("segFreq",function(v){prescFreq=v;});
+bindSeg("segDays",function(v){prescDays=v;});
+document.getElementById("calcReset").onclick=function(){ calcState={}; renderCalc(); };
+
+/* ---------- TABS ---------- */
+var tabs=document.querySelectorAll("#topguide .tab");
+var panels=document.querySelectorAll("#topguide .panel");
+tabs.forEach(function(t){
+  t.onclick=function(){
+    tabs.forEach(function(x){x.classList.remove("active");});
+    panels.forEach(function(x){x.classList.remove("active");});
+    t.classList.add("active");
+    document.getElementById(t.dataset.tab).classList.add("active");
+    document.getElementById("searchwrap").style.display=(t.dataset.tab==="drugs")?"block":"none";
+    window.scrollTo(0,0);
+  };
+});
+
+/* ---------- nurse mode ---------- */
+var nurseToggle=document.getElementById("nurseToggle");
+if(store.get("nurseMode")==="1"){ nurseToggle.checked=true; __TG.classList.add("nurse-on"); }
+nurseToggle.onchange=function(){
+  __TG.classList.toggle("nurse-on",this.checked);
+  store.set("nurseMode",this.checked?"1":"0");
+};
+
+/* ---------- search ---------- */
+document.getElementById("search").addEventListener("input",function(){ renderDrugs(this.value); });
+
+/* ---------- init ---------- */
+document.getElementById("searchwrap").style.display="block";
+renderDrugs("");
+renderSites();
+renderMix();
+renderRank();
+renderCalc();
+
+window.toggleCard=toggleCard; window.calcStep=calcStep;
+})();
+
 initButtons();
 initProducts();
 initStaff();
+
+/* ====== ビタミン剤(内服)モジュール ====== */
+var VIT_AGENTS = [
+  { id:"b2", tag:"B2", name:"ビタミンB2 (リボフラビン)", brand:"フラビタン・ハイボン 等", color:"#d9a426",
+    mech:"FAD/FMNとして酸化還元補酵素・抗酸化に働き、角化の正常化を助ける。欠乏で炎症性サイトカイン上昇・角化遅延。",
+    diseases:[
+      {d:"乾癬", ev:"mid", note:"摂取量増加で発症リスク低下(OR 0.84/log単位、特に40歳以上)。病変部で代謝遺伝子の変化。"},
+      {d:"脂漏性皮膚炎", ev:"mid", note:"欠乏症の典型的皮膚症状。補充で改善が期待。"},
+      {d:"口角炎・口唇炎・舌炎", ev:"mid", note:"リボフラビン欠乏に特徴的。"},
+      {d:"アトピー性皮膚炎", ev:"low", note:"UV処理リボフラビンがNLRP3インフラマソーム抑制で症状改善(基礎)。"}
+    ],
+    doses:[
+      {k:"成人女性(推奨量)", v:"1.4 mg/日"},
+      {k:"成人男性(推奨量)", v:"1.6 mg/日"},
+      {k:"妊婦 / 授乳婦", v:"1.9 / 2.0 mg/日"},
+      {k:"治療用量", v:"確立されていない(欠乏は推奨量基準)"}
+    ],
+    tableDose:"1.4–1.6 mg/日(欠乏予防)", tableDis:"乾癬・脂漏性皮膚炎・口角炎", warn:"" },
+  { id:"b6", tag:"B6", name:"ビタミンB6 (ピリドキシン)", brand:"ピドキサール 等", color:"#c98a2e",
+    mech:"フィラグリンmRNA/蛋白発現を濃度依存的に増加(バリア改善)。酸化ストレス下の角化細胞メラノソーム貪食を抑制し分化を回復。",
+    diseases:[
+      {d:"色素沈着・シミ予防", ev:"low", note:"メラノソーム貪食抑制・角化細胞分化回復(基礎)。"},
+      {d:"バリア機能障害", ev:"low", note:"フィラグリン産生促進によるバリア改善(基礎)。"},
+      {d:"アトピー性皮膚炎", ev:"low", note:"経口50mg/日×4週RCTで有意差なし(RR 1.05)。"}
+    ],
+    doses:[
+      {k:"成人女性 / 男性(推奨量)", v:"1.4 / 1.6 mg/日"},
+      {k:"AD研究用量", v:"50 mg/日×4週(有意差なし)"},
+      {k:"欠乏症(食事性)", v:"10–20 mg/日×3週"},
+      {k:"欠乏症(INH関連)", v:"100 mg/日×3週"}
+    ],
+    tableDose:"1.4–1.6 mg/日／欠乏 10–20 mg/日", tableDis:"色素沈着予防・バリア改善",
+    warn:"大量・長期投与で末梢神経障害(感覚性ニューロパチー)の報告。漫然投与を避ける。" },
+  { id:"e", tag:"E", name:"ビタミンE (トコフェロール)", brand:"ユベラ 等", color:"#3d6b5e",
+    mech:"強力な脂溶性抗酸化作用で脂質過酸化を抑制、酸化ストレスから細胞膜を保護。",
+    diseases:[
+      {d:"アトピー性皮膚炎", ev:"hi", note:"400 IU/日×4–8ヶ月で掻痒・病変範囲・重症度を有意に改善(複数RCT)。最も確立。"},
+      {d:"尋常性痤瘡", ev:"mid", note:"患者で血清Eが低値(SMD -0.67)。補充の有効性が示唆。"},
+      {d:"乾癬", ev:"mid", note:"患者で血清Eが著明に低値(SMD -2.73)。"},
+      {d:"白斑", ev:"low", note:"血清E低値(SMD -0.70)。抗酸化療法の対象。"},
+      {d:"光老化", ev:"low", note:"抗酸化作用で紫外線障害を軽減。"}
+    ],
+    doses:[
+      {k:"AD(単独)", v:"400 IU/日 × 4–8ヶ月"},
+      {k:"AD(VitD併用)", v:"600 IU/日 × 2ヶ月"},
+      {k:"安全性", v:"上記用量で確認済"}
+    ],
+    tableDose:"400 IU/日(AD)", tableDis:"アトピー性皮膚炎・痤瘡・乾癬", warn:"" },
+  { id:"c", tag:"C", name:"ビタミンC (アスコルビン酸)", brand:"シナール(+パントテン酸)等", color:"#1f8f6b",
+    mech:"コラーゲン合成の補因子、チロシナーゼ阻害、抗酸化。UV誘発性光障害を軽減。",
+    diseases:[
+      {d:"光老化・しわ", ev:"mid", note:"外用5–10%でコラーゲン合成促進、改善効果。"},
+      {d:"色素沈着・肝斑", ev:"mid", note:"チロシナーゼ阻害による美白効果(主に外用)。"},
+      {d:"日光角化症", ev:"low", note:"高濃度外用の治療効果の可能性(限定的)。"},
+      {d:"非黒色腫皮膚癌(低リスク)", ev:"low", note:"補助療法の可能性(エビデンス限定的)。"},
+      {d:"アトピー性皮膚炎", ev:"low", note:"患者で血漿Cが低値。補充が有益な可能性。"}
+    ],
+    doses:[
+      {k:"外用", v:"5–10% 製剤"},
+      {k:"経口(単独)", v:"治療用量は未確立"},
+      {k:"複合療法例", v:"プロシアニジン+A/C/E を1日2回×8週"}
+    ],
+    tableDose:"外用 5–10%／経口は補助的", tableDis:"光老化・色素沈着・肝斑", warn:"" },
+  { id:"txa", tag:"TA", name:"トランサミン (トラネキサム酸)", brand:"トランサミン", color:"#9b6dd1",
+    mech:"プラスミン阻害に加え、抗炎症・抗メラニン産生作用。メラノサイトへのパラクライン因子を抑制。",
+    diseases:[
+      {d:"肝斑", ev:"hi", note:"最も確立。250mg×2/日 ×3ヶ月でmMASI約49%減。第一選択級。"},
+      {d:"炎症後色素沈着(PIH)", ev:"mid", note:"経口投与が予防・治療に安全かつ有効。"},
+      {d:"酒さ(顔面紅斑)", ev:"mid", note:"3%外用+IPL併用で紅斑改善(RCT)。"},
+      {d:"尋常性痤瘡(炎症性)", ev:"mid", note:"炎症性病変の減少。"},
+      {d:"乾癬様皮膚炎", ev:"low", note:"紅斑・肥厚・落屑を軽減(動物/基礎)。"}
+    ],
+    doses:[
+      {k:"肝斑(標準)", v:"250 mg × 2/日"},
+      {k:"肝斑(高用量)", v:"500 mg × 2/日(差なし)"},
+      {k:"総量", v:"500–1500 mg/日"},
+      {k:"期間", v:"通常12週、休薬期間を設定"}
+    ],
+    tableDose:"250 mg×2/日(肝斑)", tableDis:"肝斑・PIH・酒さ",
+    warn:"血栓形成傾向のある患者では使用を避ける。血栓リスク・既往・併用薬(経口避妊薬等)を必ず確認。" },
+  { id:"cys", tag:"Cys", name:"ハイチオール (L-システイン)", brand:"ハイチオール", color:"#3c8aa8",
+    mech:"グルタチオン(GSH)前駆体として抗酸化。ケラチン等の構造蛋白形成に必要。活性化マスト細胞のTSLP産生を抑制(NF-κB/p38/JNK阻害)。",
+    diseases:[
+      {d:"アレルギー性皮膚炎", ev:"low", note:"マスト細胞のTSLP産生抑制で炎症軽減(基礎)。"},
+      {d:"尋常性痤瘡", ev:"mid", note:"NAC(N-アセチルシステイン)形態で酸化ストレス・炎症性サイトカイン(TNF-α/IL-8/IL-6)を抑制。"},
+      {d:"色素沈着", ev:"low", note:"GSH前駆体として抗酸化・美白補助。"}
+    ],
+    doses:[
+      {k:"皮膚科標準", v:"明確には未確立"},
+      {k:"参考(EPP光線過敏)", v:"500 mg × 2/日 長期"},
+      {k:"前駆体として", v:"GSH濃度上昇を期待"}
+    ],
+    tableDose:"皮膚科用量は未確立(参考 500mg×2)", tableDis:"痤瘡・色素沈着・アレルギー", warn:"" },
+  { id:"gsh", tag:"GSH", name:"タチオン (グルタチオン)", brand:"タチオン", color:"#c95a62",
+    mech:"チロシナーゼを直接・間接に阻害し、メラニン産生をユーメラニン→フェオメラニンへ転換。表皮の酸化還元バランス維持に必須。",
+    diseases:[
+      {d:"肝斑", ev:"mid", note:"外用0.5%が0.1%/プラセボより有効。経口250–500mg/日でメラニン指数減少。"},
+      {d:"全身性美白", ev:"mid", note:"チロシナーゼ阻害+メラニン経路転換による美白。"},
+      {d:"創傷治癒遅延", ev:"low", note:"角化細胞の生存・創傷治癒に重要。"},
+      {d:"酸化ストレス関連皮膚疾患", ev:"low", note:"表皮の酸化還元バランス維持。"}
+    ],
+    doses:[
+      {k:"経口", v:"250–500 mg/日"},
+      {k:"外用", v:"0.5% 製剤"},
+      {k:"投与経路", v:"経口が安全・有効"}
+    ],
+    tableDose:"経口 250–500 mg/日／外用 0.5%", tableDis:"肝斑・美白",
+    warn:"静脈内投与は有効性の欠如と副作用のため推奨されない(禁忌的扱い)。" }
+];
+
+var VIT_LS_FAV="vit_fav_v1", VIT_LS_MEMO="vit_memo_v1";
+var vitFavs = JSON.parse(localStorage.getItem(VIT_LS_FAV) || "[]");
+var vitMemos = JSON.parse(localStorage.getItem(VIT_LS_MEMO) || "{}");
+var vitFilterV = "all", vitSearchV = "";
+var vitEvLabel = { hi:"HIGH", mid:"MID", low:"LOW" };
+
+function vitView(v, btn){
+  var seg = btn.parentNode;
+  seg.querySelectorAll("button").forEach(function(b){ b.classList.remove("on"); });
+  btn.classList.add("on");
+  document.getElementById("vit-v-agents").classList.toggle("on", v==="agents");
+  document.getElementById("vit-v-dis").classList.toggle("on", v==="dis");
+  document.getElementById("vit-v-table").classList.toggle("on", v==="table");
+}
+function vitFilter(f, btn){
+  document.getElementById("vit-filters").querySelectorAll(".vit-chip").forEach(function(c){ c.classList.remove("on"); });
+  btn.classList.add("on");
+  vitFilterV = f; vitRenderAgents();
+}
+function vitSearch(q){ vitSearchV = (q||"").trim(); vitRenderAgents(); }
+
+function vitRenderAgents(){
+  var list = document.getElementById("vit-agentlist");
+  var data = VIT_AGENTS.filter(function(a){
+    if(vitFilterV==="fav" && vitFavs.indexOf(a.id)<0) return false;
+    if(vitFilterV!=="all" && vitFilterV!=="fav"){
+      var hit = a.name.indexOf(vitFilterV)>=0 || a.diseases.some(function(d){ return d.d.indexOf(vitFilterV)>=0; });
+      if(!hit) return false;
+    }
+    if(vitSearchV){
+      var blob = (a.name + a.brand + a.mech + a.diseases.map(function(d){return d.d+d.note;}).join("")).toLowerCase();
+      if(blob.indexOf(vitSearchV.toLowerCase())<0) return false;
+    }
+    return true;
+  });
+  if(!data.length){ list.innerHTML = '<div class="vit-empty">該当する成分がありません</div>'; return; }
+  list.innerHTML = data.map(function(a){
+    var on = vitFavs.indexOf(a.id)>=0 ? "on" : "";
+    var disLi = a.diseases.map(function(d){
+      return '<li><span class="ev '+d.ev+'">'+vitEvLabel[d.ev]+'</span><span><span class="dz">'+d.d+'</span> — '+d.note+'</span></li>';
+    }).join("");
+    var doseLi = a.doses.map(function(d){
+      return '<div class="vit-dline"><span class="k">'+d.k+'</span><span class="v">'+d.v+'</span></div>';
+    }).join("");
+    var warnHtml = a.warn ? '<div class="vit-sec"><div class="vit-warn"><b>⚠ 注意・禁忌</b><br>'+a.warn+'</div></div>' : "";
+    var memoVal = vitMemos[a.id] || "";
+    return '<div class="vit-card" data-id="'+a.id+'">'
+      + '<div class="vit-head" onclick="vitToggleCard(\''+a.id+'\',event)">'
+      + '<div class="vit-sw" style="background:'+a.color+'">'+a.tag+'</div>'
+      + '<div class="vit-tt"><h3>'+a.name+'</h3><div class="sub">'+a.brand+'</div></div>'
+      + '<button class="vit-star '+on+'" onclick="vitToggleFav(\''+a.id+'\',event)">★</button>'
+      + '<svg class="vit-chev" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>'
+      + '</div>'
+      + '<div class="vit-body"><div class="vit-inner">'
+      + '<div class="vit-sec"><div class="vit-lbl">作用機序</div><div class="vit-txt">'+a.mech+'</div></div>'
+      + '<div class="vit-sec"><div class="vit-lbl">推奨される皮膚科疾患</div><ul class="vit-dl">'+disLi+'</ul></div>'
+      + '<div class="vit-sec"><div class="vit-lbl">推奨内服量</div><div class="vit-dose">'+doseLi+'</div></div>'
+      + warnHtml
+      + '<div class="vit-sec vit-memo"><div class="vit-lbl">院内メモ(処方ルール等)</div>'
+      + '<textarea data-memo="'+a.id+'" placeholder="例)自費／保険算定の運用、当院採用規格、併用パターンなど">'+memoVal+'</textarea>'
+      + '<div class="hint">入力内容はこの端末に自動保存されます。</div></div>'
+      + '</div></div></div>';
+  }).join("");
+  list.querySelectorAll("textarea[data-memo]").forEach(function(t){
+    t.addEventListener("input", function(e){
+      vitMemos[e.target.getAttribute("data-memo")] = e.target.value;
+      localStorage.setItem(VIT_LS_MEMO, JSON.stringify(vitMemos));
+    });
+    t.addEventListener("click", function(e){ e.stopPropagation(); });
+  });
+}
+function vitToggleCard(id, e){
+  if(e.target.closest(".vit-star")) return;
+  document.querySelector('.vit-card[data-id="'+id+'"]').classList.toggle("open");
+}
+function vitToggleFav(id, e){
+  e.stopPropagation();
+  var i = vitFavs.indexOf(id);
+  if(i>=0) vitFavs.splice(i,1); else vitFavs.push(id);
+  localStorage.setItem(VIT_LS_FAV, JSON.stringify(vitFavs));
+  vitRenderAgents();
+}
+function vitRenderDis(){
+  var map = {};
+  VIT_AGENTS.forEach(function(a){
+    a.diseases.forEach(function(d){
+      if(!map[d.d]) map[d.d] = [];
+      map[d.d].push({ name:a.name.split(" ")[0], color:a.color, ev:d.ev });
+    });
+  });
+  var icons = {"肝斑":"◐","色素沈着・シミ予防":"◐","炎症後色素沈着(PIH)":"◐","色素沈着":"◐",
+    "アトピー性皮膚炎":"✦","乾癬":"❉","尋常性痤瘡":"●","尋常性痤瘡(炎症性)":"●",
+    "脂漏性皮膚炎":"❋","酒さ(顔面紅斑)":"❀","白斑":"○","光老化":"☀","光老化・しわ":"☀",
+    "口角炎・口唇炎・舌炎":"◇","バリア機能障害":"▣","日光角化症":"☀",
+    "非黒色腫皮膚癌(低リスク)":"☀","乾癬様皮膚炎":"❉","アレルギー性皮膚炎":"✦",
+    "全身性美白":"◐","創傷治癒遅延":"✚","酸化ストレス関連皮膚疾患":"✚"};
+  var keys = Object.keys(map).sort(function(x,y){ return map[y].length - map[x].length; });
+  document.getElementById("vit-dislist").innerHTML = keys.map(function(k){
+    var pills = map[k].map(function(p){
+      return '<span class="vit-pill"><span class="d" style="background:'+p.color+'"></span>'+p.name+'<span class="ev '+p.ev+'" style="margin-left:2px">'+vitEvLabel[p.ev]+'</span></span>';
+    }).join("");
+    return '<div class="vit-dcard"><h4>'+(icons[k]||"◆")+' '+k+'</h4>'+pills+'</div>';
+  }).join("");
+}
+function vitRenderTable(){
+  document.getElementById("vit-tablebody").innerHTML = VIT_AGENTS.map(function(a){
+    return '<tr><td><div class="nm"><span class="d" style="background:'+a.color+'"></span>'+a.name.split(" ")[0]+'</div><div class="bd">'+a.brand+'</div></td>'
+      + '<td>'+a.tableDose+'</td><td>'+a.tableDis+'</td></tr>';
+  }).join("");
+}
+function vitInit(){ vitRenderAgents(); vitRenderDis(); vitRenderTable(); }
+vitInit();
+
 </script>
 </body>
 </html>
