@@ -375,6 +375,16 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 #pg-vitamin .vit-view.on{display:block;}
 #pg-vitamin .vit-note{font-size:10.5px;color:var(--tx3);line-height:1.6;text-align:center;padding:14px 6px 4px;}
 </style>
+<style id="patch-embed-css">
+/* タブが6個になっても崩れないよう横スクロール対応 */
+.tab-nav{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav .tab-btn{flex:1 0 auto;}
+/* パッチテストアプリ埋め込み(iframe完全分離) */
+#pg-patch{padding:0;max-width:none;margin:0;}
+#pg-patch iframe{display:block;width:100%;height:calc(100dvh - 112px);min-height:480px;border:0;background:#f3ecdd;}
+@supports not (height:100dvh){#pg-patch iframe{height:calc(100vh - 112px);}}
+</style>
 </head>
 <body>
 
@@ -388,6 +398,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   <button class="tab-btn" onclick="switchTab('staff')">👨‍⚕️ 医師・看護師</button>
   <button class="tab-btn" onclick="switchTab('topical')">💊 外用薬</button>
   <button class="tab-btn" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
+  <button class="tab-btn" onclick="switchTab('patch')">🩹 パッチ</button>
 </div>
 
 <!-- 入力ページ -->
@@ -703,6 +714,811 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
       <button class="back-btn no-print" onclick="goBack()">← 入力に戻る</button>
     </div>
   </div>
+</div>
+
+<!-- パッチテスト アレルゲン参照(独立アプリをiframeで埋め込み) -->
+<div class="page" id="pg-patch">
+  <iframe title="接触皮膚炎 パッチテスト アレルゲン参照" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, viewport-fit=cover&quot;>
+<meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;>
+<meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;default&quot;>
+<title>接触皮膚炎 パッチテスト アレルゲン参照</title>
+<style>
+:root{
+  --washi:#f3ecdd; --washi2:#ece2ce; --sumi:#2c2723; --sumi2:#5b5247;
+  --shu:#b6483a; --shu-d:#9a3a2e; --kincha:#a87d35; --matsuba:#5a6e48;
+  --ai:#2f4a63; --akane:#8a4a5a; --resin:#896437; --rubber:#49545f; --uv:#357370;
+  --line:#d8ccb2; --card:#fbf6ea; --shadow:0 1px 0 rgba(0,0,0,.04),0 6px 18px -10px rgba(60,45,25,.35);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:&quot;Hiragino Sans&quot;,&quot;Yu Gothic&quot;,-apple-system,&quot;Helvetica Neue&quot;,sans-serif;
+  color:var(--sumi); background:var(--washi);
+  background-image:
+    radial-gradient(circle at 18% 12%,rgba(168,125,53,.05),transparent 40%),
+    radial-gradient(circle at 82% 78%,rgba(47,74,99,.05),transparent 42%),
+    url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix type='matrix' values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.25 0 0 0 0.025 0'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>&quot;);
+  -webkit-text-size-adjust:100%; line-height:1.65;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.mincho{font-family:&quot;Yu Mincho&quot;,&quot;YuMincho&quot;,&quot;Hiragino Mincho ProN&quot;,serif;font-weight:600}
+header{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(180deg,rgba(243,236,221,.97),rgba(243,236,221,.9));
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(env(safe-area-inset-top) + 10px) 16px 8px;
+}
+.brand{display:flex;align-items:center;gap:11px}
+.brand h1{font-size:18px;margin:0;letter-spacing:.02em}
+.brand .sub{font-size:11px;color:var(--sumi2);letter-spacing:.04em;margin-top:1px}
+.tampopo{width:34px;height:34px;flex:0 0 auto}
+.tabs{display:flex;gap:4px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--sumi2);
+  padding:7px 13px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+}
+.tab.on{background:var(--ai);color:#fff;border-color:var(--ai)}
+main{max-width:760px;margin:0 auto;padding:14px 14px 90px}
+.view{display:none;animation:fade .25s ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.search{position:relative;margin-bottom:10px}
+.search input{
+  width:100%;padding:12px 14px 12px 40px;border:1px solid var(--line);border-radius:12px;
+  font-size:15px;background:var(--card);color:var(--sumi)
+}
+.search input:focus{outline:none;border-color:var(--kincha);box-shadow:0 0 0 3px rgba(168,125,53,.15)}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.5}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{
+  border:1px solid var(--line);background:var(--card);color:var(--sumi2);
+  padding:5px 11px;border-radius:999px;font-size:12px;cursor:pointer;font-weight:600
+}
+.chip.on{background:var(--shu);color:#fff;border-color:var(--shu)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.pcard{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;
+  cursor:pointer;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s;position:relative;overflow:hidden
+}
+.pcard:active{transform:scale(.98)}
+.pcard .emo{font-size:24px;line-height:1}
+.pcard .pn{font-size:14.5px;font-weight:700;margin-top:7px}
+.pcard .pc{font-size:11px;color:var(--sumi2);margin-top:3px}
+.pcard .cnt{position:absolute;top:11px;right:12px;font-size:11px;color:var(--kincha);font-weight:700}
+.catband{position:absolute;left:0;top:0;bottom:0;width:4px}
+
+/* detail */
+.detail-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:6px}
+.detail-head .emo{font-size:34px}
+.detail-head h2{margin:0;font-size:21px}
+.detail-head .dc{font-size:12px;color:var(--sumi2)}
+.back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--ai);font-weight:700;font-size:14px;cursor:pointer;padding:6px 0;margin-bottom:2px}
+.note{
+  background:linear-gradient(0deg,rgba(168,125,53,.06),rgba(168,125,53,.06)),var(--card);
+  border:1px solid var(--line);border-left:3px solid var(--kincha);
+  border-radius:10px;padding:10px 13px;font-size:13px;color:var(--sumi);margin:10px 0 16px
+}
+.note b{color:var(--shu-d)}
+.group{margin-bottom:16px}
+.group-h{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;margin:0 0 9px}
+.dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.group-h .gn{font-size:11px;color:var(--sumi2);font-weight:600}
+.allergens{display:flex;flex-direction:column;gap:7px}
+.al{
+  display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:9px 11px;cursor:pointer
+}
+.al:active{background:#f6efdf}
+.chamber{
+  width:34px;height:34px;border-radius:50%;flex:0 0 auto;
+  border:2px solid var(--c,#bbb);display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;color:var(--c,#777);background:#fff;
+  box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 4px rgba(0,0,0,.04)
+}
+.al .am{flex:1;min-width:0}
+.al .an{font-size:14px;font-weight:700;line-height:1.3}
+.al .ax{font-size:11.5px;color:var(--sumi2);margin-top:1px}
+.al .conc{font-size:11px;color:var(--kincha);font-weight:700;white-space:nowrap}
+.addbtn{
+  border:1.5px solid var(--ai);color:var(--ai);background:#fff;width:30px;height:30px;border-radius:9px;
+  font-size:18px;font-weight:700;cursor:pointer;flex:0 0 auto;line-height:1
+}
+.addbtn.added{background:var(--ai);color:#fff}
+
+/* allergen detail sheet */
+.sheet-bg{position:fixed;inset:0;background:rgba(40,30,20,.45);z-index:50;display:none;align-items:flex-end;justify-content:center}
+.sheet-bg.on{display:flex}
+.sheet{
+  background:var(--washi);width:100%;max-width:560px;border-radius:18px 18px 0 0;
+  padding:18px 18px calc(20px + env(safe-area-inset-bottom));max-height:84vh;overflow:auto;
+  box-shadow:0 -10px 40px rgba(0,0,0,.3);animation:up .26s cubic-bezier(.2,.8,.2,1)
+}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.sheet .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 14px}
+.sheet h3{margin:0 0 2px;font-size:19px}
+.sheet .meta{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.sheet .body{font-size:14px;margin:8px 0}
+.sheet .lbl{font-size:11px;color:var(--sumi2);font-weight:700;letter-spacing:.05em;margin:14px 0 5px}
+.relprod{display:flex;flex-wrap:wrap;gap:6px}
+.relprod span{font-size:12px;background:var(--card);border:1px solid var(--line);padding:4px 9px;border-radius:8px;cursor:pointer}
+
+/* list */
+.listempty{text-align:center;color:var(--sumi2);padding:40px 20px;font-size:14px}
+.listempty .big{font-size:40px;margin-bottom:8px}
+.litem{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 11px;margin-bottom:7px}
+.litem .am{flex:1}
+.litem .an{font-size:14px;font-weight:700}
+.litem .ax{font-size:11px;color:var(--sumi2)}
+.litem .conc{font-size:11px;color:var(--kincha);font-weight:700;margin-right:4px}
+.litem .rm{border:none;background:none;color:var(--shu);font-size:20px;cursor:pointer;padding:2px 6px}
+.listbar{display:flex;gap:8px;margin:6px 0 14px;flex-wrap:wrap}
+.btn{border:1px solid var(--ai);background:var(--ai);color:#fff;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--ai)}
+.btn.warn{border-color:var(--shu);background:#fff;color:var(--shu)}
+.count-h{font-size:13px;color:var(--sumi2);margin:2px 0 10px}
+
+/* standard series */
+.acc{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.acc summary{padding:12px 14px;font-weight:700;font-size:14.5px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary .gn{margin-left:auto;font-size:11px;color:var(--sumi2);font-weight:600}
+.acc .ac-body{padding:0 12px 10px}
+
+.disc{font-size:11.5px;color:var(--sumi2);border-top:1px dashed var(--line);margin-top:24px;padding-top:14px;line-height:1.6}
+.foot{text-align:center;font-size:11px;color:var(--sumi2);margin-top:18px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--sumi);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:80;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@media print{
+  header,.tabs,.listbar,.disc,.foot,.back,.addbtn{display:none!important}
+  body{background:#fff}
+  .litem{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class=&quot;brand&quot;>
+    <svg class=&quot;tampopo&quot; viewBox=&quot;0 0 48 48&quot; aria-hidden=&quot;true&quot;>
+      <g fill=&quot;none&quot;>
+        <line x1=&quot;24&quot; y1=&quot;46&quot; x2=&quot;24&quot; y2=&quot;24&quot; stroke=&quot;#5a6e48&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/>
+        <path d=&quot;M24 40c-4-1-7-4-8-7&quot; stroke=&quot;#5a6e48&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/>
+        <circle cx=&quot;24&quot; cy=&quot;18&quot; r=&quot;7.5&quot; fill=&quot;#a87d35&quot;/>
+        <g stroke=&quot;#c9a24a&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot;>
+          <line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;24&quot; y2=&quot;4&quot;/><line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;34&quot; y2=&quot;8&quot;/>
+          <line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;38&quot; y2=&quot;18&quot;/><line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;34&quot; y2=&quot;28&quot;/>
+          <line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;14&quot; y2=&quot;8&quot;/><line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;10&quot; y2=&quot;18&quot;/>
+          <line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;14&quot; y2=&quot;28&quot;/><line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;31&quot; y2=&quot;3&quot;/>
+          <line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;17&quot; y2=&quot;3&quot;/><line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;39&quot; y2=&quot;11&quot;/>
+          <line x1=&quot;24&quot; y1=&quot;18&quot; x2=&quot;9&quot; y2=&quot;11&quot;/>
+        </g>
+        <g fill=&quot;#fff8e8&quot;><circle cx=&quot;24&quot; cy=&quot;4&quot; r=&quot;2.1&quot;/><circle cx=&quot;34&quot; cy=&quot;8&quot; r=&quot;2.1&quot;/><circle cx=&quot;38&quot; cy=&quot;18&quot; r=&quot;2.1&quot;/><circle cx=&quot;34&quot; cy=&quot;28&quot; r=&quot;2.1&quot;/><circle cx=&quot;14&quot; cy=&quot;8&quot; r=&quot;2.1&quot;/><circle cx=&quot;10&quot; cy=&quot;18&quot; r=&quot;2.1&quot;/><circle cx=&quot;14&quot; cy=&quot;28&quot; r=&quot;2.1&quot;/><circle cx=&quot;31&quot; cy=&quot;3&quot; r=&quot;1.8&quot;/><circle cx=&quot;17&quot; cy=&quot;3&quot; r=&quot;1.8&quot;/><circle cx=&quot;39&quot; cy=&quot;11&quot; r=&quot;1.8&quot;/><circle cx=&quot;9&quot; cy=&quot;11&quot; r=&quot;1.8&quot;/></g>
+      </g>
+    </svg>
+    <div>
+      <h1 class=&quot;mincho&quot;>接触皮膚炎 パッチテスト</h1>
+      <div class=&quot;sub&quot;>製品から、検査すべきアレルゲンを引く</div>
+    </div>
+  </div>
+  <nav class=&quot;tabs&quot; id=&quot;tabs&quot;>
+    <button class=&quot;tab on&quot; data-v=&quot;products&quot;>製品から探す</button>
+    <button class=&quot;tab&quot; data-v=&quot;allergens&quot;>アレルゲンから探す</button>
+    <button class=&quot;tab&quot; data-v=&quot;series&quot;>標準アレルゲン</button>
+    <button class=&quot;tab&quot; data-v=&quot;list&quot;>検査リスト <span id=&quot;listBadge&quot;></span></button>
+  </nav>
+</header>
+
+<main>
+  <!-- PRODUCTS -->
+  <section class=&quot;view on&quot; id=&quot;view-products&quot;>
+    <div class=&quot;search&quot;>
+      <svg width=&quot;18&quot; height=&quot;18&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/><line x1=&quot;21&quot; y1=&quot;21&quot; x2=&quot;16.5&quot; y2=&quot;16.5&quot;/></svg>
+      <input id=&quot;psearch&quot; type=&quot;search&quot; placeholder=&quot;製品名で検索（例：アイシャドウ、毛染め、湿布）&quot; autocomplete=&quot;off&quot;>
+    </div>
+    <div class=&quot;filters&quot; id=&quot;catfilters&quot;></div>
+    <div class=&quot;grid&quot; id=&quot;plist&quot;></div>
+  </section>
+
+  <!-- PRODUCT DETAIL -->
+  <section class=&quot;view&quot; id=&quot;view-detail&quot;>
+    <button class=&quot;back&quot; id=&quot;backBtn&quot;>‹ 製品一覧へ</button>
+    <div id=&quot;detailBody&quot;></div>
+  </section>
+
+  <!-- ALLERGENS -->
+  <section class=&quot;view&quot; id=&quot;view-allergens&quot;>
+    <div class=&quot;search&quot;>
+      <svg width=&quot;18&quot; height=&quot;18&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/><line x1=&quot;21&quot; y1=&quot;21&quot; x2=&quot;16.5&quot; y2=&quot;16.5&quot;/></svg>
+      <input id=&quot;asearch&quot; type=&quot;search&quot; placeholder=&quot;アレルゲン名で検索（例：ニッケル、MI、ロジン）&quot; autocomplete=&quot;off&quot;>
+    </div>
+    <div class=&quot;filters&quot; id=&quot;grpfilters&quot;></div>
+    <div class=&quot;allergens&quot; id=&quot;alist&quot;></div>
+  </section>
+
+  <!-- STANDARD SERIES -->
+  <section class=&quot;view&quot; id=&quot;view-series&quot;>
+    <div class=&quot;note&quot; style=&quot;margin-top:4px&quot;>
+      <b>ジャパニーズスタンダードアレルゲン</b> を群ごとに収載。濃度・基剤は<b>標準的な目安</b>であり、実際は使用する試薬パネル（市販品・自家調製）と<b>最新の学会基準</b>を必ずご確認ください。
+    </div>
+    <div id=&quot;seriesBody&quot;></div>
+  </section>
+
+  <!-- LIST -->
+  <section class=&quot;view&quot; id=&quot;view-list&quot;>
+    <div id=&quot;listBody&quot;></div>
+  </section>
+
+  <div class=&quot;disc&quot;>
+    ※ 本アプリは診療補助の参照ツールです。掲載成分・濃度・基剤は代表的な目安で、製品ごとに配合は異なります。実際のパッチテスト施行・判定・読み替えは施行医の判断と最新の文献・学会基準（日本皮膚アレルギー・接触皮膚炎学会）に基づいてください。
+  </div>
+  <div class=&quot;foot mincho&quot;>やまもと皮膚科・漢方クリニック　🌼 たんぽぽちゃん</div>
+</main>
+
+<div class=&quot;sheet-bg&quot; id=&quot;sheetBg&quot;><div class=&quot;sheet&quot; id=&quot;sheet&quot;></div></div>
+<div class=&quot;toast&quot; id=&quot;toast&quot;></div>
+
+<script>
+/* ============ アレルゲン辞書 ============ */
+/* group: metal/fragrance/preserv/surf/dye/resin/rubber/uv/base/topical/plant/disinf/acrylate */
+const GROUPS={
+  metal:{n:&quot;金属&quot;,c:&quot;var(--kincha)&quot;},
+  fragrance:{n:&quot;香料&quot;,c:&quot;var(--shu)&quot;},
+  preserv:{n:&quot;防腐剤&quot;,c:&quot;var(--ai)&quot;},
+  surf:{n:&quot;界面活性剤・乳化剤&quot;,c:&quot;var(--matsuba)&quot;},
+  dye:{n:&quot;色素・染料&quot;,c:&quot;var(--akane)&quot;},
+  crossreact:{n:&quot;交差反応物質&quot;,c:&quot;#a0566a&quot;},
+  resin:{n:&quot;樹脂・天然樹脂&quot;,c:&quot;var(--resin)&quot;},
+  rosin:{n:&quot;ロジン・誘導体&quot;,c:&quot;#a07a45&quot;},
+  epoxygrp:{n:&quot;エポキシ樹脂&quot;,c:&quot;#936b35&quot;},
+  hardener:{n:&quot;エポキシ硬化剤&quot;,c:&quot;#5d8276&quot;},
+  diluent:{n:&quot;反応性希釈剤&quot;,c:&quot;#8a7a4a&quot;},
+  acrylate:{n:&quot;(メタ)アクリレート&quot;,c:&quot;#7a5aa0&quot;},
+  denture:{n:&quot;義歯床用樹脂&quot;,c:&quot;#8a6aa5&quot;},
+  copolymer:{n:&quot;コポリマー類&quot;,c:&quot;#8a7a9a&quot;},
+  cyano:{n:&quot;シアノアクリレート&quot;,c:&quot;#4a7a8a&quot;},
+  isocyanate:{n:&quot;イソシアネート&quot;,c:&quot;#9a6a55&quot;},
+  rubber:{n:&quot;ゴム関連&quot;,c:&quot;var(--rubber)&quot;},
+  rubacc:{n:&quot;ゴム加硫促進剤&quot;,c:&quot;#4f5b66&quot;},
+  rubanti:{n:&quot;ゴム老化防止剤&quot;,c:&quot;#6b5d52&quot;},
+  uv:{n:&quot;UV吸収剤&quot;,c:&quot;var(--uv)&quot;},
+  base:{n:&quot;基剤・添加物&quot;,c:&quot;#8a7a52&quot;},
+  topical:{n:&quot;外用薬成分&quot;,c:&quot;#b06a3a&quot;},
+  abx:{n:&quot;外用抗菌薬&quot;,c:&quot;#b86a45&quot;},
+  steroid:{n:&quot;外用ステロイド薬&quot;,c:&quot;#c79a55&quot;},
+  anesth:{n:&quot;外用麻酔薬&quot;,c:&quot;#9a8a6a&quot;},
+  nsaid:{n:&quot;外用NSAID&quot;,c:&quot;#b07a8a&quot;},
+  plant:{n:&quot;植物&quot;,c:&quot;#6b8a3a&quot;},
+  disinf:{n:&quot;消毒・抗菌&quot;,c:&quot;#3a7a8a&quot;},
+  dentalother:{n:&quot;その他の歯科材料&quot;,c:&quot;#8a8a6a&quot;},
+  lipcare:{n:&quot;リップバーム成分&quot;,c:&quot;#c2786a&quot;},
+  vitamin:{n:&quot;ビタミン類&quot;,c:&quot;#c9a24a&quot;},
+  own:{n:&quot;患者持参品&quot;,c:&quot;#9a6b8a&quot;}
+};
+const A={
+  // metals
+  nickel:{n:&quot;硫酸ニッケル&quot;,x:&quot;Nickel sulfate&quot;,g:&quot;metal&quot;,c:&quot;5% pet.&quot;,d:&quot;装身具・金属製品・化粧品ブラシ金具など。接触皮膚炎で最頻のアレルゲン。&quot;},
+  cobalt:{n:&quot;塩化コバルト&quot;,x:&quot;Cobalt chloride&quot;,g:&quot;metal&quot;,c:&quot;1% pet.&quot;,d:&quot;ニッケルと共陽性が多い。顔料(青)・金属・セメントなど。&quot;},
+  chromate:{n:&quot;重クロム酸カリウム&quot;,x:&quot;Potassium dichromate&quot;,g:&quot;metal&quot;,c:&quot;0.5% pet.&quot;,d:&quot;なめし革・セメント・顔料。6価/3価。&quot;},
+  gold:{n:&quot;金チオ硫酸ナトリウム&quot;,x:&quot;Sodium thiosulfate gold&quot;,g:&quot;metal&quot;,c:&quot;2% pet.&quot;,d:&quot;装飾品・歯科金属。眼瞼炎・顔面に関連することあり。&quot;},
+  palladium:{n:&quot;塩化パラジウム&quot;,x:&quot;Palladium chloride&quot;,g:&quot;metal&quot;,c:&quot;2% pet.&quot;,d:&quot;歯科金属・装身具。ニッケルと交差。&quot;},
+  mercury:{n:&quot;アミノ水銀(無機水銀)&quot;,x:&quot;Mercury&quot;,g:&quot;metal&quot;,c:&quot;0.5% pet.&quot;,d:&quot;歯科アマルガム・一部の旧防腐剤。口腔扁平苔癬様病変。&quot;},
+  lead:{n:&quot;鉛(酢酸鉛など)&quot;,x:&quot;Lead&quot;,g:&quot;metal&quot;,c:&quot;1% pet.&quot;,d:&quot;無機顔料・一部の伝統的/輸入化粧品に混入。接触アレルゲンとしては比較的まれ。&quot;},
+  aluminum:{n:&quot;塩化アルミニウム&quot;,x:&quot;Aluminium chloride&quot;,g:&quot;metal&quot;,c:&quot;2% aq&quot;,d:&quot;制汗剤の主成分。刺激性が強く解釈注意。アレルギーはまれ。&quot;},
+  pdtetrachloro:{n:&quot;テトラクロロパラジウム酸ナトリウム&quot;,x:&quot;Sodium tetrachloropalladate&quot;,g:&quot;metal&quot;,c:&quot;3% pet.&quot;,d:&quot;パラジウムの高感度パッチ試薬。歯科金属。&quot;},
+  beryllium:{n:&quot;ベリリウム&quot;,x:&quot;Beryllium&quot;,g:&quot;metal&quot;,c:&quot;1% pet.&quot;,d:&quot;歯科合金・産業。接触アレルゲンとしてはまれ。&quot;},
+  amalgam:{n:&quot;アマルガム&quot;,x:&quot;Amalgam&quot;,g:&quot;metal&quot;,c:&quot;5% pet.&quot;,d:&quot;歯科水銀合金。口腔扁平苔癬様病変。&quot;},
+  copper:{n:&quot;銅(硫酸銅)&quot;,x:&quot;Copper sulfate&quot;,g:&quot;metal&quot;,c:&quot;2% pet.&quot;,d:&quot;歯科合金・装飾。アレルギーはまれ。&quot;},
+  tin:{n:&quot;スズ&quot;,x:&quot;Tin&quot;,g:&quot;metal&quot;,c:&quot;50% pet.&quot;,d:&quot;歯科アマルガム・合金。&quot;},
+  zinc:{n:&quot;亜鉛&quot;,x:&quot;Zinc&quot;,g:&quot;metal&quot;,c:&quot;2.5% pet.&quot;,d:&quot;歯科セメント・合金。&quot;},
+  platinum:{n:&quot;白金(塩化白金酸)&quot;,x:&quot;Platinum&quot;,g:&quot;metal&quot;,c:&quot;0.25% pet.&quot;,d:&quot;歯科・宝飾。&quot;},
+  indium:{n:&quot;インジウム&quot;,x:&quot;Indium&quot;,g:&quot;metal&quot;,c:&quot;10% pet.&quot;,d:&quot;歯科合金。&quot;},
+  // fragrance
+  fmi:{n:&quot;フレグランスミックスI&quot;,x:&quot;Fragrance mix I&quot;,g:&quot;fragrance&quot;,c:&quot;8% pet.&quot;,d:&quot;8種混合(桂皮アルコール・桂皮アルデヒド・オイゲノール・イソオイゲノール・ゲラニオール・ヒドロキシシトロネラール・α-アミルケイ皮アルデヒド・オークモス)。香料アレルギーの一次スクリーニング。&quot;},
+  fmii:{n:&quot;フレグランスミックスII&quot;,x:&quot;Fragrance mix II&quot;,g:&quot;fragrance&quot;,c:&quot;14% pet.&quot;,d:&quot;FM Iで捕捉できない香料(HICC/Lyral・シトラール・ファルネソール・クマリン・シトロネロール・α-ヘキシルケイ皮アルデヒド)。&quot;},
+  balsam:{n:&quot;ペルーバルサム&quot;,x:&quot;Myroxylon pereirae&quot;,g:&quot;fragrance&quot;,c:&quot;25% pet.&quot;,d:&quot;天然香料・香味料の指標。化粧品・外用薬・飲食物にも含む。&quot;},
+  cinnamylalcohol:{n:&quot;桂皮アルコール&quot;,x:&quot;Cinnamyl alcohol&quot;,g:&quot;fragrance&quot;,c:&quot;2% pet.&quot;,d:&quot;FM I構成成分。化粧品香料。&quot;},
+  cinnamal:{n:&quot;桂皮アルデヒド&quot;,x:&quot;Cinnamaldehyde&quot;,g:&quot;fragrance&quot;,c:&quot;1% pet.&quot;,d:&quot;シナモン由来。香水・歯磨剤・口腔ケア。&quot;},
+  eugenol:{n:&quot;オイゲノール&quot;,x:&quot;Eugenol&quot;,g:&quot;fragrance&quot;,c:&quot;2% pet.&quot;,d:&quot;丁子油。歯科材料・香料。&quot;},
+  isoeugenol:{n:&quot;イソオイゲノール&quot;,x:&quot;Isoeugenol&quot;,g:&quot;fragrance&quot;,c:&quot;2% pet.&quot;,d:&quot;香料。FM I構成成分。&quot;},
+  hydroxycitronellal:{n:&quot;ヒドロキシシトロネラール&quot;,x:&quot;Hydroxycitronellal&quot;,g:&quot;fragrance&quot;,c:&quot;5% pet.&quot;,d:&quot;スズラン様香料。FM I構成成分。&quot;},
+  hicc:{n:&quot;HICC(Lyral)&quot;,x:&quot;HICC / Lyral&quot;,g:&quot;fragrance&quot;,c:&quot;5% pet.&quot;,d:&quot;合成スズラン香料。EUでは使用制限。FM II構成。&quot;},
+  limonene:{n:&quot;リモネン(酸化物)&quot;,x:&quot;Oxidized limonene&quot;,g:&quot;fragrance&quot;,c:&quot;3% pet.&quot;,d:&quot;柑橘香料。酸化で感作性増大。&quot;},
+  limonenehp:{n:&quot;リモネンヒドロペルオキシド&quot;,x:&quot;Limonene hydroperoxides&quot;,g:&quot;fragrance&quot;,c:&quot;0.3% pet.&quot;,d:&quot;リモネンの酸化生成物(主要感作物質)。柑橘精油・化粧品。&quot;},
+  eu26:{n:&quot;EU表示義務香料26種&quot;,x:&quot;EU 26 fragrance allergens&quot;,g:&quot;fragrance&quot;,c:&quot;各成分&quot;,d:&quot;EU化粧品規則で表示義務のある26種の香料アレルゲン。FM I/IIで捕捉しきれない個別成分(ベンジルアルコール/ベンジルサリチレート/シトロネロール/ゲラニオール/シトラール/クマリン/ファルネソール/ヘキシルケイ皮アルデヒド/アミルケイ皮アルデヒド/アミルケイ皮アルコール/リリアル/α-イソメチルイオノン/安息香酸ベンジル/ケイ皮酸ベンジル/アニシルアルコール/メチル2-オクチノエート/オークモス/ツリーモス等)を個別に貼付する。&quot;},
+  menthol:{n:&quot;メントール&quot;,x:&quot;Menthol&quot;,g:&quot;fragrance&quot;,c:&quot;2% pet.&quot;,d:&quot;ハッカ由来。歯磨剤・外用薬・口腔ケア。&quot;},
+  spearmintoil:{n:&quot;スペアミントオイル&quot;,x:&quot;Spearmint oil&quot;,g:&quot;fragrance&quot;,c:&quot;2% pet.&quot;,d:&quot;歯磨剤・口腔ケアの香味油。カルボン等を含む。&quot;},
+  anethole:{n:&quot;アネトール&quot;,x:&quot;Anethole&quot;,g:&quot;fragrance&quot;,c:&quot;2% pet.&quot;,d:&quot;アニス/フェンネル由来の香味。歯磨剤・リキュール。&quot;},
+  linalool:{n:&quot;リナロール(酸化物)&quot;,x:&quot;Oxidized linalool&quot;,g:&quot;fragrance&quot;,c:&quot;6% pet.&quot;,d:&quot;ラベンダー系香料。酸化で感作性。&quot;},
+  linaloolhp:{n:&quot;リナロールヒドロペルオキシド&quot;,x:&quot;Linalool hydroperoxides&quot;,g:&quot;fragrance&quot;,c:&quot;1% pet.&quot;,d:&quot;リナロールの酸化生成物(主要感作物質)。化粧品・リップ・精油。&quot;},
+  colophonium:{n:&quot;コロホニウム(ロジン/松脂)&quot;,x:&quot;Colophonium&quot;,g:&quot;resin&quot;,c:&quot;20% pet.&quot;,d:&quot;粘着剤・マスカラ・整髪料・絆創膏・ワックス。香料関連でもある。&quot;},
+  glycerylrosinate:{n:&quot;グリセリルロジネート&quot;,x:&quot;Glyceryl rosinate&quot;,g:&quot;resin&quot;,c:&quot;20% pet.&quot;,d:&quot;ロジングリセリンエステル。粘着剤。&quot;},
+  pentaerythritolrosin:{n:&quot;ペンタエリスリトールロジンエステル&quot;,x:&quot;Pentaerythritol ester of rosin&quot;,g:&quot;resin&quot;,c:&quot;20% pet.&quot;,d:&quot;ロジン誘導体。粘着剤。&quot;},
+  abitol:{n:&quot;ヒドロアビエチルアルコール(Abitol)&quot;,x:&quot;Hydroabietyl alcohol / Abitol&quot;,g:&quot;resin&quot;,c:&quot;10% pet.&quot;,d:&quot;ロジン由来アルコール。粘着剤・接着剤。&quot;},
+  glycerolabietate:{n:&quot;アビエチン酸グリセロールエステル&quot;,x:&quot;Glycerol ester of abietic acid&quot;,g:&quot;resin&quot;,c:&quot;20% pet.&quot;,d:&quot;ロジン(アビエチン酸)誘導体。粘着剤。&quot;},
+  abieticacid:{n:&quot;アビエチン酸&quot;,x:&quot;Abietic acid&quot;,g:&quot;resin&quot;,c:&quot;10% pet.&quot;,d:&quot;ロジンの主要構成酸。酸化物が感作。&quot;},
+  // preservatives
+  mi:{n:&quot;メチルイソチアゾリノン(MI)&quot;,x:&quot;Methylisothiazolinone&quot;,g:&quot;preserv&quot;,c:&quot;0.2% aq&quot;,d:&quot;単独でも広く使用。化粧品・ウェットティッシュ・塗料。近年急増。&quot;},
+  mcimi:{n:&quot;MCI/MI(Kathon CG)&quot;,x:&quot;MCI/MI&quot;,g:&quot;preserv&quot;,c:&quot;0.02% aq&quot;,d:&quot;メチルクロロイソチアゾリノン/MI混合。リンスオフ製品・シャンプー。&quot;},
+  bit:{n:&quot;ベンジルイソチアゾリノン(BIT)&quot;,x:&quot;Benzisothiazolinone&quot;,g:&quot;preserv&quot;,c:&quot;0.1% pet.&quot;,d:&quot;水性製品・塗料・化粧品の防腐剤。MI/MCIと同系のイソチアゾリノン。&quot;},
+  tcmtb:{n:&quot;2-(チオシアノメチルチオ)ベンゾチアゾール&quot;,x:&quot;TCMTB&quot;,g:&quot;preserv&quot;,c:&quot;0.1% pet.&quot;,d:&quot;革・靴の防カビ剤(生物殺菌剤)。&quot;},
+  formaldehyde:{n:&quot;ホルムアルデヒド&quot;,x:&quot;Formaldehyde&quot;,g:&quot;preserv&quot;,c:&quot;1% aq&quot;,d:&quot;防腐・繊維加工。遊離剤群と合わせて評価。&quot;},
+  quaternium15:{n:&quot;クオタニウム-15&quot;,x:&quot;Quaternium-15&quot;,g:&quot;preserv&quot;,c:&quot;1% pet.&quot;,d:&quot;ホルムアルデヒド遊離剤。化粧品。&quot;},
+  imidazolidinylurea:{n:&quot;イミダゾリジニル尿素&quot;,x:&quot;Imidazolidinyl urea&quot;,g:&quot;preserv&quot;,c:&quot;2% pet.&quot;,d:&quot;ホルムアルデヒド遊離剤。&quot;},
+  diazolidinylurea:{n:&quot;ジアゾリジニル尿素&quot;,x:&quot;Diazolidinyl urea&quot;,g:&quot;preserv&quot;,c:&quot;2% pet.&quot;,d:&quot;ホルムアルデヒド遊離剤。&quot;},
+  dmdmhydantoin:{n:&quot;DMDMヒダントイン&quot;,x:&quot;DMDM hydantoin&quot;,g:&quot;preserv&quot;,c:&quot;2% pet.&quot;,d:&quot;ホルムアルデヒド遊離剤。&quot;},
+  parabens:{n:&quot;パラベンミックス&quot;,x:&quot;Paraben mix&quot;,g:&quot;preserv&quot;,c:&quot;16% pet.&quot;,d:&quot;広く使用される防腐剤。実際の感作率は比較的低い。&quot;},
+  phenoxyethanol:{n:&quot;フェノキシエタノール&quot;,x:&quot;Phenoxyethanol&quot;,g:&quot;preserv&quot;,c:&quot;1% pet.&quot;,d:&quot;パラベン代替防腐剤。化粧品・外用薬。&quot;},
+  ipbc:{n:&quot;IPBC&quot;,x:&quot;Iodopropynyl butylcarbamate&quot;,g:&quot;preserv&quot;,c:&quot;0.2% pet.&quot;,d:&quot;ヨードプロピニルブチルカルバメート。化粧品・塗料。&quot;},
+  mdbgn:{n:&quot;メチルジブロモグルタロニトリル&quot;,x:&quot;MDBGN&quot;,g:&quot;preserv&quot;,c:&quot;0.5% pet.&quot;,d:&quot;Euxyl K400成分。リーブオン制限。&quot;},
+  bronopol:{n:&quot;ブロノポール&quot;,x:&quot;Bronopol&quot;,g:&quot;preserv&quot;,c:&quot;0.5% pet.&quot;,d:&quot;ホルムアルデヒド遊離剤の一つ。&quot;},
+  fareleaser:{n:&quot;ホルムアルデヒド放出剤&quot;,x:&quot;Formaldehyde releasers&quot;,g:&quot;preserv&quot;,c:&quot;各遊離剤&quot;,d:&quot;クオタニウム-15・イミダゾリジニル尿素・ジアゾリジニル尿素・DMDMヒダントイン等の総称。実際はホルムアルデヒドと各遊離剤を個別にパッチテストする。&quot;},
+  // surfactant / emulsifier
+  cocamidopropyl:{n:&quot;コカミドプロピルベタイン&quot;,x:&quot;Cocamidopropyl betaine&quot;,g:&quot;surf&quot;,c:&quot;1% aq&quot;,d:&quot;洗浄剤。真の抗原はDMAPA/アミドアミンの残留。シャンプー・洗顔・歯磨剤。&quot;},
+  dmapa:{n:&quot;ジメチルアミノプロピルアミン&quot;,x:&quot;DMAPA&quot;,g:&quot;surf&quot;,c:&quot;1% aq&quot;,d:&quot;コカミドプロピルベタインの不純物・真の抗原。&quot;},
+  amidoamine:{n:&quot;アミドアミン&quot;,x:&quot;Amidoamine&quot;,g:&quot;surf&quot;,c:&quot;0.1% aq&quot;,d:&quot;コカミドプロピルベタイン中間体。真の抗原。&quot;},
+  sorbitan:{n:&quot;ソルビタンセスキオレエート&quot;,x:&quot;Sorbitan sesquioleate&quot;,g:&quot;surf&quot;,c:&quot;20% pet.&quot;,d:&quot;乳化剤。化粧品・外用基剤・一部のパッチ試薬基剤にも。&quot;},
+  sorbitanmono:{n:&quot;ソルビタンモノオレエート&quot;,x:&quot;Sorbitan monooleate (Span 80)&quot;,g:&quot;surf&quot;,c:&quot;20% pet.&quot;,d:&quot;乳化剤。化粧品・外用基剤。&quot;},
+  peg45:{n:&quot;PEG-45/ドデシルグリコールコポリマー&quot;,x:&quot;PEG-45/Dodecyl glycol copolymer&quot;,g:&quot;surf&quot;,c:&quot;as is&quot;,d:&quot;口紅・化粧品の乳化剤。&quot;},
+  bdpa2:{n:&quot;ビス-ジグリセリルポリアシルアジペート-2&quot;,x:&quot;Bis-diglyceryl polyacyladipate-2&quot;,g:&quot;surf&quot;,c:&quot;as is&quot;,d:&quot;口紅・リップの皮膜・エモリエント乳化成分。&quot;},
+  cetylstearyl:{n:&quot;セチルステアリルアルコール&quot;,x:&quot;Cetylstearyl alcohol&quot;,g:&quot;base&quot;,c:&quot;20% pet.&quot;,d:&quot;乳化基剤。クリーム・外用軟膏。&quot;},
+  sls:{n:&quot;ラウリル硫酸ナトリウム&quot;,x:&quot;Sodium lauryl sulfate&quot;,g:&quot;surf&quot;,c:&quot;0.25% aq&quot;,d:&quot;刺激性参照(陰性対照的)。アレルゲン解釈に注意。&quot;},
+  oleamidopropyl:{n:&quot;オレアミドプロピルジメチルアミン&quot;,x:&quot;Oleamidopropyl dimethylamine&quot;,g:&quot;surf&quot;,c:&quot;0.1% aq&quot;,d:&quot;カチオン系界面活性剤・帯電防止剤。マスカラ・アイライナー等の化粧品。DMAPA/アミドアミン類縁のアミンで交差しうる。&quot;},
+  decylglucoside:{n:&quot;デシルグルコシド&quot;,x:&quot;Decyl glucoside&quot;,g:&quot;surf&quot;,c:&quot;5% aq&quot;,d:&quot;非イオン界面活性剤・乳化剤。日焼け止め(Tinosorb M分散)・洗浄料・化粧品。&quot;},
+  laurylglucoside:{n:&quot;ラウリルグルコシド&quot;,x:&quot;Lauryl glucoside&quot;,g:&quot;surf&quot;,c:&quot;3% aq&quot;,d:&quot;非イオン界面活性剤。洗浄料。デシルグルコシドと交差。&quot;},
+  cocamidedea:{n:&quot;ココジエタノールアミド(コカミドDEA)&quot;,x:&quot;Cocamide DEA&quot;,g:&quot;surf&quot;,c:&quot;0.5% pet.&quot;,d:&quot;洗浄料の増粘・起泡剤。&quot;},
+  cetylpegppg:{n:&quot;セチルPEG/PPG-10/1ジメチコン&quot;,x:&quot;Cetyl PEG/PPG-10/1 dimethicone&quot;,g:&quot;surf&quot;,c:&quot;as is&quot;,d:&quot;シリコン系乳化剤(Abil EM 90)。制汗剤・化粧品。&quot;},
+  // dye
+  carmine:{n:&quot;カルミン(コチニール)&quot;,x:&quot;Carmine&quot;,g:&quot;dye&quot;,c:&quot;as is&quot;,d:&quot;赤色天然色素。口紅・チーク・アイシャドウ。即時型(蕁麻疹)もあり。&quot;},
+  ppd:{n:&quot;パラフェニレンジアミン(PPD)&quot;,x:&quot;p-Phenylenediamine&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;酸化型ヘアダイの中核抗原。黒色ヘナ・一部繊維染料・黒ゴムにも。&quot;},
+  ptd:{n:&quot;トルエン-2,5-ジアミン&quot;,x:&quot;PTD&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;ヘアダイ染料。PPDと交差。&quot;},
+  paminophenol:{n:&quot;p-アミノフェノール&quot;,x:&quot;p-Aminophenol&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;ヘアダイ酸化染料。&quot;},
+  maminophenol:{n:&quot;m-アミノフェノール&quot;,x:&quot;m-Aminophenol&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;ヘアダイ酸化染料(カプラー)。&quot;},
+  resorcinol:{n:&quot;レゾルシノール&quot;,x:&quot;Resorcinol&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;ヘアダイのカプラー。外用薬にも。&quot;},
+  pyrogallol:{n:&quot;ピロガロール&quot;,x:&quot;Pyrogallol&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;ヘアダイ・ヘナ染料成分。&quot;},
+  hydroquinone:{n:&quot;ヒドロキノン&quot;,x:&quot;Hydroquinone&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;ヘアダイ・美白剤・写真現像。&quot;},
+  persulfate:{n:&quot;過硫酸アンモニウム&quot;,x:&quot;Ammonium persulfate&quot;,g:&quot;dye&quot;,c:&quot;2.5% pet.&quot;,d:&quot;ブリーチ(脱色)剤。接触蕁麻疹・喘息も。&quot;},
+  nitroppd:{n:&quot;2-ニトロ-p-フェニレンジアミン&quot;,x:&quot;2-Nitro-PPD&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;半永久染毛料の染料。&quot;},
+  textiledyemix:{n:&quot;繊維染料ミックス&quot;,x:&quot;Textile dye mix&quot;,g:&quot;dye&quot;,c:&quot;6.6% pet.&quot;,d:&quot;Disperse Orange 3・Yellow 3・Red 1・Blue 35/106/124等の混合。&quot;},
+  paba:{n:&quot;PABA(パラアミノ安息香酸)&quot;,x:&quot;PABA&quot;,g:&quot;crossreact&quot;,c:&quot;10% pet.&quot;,d:&quot;パラ基化合物でPPDと交差。旧UV吸収剤・局所麻酔関連。&quot;},
+  disperseblue:{n:&quot;分散染料ブルー106/124&quot;,x:&quot;Disperse blue 106/124&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;ポリエステル繊維染料。下着・スポーツ衣料による皮膚炎。&quot;},
+  disperseorange:{n:&quot;分散染料オレンジ3&quot;,x:&quot;Disperse orange 3&quot;,g:&quot;dye&quot;,c:&quot;1% pet.&quot;,d:&quot;繊維染料。PPDと交差。&quot;},
+  eosin:{n:&quot;エオシン(色素)&quot;,x:&quot;Eosin&quot;,g:&quot;dye&quot;,c:&quot;50% pet.&quot;,d:&quot;口紅の赤色色素。光接触の報告も。&quot;},
+  talc:{n:&quot;タルク&quot;,x:&quot;Talc&quot;,g:&quot;dye&quot;,c:&quot;as is&quot;,d:&quot;含水ケイ酸マグネシウム。化粧品の体質顔料・フィラー。&quot;},
+  ironoxide:{n:&quot;酸化鉄&quot;,x:&quot;Iron oxides&quot;,g:&quot;dye&quot;,c:&quot;as is&quot;,d:&quot;無機顔料(赤・黄・黒)。ファンデーション等の着色剤。&quot;},
+  // resin / natural
+  shellac:{n:&quot;シェラック&quot;,x:&quot;Shellac&quot;,g:&quot;resin&quot;,c:&quot;20% EtOH&quot;,d:&quot;ラックカイガラムシ由来天然樹脂。マスカラ・アイライナー・口紅・ネイル・整髪料。&quot;},
+  tosylamide:{n:&quot;トシルアミド/ホルムアルデヒド樹脂&quot;,x:&quot;Tosylamide resin&quot;,g:&quot;resin&quot;,c:&quot;10% pet.&quot;,d:&quot;マニキュアの被膜形成樹脂。眼瞼・頸部の遠隔部皮膚炎が典型。&quot;},
+  epoxy:{n:&quot;エポキシ樹脂&quot;,x:&quot;Epoxy resin&quot;,g:&quot;resin&quot;,c:&quot;1% pet.&quot;,d:&quot;接着剤・塗料・床材。職業性が多い。&quot;},
+  epoxydgeba:{n:&quot;エポキシ樹脂(ビスフェノールA型/DGEBA)&quot;,x:&quot;Epoxy resin DGEBA&quot;,g:&quot;resin&quot;,c:&quot;1% pet.&quot;,d:&quot;ビスフェノールA型。標準的なエポキシ抗原。&quot;},
+  epoxydgebf:{n:&quot;エポキシ樹脂(ビスフェノールF型/DGEBF)&quot;,x:&quot;Epoxy resin DGEBF&quot;,g:&quot;resin&quot;,c:&quot;0.25% pet.&quot;,d:&quot;ビスフェノールF型。A型陰性でも陽性のことあり。&quot;},
+  mxda:{n:&quot;m-キシリレンジアミン&quot;,x:&quot;m-Xylylenediamine (MXDA)&quot;,g:&quot;hardener&quot;,c:&quot;0.1% pet.&quot;,d:&quot;エポキシ硬化剤(アミン)。&quot;},
+  trisdmp:{n:&quot;2,4,6-トリス(ジメチルアミノメチル)フェノール&quot;,x:&quot;Tris-DMP (DMP-30)&quot;,g:&quot;hardener&quot;,c:&quot;0.25% pet.&quot;,d:&quot;エポキシ硬化促進剤。&quot;},
+  ipda:{n:&quot;イソホロンジアミン&quot;,x:&quot;Isophorone diamine (IPDA)&quot;,g:&quot;hardener&quot;,c:&quot;0.5% pet.&quot;,d:&quot;エポキシ硬化剤(脂環式アミン)。&quot;},
+  deta:{n:&quot;ジエチレントリアミン&quot;,x:&quot;Diethylenetriamine (DETA)&quot;,g:&quot;hardener&quot;,c:&quot;1% pet.&quot;,d:&quot;エポキシ硬化剤(ポリアミン)。&quot;},
+  bddge:{n:&quot;1,4-ブタンジオールジグリシジルエーテル&quot;,x:&quot;BDDGE&quot;,g:&quot;diluent&quot;,c:&quot;0.25% pet.&quot;,d:&quot;エポキシ反応性希釈剤。&quot;},
+  hddge:{n:&quot;1,6-ヘキサンジオールジグリシジルエーテル&quot;,x:&quot;HDDGE&quot;,g:&quot;diluent&quot;,c:&quot;0.25% pet.&quot;,d:&quot;エポキシ反応性希釈剤。&quot;},
+  cge:{n:&quot;クレジルグリシジルエーテル&quot;,x:&quot;Cresyl glycidyl ether (CGE)&quot;,g:&quot;diluent&quot;,c:&quot;0.25% pet.&quot;,d:&quot;エポキシ反応性希釈剤。&quot;},
+  ptbpfr:{n:&quot;PTBPホルムアルデヒド樹脂&quot;,x:&quot;PTBP-FR&quot;,g:&quot;resin&quot;,c:&quot;1% pet.&quot;,d:&quot;p-tert-ブチルフェノール樹脂。接着剤・革製品・靴・時計バンド。&quot;},
+  // acrylate
+  hema:{n:&quot;2-HEMA&quot;,x:&quot;2-Hydroxyethyl methacrylate&quot;,g:&quot;acrylate&quot;,c:&quot;2% pet.&quot;,d:&quot;ジェルネイル・人工爪・歯科レジン・医療用粘着。アクリレートの代表的スクリーニング。&quot;},
+  egdma:{n:&quot;EGDMA&quot;,x:&quot;Ethylene glycol dimethacrylate&quot;,g:&quot;acrylate&quot;,c:&quot;2% pet.&quot;,d:&quot;ジェルネイル・接着剤。&quot;},
+  hpma:{n:&quot;2-HPMA&quot;,x:&quot;2-Hydroxypropyl methacrylate&quot;,g:&quot;acrylate&quot;,c:&quot;2% pet.&quot;,d:&quot;アクリレート系硬化材。&quot;},
+  mma:{n:&quot;メチルメタクリレート(MMA)&quot;,x:&quot;Methyl methacrylate&quot;,g:&quot;acrylate&quot;,c:&quot;2% pet.&quot;,d:&quot;人工爪・歯科レジン・骨セメント。&quot;},
+  hea:{n:&quot;2-ヒドロキシエチルアクリレート(2-HEA)&quot;,x:&quot;2-Hydroxyethyl acrylate&quot;,g:&quot;acrylate&quot;,c:&quot;0.1% pet.&quot;,d:&quot;ジェルネイル・UV硬化材。HEMAより感作性が強い。&quot;},
+  ethylacrylate:{n:&quot;エチルアクリレート&quot;,x:&quot;Ethyl acrylate&quot;,g:&quot;acrylate&quot;,c:&quot;0.1% pet.&quot;,d:&quot;接着剤・塗料・ネイル。アクリレート系スクリーニング。&quot;},
+  iboa:{n:&quot;イソボルニルアクリレート&quot;,x:&quot;Isobornyl acrylate (IBOA)&quot;,g:&quot;acrylate&quot;,c:&quot;0.1% pet.&quot;,d:&quot;医療用粘着剤(血糖センサー・インスリンポンプ)で問題化。&quot;},
+  butylacrylate:{n:&quot;ブチルアクリレート&quot;,x:&quot;Butyl acrylate&quot;,g:&quot;acrylate&quot;,c:&quot;0.1% pet.&quot;,d:&quot;アクリル系粘着剤の構成モノマー。&quot;},
+  tegdma:{n:&quot;トリエチレングリコールジメタクリレート(TEGDMA)&quot;,x:&quot;Triethylene glycol dimethacrylate&quot;,g:&quot;acrylate&quot;,c:&quot;2% pet.&quot;,d:&quot;歯科レジン・接着材の主要メタクリレート。&quot;},
+  bpo:{n:&quot;ベンゾイルペルオキシド&quot;,x:&quot;Benzoyl peroxide&quot;,g:&quot;acrylate&quot;,c:&quot;1% pet.&quot;,d:&quot;アクリルレジンの重合開始剤。義歯床・ネイル。&quot;},
+  dmpt:{n:&quot;N,N-ジメチル-p-トルイジン&quot;,x:&quot;N,N-Dimethyl-p-toluidine&quot;,g:&quot;acrylate&quot;,c:&quot;2% pet.&quot;,d:&quot;アクリルレジンの重合促進剤。義歯床。&quot;},
+  ptgcopolymer:{n:&quot;フタル酸無水物/トリメリット酸無水物/グリコールコポリマー&quot;,x:&quot;Phthalic/TMA/glycols copolymer&quot;,g:&quot;copolymer&quot;,c:&quot;as is&quot;,d:&quot;ネイルポリッシュの皮膜形成樹脂(TSFR代替)。&quot;},
+  antcopolymer:{n:&quot;アジピン酸/ネオペンチルグリコール/トリメリット酸無水物コポリマー&quot;,x:&quot;Adipic/neopentyl glycol/TMA copolymer&quot;,g:&quot;copolymer&quot;,c:&quot;as is&quot;,d:&quot;ネイルポリッシュの皮膜形成樹脂(TSFR代替)。&quot;},
+  acrylatescopolymer:{n:&quot;アクリレート(コ)ポリマー&quot;,x:&quot;Acrylates copolymer&quot;,g:&quot;copolymer&quot;,c:&quot;as is&quot;,d:&quot;日焼け止め・化粧品の皮膜形成ポリマー。&quot;},
+  ethylcyanoacrylate:{n:&quot;エチルシアノアクリレート&quot;,x:&quot;Ethyl cyanoacrylate&quot;,g:&quot;cyano&quot;,c:&quot;10% pet.&quot;,d:&quot;瞬間接着剤・つけ爪用接着剤・まつ毛エクステ。&quot;},
+  ipdi:{n:&quot;イソホロンジイソシアネート&quot;,x:&quot;Isophorone diisocyanate (IPDI)&quot;,g:&quot;isocyanate&quot;,c:&quot;0.1% pet.&quot;,d:&quot;ポリウレタン系トップコート・硬化剤。&quot;},
+  // rubber
+  thiuram:{n:&quot;チウラムミックス&quot;,x:&quot;Thiuram mix&quot;,g:&quot;rubber&quot;,c:&quot;1% pet.&quot;,d:&quot;ゴム加硫促進剤。手袋・ゴム製品。職業性手湿疹の主因。&quot;},
+  carba:{n:&quot;カルバミックス&quot;,x:&quot;Carba mix&quot;,g:&quot;rubber&quot;,c:&quot;3% pet.&quot;,d:&quot;ゴム加硫促進剤。手袋・ゴムバンド。&quot;},
+  mbt:{n:&quot;メルカプトベンゾチアゾール&quot;,x:&quot;MBT&quot;,g:&quot;rubber&quot;,c:&quot;2% pet.&quot;,d:&quot;ゴム加硫促進剤。靴・手袋。&quot;},
+  mercaptomix:{n:&quot;メルカプトミックス&quot;,x:&quot;Mercapto mix&quot;,g:&quot;rubber&quot;,c:&quot;2% pet.&quot;,d:&quot;ゴム促進剤群。&quot;},
+  ippd:{n:&quot;IPPD(黒ゴム)&quot;,x:&quot;IPPD&quot;,g:&quot;rubber&quot;,c:&quot;0.1% pet.&quot;,d:&quot;黒色ゴム酸化防止剤。タイヤ・ゴムホース。&quot;},
+  thiourea:{n:&quot;ジアルキルチオウレアミックス&quot;,x:&quot;Thiourea mix&quot;,g:&quot;rubber&quot;,c:&quot;1% pet.&quot;,d:&quot;ネオプレン・接着剤。靴・装具。&quot;},
+  thiuramsindiv:{n:&quot;個別チウラム類&quot;,x:&quot;Individual thiurams&quot;,g:&quot;rubber&quot;,c:&quot;各1% pet.&quot;,d:&quot;チウラムミックス構成成分の個別評価。TMTD・TMTM・TETD・DPTT等。&quot;},
+  dithiocarbamatesindiv:{n:&quot;個別ジチオカルバメート類&quot;,x:&quot;Individual dithiocarbamates&quot;,g:&quot;rubber&quot;,c:&quot;各1% pet.&quot;,d:&quot;カルバミックス構成成分の個別評価。ZDEC・ZDBC・ZMBT等。&quot;},
+  dpg:{n:&quot;1,3-ジフェニルグアニジン(DPG)&quot;,x:&quot;1,3-Diphenylguanidine&quot;,g:&quot;rubber&quot;,c:&quot;1% pet.&quot;,d:&quot;グアニジン系加硫促進剤。医療用手袋で重要性が増大。&quot;},
+  ppdderiv:{n:&quot;その他のフェニレンジアミン誘導体&quot;,x:&quot;Other PPD derivatives&quot;,g:&quot;rubber&quot;,c:&quot;各0.1% pet.&quot;,d:&quot;ゴム老化防止剤。CPPD・DPPD等の黒ゴム由来。&quot;},
+  blackrubber:{n:&quot;ブラックラバーミックス&quot;,x:&quot;Black rubber mix&quot;,g:&quot;rubber&quot;,c:&quot;0.6% pet.&quot;,d:&quot;IPPD/CPPD/DPPD等の混合。黒ゴム製品。&quot;},
+  cedc:{n:&quot;2-シアノエチルジメチルジチオカルバメート(CEDC)&quot;,x:&quot;Cyanoethyl dimethyldithiocarbamate&quot;,g:&quot;rubber&quot;,c:&quot;0.1% pet.&quot;,d:&quot;新興のゴム加硫促進剤(ニトリル手袋)。標準シリーズで見逃されやすい。&quot;},
+  // uv
+  bp3:{n:&quot;ベンゾフェノン-3(オキシベンゾン)&quot;,x:&quot;Benzophenone-3&quot;,g:&quot;uv&quot;,c:&quot;10% pet.&quot;,d:&quot;日焼け止め・化粧品UV吸収剤。光接触皮膚炎に注意。&quot;},
+  octocrylene:{n:&quot;オクトクリレン&quot;,x:&quot;Octocrylene&quot;,g:&quot;uv&quot;,c:&quot;10% pet.&quot;,d:&quot;UV吸収剤。ケトプロフェンと交差(光アレルギー)。&quot;},
+  avobenzone:{n:&quot;アボベンゾン&quot;,x:&quot;Avobenzone&quot;,g:&quot;uv&quot;,c:&quot;10% pet.&quot;,d:&quot;ブチルメトキシジベンゾイルメタン。UVA吸収剤。&quot;},
+  ehmc:{n:&quot;エチルヘキシルメトキシシンナメート&quot;,x:&quot;EHMC&quot;,g:&quot;uv&quot;,c:&quot;10% pet.&quot;,d:&quot;桂皮酸系UVB吸収剤。&quot;},
+  bp4:{n:&quot;ベンゾフェノン-4&quot;,x:&quot;Benzophenone-4 (sulisobenzone)&quot;,g:&quot;uv&quot;,c:&quot;2% pet.&quot;,d:&quot;水溶性UV吸収剤。化粧品・ヘア製品。&quot;},
+  tinosorbs:{n:&quot;Tinosorb S（ベモトリジノール）&quot;,x:&quot;Bemotrizinol / BEMT&quot;,g:&quot;uv&quot;,c:&quot;10% pet.&quot;,d:&quot;新規有機UV吸収剤(ビス-エチルヘキシルオキシフェノールメトキシフェニルトリアジン)。&quot;},
+  octisalate:{n:&quot;エチルヘキシルサリチル酸(オクチサレート)&quot;,x:&quot;Ethylhexyl salicylate&quot;,g:&quot;uv&quot;,c:&quot;5% pet.&quot;,d:&quot;サリチル酸系UVB吸収剤。&quot;},
+  polysilicone15:{n:&quot;ジメチコジエチルベンザルマロネート&quot;,x:&quot;Polysilicone-15 (Parsol SLX)&quot;,g:&quot;uv&quot;,c:&quot;10% pet.&quot;,d:&quot;シリコン系UVB吸収ポリマー。&quot;},
+  // base
+  lanolin:{n:&quot;ラノリンアルコール(羊毛アルコール)&quot;,x:&quot;Wool alcohols&quot;,g:&quot;base&quot;,c:&quot;30% pet.&quot;,d:&quot;軟膏・化粧品・リップの油性基剤。&quot;},
+  propyleneglycol:{n:&quot;プロピレングリコール&quot;,x:&quot;Propylene glycol&quot;,g:&quot;base&quot;,c:&quot;20% aq&quot;,d:&quot;溶剤・保湿基剤。刺激と感作の両面。&quot;},
+  zincricinoleate:{n:&quot;亜鉛リシノレート&quot;,x:&quot;Zinc ricinoleate&quot;,g:&quot;base&quot;,c:&quot;as is&quot;,d:&quot;デオドラントの消臭成分(ヒマシ油由来)。&quot;},
+  beeswax:{n:&quot;蜜蝋(ミツロウ)&quot;,x:&quot;Beeswax&quot;,g:&quot;lipcare&quot;,c:&quot;30% pet.&quot;,d:&quot;リップ・軟膏の油性基剤。プロポリス/ペルーバルサムと関連。&quot;},
+  coconutoil:{n:&quot;ココナッツオイル&quot;,x:&quot;Coconut oil&quot;,g:&quot;lipcare&quot;,c:&quot;as is&quot;,d:&quot;リップ・化粧品の植物油。&quot;},
+  almondoil:{n:&quot;アーモンドオイル&quot;,x:&quot;Sweet almond oil&quot;,g:&quot;lipcare&quot;,c:&quot;as is&quot;,d:&quot;リップ・化粧品の植物油。&quot;},
+  peppermintoil:{n:&quot;ペパーミントオイル&quot;,x:&quot;Peppermint oil&quot;,g:&quot;lipcare&quot;,c:&quot;2% pet.&quot;,d:&quot;香味油。l-メントール・カルボン等を含み口唇炎の原因に。&quot;},
+  vitamine:{n:&quot;ビタミンE(トコフェロール)&quot;,x:&quot;Tocopherol&quot;,g:&quot;vitamin&quot;,c:&quot;as is&quot;,d:&quot;酸化防止剤。リップ・スキンケア。接触皮膚炎・接触蕁麻疹の報告。&quot;},
+  ricinoleic:{n:&quot;リシノール酸(ヒマシ油由来)&quot;,x:&quot;Ricinoleic acid / Castor oil&quot;,g:&quot;lipcare&quot;,c:&quot;as is&quot;,d:&quot;ヒマシ油の主成分。口紅の主要油性成分で口唇炎の代表的原因。&quot;},
+  // topical med
+  neomycin:{n:&quot;硫酸ネオマイシン&quot;,x:&quot;Neomycin&quot;,g:&quot;topical&quot;,c:&quot;20% pet.&quot;,d:&quot;外用抗菌薬。フラジオマイシンと交差。&quot;},
+  budesonide:{n:&quot;ブデソニド&quot;,x:&quot;Budesonide&quot;,g:&quot;topical&quot;,c:&quot;0.01% pet.&quot;,d:&quot;ステロイドのスクリーニング(B群)。外用ステロイド接触皮膚炎。&quot;},
+  tixocortol:{n:&quot;チキソコルトールピバレート&quot;,x:&quot;Tixocortol pivalate&quot;,g:&quot;topical&quot;,c:&quot;0.1% pet.&quot;,d:&quot;ステロイドのスクリーニング(A群/ヒドロコルチゾン型)。&quot;},
+  ketoprofen:{n:&quot;ケトプロフェン&quot;,x:&quot;Ketoprofen&quot;,g:&quot;topical&quot;,c:&quot;1% pet.&quot;,d:&quot;外用NSAID。光接触皮膚炎の代表。オクトクリレンと交差。&quot;},
+  benzocaine:{n:&quot;ベンゾカイン&quot;,x:&quot;Benzocaine&quot;,g:&quot;topical&quot;,c:&quot;5% pet.&quot;,d:&quot;局所麻酔薬。市販外用薬・坐薬。&quot;},
+  dibucaine:{n:&quot;ジブカイン&quot;,x:&quot;Dibucaine&quot;,g:&quot;topical&quot;,c:&quot;5% pet.&quot;,d:&quot;局所麻酔薬。痔疾用薬・市販外用薬。&quot;},
+  bacitracin:{n:&quot;バシトラシン&quot;,x:&quot;Bacitracin&quot;,g:&quot;topical&quot;,c:&quot;20% pet.&quot;,d:&quot;外用抗菌薬。ネオマイシンとの配合剤が多い。&quot;},
+  mupirocin:{n:&quot;ムピロシン&quot;,x:&quot;Mupirocin&quot;,g:&quot;topical&quot;,c:&quot;2% pet.&quot;,d:&quot;外用抗菌薬(バクトロバン)。&quot;},
+  aminoglycoside:{n:&quot;アミノグリコシド類&quot;,x:&quot;Aminoglycosides&quot;,g:&quot;topical&quot;,c:&quot;各20% pet.&quot;,d:&quot;ゲンタマイシン・カナマイシン・フラジオマイシン等。ネオマイシンと交差。&quot;},
+  hcbutyrate:{n:&quot;ヒドロコルチゾン-17-酪酸エステル&quot;,x:&quot;Hydrocortisone-17-butyrate&quot;,g:&quot;topical&quot;,c:&quot;0.1% pet.&quot;,d:&quot;ステロイドのスクリーニング(ロコイド/エステル型)。&quot;},
+  lidocaine:{n:&quot;リドカイン&quot;,x:&quot;Lidocaine&quot;,g:&quot;topical&quot;,c:&quot;15% pet.&quot;,d:&quot;アミド型局所麻酔薬。外用・注射。&quot;},
+  bufexamac:{n:&quot;ブフェキサマク&quot;,x:&quot;Bufexamac&quot;,g:&quot;topical&quot;,c:&quot;5% pet.&quot;,d:&quot;外用NSAID。重症接触皮膚炎を起こし欧州で販売中止。&quot;},
+  diclofenac:{n:&quot;ジクロフェナク&quot;,x:&quot;Diclofenac&quot;,g:&quot;topical&quot;,c:&quot;1% pet.&quot;,d:&quot;外用NSAID(ボルタレン)。光接触の報告も。&quot;},
+  // plant
+  sesquiterpene:{n:&quot;セスキテルペンラクトンミックス&quot;,x:&quot;Sesquiterpene lactone mix&quot;,g:&quot;plant&quot;,c:&quot;0.1% pet.&quot;,d:&quot;キク科植物(菊・ヨモギ・除虫菊)。植物・化粧品植物エキス。&quot;},
+  scutellaria:{n:&quot;オウゴンエキス&quot;,x:&quot;Scutellaria baicalensis&quot;,g:&quot;plant&quot;,c:&quot;as is&quot;,d:&quot;コガネバナ(黄芩)由来の植物エキス。化粧品の抗酸化・整肌成分。&quot;},
+  propolis:{n:&quot;プロポリス&quot;,x:&quot;Propolis&quot;,g:&quot;plant&quot;,c:&quot;10% pet.&quot;,d:&quot;ミツバチ由来の樹脂様物質。化粧品・リップ・健康食品。ペルーバルサムと交差しうる。&quot;},
+  carvone:{n:&quot;カルボン&quot;,x:&quot;Carvone&quot;,g:&quot;plant&quot;,c:&quot;5% pet.&quot;,d:&quot;スペアミント/キャラウェイ由来モノテルペン。香味・香料成分。酸化型で感作性。&quot;},
+  teatree:{n:&quot;ティーツリーオイル&quot;,x:&quot;Tea tree oil (oxidized)&quot;,g:&quot;plant&quot;,c:&quot;5% pet.&quot;,d:&quot;Melaleuca精油。酸化型で感作性。化粧品・アロマ。&quot;},
+  lavenderoil:{n:&quot;ラベンダーオイル&quot;,x:&quot;Lavender oil&quot;,g:&quot;plant&quot;,c:&quot;2% pet.&quot;,d:&quot;精油。酸化リナロール等を含み感作。アロマ・化粧品。&quot;},
+  lemongrassoil:{n:&quot;レモングラスオイル&quot;,x:&quot;Lemongrass oil&quot;,g:&quot;plant&quot;,c:&quot;2% pet.&quot;,d:&quot;精油。シトラール等を含む。アロマ・化粧品。&quot;},
+  lichenacid:{n:&quot;リケン酸ミックス&quot;,x:&quot;Lichen acid mix&quot;,g:&quot;plant&quot;,c:&quot;0.3% pet.&quot;,d:&quot;地衣類(オークモス/ツリーモス)由来。アトラノール等。香料関連。&quot;},
+  bromelain:{n:&quot;ブロメライン&quot;,x:&quot;Bromelain&quot;,g:&quot;plant&quot;,c:&quot;as is&quot;,d:&quot;パイナップル由来酵素。一部の口腔ケア・酵素製品。&quot;},
+  // disinfectant
+  chlorhexidine:{n:&quot;クロルヘキシジン&quot;,x:&quot;Chlorhexidine&quot;,g:&quot;disinf&quot;,c:&quot;0.5% aq&quot;,d:&quot;消毒薬・含嗽剤・化粧品防腐。即時型もあり。&quot;},
+  benzalkonium:{n:&quot;塩化ベンザルコニウム&quot;,x:&quot;Benzalkonium chloride&quot;,g:&quot;disinf&quot;,c:&quot;0.1% aq&quot;,d:&quot;消毒・防腐。刺激性が強く解釈注意。&quot;},
+  povidone:{n:&quot;ポビドンヨード&quot;,x:&quot;Povidone iodine&quot;,g:&quot;disinf&quot;,c:&quot;as is&quot;,d:&quot;消毒薬。&quot;},
+  benzylalcohol:{n:&quot;ベンジルアルコール&quot;,x:&quot;Benzyl alcohol&quot;,g:&quot;disinf&quot;,c:&quot;1% pet.&quot;,d:&quot;防腐・溶剤。化粧品・注射剤・消毒。&quot;},
+  glutaraldehyde:{n:&quot;グルタルアルデヒド&quot;,x:&quot;Glutaraldehyde&quot;,g:&quot;disinf&quot;,c:&quot;0.3% pet.&quot;,d:&quot;医療器具の消毒・滅菌。職業性(医療従事者)。&quot;},
+  glyoxal:{n:&quot;グリオキサール&quot;,x:&quot;Glyoxal&quot;,g:&quot;disinf&quot;,c:&quot;1% aq&quot;,d:&quot;消毒・繊維加工。&quot;},
+  benzoxonium:{n:&quot;ベンゾキソニウム塩化物&quot;,x:&quot;Benzoxonium chloride&quot;,g:&quot;disinf&quot;,c:&quot;0.1% aq&quot;,d:&quot;第四級アンモニウム消毒薬。含嗽・口腔。&quot;},
+  lauramineoxide:{n:&quot;ラウラミンオキシド&quot;,x:&quot;Lauramine oxide&quot;,g:&quot;disinf&quot;,c:&quot;0.1% aq&quot;,d:&quot;両性界面活性剤。消毒・洗浄製剤。&quot;},
+  octenidine:{n:&quot;オクテニジン&quot;,x:&quot;Octenidine dihydrochloride&quot;,g:&quot;disinf&quot;,c:&quot;0.1% aq&quot;,d:&quot;創傷消毒(オクテニセプト)。&quot;},
+  polyhexanide:{n:&quot;ポリヘキサニド(PHMB)&quot;,x:&quot;Polyhexanide&quot;,g:&quot;disinf&quot;,c:&quot;2.5% aq&quot;,d:&quot;創傷・コンタクト用消毒(PHMB/ビグアナイド)。&quot;},
+  ownproduct:{n:&quot;患者使用中の製品そのもの&quot;,x:&quot;Own product（本人持参品）&quot;,g:&quot;own&quot;,c:&quot;as is&quot;,d:&quot;患者が実際に使用している製品を、適切な濃度・基剤(化粧品は多くが as is で可、刺激の強いものは希釈)でパッチテストに加える。標準アレルゲンが陰性でも製品で陽性となることがあり、原因同定に重要。&quot;},
+  ownpersonalcare:{n:&quot;患者のパーソナルケア製品&quot;,x:&quot;Patient's personal care products&quot;,g:&quot;own&quot;,c:&quot;as is&quot;,d:&quot;接触部位に使用しているクリーム・ローション・化粧品等を併せて貼付。金属皮膚炎の修飾因子・併発アレルギーの評価。&quot;}
+};
+
+/* ============ 製品データ ============ */
+const PRODUCTS=[
+ {id:&quot;eyeshadow&quot;,n:&quot;アイシャドウ&quot;,cat:&quot;メイク&quot;,e:&quot;👁️&quot;,
+  pearls:&quot;眼瞼は皮膚が薄く感作されやすい。<b>遠隔部</b>(マニキュア由来など)の眼瞼炎との鑑別も。金属顔料・天然色素・シェラックがポイント。&quot;,
+  groups:[[&quot;metal&quot;,[&quot;nickel&quot;,&quot;cobalt&quot;,&quot;chromate&quot;,&quot;gold&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamylalcohol&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;]],[&quot;dye&quot;,[&quot;carmine&quot;]],[&quot;resin&quot;,[&quot;shellac&quot;]],[&quot;surf&quot;,[&quot;dmapa&quot;,&quot;sorbitan&quot;]]]},
+
+ {id:&quot;mascara&quot;,n:&quot;マスカラ・アイライナー&quot;,cat:&quot;メイク&quot;,e:&quot;🖌️&quot;,
+  pearls:&quot;被膜・粘性成分の<b>シェラック</b>が要点。眼瞼炎・結膜刺激をきたす。<b>標準アレルゲンに加え、患者が実際に使用しているマスカラ・アイライナー製品そのもの</b>(as is／適切に希釈)を必ずパッチテストに含めることが重要。&quot;,
+  groups:[[&quot;metal&quot;,[&quot;nickel&quot;,&quot;cobalt&quot;,&quot;chromate&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamylalcohol&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;benzalkonium&quot;]],[&quot;resin&quot;,[&quot;shellac&quot;]],[&quot;surf&quot;,[&quot;dmapa&quot;,&quot;oleamidopropyl&quot;]],[&quot;dye&quot;,[&quot;carmine&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;foundation&quot;,n:&quot;ファンデーション・BB&quot;,cat:&quot;メイク&quot;,e:&quot;🧴&quot;,
+  pearls:&quot;顔面びまん性皮膚炎。香料・防腐剤・UV吸収剤・金属顔料・乳化剤・植物エキス・無機顔料を幅広く。光接触の要素があれば<b>光パッチテスト</b>も考慮。<b>標準アレルゲンに加え、患者が実際に使用しているファンデーション・BB製品そのもの</b>(as is)を必ず含めることが重要。&quot;,
+  groups:[[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamylalcohol&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;fareleaser&quot;,&quot;parabens&quot;]],[&quot;uv&quot;,[&quot;octocrylene&quot;,&quot;bp4&quot;,&quot;tinosorbs&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;,&quot;cobalt&quot;,&quot;gold&quot;]],[&quot;surf&quot;,[&quot;propyleneglycol&quot;,&quot;decylglucoside&quot;]],[&quot;plant&quot;,[&quot;scutellaria&quot;,&quot;propolis&quot;,&quot;carvone&quot;]],[&quot;dye&quot;,[&quot;talc&quot;,&quot;ironoxide&quot;,&quot;carmine&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;lipstick&quot;,n:&quot;口紅・リップ&quot;,cat:&quot;メイク&quot;,e:&quot;💄&quot;,
+  pearls:&quot;口唇炎・口囲皮膚炎。<b>ヒマシ油(リシノール酸)・ラノリン・蜜蝋などのリップバーム油性成分</b>と香料が要点。歯磨剤・含嗽剤の香料(ミント・カルボン)との合併も。<b>標準アレルゲンに加え、患者が実際に使用している口紅・リップバーム製品そのもの</b>(as is)を必ず含めることが重要。&quot;,
+  groups:[[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamylalcohol&quot;,&quot;linaloolhp&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;,&quot;cobalt&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;]],[&quot;lipcare&quot;,[&quot;ricinoleic&quot;,&quot;lanolin&quot;,&quot;beeswax&quot;,&quot;coconutoil&quot;,&quot;almondoil&quot;,&quot;peppermintoil&quot;,&quot;vitamine&quot;,&quot;propolis&quot;]],[&quot;uv&quot;,[&quot;bp3&quot;,&quot;bp4&quot;]],[&quot;resin&quot;,[&quot;shellac&quot;]],[&quot;surf&quot;,[&quot;peg45&quot;,&quot;bdpa2&quot;,&quot;sorbitanmono&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;cheek&quot;,n:&quot;チーク・パウダー&quot;,cat:&quot;メイク&quot;,e:&quot;🌸&quot;,
+  pearls:&quot;粉体化粧品。鉱物顔料(酸化鉄・分散染料)・天然色素・香料・防腐剤が要点。<b>標準アレルゲンに加え、患者が実際に使用しているチーク・パウダー製品そのもの</b>(as is)を必ず含めることが重要。&quot;,
+  groups:[[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamylalcohol&quot;,&quot;linaloolhp&quot;,&quot;limonenehp&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;fareleaser&quot;,&quot;parabens&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;,&quot;cobalt&quot;,&quot;chromate&quot;,&quot;lead&quot;]],[&quot;dye&quot;,[&quot;carmine&quot;,&quot;ironoxide&quot;,&quot;disperseblue&quot;]],[&quot;base&quot;,[&quot;propyleneglycol&quot;,&quot;lanolin&quot;]],[&quot;plant&quot;,[&quot;propolis&quot;,&quot;beeswax&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;nail&quot;,n:&quot;ネイル・マニキュア&quot;,cat:&quot;メイク&quot;,e:&quot;💅&quot;,
+  pearls:&quot;<b>遠隔部皮膚炎</b>が典型(眼瞼・頸部・顔面)。マニキュアは<b>トシルアミド樹脂・皮膜コポリマー</b>、ジェル/人工爪は<b>(メタ)アクリレート</b>(HEMA・2-HEA等)。手袋でも防げないことに注意。<b>標準アレルゲンに加え、患者が使用しているネイル製品そのもの(未希釈)</b>を必ず含める。未硬化の液状(メタ)アクリレートは刺激・感作リスクがあり取扱い注意。&quot;,
+  groups:[[&quot;acrylate&quot;,[&quot;hema&quot;,&quot;hpma&quot;,&quot;egdma&quot;,&quot;mma&quot;,&quot;hea&quot;,&quot;ethylacrylate&quot;]],[&quot;resin&quot;,[&quot;tosylamide&quot;]],[&quot;copolymer&quot;,[&quot;ptgcopolymer&quot;,&quot;antcopolymer&quot;]],[&quot;cyano&quot;,[&quot;ethylcyanoacrylate&quot;]],[&quot;isocyanate&quot;,[&quot;ipdi&quot;]],[&quot;preserv&quot;,[&quot;formaldehyde&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;skincare&quot;,n:&quot;化粧水・乳液・クリーム&quot;,cat:&quot;スキンケア&quot;,e:&quot;🧴&quot;,
+  pearls:&quot;スキンケア全般。<b>防腐剤(MI/MCI・ホルムアルデヒド/遊離剤・パラベン・BIT・IPBC)・香料・乳化基剤</b>を網羅。植物エキス・UV吸収剤・トコフェロールも。<b>標準アレルゲンに加え、患者が実際に使用している化粧水・乳液・クリーム製品そのもの</b>(as is)を必ず含めることが重要。&quot;,
+  groups:[[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamylalcohol&quot;,&quot;linaloolhp&quot;,&quot;limonenehp&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;,&quot;formaldehyde&quot;,&quot;fareleaser&quot;,&quot;parabens&quot;,&quot;bit&quot;,&quot;ipbc&quot;]],[&quot;surf&quot;,[&quot;propyleneglycol&quot;,&quot;lanolin&quot;,&quot;decylglucoside&quot;,&quot;sorbitan&quot;]],[&quot;uv&quot;,[&quot;bp3&quot;,&quot;bp4&quot;,&quot;octocrylene&quot;]],[&quot;plant&quot;,[&quot;propolis&quot;,&quot;teatree&quot;]],[&quot;vitamin&quot;,[&quot;vitamine&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;sunscreen&quot;,n:&quot;日焼け止め&quot;,cat:&quot;スキンケア&quot;,e:&quot;☀️&quot;,
+  pearls:&quot;露光部・顔面の皮膚炎。<b>UV吸収剤</b>が中心。<b>光接触皮膚炎が疑われる場合はフォトパッチテストが必須</b>(オクトクリレンはケトプロフェンと交差)。<b>標準アレルゲンに加え、患者が使用している日焼け止め製品そのもの(未希釈)</b>を必ず含めることが重要。&quot;,
+  groups:[[&quot;uv&quot;,[&quot;bp3&quot;,&quot;bp4&quot;,&quot;octocrylene&quot;,&quot;avobenzone&quot;,&quot;tinosorbs&quot;,&quot;ehmc&quot;,&quot;octisalate&quot;,&quot;polysilicone15&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;parabens&quot;]],[&quot;surf&quot;,[&quot;decylglucoside&quot;]],[&quot;vitamin&quot;,[&quot;vitamine&quot;]],[&quot;copolymer&quot;,[&quot;acrylatescopolymer&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;perfume&quot;,n:&quot;香水・フレグランス&quot;,cat:&quot;スキンケア&quot;,e:&quot;🌷&quot;,
+  pearls:&quot;頸部・腋窩・手首など塗布部位。<b>FM I・II とペルーバルサム</b>でスクリーニングし、HICC・酸化リナロール/リモネン・<b>EU表示義務香料26種</b>を追加。<b>標準アレルゲンに加え、患者が使用している香水・フレグランス製品そのもの</b>(as is／適切に希釈)を必ず含めることが重要。&quot;,
+  groups:[[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;hicc&quot;,&quot;linaloolhp&quot;,&quot;limonenehp&quot;,&quot;eu26&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;hairdye&quot;,n:&quot;ヘアダイ・毛染め&quot;,cat:&quot;ヘアケア&quot;,e:&quot;🎨&quot;,
+  pearls:&quot;頭皮・生え際・耳介・項部・顔面。<b>PPD/PTDが中核</b>。黒色ヘナはPPD混入に注意。<b>重症既往例のパッチテストは慎重に</b>(強陽性・新規感作のリスク)。<b>患者使用中のヘアダイ製品そのもの(10% aq.)</b>も必ず含めることが重要。&quot;,
+  groups:[[&quot;dye&quot;,[&quot;ppd&quot;,&quot;ptd&quot;,&quot;paminophenol&quot;,&quot;maminophenol&quot;,&quot;resorcinol&quot;,&quot;pyrogallol&quot;,&quot;hydroquinone&quot;,&quot;persulfate&quot;,&quot;nitroppd&quot;,&quot;textiledyemix&quot;]],[&quot;crossreact&quot;,[&quot;benzocaine&quot;,&quot;ippd&quot;,&quot;paba&quot;]],[&quot;preserv&quot;,[&quot;mcimi&quot;]],[&quot;surf&quot;,[&quot;cocamidopropyl&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;shampoo&quot;,n:&quot;シャンプー・リンス&quot;,cat:&quot;ヘアケア&quot;,e:&quot;🧼&quot;,
+  pearls:&quot;頭皮・項部・洗い流れる部位。リンスオフでも<b>MI/MCI</b>は問題。<b>コカミドプロピルベタイン</b>は不純物のアミドアミン/DMAPAが真の抗原。残留ヘアダイ(PPD)にも注意。<b>標準アレルゲンに加え、患者が使用しているシャンプー・リンス製品そのもの</b>(刺激回避のため適切に希釈)を必ず含めることが重要。&quot;,
+  groups:[[&quot;surf&quot;,[&quot;cocamidopropyl&quot;,&quot;amidoamine&quot;,&quot;dmapa&quot;,&quot;laurylglucoside&quot;,&quot;decylglucoside&quot;,&quot;cocamidedea&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;,&quot;formaldehyde&quot;,&quot;parabens&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamal&quot;]],[&quot;dye&quot;,[&quot;ppd&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;styling&quot;,n:&quot;整髪料・ヘアスプレー&quot;,cat:&quot;ヘアケア&quot;,e:&quot;💈&quot;,
+  pearls:&quot;前額・側頭・項部・うなじ。<b>防腐剤・香料・(メタ)アクリレート系皮膜剤</b>が要点。残留ヘアダイ(PPD)にも注意。<b>標準アレルゲンに加え、患者が使用している整髪料・ヘアスプレー製品そのもの</b>(as is)を必ず含めることが重要。&quot;,
+  groups:[[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;,&quot;formaldehyde&quot;,&quot;parabens&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;linaloolhp&quot;,&quot;limonenehp&quot;]],[&quot;acrylate&quot;,[&quot;hema&quot;,&quot;mma&quot;,&quot;ethylacrylate&quot;,&quot;ethylcyanoacrylate&quot;]],[&quot;surf&quot;,[&quot;cocamidopropyl&quot;]],[&quot;dye&quot;,[&quot;ppd&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;soap&quot;,n:&quot;石鹸・ボディソープ&quot;,cat:&quot;パーソナルケア&quot;,e:&quot;🫧&quot;,
+  pearls:&quot;<b>洗浄剤・防腐剤・香料・植物精油</b>が要点。リンスオフでも感作はある。<b>標準アレルゲンに加え、患者が使用している石鹸・ボディソープ製品そのもの</b>(刺激回避のため適切に希釈)を必ず含めることが重要。&quot;,
+  groups:[[&quot;surf&quot;,[&quot;cocamidopropyl&quot;,&quot;laurylglucoside&quot;,&quot;decylglucoside&quot;,&quot;sorbitan&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;,&quot;fareleaser&quot;,&quot;parabens&quot;,&quot;benzalkonium&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;linaloolhp&quot;,&quot;limonenehp&quot;,&quot;eu26&quot;]],[&quot;plant&quot;,[&quot;teatree&quot;,&quot;lavenderoil&quot;,&quot;lemongrassoil&quot;,&quot;propolis&quot;]],[&quot;base&quot;,[&quot;lanolin&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;deodorant&quot;,n:&quot;デオドラント・制汗剤&quot;,cat:&quot;パーソナルケア&quot;,e:&quot;🧴&quot;,
+  pearls:&quot;腋窩。<b>香料・植物精油・プロピレングリコール</b>が要点。アルミニウム塩は<b>刺激性皮膚炎との鑑別</b>が重要(アレルギーはまれ)。<b>標準アレルゲンに加え、患者が使用しているデオドラント・制汗剤製品そのもの</b>(as is)を必ず含めることが重要。&quot;,
+  groups:[[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamal&quot;,&quot;linaloolhp&quot;,&quot;limonenehp&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;,&quot;fareleaser&quot;,&quot;parabens&quot;]],[&quot;plant&quot;,[&quot;teatree&quot;,&quot;propolis&quot;,&quot;lavenderoil&quot;,&quot;lichenacid&quot;,&quot;sesquiterpene&quot;]],[&quot;base&quot;,[&quot;propyleneglycol&quot;,&quot;zincricinoleate&quot;]],[&quot;metal&quot;,[&quot;aluminum&quot;]],[&quot;surf&quot;,[&quot;cetylpegppg&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;toothpaste&quot;,n:&quot;歯磨剤・口腔ケア&quot;,cat:&quot;パーソナルケア&quot;,e:&quot;🪥&quot;,
+  pearls:&quot;口唇炎・口囲皮膚炎・口角炎・口内炎様。<b>香料(ミント・カルボン・アネトール・桂皮アルデヒド)・SLS・コカミドプロピルベタイン</b>が要点。歯科金属・レジンとの関連も。<b>標準アレルゲンに加え、患者が使用している歯磨剤・口腔ケア製品そのもの</b>(適切に希釈)を必ず含めることが重要。&quot;,
+  groups:[[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamal&quot;,&quot;peppermintoil&quot;,&quot;spearmintoil&quot;,&quot;menthol&quot;,&quot;carvone&quot;,&quot;anethole&quot;]],[&quot;surf&quot;,[&quot;cocamidopropyl&quot;,&quot;sls&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;,&quot;fareleaser&quot;,&quot;parabens&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;,&quot;pdtetrachloro&quot;,&quot;mercury&quot;,&quot;beryllium&quot;]],[&quot;acrylate&quot;,[&quot;hema&quot;,&quot;mma&quot;,&quot;egdma&quot;]],[&quot;plant&quot;,[&quot;propolis&quot;,&quot;bromelain&quot;,&quot;eugenol&quot;]],[&quot;base&quot;,[&quot;propyleneglycol&quot;]],[&quot;topical&quot;,[&quot;tixocortol&quot;,&quot;budesonide&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;jewelry&quot;,n:&quot;アクセサリー・装身具&quot;,cat:&quot;金属・日用品&quot;,e:&quot;💍&quot;,
+  pearls:&quot;接触部位に一致した皮膚炎。<b>ニッケル・コバルト・クロム・金・パラジウム</b>。ピアスでの初回感作が多い。<b>装身具そのものと、接触部位に使用しているパーソナルケア製品</b>(クリーム・ローション等)も併せて貼付し、修飾因子を評価。&quot;,
+  groups:[[&quot;metal&quot;,[&quot;nickel&quot;,&quot;cobalt&quot;,&quot;chromate&quot;,&quot;gold&quot;,&quot;palladium&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;,&quot;cinnamylalcohol&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;]],[&quot;topical&quot;,[&quot;neomycin&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;,&quot;ownpersonalcare&quot;]]]},
+
+ {id:&quot;watch&quot;,n:&quot;時計・腕時計バンド&quot;,cat:&quot;金属・日用品&quot;,e:&quot;⌚&quot;,
+  pearls:&quot;手首の限局性皮膚炎。<b>金属(裏蓋・バックル)・ゴム添加剤(ラバーバンド)・革ベルトのクロム・接着剤樹脂</b>。重クロム酸カリウムは金属メッキとクロムなめし革(皮革成分)の両方をカバー。<b>標準アレルゲンに加え、患者のバンドそのもの</b>も必ず貼付することが重要。&quot;,
+  groups:[[&quot;metal&quot;,[&quot;nickel&quot;,&quot;cobalt&quot;,&quot;chromate&quot;,&quot;gold&quot;]],[&quot;rubber&quot;,[&quot;thiuram&quot;,&quot;mercaptomix&quot;,&quot;mbt&quot;,&quot;carba&quot;]],[&quot;resin&quot;,[&quot;ptbpfr&quot;,&quot;colophonium&quot;,&quot;epoxy&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;textile&quot;,n:&quot;衣類・繊維&quot;,cat:&quot;金属・日用品&quot;,e:&quot;👕&quot;,
+  pearls:&quot;摩擦部・発汗部(腋窩・大腿内側・襟元)。<b>分散染料・繊維仕上げ剤(ホルムアルデヒド/遊離剤)・下着や装飾の金属/ゴム・接着剤樹脂</b>が要点。重クロム酸カリウムはなめし剤(クロム)もカバー。<b>標準アレルゲンに加え、患者が着用している衣類そのもの</b>(発汗部の生地)も必ず貼付することが重要。&quot;,
+  groups:[[&quot;dye&quot;,[&quot;textiledyemix&quot;,&quot;disperseblue&quot;,&quot;disperseorange&quot;]],[&quot;preserv&quot;,[&quot;formaldehyde&quot;,&quot;fareleaser&quot;]],[&quot;metal&quot;,[&quot;nickel&quot;,&quot;cobalt&quot;,&quot;chromate&quot;]],[&quot;rubber&quot;,[&quot;thiuram&quot;,&quot;mercaptomix&quot;,&quot;mbt&quot;,&quot;carba&quot;]],[&quot;resin&quot;,[&quot;ptbpfr&quot;,&quot;colophonium&quot;,&quot;epoxy&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;leather&quot;,n:&quot;革製品・靴&quot;,cat:&quot;金属・日用品&quot;,e:&quot;👞&quot;,
+  pearls:&quot;足背・足趾背・接触部の皮膚炎。<b>クロム(皮革なめし剤)・ゴム促進剤・接着剤樹脂・生物殺菌剤・染料</b>が要点。<b>標準アレルゲンに加え、患者の靴そのもの</b>(内側材)も必ず貼付することが重要。&quot;,
+  groups:[[&quot;metal&quot;,[&quot;chromate&quot;,&quot;cobalt&quot;,&quot;nickel&quot;]],[&quot;rubber&quot;,[&quot;thiuram&quot;,&quot;mercaptomix&quot;,&quot;mbt&quot;,&quot;carba&quot;]],[&quot;resin&quot;,[&quot;ptbpfr&quot;,&quot;colophonium&quot;,&quot;epoxy&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;,&quot;bit&quot;,&quot;tcmtb&quot;]],[&quot;dye&quot;,[&quot;ppd&quot;,&quot;textiledyemix&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;rubber&quot;,n:&quot;ゴム手袋・ゴム製品&quot;,cat:&quot;金属・日用品&quot;,e:&quot;🧤&quot;,
+  pearls:&quot;手湿疹(職業性・手袋)。<b>加硫促進剤(チウラム・カルバ・メルカプト・グアニジンDPG・新興CEDC)・老化防止剤(IPPD・黒ゴムミックス)・チオ尿素</b>を網羅。標準シリーズでは<b>新興促進剤(CEDC)を見逃しやすい</b>。ラテックスは<b>I型</b>でプリックテストを。<b>標準アレルゲンに加え、患者の手袋そのもの(両面)</b>も必ず貼付することが重要。&quot;,
+  groups:[[&quot;rubacc&quot;,[&quot;thiuram&quot;,&quot;thiuramsindiv&quot;,&quot;mercaptomix&quot;,&quot;mbt&quot;,&quot;carba&quot;,&quot;dithiocarbamatesindiv&quot;,&quot;dpg&quot;,&quot;cedc&quot;]],[&quot;rubanti&quot;,[&quot;ippd&quot;,&quot;ppdderiv&quot;,&quot;blackrubber&quot;]],[&quot;rubber&quot;,[&quot;thiourea&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;adhesive&quot;,n:&quot;接着剤・エポキシ&quot;,cat:&quot;金属・日用品&quot;,e:&quot;🧯&quot;,
+  pearls:&quot;職業性接触皮膚炎が多い(手・前腕・顔)。<b>エポキシ樹脂(A型/F型)・硬化剤(アミン)・反応性希釈剤・アクリレート・接着剤樹脂</b>を網羅。<b>標準アレルゲンに加え、患者の接着剤製品そのもの</b>(適切に希釈)も必ず貼付することが重要。&quot;,
+  groups:[[&quot;epoxygrp&quot;,[&quot;epoxydgeba&quot;,&quot;epoxydgebf&quot;]],[&quot;hardener&quot;,[&quot;mxda&quot;,&quot;trisdmp&quot;,&quot;ipda&quot;,&quot;deta&quot;]],[&quot;diluent&quot;,[&quot;bddge&quot;,&quot;hddge&quot;,&quot;cge&quot;]],[&quot;acrylate&quot;,[&quot;mma&quot;,&quot;hema&quot;,&quot;ethylcyanoacrylate&quot;]],[&quot;resin&quot;,[&quot;colophonium&quot;,&quot;ptbpfr&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;topical&quot;,n:&quot;外用薬全般&quot;,cat:&quot;医療・外用&quot;,e:&quot;💊&quot;,
+  pearls:&quot;既存皮疹の<b>難治化・悪化</b>が手がかり。<b>主薬(抗菌薬・ステロイド・麻酔薬・NSAID)・基剤・防腐剤・香料</b>を網羅。ステロイドはA群(チキソコルトール)/B群(ブデソニド)スクリーニング。ケトプロフェンは<b>光接触</b>に注意。<b>標準アレルゲンに加え、患者の外用薬そのもの</b>も必ず貼付することが重要。&quot;,
+  groups:[[&quot;abx&quot;,[&quot;neomycin&quot;,&quot;bacitracin&quot;,&quot;mupirocin&quot;,&quot;aminoglycoside&quot;]],[&quot;steroid&quot;,[&quot;tixocortol&quot;,&quot;budesonide&quot;,&quot;hcbutyrate&quot;]],[&quot;anesth&quot;,[&quot;benzocaine&quot;,&quot;lidocaine&quot;]],[&quot;nsaid&quot;,[&quot;ketoprofen&quot;,&quot;bufexamac&quot;]],[&quot;preserv&quot;,[&quot;mi&quot;,&quot;mcimi&quot;,&quot;bit&quot;,&quot;fareleaser&quot;,&quot;parabens&quot;]],[&quot;base&quot;,[&quot;propyleneglycol&quot;,&quot;lanolin&quot;,&quot;cetylstearyl&quot;]],[&quot;fragrance&quot;,[&quot;fmi&quot;,&quot;fmii&quot;,&quot;balsam&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;patch&quot;,n:&quot;湿布・貼付剤・テープ&quot;,cat:&quot;医療・外用&quot;,e:&quot;🩹&quot;,
+  pearls:&quot;貼付部に一致した皮膚炎。<b>粘着剤(ロジン誘導体・アクリレート)・ゴム添加剤・主薬</b>が要点。医療用粘着の<b>イソボルニルアクリレート</b>(血糖センサー等)も。ケトプロフェン湿布は<b>光接触皮膚炎</b>に注意(オクトクリレン交差)。<b>標準アレルゲンに加え、患者の湿布・テープそのもの</b>も必ず貼付することが重要。&quot;,
+  groups:[[&quot;rosin&quot;,[&quot;colophonium&quot;,&quot;glycerylrosinate&quot;,&quot;pentaerythritolrosin&quot;,&quot;abitol&quot;,&quot;glycerolabietate&quot;,&quot;abieticacid&quot;]],[&quot;acrylate&quot;,[&quot;hema&quot;,&quot;iboa&quot;,&quot;butylacrylate&quot;,&quot;ethylcyanoacrylate&quot;]],[&quot;rubber&quot;,[&quot;carba&quot;,&quot;thiuram&quot;]],[&quot;nsaid&quot;,[&quot;ketoprofen&quot;,&quot;diclofenac&quot;]],[&quot;preserv&quot;,[&quot;mcimi&quot;]],[&quot;base&quot;,[&quot;lanolin&quot;,&quot;propyleneglycol&quot;]],[&quot;fragrance&quot;,[&quot;limonenehp&quot;,&quot;linaloolhp&quot;,&quot;cinnamylalcohol&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;disinfectant&quot;,n:&quot;消毒薬&quot;,cat:&quot;医療・外用&quot;,e:&quot;🧴&quot;,
+  pearls:&quot;処置・術野・手指。<b>クロルヘキシジン・ヨード・第四級アンモニウム・アルデヒド・ビグアナイド系</b>を網羅。<b>即時型(アナフィラキシー)の既往</b>にも注意(クロルヘキシジン・PVP-ヨード)。<b>標準アレルゲンに加え、患者の消毒薬そのもの</b>(適切に希釈)も必ず貼付することが重要。&quot;,
+  groups:[[&quot;disinf&quot;,[&quot;chlorhexidine&quot;,&quot;benzalkonium&quot;,&quot;benzylalcohol&quot;,&quot;glutaraldehyde&quot;,&quot;formaldehyde&quot;,&quot;glyoxal&quot;,&quot;povidone&quot;,&quot;benzoxonium&quot;,&quot;lauramineoxide&quot;,&quot;octenidine&quot;,&quot;polyhexanide&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]},
+
+ {id:&quot;dental&quot;,n:&quot;歯科金属・義歯&quot;,cat:&quot;医療・外用&quot;,e:&quot;🦷&quot;,
+  pearls:&quot;口腔扁平苔癬様病変・口囲・掌蹠の遠隔反応。<b>金属(Ni・Pd・Au・Co・Cr・水銀・アマルガム他)・メタクリレート・義歯床用樹脂</b>を網羅。金属・レジンは<b>遅延判定(7日)</b>も追加。<b>標準アレルゲンに加え、患者の歯科材料そのもの</b>も貼付することが重要。&quot;,
+  groups:[[&quot;metal&quot;,[&quot;nickel&quot;,&quot;palladium&quot;,&quot;gold&quot;,&quot;cobalt&quot;,&quot;chromate&quot;,&quot;mercury&quot;,&quot;amalgam&quot;,&quot;copper&quot;,&quot;tin&quot;,&quot;zinc&quot;,&quot;platinum&quot;,&quot;indium&quot;]],[&quot;acrylate&quot;,[&quot;hema&quot;,&quot;hpma&quot;,&quot;egdma&quot;,&quot;tegdma&quot;,&quot;mma&quot;]],[&quot;denture&quot;,[&quot;bpo&quot;,&quot;dmpt&quot;]],[&quot;dentalother&quot;,[&quot;formaldehyde&quot;,&quot;colophonium&quot;,&quot;benzocaine&quot;]],[&quot;own&quot;,[&quot;ownproduct&quot;]]]}
+];
+
+/* ============ 標準アレルゲン(群別一覧) ============ */
+const SERIES_ORDER=[&quot;metal&quot;,&quot;fragrance&quot;,&quot;preserv&quot;,&quot;surf&quot;,&quot;dye&quot;,&quot;crossreact&quot;,&quot;resin&quot;,&quot;hardener&quot;,&quot;diluent&quot;,&quot;acrylate&quot;,&quot;copolymer&quot;,&quot;cyano&quot;,&quot;isocyanate&quot;,&quot;rubber&quot;,&quot;uv&quot;,&quot;base&quot;,&quot;lipcare&quot;,&quot;vitamin&quot;,&quot;topical&quot;,&quot;plant&quot;,&quot;disinf&quot;,&quot;own&quot;];
+
+/* ============ state ============ */
+let LIST=JSON.parse(localStorage.getItem(&quot;ptd_list&quot;)||&quot;[]&quot;);
+let activeCat=&quot;すべて&quot;, activeGrp=&quot;すべて&quot;;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+function saveList(){localStorage.setItem(&quot;ptd_list&quot;,JSON.stringify(LIST));updateBadge();}
+function updateBadge(){
+  const b=$(&quot;#listBadge&quot;);
+  b.textContent=LIST.length?(&quot;(&quot;+LIST.length+&quot;)&quot;):&quot;&quot;;
+}
+function toast(t){const e=$(&quot;#toast&quot;);e.textContent=t;e.classList.add(&quot;on&quot;);clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove(&quot;on&quot;),1400);}
+
+/* ===== tabs ===== */
+$$(&quot;#tabs .tab&quot;).forEach(t=>t.onclick=()=>switchView(t.dataset.v));
+function switchView(v){
+  $$(&quot;#tabs .tab&quot;).forEach(x=>x.classList.toggle(&quot;on&quot;,x.dataset.v===v));
+  $$(&quot;.view&quot;).forEach(x=>x.classList.remove(&quot;on&quot;));
+  $(&quot;#view-&quot;+v).classList.add(&quot;on&quot;);
+  if(v===&quot;list&quot;)renderList();
+  window.scrollTo(0,0);
+}
+
+/* ===== products ===== */
+const CATS=[&quot;すべて&quot;,...new Set(PRODUCTS.map(p=>p.cat))];
+function renderCatFilters(){
+  $(&quot;#catfilters&quot;).innerHTML=CATS.map(c=>`<div class=&quot;chip ${c===activeCat?'on':''}&quot; data-c=&quot;${c}&quot;>${c}</div>`).join(&quot;&quot;);
+  $$(&quot;#catfilters .chip&quot;).forEach(ch=>ch.onclick=()=>{activeCat=ch.dataset.c;renderCatFilters();renderProducts();});
+}
+function renderProducts(){
+  const q=$(&quot;#psearch&quot;).value.trim().toLowerCase();
+  const list=PRODUCTS.filter(p=>{
+    const okCat=activeCat===&quot;すべて&quot;||p.cat===activeCat;
+    const okQ=!q||p.n.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)||
+      p.groups.some(g=>g[1].some(id=>(A[id].n+A[id].x).toLowerCase().includes(q)));
+    return okCat&amp;&amp;okQ;
+  });
+  if(!list.length){$(&quot;#plist&quot;).innerHTML=`<div class=&quot;listempty&quot; style=&quot;grid-column:1/-1&quot;><div class=&quot;big&quot;>🔍</div>該当する製品がありません</div>`;return;}
+  $(&quot;#plist&quot;).innerHTML=list.map(p=>{
+    const n=p.groups.reduce((s,g)=>s+g[1].length,0);
+    const col=GROUPS[p.groups[0][0]].c;
+    return `<div class=&quot;pcard&quot; data-id=&quot;${p.id}&quot;><div class=&quot;catband&quot; style=&quot;background:${col}&quot;></div>
+      <span class=&quot;cnt&quot;>${n}項</span><div class=&quot;emo&quot;>${p.e}</div>
+      <div class=&quot;pn mincho&quot;>${p.n}</div><div class=&quot;pc&quot;>${p.cat}</div></div>`;
+  }).join(&quot;&quot;);
+  $$(&quot;#plist .pcard&quot;).forEach(c=>c.onclick=()=>openDetail(c.dataset.id));
+}
+$(&quot;#psearch&quot;).oninput=renderProducts;
+
+function openDetail(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  let h=`<div class=&quot;detail-head&quot;><div class=&quot;emo&quot;>${p.e}</div><div><h2 class=&quot;mincho&quot;>${p.n}</h2><div class=&quot;dc&quot;>${p.cat}</div></div></div>`;
+  h+=`<div class=&quot;note&quot;>${p.pearls}</div>`;
+  p.groups.forEach(([gk,ids])=>{
+    const G=GROUPS[gk];
+    h+=`<div class=&quot;group&quot;><div class=&quot;group-h&quot;><span class=&quot;dot&quot; style=&quot;background:${G.c}&quot;></span>${G.n}<span class=&quot;gn&quot;>${ids.length}項目</span></div><div class=&quot;allergens&quot;>`;
+    ids.forEach(aid=>{
+      const a=A[aid];const added=LIST.includes(aid);
+      const abbr=a.x.split(/[ /]/)[0].slice(0,4);
+      h+=`<div class=&quot;al&quot; data-a=&quot;${aid}&quot;><div class=&quot;chamber&quot; style=&quot;--c:${G.c}&quot;>${abbr}</div>
+        <div class=&quot;am&quot;><div class=&quot;an&quot;>${a.n}</div><div class=&quot;ax&quot;>${a.x}</div></div>
+        <div class=&quot;conc&quot;>${a.c}</div>
+        <button class=&quot;addbtn ${added?'added':''}&quot; data-add=&quot;${aid}&quot;>${added?'✓':'+'}</button></div>`;
+    });
+    h+=`</div></div>`;
+  });
+  // bulk add
+  const allIds=[...new Set(p.groups.flatMap(g=>g[1]))];
+  h+=`<button class=&quot;btn&quot; id=&quot;addAll&quot; style=&quot;width:100%;margin-top:4px&quot;>この製品の${allIds.length}項目をまとめてリストに追加</button>`;
+  $(&quot;#detailBody&quot;).innerHTML=h;
+  $$(&quot;#detailBody .al .am, #detailBody .chamber&quot;).forEach(el=>{});
+  $$(&quot;#detailBody .al&quot;).forEach(al=>{
+    al.querySelector(&quot;.am&quot;).onclick=()=>openAllergenSheet(al.dataset.a);
+    al.querySelector(&quot;.chamber&quot;).onclick=()=>openAllergenSheet(al.dataset.a);
+  });
+  $$(&quot;#detailBody [data-add]&quot;).forEach(b=>b.onclick=e=>{e.stopPropagation();toggleAdd(b.dataset.add,b);});
+  $(&quot;#addAll&quot;).onclick=()=>{
+    let added=0;allIds.forEach(id=>{if(!LIST.includes(id)){LIST.push(id);added++;}});
+    saveList();openDetail(id);toast(added?`${added}項目を追加しました`:&quot;すべて追加済みです&quot;);
+  };
+  switchView(&quot;detail&quot;);
+}
+$(&quot;#backBtn&quot;).onclick=()=>switchView(&quot;products&quot;);
+
+function toggleAdd(aid,btn){
+  const i=LIST.indexOf(aid);
+  if(i>=0){LIST.splice(i,1);btn&amp;&amp;(btn.classList.remove(&quot;added&quot;),btn.textContent=&quot;+&quot;);toast(&quot;リストから削除&quot;);}
+  else{LIST.push(aid);btn&amp;&amp;(btn.classList.add(&quot;added&quot;),btn.textContent=&quot;✓&quot;);toast(&quot;リストに追加&quot;);}
+  saveList();
+}
+
+/* ===== allergens tab ===== */
+const GRPKEYS=[&quot;すべて&quot;,...SERIES_ORDER];
+function renderGrpFilters(){
+  $(&quot;#grpfilters&quot;).innerHTML=GRPKEYS.map(k=>{
+    const label=k===&quot;すべて&quot;?&quot;すべて&quot;:GROUPS[k].n;
+    return `<div class=&quot;chip ${k===activeGrp?'on':''}&quot; data-g=&quot;${k}&quot;>${label}</div>`;
+  }).join(&quot;&quot;);
+  $$(&quot;#grpfilters .chip&quot;).forEach(ch=>ch.onclick=()=>{activeGrp=ch.dataset.g;renderGrpFilters();renderAllergens();});
+}
+function renderAllergens(){
+  const q=$(&quot;#asearch&quot;).value.trim().toLowerCase();
+  const ids=Object.keys(A).filter(id=>{
+    const a=A[id];
+    const okG=activeGrp===&quot;すべて&quot;||a.g===activeGrp;
+    const okQ=!q||(a.n+a.x).toLowerCase().includes(q);
+    return okG&amp;&amp;okQ;
+  });
+  if(!ids.length){$(&quot;#alist&quot;).innerHTML=`<div class=&quot;listempty&quot;><div class=&quot;big&quot;>🔍</div>該当するアレルゲンがありません</div>`;return;}
+  $(&quot;#alist&quot;).innerHTML=ids.map(id=>{
+    const a=A[id];const G=GROUPS[a.g];const abbr=a.x.split(/[ /]/)[0].slice(0,4);const added=LIST.includes(id);
+    return `<div class=&quot;al&quot; data-a=&quot;${id}&quot;><div class=&quot;chamber&quot; style=&quot;--c:${G.c}&quot;>${abbr}</div>
+      <div class=&quot;am&quot;><div class=&quot;an&quot;>${a.n}</div><div class=&quot;ax&quot;>${G.n}・${a.x}</div></div>
+      <div class=&quot;conc&quot;>${a.c}</div>
+      <button class=&quot;addbtn ${added?'added':''}&quot; data-add=&quot;${id}&quot;>${added?'✓':'+'}</button></div>`;
+  }).join(&quot;&quot;);
+  $$(&quot;#alist .al&quot;).forEach(al=>{
+    al.querySelector(&quot;.am&quot;).onclick=()=>openAllergenSheet(al.dataset.a);
+    al.querySelector(&quot;.chamber&quot;).onclick=()=>openAllergenSheet(al.dataset.a);
+  });
+  $$(&quot;#alist [data-add]&quot;).forEach(b=>b.onclick=e=>{e.stopPropagation();toggleAdd(b.dataset.add,b);});
+}
+$(&quot;#asearch&quot;).oninput=renderAllergens;
+
+/* ===== allergen sheet ===== */
+function openAllergenSheet(aid){
+  const a=A[aid];const G=GROUPS[a.g];
+  const rel=PRODUCTS.filter(p=>p.groups.some(g=>g[1].includes(aid)));
+  const added=LIST.includes(aid);
+  $(&quot;#sheet&quot;).innerHTML=`<div class=&quot;grab&quot;></div>
+    <h3 class=&quot;mincho&quot;>${a.n}</h3>
+    <div style=&quot;font-size:12px;color:var(--sumi2)&quot;>${a.x}</div>
+    <div class=&quot;meta&quot;>
+      <span class=&quot;pill&quot; style=&quot;border-color:${G.c};color:${G.c}&quot;>${G.n}</span>
+      <span class=&quot;pill&quot;>濃度/基剤  ${a.c}</span>
+    </div>
+    <div class=&quot;body&quot;>${a.d}</div>
+    <div class=&quot;lbl&quot;>関連する製品（${rel.length}）</div>
+    <div class=&quot;relprod&quot;>${rel.map(p=>`<span data-p=&quot;${p.id}&quot;>${p.e} ${p.n}</span>`).join(&quot;&quot;)||&quot;—&quot;}</div>
+    <button class=&quot;btn ${added?'warn':''}&quot; id=&quot;sheetAdd&quot; style=&quot;width:100%;margin-top:18px;${added?'background:#fff':''}&quot;>${added?'リストから削除':'検査リストに追加'}</button>`;
+  $(&quot;#sheetAdd&quot;).onclick=()=>{toggleAdd(aid,null);closeSheet();renderAllergens();if($(&quot;#view-detail&quot;).classList.contains(&quot;on&quot;)){/*keep*/}};
+  $$(&quot;#sheet .relprod span&quot;).forEach(s=>s.onclick=()=>{closeSheet();openDetail(s.dataset.p);});
+  $(&quot;#sheetBg&quot;).classList.add(&quot;on&quot;);
+}
+function closeSheet(){$(&quot;#sheetBg&quot;).classList.remove(&quot;on&quot;);}
+$(&quot;#sheetBg&quot;).onclick=e=>{if(e.target===$(&quot;#sheetBg&quot;))closeSheet();};
+
+/* ===== series tab ===== */
+function renderSeries(){
+  let h=&quot;&quot;;
+  SERIES_ORDER.forEach(gk=>{
+    const G=GROUPS[gk];
+    const ids=Object.keys(A).filter(id=>A[id].g===gk);
+    if(!ids.length)return;
+    h+=`<details class=&quot;acc&quot;><summary><span class=&quot;dot&quot; style=&quot;background:${G.c}&quot;></span>${G.n}<span class=&quot;gn&quot;>${ids.length}項目</span></summary><div class=&quot;ac-body&quot;><div class=&quot;allergens&quot;>`;
+    ids.forEach(id=>{
+      const a=A[id];const abbr=a.x.split(/[ /]/)[0].slice(0,4);const added=LIST.includes(id);
+      h+=`<div class=&quot;al&quot; data-a=&quot;${id}&quot;><div class=&quot;chamber&quot; style=&quot;--c:${G.c}&quot;>${abbr}</div>
+        <div class=&quot;am&quot;><div class=&quot;an&quot;>${a.n}</div><div class=&quot;ax&quot;>${a.x}</div></div>
+        <div class=&quot;conc&quot;>${a.c}</div>
+        <button class=&quot;addbtn ${added?'added':''}&quot; data-add=&quot;${id}&quot;>${added?'✓':'+'}</button></div>`;
+    });
+    h+=`</div></div></details>`;
+  });
+  $(&quot;#seriesBody&quot;).innerHTML=h;
+  $$(&quot;#seriesBody .al&quot;).forEach(al=>{
+    al.querySelector(&quot;.am&quot;).onclick=()=>openAllergenSheet(al.dataset.a);
+    al.querySelector(&quot;.chamber&quot;).onclick=()=>openAllergenSheet(al.dataset.a);
+  });
+  $$(&quot;#seriesBody [data-add]&quot;).forEach(b=>b.onclick=e=>{e.stopPropagation();toggleAdd(b.dataset.add,b);renderSeries();});
+}
+
+/* ===== list tab ===== */
+function renderList(){
+  if(!LIST.length){
+    $(&quot;#listBody&quot;).innerHTML=`<div class=&quot;listempty&quot;><div class=&quot;big&quot;>🌼</div>検査リストは空です<br><span style=&quot;font-size:12px&quot;>製品ページやアレルゲン一覧の「＋」で追加できます</span></div>`;
+    return;
+  }
+  // group by allergen group, keep insertion order within
+  const byG={};LIST.forEach(id=>{const g=A[id].g;(byG[g]=byG[g]||[]).push(id);});
+  let h=`<div class=&quot;count-h&quot;>選択中 ${LIST.length} 項目</div>
+    <div class=&quot;listbar&quot;>
+      <button class=&quot;btn&quot; id=&quot;copyList&quot;>テキストでコピー</button>
+      <button class=&quot;btn ghost&quot; id=&quot;printList&quot;>印刷 / PDF</button>
+      <button class=&quot;btn warn&quot; id=&quot;clearList&quot;>すべて削除</button>
+    </div>`;
+  SERIES_ORDER.forEach(gk=>{
+    if(!byG[gk])return;const G=GROUPS[gk];
+    h+=`<div class=&quot;group-h&quot; style=&quot;margin-top:12px&quot;><span class=&quot;dot&quot; style=&quot;background:${G.c}&quot;></span>${G.n}</div>`;
+    byG[gk].forEach(id=>{
+      const a=A[id];
+      h+=`<div class=&quot;litem&quot;><div class=&quot;am&quot;><div class=&quot;an&quot;>${a.n}</div><div class=&quot;ax&quot;>${a.x}</div></div>
+        <div class=&quot;conc&quot;>${a.c}</div><button class=&quot;rm&quot; data-rm=&quot;${id}&quot;>×</button></div>`;
+    });
+  });
+  $(&quot;#listBody&quot;).innerHTML=h;
+  $$(&quot;#listBody [data-rm]&quot;).forEach(b=>b.onclick=()=>{toggleAdd(b.dataset.rm,null);renderList();});
+  $(&quot;#copyList&quot;).onclick=copyList;
+  $(&quot;#printList&quot;).onclick=()=>window.print();
+  $(&quot;#clearList&quot;).onclick=()=>{if(confirm(&quot;検査リストをすべて削除しますか？&quot;)){LIST=[];saveList();renderList();}};
+}
+function copyList(){
+  const byG={};LIST.forEach(id=>{const g=A[id].g;(byG[g]=byG[g]||[]).push(id);});
+  let t=&quot;【パッチテスト 検査項目】\n&quot;;
+  SERIES_ORDER.forEach(gk=>{
+    if(!byG[gk])return;t+=`\n■ ${GROUPS[gk].n}\n`;
+    byG[gk].forEach(id=>{const a=A[id];t+=`・${a.n}（${a.c}）\n`;});
+  });
+  t+=`\n計 ${LIST.length} 項目`;
+  navigator.clipboard.writeText(t).then(()=>toast(&quot;コピーしました&quot;)).catch(()=>{
+    const ta=document.createElement(&quot;textarea&quot;);ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand(&quot;copy&quot;);ta.remove();toast(&quot;コピーしました&quot;);
+  });
+}
+
+/* ===== init ===== */
+renderCatFilters();renderProducts();renderGrpFilters();renderAllergens();renderSeries();updateBadge();
+</script>
+</body>
+</html>
+"></iframe>
 </div>
 
 <script>
@@ -1563,6 +2379,8 @@ function switchTab(tab) {
   document.getElementById('pg-staff-detail').classList.remove('active');
   document.getElementById('pg-topical').classList.toggle('active', tab === 'topical');
   document.getElementById('pg-vitamin').classList.toggle('active', tab === 'vitamin');
+  if(tabs[5]) tabs[5].classList.toggle('active', tab === 'patch');
+  var _pgp=document.getElementById('pg-patch'); if(_pgp) _pgp.classList.toggle('active', tab === 'patch');
   window.scrollTo(0, 0);
 }
 
