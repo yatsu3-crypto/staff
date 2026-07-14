@@ -385,6 +385,70 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 #pg-patch iframe{display:block;width:100%;height:calc(100dvh - 112px);min-height:480px;border:0;background:#f3ecdd;}
 @supports not (height:100dvh){#pg-patch iframe{height:calc(100vh - 112px);}}
 </style>
+<style id="allergy-css">
+/* ===== 食物アレルギータブ ===== */
+#pg-allergy .alg-seg{display:flex;gap:6px;background:#fff;border:.5px solid var(--bd);border-radius:11px;padding:4px;margin-bottom:12px;box-shadow:0 1px 5px rgba(0,0,0,.06);}
+#pg-allergy .alg-seg button{flex:1;border:none;background:none;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--tx2);padding:9px 4px;border-radius:8px;cursor:pointer;transition:.2s;}
+#pg-allergy .alg-seg button.on{background:var(--g);color:#fff;}
+#pg-allergy .alg-view{display:none;}
+#pg-allergy .alg-view.on{display:block;}
+#pg-allergy .alg-search{position:relative;margin-bottom:11px;}
+#pg-allergy .alg-search input{width:100%;font-family:inherit;font-size:14px;padding:11px 13px 11px 38px;border-radius:10px;border:1px solid var(--bd);background:#fff;color:var(--tx);outline:none;}
+#pg-allergy .alg-search input:focus{border-color:var(--g2);}
+#pg-allergy .alg-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--tx3);}
+#pg-allergy .alg-modehint{font-size:11px;color:var(--tx3);margin:0 2px 10px;line-height:1.5;}
+#pg-allergy .alg-chips{display:flex;flex-wrap:wrap;gap:7px;}
+#pg-allergy .alg-chip{border:1px solid var(--bd);background:var(--bg);color:var(--tx2);padding:7px 11px;border-radius:20px;cursor:pointer;font-family:inherit;font-size:12.5px;display:inline-flex;align-items:center;gap:5px;transition:.15s;}
+#pg-allergy .alg-chip .cat{font-size:9px;color:#fff;background:var(--g2);border-radius:8px;padding:1px 5px;}
+#pg-allergy .alg-chip[data-cat="mandatory"] .cat{background:#c1432a;}
+#pg-allergy .alg-chip.sel{background:var(--g);color:#fff;border-color:var(--g);}
+#pg-allergy .alg-chip.sel .cat{background:rgba(255,255,255,.28);}
+#pg-allergy .alg-selbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:13px 0 10px;padding:9px 12px;background:var(--gl);border-radius:10px;}
+#pg-allergy .alg-selbar .lead{font-size:12px;color:var(--gd);}
+#pg-allergy .alg-selbar .cnt{font-weight:700;color:var(--tc);font-size:15px;}
+#pg-allergy .alg-pbtn{background:#2b6cb0;color:#fff;border:none;border-radius:50px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;}
+#pg-allergy .alg-clear{margin-left:auto;border:none;background:none;color:var(--g);cursor:pointer;font-family:inherit;font-size:12px;text-decoration:underline;}
+#pg-allergy .alg-empty{text-align:center;color:var(--tx3);font-size:13px;padding:40px 16px;border:1px dashed var(--bd);border-radius:12px;background:#fff;line-height:1.7;}
+#pg-allergy .alg-empty .tp{font-size:30px;display:block;margin-bottom:8px;}
+#pg-allergy .alg-card{background:#fff;border-radius:13px;border:.5px solid var(--bd);box-shadow:0 1px 5px rgba(0,0,0,.06);margin-bottom:13px;overflow:hidden;}
+#pg-allergy .alg-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 14px;background:#f0ece4;border-bottom:.5px solid var(--bd);}
+#pg-allergy .alg-head .nm{font-size:16px;font-weight:700;color:var(--tx);}
+#pg-allergy .alg-head .al{font-size:11px;color:var(--tx3);}
+#pg-allergy .alg-head .bdg{margin-left:auto;font-size:9.5px;color:#fff;background:var(--g2);border-radius:10px;padding:2px 8px;white-space:nowrap;}
+#pg-allergy .alg-head .bdg.mandatory{background:#c1432a;}
+#pg-allergy .alg-flag{font-size:9.5px;color:#fff;border-radius:9px;padding:2px 7px;cursor:pointer;}
+#pg-allergy .alg-flag.f-fdeia{background:#c1432a;}
+#pg-allergy .alg-flag.f-latex{background:var(--g);}
+#pg-allergy .alg-layer{padding:11px 14px;border-bottom:.5px solid #f0ece4;}
+#pg-allergy .alg-layer:last-child{border-bottom:none;}
+#pg-allergy .alg-ltitle{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;margin-bottom:7px;}
+#pg-allergy .alg-ltitle .d{width:8px;height:8px;border-radius:50%;flex:none;}
+#pg-allergy .alg-layer.avoid{background:#fbeae4;}#pg-allergy .alg-layer.avoid .d{background:#c1432a;}#pg-allergy .alg-layer.avoid .alg-ltitle{color:#9c3620;}
+#pg-allergy .alg-layer.cross{background:#f5eede;}#pg-allergy .alg-layer.cross .d{background:#9a6b2f;}#pg-allergy .alg-layer.cross .alg-ltitle{color:#9a6b2f;}
+#pg-allergy .alg-layer.hiddensrc{background:#e9eee8;}#pg-allergy .alg-layer.hiddensrc .d{background:var(--g);}#pg-allergy .alg-layer.hiddensrc .alg-ltitle{color:var(--gd);}
+#pg-allergy .alg-layer.ok{background:#e6eef0;}#pg-allergy .alg-layer.ok .d{background:#2f4a6b;}#pg-allergy .alg-layer.ok .alg-ltitle{color:#2f4a6b;}
+#pg-allergy .alg-items{display:flex;flex-wrap:wrap;gap:6px;}
+#pg-allergy .alg-item{background:rgba(255,255,255,.8);border:1px solid rgba(0,0,0,.06);border-radius:7px;padding:4px 9px;font-size:12px;color:var(--tx);}
+#pg-allergy .alg-item.high{font-weight:700;border-color:rgba(193,67,42,.3);}
+#pg-allergy .alg-topic{background:#fff;border:.5px solid var(--bd);border-radius:13px;box-shadow:0 1px 5px rgba(0,0,0,.06);margin-bottom:12px;overflow:hidden;}
+#pg-allergy .alg-topic summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;padding:12px 14px;background:#f0ece4;font-weight:600;font-size:13px;color:var(--tx);}
+#pg-allergy .alg-topic summary::-webkit-details-marker{display:none;}
+#pg-allergy .alg-topic summary .tm{flex:none;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;}
+#pg-allergy .alg-topic.latex summary .tm{background:var(--g);}
+#pg-allergy .alg-topic.oas summary .tm{background:#9a6b2f;}
+#pg-allergy .alg-topic.fdeia summary .tm{background:#c1432a;}
+#pg-allergy .alg-topic summary .ts{margin-left:auto;font-size:10.5px;color:var(--tx3);font-weight:400;text-align:right;}
+#pg-allergy .alg-topic summary .ar{color:#9a6b2f;font-size:11px;transition:transform .2s;flex:none;}
+#pg-allergy .alg-topic[open] summary .ar{transform:rotate(90deg);}
+#pg-allergy .alg-tbody{padding:13px 14px;font-size:12.5px;line-height:1.75;color:var(--tx);}
+#pg-allergy .alg-tbody p{margin:0 0 9px;}
+#pg-allergy .alg-keypoint{background:var(--gl);border-left:3px solid var(--g);border-radius:0 8px 8px 0;padding:9px 11px;font-size:12px;margin:9px 0;line-height:1.65;}
+#pg-allergy .alg-ptable{width:100%;border-collapse:collapse;font-size:11.5px;margin:6px 0;}
+#pg-allergy .alg-ptable th,#pg-allergy .alg-ptable td{border:.5px solid var(--bd);padding:7px 8px;text-align:left;vertical-align:top;line-height:1.6;}
+#pg-allergy .alg-ptable th{background:#f0ece4;white-space:nowrap;font-weight:600;color:var(--gd);}
+#pg-allergy .alg-ptable .season{display:block;font-size:10px;color:#9a6b2f;margin-top:2px;}
+#pg-allergy .alg-warn{background:var(--wbg);border-left:3px solid var(--wbd);border-radius:7px;padding:11px 13px;font-size:11.5px;line-height:1.65;color:var(--wtx);margin-top:14px;}
+</style>
 </head>
 <body>
 
@@ -399,6 +463,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   <button class="tab-btn" onclick="switchTab('topical')">💊 外用薬</button>
   <button class="tab-btn" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
   <button class="tab-btn" onclick="switchTab('patch')">🩹 パッチ</button>
+  <button class="tab-btn" onclick="switchTab('allergy')">🍽 食物アレルギー</button>
 </div>
 
 <!-- 入力ページ -->
@@ -713,6 +778,84 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
       <button class="back-btn no-print" onclick="switchTab('topical')" style="margin-bottom:8px;">💊 外用薬の使い方を見る</button>
       <button class="back-btn no-print" onclick="goBack()">← 入力に戻る</button>
     </div>
+  </div>
+</div>
+
+<!-- 食物アレルギーページ -->
+<div class="page" id="pg-allergy">
+  <div class="alg-seg">
+    <button class="on" onclick="algView('avoid',this)">回避食品</button>
+    <button onclick="algView('topics',this)">特集トピック</button>
+  </div>
+
+  <div class="alg-view on" id="alg-v-avoid">
+    <div class="alg-seg" style="margin-bottom:11px;">
+      <button class="on" id="alg-m-clinic" onclick="algMode('clinic')">スタッフ説明</button>
+      <button id="alg-m-patient" onclick="algMode('patient')">患者さん向け</button>
+    </div>
+    <div class="alg-modehint" id="alg-modehint">スタッフ説明モード：含む食品／交差反応／隠れた原材料を表示します。</div>
+    <div class="alg-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="alg-search" placeholder="アレルゲン名で検索（小麦・卵・えび…）" oninput="algRenderChips(this.value)">
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>アレルゲンを選択（複数可・義務8／推奨20品目）</div>
+      <div class="card-body"><div class="alg-chips" id="alg-chips"></div></div>
+    </div>
+    <div class="alg-selbar" id="alg-selbar" style="display:none;">
+      <span class="lead">選択中</span><span class="cnt" id="alg-cnt">0</span><span class="lead">品目</span>
+      <button class="alg-pbtn" onclick="window.print()">🖨 印刷/PDF</button>
+      <button class="alg-clear" onclick="algClear()">すべて解除</button>
+    </div>
+    <div id="alg-results">
+      <div class="alg-empty"><span class="tp">🍽</span>アレルゲンを選ぶと、避けたほうがよい食品を「含む食品／交差反応／隠れた原材料」に分けて表示します。</div>
+    </div>
+    <div class="alg-warn" id="alg-warn" style="display:none;">
+      <b>⚠ ご確認ください</b>：一般的な参考情報です。反応の程度・耐性には個人差が大きく、微量で反応する方や加熱・加工で食べられる方もいます。実際の除去範囲・解除は主治医の指示に従い、加工食品は購入時に必ず<b>原材料・アレルギー表示</b>をご確認ください。
+    </div>
+  </div>
+
+  <div class="alg-view" id="alg-v-topics">
+    <details class="alg-topic latex" id="alg-topicLatex">
+      <summary><span class="tm">果</span>ラテックス-フルーツ症候群<span class="ts">ゴム手袋×果物</span><span class="ar">▶</span></summary>
+      <div class="alg-tbody">
+        <p>天然ゴム（ラテックス）アレルギーの方の約<b>30〜50%</b>は、特定の果物・野菜でも口のかゆみ・じんましん、まれにアナフィラキシーを起こします。医療従事者・手荒れのある方は特に注意。</p>
+        <div class="alg-ltitle" style="color:#9c3620;"><span class="d" style="background:#c1432a;"></span>交差しやすい果物（高リスク）</div>
+        <div class="alg-items" style="margin-bottom:9px;"><span class="alg-item high">バナナ</span><span class="alg-item high">アボカド</span><span class="alg-item high">キウイ</span><span class="alg-item high">クリ（栗）</span></div>
+        <div class="alg-ltitle" style="color:#9a6b2f;"><span class="d" style="background:#9a6b2f;"></span>報告のある果物・野菜（中等度）</div>
+        <div class="alg-items"><span class="alg-item">パパイヤ</span><span class="alg-item">いちじく</span><span class="alg-item">メロン</span><span class="alg-item">もも</span><span class="alg-item">パイナップル</span><span class="alg-item">トマト</span><span class="alg-item">じゃがいも</span><span class="alg-item">セロリ</span></div>
+        <div class="alg-keypoint">ゴム手袋・風船・絆創膏で<b>かゆみ・じんましん</b>が出たことのある方は要注意。これらの果物でアレルギーのある方が手術・歯科・検査を受ける際は<b>「ラテックスアレルギーの可能性」を必ず申告</b>してください。</div>
+      </div>
+    </details>
+
+    <details class="alg-topic oas" id="alg-topicOas">
+      <summary><span class="tm">花</span>口腔アレルギー症候群（OAS/PFAS）<span class="ts">花粉症×生の果物野菜</span><span class="ar">▶</span></summary>
+      <div class="alg-tbody">
+        <p>花粉と似たたんぱく質を持つ<b>生の果物・野菜</b>で、口・唇・のどのかゆみを起こします。原因たんぱくは熱に弱く、<b>加熱・加工品（ジャム・缶詰・ジュース）では出にくい</b>のが特徴です（個人差あり）。</p>
+        <table class="alg-ptable">
+          <tr><th>原因花粉</th><th>注意したい食べ物</th></tr>
+          <tr><td>シラカンバ・ハンノキ<span class="season">1〜6月／北日本・高地</span></td><td><b>バラ科</b>：りんご・もも・さくらんぼ・梨・いちご・梅／<b>豆乳・大豆</b>（豆乳で強く出ることあり）／キウイ・セロリ・にんじん</td></tr>
+          <tr><td>スギ・ヒノキ<span class="season">2〜5月／全国</span></td><td>トマト（報告あり・頻度は低め）</td></tr>
+          <tr><td>イネ科<span class="season">5〜8月／河川敷・草地</span></td><td>メロン・スイカ・トマト・キウイ・オレンジ・じゃがいも</td></tr>
+          <tr><td>ブタクサ<span class="season">8〜10月</span></td><td>メロン・スイカ・きゅうり・ズッキーニ・バナナ</td></tr>
+          <tr><td>ヨモギ<span class="season">8〜10月</span></td><td>セロリ・にんじん・マンゴー・スパイス類（マスタード・クミン等）</td></tr>
+        </table>
+        <div class="alg-keypoint">口のかゆみで済むことが多い一方、<b>豆乳・セロリ・スパイス類は全身症状に進みやすい</b>との報告があります。どの花粉に感作されているか調べると原因整理に役立ちます（当院で検査できます）。</div>
+      </div>
+    </details>
+
+    <details class="alg-topic fdeia" id="alg-topicFdeia">
+      <summary><span class="tm">運</span>食物依存性運動誘発アナフィラキシー<span class="ts">FDEIA／学童〜若年成人</span><span class="ar">▶</span></summary>
+      <div class="alg-tbody">
+        <p>特定の食物単独では無症状でも、<b>食後2〜4時間以内の運動</b>でじんましん・呼吸困難・血圧低下を起こす病態。<b>中学生〜若年成人に最多</b>で、原因は<b>小麦（ω-5グリアジン）が最多、次いで甲殻類（えび・かに）</b>。</p>
+        <div class="alg-ltitle" style="color:#9c3620;"><span class="d" style="background:#c1432a;"></span>二大原因食物</div>
+        <div class="alg-items" style="margin-bottom:9px;"><span class="alg-item high">小麦（パン・麺・うどん）</span><span class="alg-item high">えび・かに（甲殻類）</span></div>
+        <div class="alg-ltitle" style="color:#9a6b2f;"><span class="d" style="background:#9a6b2f;"></span>増悪因子</div>
+        <div class="alg-items"><span class="alg-item">NSAIDs内服</span><span class="alg-item">入浴</span><span class="alg-item">睡眠不足・疲労</span><span class="alg-item">感冒</span><span class="alg-item">飲酒</span><span class="alg-item">月経前</span><span class="alg-item">花粉飛散期</span></div>
+        <div class="alg-keypoint"><b>生活指導</b>：原因食物を食べた日は<b>食後最低2時間（できれば4時間）運動を避ける</b>。体育・部活・持久走の前は原因食物を摂らない。痛み止めを飲んだ日は特に注意。エピペン®処方時は運動時に必ず携行。</div>
+        <p style="font-size:11.5px;color:var(--tx3);">※乳児期に多いのは即時型の鶏卵・乳・小麦アレルギーで、FDEIAとは別病態。学校での発症が多く、<b>学校生活管理指導表</b>の提出を推奨します。</p>
+      </div>
+    </details>
   </div>
 </div>
 
@@ -2381,6 +2524,8 @@ function switchTab(tab) {
   document.getElementById('pg-vitamin').classList.toggle('active', tab === 'vitamin');
   if(tabs[5]) tabs[5].classList.toggle('active', tab === 'patch');
   var _pgp=document.getElementById('pg-patch'); if(_pgp) _pgp.classList.toggle('active', tab === 'patch');
+  if(tabs[6]) tabs[6].classList.toggle('active', tab === 'allergy');
+  var _pga=document.getElementById('pg-allergy'); if(_pga) _pga.classList.toggle('active', tab === 'allergy');
   window.scrollTo(0, 0);
 }
 
@@ -3231,6 +3376,257 @@ function vitRenderTable(){
 }
 function vitInit(){ vitRenderAgents(); vitRenderDis(); vitRenderTable(); }
 vitInit();
+
+/* ====== 食物アレルギー(回避食品)モジュール ====== */
+var ALG_DB = [
+ {id:"wheat",name:"小麦",cat:"mandatory",alias:"こむぎ",fdeia:true,
+  avoid:["パン","うどん・そうめん","中華麺・パスタ","餃子・シュウマイの皮","お好み焼き・たこ焼き","ケーキ・クッキー","天ぷら・フライの衣","麩(ふ)"],
+  cross:["大麦(麦茶・麦ごはん)","ライ麦","オーツ麦(えん麦)","スペルト小麦・デュラム小麦"],
+  hid:["醤油(小麦含有が一般的)","味噌の一部","カレー・シチューのルウ","練り製品のつなぎ","スープ・ソースの増粘剤","麦芽(ビール等)"],
+  ok:["米・米粉","ビーフン・フォー(米麺)","そば粉(そばOKなら)","小麦不使用醤油(たまり)"]},
+ {id:"egg",name:"卵",cat:"mandatory",alias:"たまご",
+  avoid:["ゆで卵・卵焼き","茶碗蒸し・オムレツ","マヨネーズ","プリン・カスタード","スポンジ・シフォンケーキ","フライの衣(卵液)"],
+  cross:["うずら卵など他の鳥類の卵"],
+  hid:["練り製品(かまぼこ・はんぺん)","ハム・ソーセージのつなぎ","麺類のつや出し","洋菓子・アイス","タルタルソース","卵白リゾチーム(添加物)"],
+  ok:["豆腐・豆乳で代替","つなぎに片栗粉・すりおろし芋","卵不使用マヨネーズ"]},
+ {id:"milk",name:"乳",cat:"mandatory",alias:"牛乳・乳製品",
+  avoid:["牛乳・生クリーム","バター・チーズ","ヨーグルト","アイスクリーム","ミルクチョコレート","グラタン・シチュー"],
+  cross:["ヤギ乳・羊乳(交差しやすい)"],
+  hid:["パン・洋菓子全般","カレー・シチューのルウ","ハム・ソーセージの一部","乳糖(粉末調味料・薬の添加物)","カゼイン・ホエイ表記品","乳化剤の一部"],
+  ok:["豆乳・アーモンドミルク・オーツミルク","乳不使用マーガリン","アレルギー用ミルク(治療用)"]},
+ {id:"buckwheat",name:"そば",cat:"mandatory",alias:"蕎麦",
+  avoid:["そば(乾麺・生そば)","そばがき","そばボーロ・そば菓子","そば茶"],
+  cross:["特になし(単独で強い抗原)"],
+  hid:["同じ釜でゆでた麺(コンタミ)","そば粉入りガレット","そば殻枕(吸入も注意)"],
+  ok:["米麺・小麦麺(小麦OKなら)","そば不使用と明記の店"]},
+ {id:"peanut",name:"落花生",cat:"mandatory",alias:"ピーナッツ",
+  avoid:["ピーナッツ・バターピーナッツ","ピーナッツバター","柿ピー","ピーナッツ入り菓子"],
+  cross:["大豆など他の豆類","木の実類と併発しやすい"],
+  hid:["チョコ・クッキー(コンタミ)","エスニックのソース(サテ・担々)","ドレッシング","食用ピーナッツ油"],
+  ok:["他の豆・種実は個別評価","主治医と相談し代替を選択"]},
+ {id:"walnut",name:"くるみ",cat:"mandatory",alias:"クルミ",
+  avoid:["くるみ(製菓用含む)","くるみパン・ゆべし","くるみ入りサラダ・和え物"],
+  cross:["ペカンナッツ(特に交差)","他の木の実(カシュー等)"],
+  hid:["グラノーラ・シリアル","焼き菓子・ナッツミックス","ナッツ入りチョコ"],
+  ok:["他のナッツは個別評価","ドライフルーツ等で代替"]},
+ {id:"shrimp",name:"えび",cat:"mandatory",alias:"海老",fdeia:true,
+  avoid:["えび(甘えび・車えび等)","えびフライ・天ぷら","えびシュウマイ・餃子","干しえび・桜えび"],
+  cross:["かに(強く交差)","シャコ・オキアミ","貝類・軟体類と併発あり"],
+  hid:["えびだしのスープ・出汁","キムチ(アミの塩辛)","えび風味スナック","チャーハン・お好み焼きの具"],
+  ok:["白身魚・鶏肉","えび不使用の出汁"]},
+ {id:"crab",name:"かに",cat:"mandatory",alias:"蟹",fdeia:true,
+  avoid:["かに(ずわい・たらば等)","かに身・かに味噌","かにクリームコロッケ","かに雑炊・かに鍋"],
+  cross:["えび(強く交差)","シャコ・オキアミ"],
+  hid:["かに風味かまぼこ","かにだしのスープ","シーフードミックス"],
+  ok:["白身魚・鶏肉","かに不使用のかまぼこ"]},
+ {id:"soy",name:"大豆",cat:"recommended",alias:"だいず",
+  avoid:["豆腐・厚揚げ・油揚げ","納豆","豆乳","きなこ・煮豆","枝豆・もやし(大豆)"],
+  cross:["他の豆類と交差の可能性","カバノキ花粉との関連(豆乳で口腔症状)"],
+  hid:["醤油・味噌(発酵で食べられる方も)","大豆油・レシチン(乳化剤)","大豆由来たんぱく質","マーガリン・ドレッシング"],
+  ok:["米・雑穀","醤油・味噌は個別評価","えんどう豆由来の代替(要確認)"]},
+ {id:"almond",name:"アーモンド",cat:"recommended",alias:"",
+  avoid:["アーモンド(素焼き・製菓用)","アーモンドプードル入り菓子","アーモンドミルク","マジパン"],
+  cross:["他の木の実(くるみ・カシュー等)"],
+  hid:["チョコ・グラノーラ","ナッツミックス"],
+  ok:["他の種実は個別評価"]},
+ {id:"cashew",name:"カシューナッツ",cat:"recommended",alias:"",
+  avoid:["カシューナッツ(炒め物含む)","カシュー入りエスニック料理"],
+  cross:["ピスタチオ(特に強く交差)","マンゴー・ウルシ科(接触交差)"],
+  hid:["ナッツミックス","カレーのコク出し","菓子類"],
+  ok:["他の種実は個別評価"]},
+ {id:"abalone",name:"あわび",cat:"recommended",alias:"鮑",
+  avoid:["あわび(刺身・煮貝)","あわび入り海鮮料理"],
+  cross:["他の貝類(さざえ・とこぶし)"],
+  hid:["高級シーフードだし","おせち・海鮮弁当の具"],
+  ok:["白身魚など他のたんぱく源"]},
+ {id:"squid",name:"いか",cat:"recommended",alias:"烏賊",
+  avoid:["いか刺し・いかフライ","するめ・さきいか","いかそうめん・塩辛"],
+  cross:["たこ・貝類と併発あり"],
+  hid:["シーフードミックス","お好み焼き・たこ焼きの具","魚介エキス"],
+  ok:["白身魚・鶏肉など"]},
+ {id:"salmonroe",name:"いくら",cat:"recommended",alias:"魚卵",
+  avoid:["いくら・すじこ","いくら丼・軍艦巻き"],
+  cross:["たらこ・数の子など他の魚卵","鮭本体と併発あり"],
+  hid:["ちらし寿司・海鮮丼の具","おせちの一部"],
+  ok:["魚卵以外の魚介・肉類"]},
+ {id:"orange",name:"オレンジ",cat:"recommended",alias:"",
+  avoid:["オレンジ・オレンジジュース","マーマレード","オレンジ風味菓子"],
+  cross:["みかん・グレープフルーツ等の柑橘"],
+  hid:["ミックスジュース","ゼリー・ドレッシング","柑橘系フレーバー"],
+  ok:["柑橘以外の果物(個別評価)"]},
+ {id:"kiwi",name:"キウイフルーツ",cat:"recommended",alias:"",latex:true,
+  avoid:["キウイ(グリーン・ゴールド)","キウイジュース・スムージー"],
+  cross:["ラテックス-フルーツ症候群(バナナ・アボカド等)","花粉症関連の口腔症状"],
+  hid:["ミックスフルーツ・タルト","スムージー・ヨーグルトトッピング"],
+  ok:["他の果物を個別評価"]},
+ {id:"beef",name:"牛肉",cat:"recommended",alias:"",
+  avoid:["牛肉(ステーキ・焼肉)","牛ひき肉(ハンバーグ)","牛すじ・牛丼"],
+  cross:["乳製品と関連あり(α-Gal)","ゼラチン・マダニ関連(α-Gal症候群)"],
+  hid:["ビーフエキス・コンソメ","カレー・シチュー","ブイヨン・だしの素"],
+  ok:["鶏肉・魚など","牛由来でないブイヨン"]},
+ {id:"gelatin",name:"ゼラチン",cat:"recommended",alias:"",
+  avoid:["ゼリー・グミ","ムース・ババロア","マシュマロ"],
+  cross:["牛・豚由来(α-Galと関連あり)","一部ワクチン・カプセル(要相談)"],
+  hid:["ヨーグルト・プリンの安定剤","ハム・錠剤コーティング","果汁飲料の一部"],
+  ok:["寒天・ペクチンで代替","アガー使用のゼリー"]},
+ {id:"sesame",name:"ごま",cat:"recommended",alias:"胡麻",
+  avoid:["ごま(いり・すり)","ごま油","ごまだれ・練りごま(タヒニ)","ごま和え・ごま団子"],
+  cross:["他の種実類と併発あり"],
+  hid:["ドレッシング・担々麺スープ","フムス・エスニック","ふりかけ・パンのトッピング"],
+  ok:["ごま不使用の油(米油等)","ごま抜きの和え衣"]},
+ {id:"salmon",name:"さけ",cat:"recommended",alias:"鮭",
+  avoid:["鮭(切り身・焼き鮭)","鮭フレーク・スモークサーモン","鮭おにぎり"],
+  cross:["ます・他の魚と併発あり","いくら(魚卵)"],
+  hid:["混合ふりかけ","海鮮弁当・寿司の具","魚肉ソーセージの一部"],
+  ok:["鶏肉・大豆など","他の魚を個別評価"]},
+ {id:"mackerel",name:"さば",cat:"recommended",alias:"鯖",
+  avoid:["さば(塩焼き・味噌煮)","しめさば","さば缶"],
+  cross:["ヒスタミン反応(鮮度低下で悪化)","他の青魚(あじ・いわし)"],
+  hid:["だし(さば節)","めんつゆ・和風だし","混合削り節"],
+  ok:["昆布・しいたけのだし","白身魚など"]},
+ {id:"chicken",name:"鶏肉",cat:"recommended",alias:"",
+  avoid:["鶏肉(唐揚げ・焼き鳥)","鶏ひき肉(つくね)","チキンナゲット"],
+  cross:["卵と関連あり(bird-egg症候群)","他の鳥肉"],
+  hid:["チキンエキス・鶏ガラスープ","中華だし・ラーメンスープ","コンソメの一部"],
+  ok:["豚・牛・魚など","鶏ガラ不使用のだし"]},
+ {id:"banana",name:"バナナ",cat:"recommended",alias:"",latex:true,
+  avoid:["バナナ(生・焼き)","バナナジュース・スムージー","バナナチップス"],
+  cross:["ラテックス-フルーツ症候群(キウイ・アボカド等)"],
+  hid:["ミックスジュース・スムージー","バナナ風味の菓子・パン"],
+  ok:["他の果物を個別評価"]},
+ {id:"pork",name:"豚肉",cat:"recommended",alias:"",
+  avoid:["豚肉(生姜焼き・とんかつ)","豚ひき肉","ベーコン・ハム・ソーセージ"],
+  cross:["ゼラチン(豚由来)","猫アレルギーとの関連(pork-cat症候群)"],
+  hid:["ラード・豚エキス","中華スープ・ラーメンだし","ゼラチン・加工肉"],
+  ok:["鶏・魚・大豆など","豚由来でないだし・ゼラチン代替"]},
+ {id:"matsutake",name:"まつたけ",cat:"recommended",alias:"松茸",
+  avoid:["まつたけ(焼き・土瓶蒸し)","まつたけご飯"],
+  cross:["他のきのこと併発あり"],
+  hid:["まつたけ風味の吸い物の素","混合きのこ料理"],
+  ok:["他のきのこは個別評価"]},
+ {id:"peach",name:"もも",cat:"recommended",alias:"桃",
+  avoid:["もも(生・缶詰)","ネクタリン","もものジュース・ゼリー"],
+  cross:["バラ科果物(りんご・さくらんぼ・梅等)","花粉-食物アレルギー症候群"],
+  hid:["ミックスジュース","フルーツタルト・ヨーグルト"],
+  ok:["加熱で食べられる方も(要相談)","バラ科以外を個別評価"]},
+ {id:"yam",name:"やまいも",cat:"recommended",alias:"山芋",
+  avoid:["やまいも・ながいも(とろろ)","山かけ・磯辺揚げ"],
+  cross:["接触でかゆみ(シュウ酸)と混同注意"],
+  hid:["お好み焼き・そばのつなぎ","はんぺん・練り製品のつなぎ","和菓子のつなぎ"],
+  ok:["片栗粉・上新粉でつなぎ代替"]},
+ {id:"apple",name:"りんご",cat:"recommended",alias:"林檎",
+  avoid:["りんご(生)","アップルジュース","アップルパイ"],
+  cross:["バラ科果物(もも・さくらんぼ・梨等)","シラカバ花粉との関連(口腔症状)"],
+  hid:["ミックスジュース","ドレッシング・カレーの隠し味","ジャム・ゼリー"],
+  ok:["加熱で食べられる方も(要相談)","バラ科以外を個別評価"]}
+];
+
+var ALG_LS = "alg_avoid_state_v1";
+var algSel = {};
+var algModeCur = "clinic";
+(function algLoad(){
+  try{
+    var s = JSON.parse(localStorage.getItem(ALG_LS)||"{}");
+    if(s.sel){ s.sel.forEach(function(id){ if(ALG_DB.some(function(d){return d.id===id;})) algSel[id]=1; }); }
+    if(s.mode==="patient"||s.mode==="clinic") algModeCur = s.mode;
+  }catch(e){}
+})();
+function algSave(){
+  try{ localStorage.setItem(ALG_LS, JSON.stringify({sel:Object.keys(algSel), mode:algModeCur})); }catch(e){}
+}
+function algEsc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function algView(v, btn){
+  var seg = btn.parentNode;
+  var bs = seg.querySelectorAll("button");
+  for(var i=0;i<bs.length;i++) bs[i].classList.remove("on");
+  btn.classList.add("on");
+  document.getElementById("alg-v-avoid").classList.toggle("on", v==="avoid");
+  document.getElementById("alg-v-topics").classList.toggle("on", v==="topics");
+}
+function algMode(m){
+  algModeCur = m;
+  document.getElementById("alg-m-clinic").classList.toggle("on", m==="clinic");
+  document.getElementById("alg-m-patient").classList.toggle("on", m==="patient");
+  document.getElementById("alg-modehint").textContent = m==="patient"
+    ? "患者さん向けモード：含む食品／交差反応／隠れた原材料に加え、代替・食べられる例も表示します。"
+    : "スタッフ説明モード：含む食品／交差反応／隠れた原材料を表示します。";
+  algSave(); algRenderResults();
+}
+function algRenderChips(filter){
+  filter = (filter||"").trim();
+  var wrap = document.getElementById("alg-chips");
+  wrap.innerHTML = "";
+  var shown = 0;
+  ALG_DB.forEach(function(d){
+    if(filter && d.name.indexOf(filter)<0 && !(d.alias && d.alias.indexOf(filter)>=0)) return;
+    shown++;
+    var b = document.createElement("button");
+    b.className = "alg-chip" + (algSel[d.id]?" sel":"");
+    b.setAttribute("data-cat", d.cat);
+    b.innerHTML = '<span class="cat">'+(d.cat==="mandatory"?"義務":"推奨")+'</span>'+algEsc(d.name);
+    b.onclick = function(){ algToggle(d.id); };
+    wrap.appendChild(b);
+  });
+  if(!shown) wrap.innerHTML = '<span style="color:var(--tx3);font-size:12.5px;">該当するアレルゲンが見つかりません。</span>';
+}
+function algToggle(id){
+  if(algSel[id]) delete algSel[id]; else algSel[id]=1;
+  algSave();
+  algRenderChips(document.getElementById("alg-search").value);
+  algRenderResults();
+}
+function algClear(){
+  algSel = {}; algSave();
+  algRenderChips(document.getElementById("alg-search").value);
+  algRenderResults();
+}
+function algLayer(cls,title,items){
+  if(!items||!items.length) return "";
+  var chips = items.map(function(x){ return '<span class="alg-item">'+algEsc(x)+'</span>'; }).join("");
+  return '<div class="alg-layer '+cls+'"><div class="alg-ltitle"><span class="d"></span>'+title+'</div><div class="alg-items">'+chips+'</div></div>';
+}
+function algRenderResults(){
+  var res = document.getElementById("alg-results");
+  var selbar = document.getElementById("alg-selbar");
+  var warn = document.getElementById("alg-warn");
+  var ids = Object.keys(algSel);
+  document.getElementById("alg-cnt").textContent = ids.length;
+  if(!ids.length){
+    selbar.style.display="none"; warn.style.display="none";
+    res.innerHTML = '<div class="alg-empty"><span class="tp">🍽</span>アレルゲンを選ぶと、避けたほうがよい食品を「含む食品／交差反応／隠れた原材料」に分けて表示します。</div>';
+    return;
+  }
+  selbar.style.display="flex"; warn.style.display="block";
+  var order = ALG_DB.filter(function(d){ return algSel[d.id]; });
+  res.innerHTML = order.map(function(d){
+    var badge = d.cat==="mandatory"
+      ? '<span class="bdg mandatory">特定原材料（義務）</span>'
+      : '<span class="bdg">準ずるもの（推奨）</span>';
+    var flags = "";
+    if(d.fdeia) flags += '<span class="alg-flag f-fdeia" onclick="algOpenTopic(\'alg-topicFdeia\')">⚡運動誘発(FDEIA)</span>';
+    if(d.latex) flags += '<span class="alg-flag f-latex" onclick="algOpenTopic(\'alg-topicLatex\')">🧤ラテックス交差</span>';
+    var body = algLayer("avoid","そのものを含む主な食品", d.avoid);
+    body += algLayer("cross","交差反応・注意したい類縁食品", d.cross);
+    body += algLayer("hiddensrc","隠れた原材料（見落としやすい）", d.hid);
+    if(algModeCur==="patient") body += algLayer("ok","代替・食べられる例（主治医と相談を）", d.ok);
+    var al = d.alias ? '<span class="al">（'+algEsc(d.alias)+'）</span>' : "";
+    return '<div class="alg-card"><div class="alg-head"><span class="nm">'+algEsc(d.name)+'</span>'+al+flags+badge+'</div>'+body+'</div>';
+  }).join("");
+}
+function algOpenTopic(id){
+  var segBtns = document.querySelectorAll('#pg-allergy > .alg-seg button');
+  if(segBtns[1]) segBtns[1].click();
+  var t = document.getElementById(id);
+  if(t){ t.open = true; setTimeout(function(){ t.scrollIntoView({behavior:"smooth",block:"start"}); }, 80); }
+}
+function algInit(){
+  algMode(algModeCur);
+  algRenderChips("");
+  algRenderResults();
+}
+algInit();
 
 </script>
 </body>
