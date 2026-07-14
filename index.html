@@ -448,6 +448,37 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 #pg-allergy .alg-ptable th{background:#f0ece4;white-space:nowrap;font-weight:600;color:var(--gd);}
 #pg-allergy .alg-ptable .season{display:block;font-size:10px;color:#9a6b2f;margin-top:2px;}
 #pg-allergy .alg-warn{background:var(--wbg);border-left:3px solid var(--wbd);border-radius:7px;padding:11px 13px;font-size:11.5px;line-height:1.65;color:var(--wtx);margin-top:14px;}
+/* View39 */
+#pg-allergy .v39-intro{font-size:11.5px;color:var(--tx2);line-height:1.6;background:#fff;border:.5px solid var(--bd);border-radius:11px;padding:11px 13px;margin-bottom:11px;}
+#pg-allergy .v39-intro b{color:var(--g);}
+#pg-allergy .v39-search{position:relative;margin-bottom:12px;}
+#pg-allergy .v39-search input{width:100%;font-family:inherit;font-size:14px;padding:11px 13px 11px 38px;border-radius:10px;border:1px solid var(--bd);background:#fff;color:var(--tx);outline:none;}
+#pg-allergy .v39-search input:focus{border-color:var(--g2);}
+#pg-allergy .v39-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--tx3);}
+#pg-allergy .v39-cat{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--gd);display:flex;align-items:center;gap:7px;margin:16px 2px 8px;}
+#pg-allergy .v39-cat::after{content:"";flex:1;height:1px;background:var(--bd);}
+#pg-allergy .v39-cat .n{font-weight:400;color:var(--tx3);font-size:10px;letter-spacing:0;}
+#pg-allergy .v39-item{background:#fff;border:.5px solid var(--bd);border-radius:11px;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:8px;overflow:hidden;}
+#pg-allergy .v39-item summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;padding:12px 13px;}
+#pg-allergy .v39-item summary::-webkit-details-marker{display:none;}
+#pg-allergy .v39-item summary .ic{flex:none;width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;background:var(--gl);}
+#pg-allergy .v39-item summary .nm{font-size:14px;font-weight:600;color:var(--tx);}
+#pg-allergy .v39-item summary .kd{margin-left:auto;font-size:9px;font-weight:700;padding:2px 7px;border-radius:9px;white-space:nowrap;}
+#pg-allergy .v39-item summary .kd.food{background:#fbeae4;color:#9c3620;}
+#pg-allergy .v39-item summary .kd.env{background:#e6eef0;color:#2f4a6b;}
+#pg-allergy .v39-item summary .ar{flex:none;color:#9a6b2f;font-size:11px;transition:transform .2s;margin-left:6px;}
+#pg-allergy .v39-item[open] summary .ar{transform:rotate(90deg);}
+#pg-allergy .v39-item[open] summary{border-bottom:.5px solid #f0ece4;}
+#pg-allergy .v39-body{padding:6px 0 0;}
+#pg-allergy .v39-envwrap{padding:12px 14px;}
+#pg-allergy .v39-ev{display:inline-block;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:9px;margin-bottom:9px;}
+#pg-allergy .v39-ev.est{background:#dff0ea;color:#0a6b52;}
+#pg-allergy .v39-ev.rep{background:#fdf0d8;color:#9a6a17;}
+#pg-allergy .v39-ev.ltd{background:#eef1f3;color:#5a6b73;}
+#pg-allergy .v39-ntitle{font-size:11.5px;font-weight:700;color:var(--gd);margin:2px 0 6px;}
+#pg-allergy .v39-note{font-size:12px;line-height:1.7;color:var(--tx2);margin-bottom:10px;}
+#pg-allergy .v39-jump{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--tc);background:var(--gl);border:none;border-radius:8px;padding:6px 11px;cursor:pointer;font-family:inherit;margin-top:2px;}
+#pg-allergy .v39-empty{text-align:center;color:var(--tx3);font-size:13px;padding:30px 16px;}
 </style>
 </head>
 <body>
@@ -785,6 +816,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 <div class="page" id="pg-allergy">
   <div class="alg-seg">
     <button class="on" onclick="algView('avoid',this)">回避食品</button>
+    <button onclick="algView('view39',this)">View39対応</button>
     <button onclick="algView('topics',this)">特集トピック</button>
   </div>
 
@@ -812,6 +844,18 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
     </div>
     <div class="alg-warn" id="alg-warn" style="display:none;">
       <b>⚠ ご確認ください</b>：一般的な参考情報です。反応の程度・耐性には個人差が大きく、微量で反応する方や加熱・加工で食べられる方もいます。実際の除去範囲・解除は主治医の指示に従い、加工食品は購入時に必ず<b>原材料・アレルギー表示</b>をご確認ください。
+    </div>
+  </div>
+
+  <div class="alg-view" id="alg-v-view39">
+    <div class="v39-intro">アレルギー検査 <b>View39（ビュー39）</b> の全39項目に対応。検査で陽性だった項目をタップすると、避けたほうがよい食品・交差反応・生活上の注意が開きます。食物20項目＋吸入/環境19項目。</div>
+    <div class="v39-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="v39-search" placeholder="項目名で検索（マラセチア・ダニ・小麦…）" oninput="algFilterView39(this.value)">
+    </div>
+    <div id="alg-view39-list"></div>
+    <div class="alg-warn" style="margin-top:14px;">
+      <b>⚠ 検査結果の解釈について</b>：特異的IgEが陽性（感作あり）でも、必ず症状が出るとは限りません。実際に食べて症状がないものは、自己判断で除去せず主治医にご相談ください。特に<b>真菌（マラセチア・カンジダ等）の陽性と食物除去は直接結びつきません</b>。数値の解釈と除去の要否は診察で判断します。
     </div>
   </div>
 
@@ -3379,6 +3423,26 @@ vitInit();
 
 /* ====== 食物アレルギー(回避食品)モジュール ====== */
 var ALG_DB = [
+ {id:"eggwhite",name:"卵白",cat:"recommended",alias:"らんぱく",v39only:true,
+  avoid:["卵（卵白）全般","卵焼き・目玉焼き・ゆで卵","マヨネーズ","メレンゲ・スポンジケーキ"],
+  cross:["うずら卵など他の鳥類の卵"],
+  hid:["練り製品・ハムのつなぎ","洋菓子・アイス","麺のつや出し","卵白リゾチーム(添加物)"],
+  ok:["卵黄は食べられる場合あり(要相談)","豆腐・豆乳で代替"]},
+ {id:"ovomucoid",name:"オボムコイド",cat:"recommended",alias:"卵白・加熱耐性",v39only:true,
+  avoid:["加熱した卵を含む食品全般","焼き菓子・ハンバーグのつなぎ","加熱卵入り加工食品"],
+  cross:["卵白全般（同一由来）"],
+  hid:["練り製品・加工肉","焼き菓子・パン","加熱卵含有の総菜"],
+  ok:["※オボムコイドは加熱に強いたんぱく。数値が高いほど加熱卵でも症状が出やすく、完全除去の目安になります。解除の見極めは主治医と。"]},
+ {id:"rice",name:"米",cat:"recommended",alias:"こめ",v39only:true,
+  avoid:["ご飯・餅・おかゆ","米粉・上新粉","せんべい・米菓","ビーフン・米麺"],
+  cross:["イネ科花粉との関連が指摘されることあり","他の穀物との交差は一般に弱い"],
+  hid:["米由来の水あめ・甘味料","米粉パン・グルテンフリー食品","米味噌・米麹"],
+  ok:["低アレルゲン米(ゆきひかり等)を主治医と検討","雑穀・いも類・パン(小麦OKなら)"]},
+ {id:"tuna",name:"マグロ",cat:"recommended",alias:"鮪",v39only:true,
+  avoid:["刺身・寿司・鉄火丼","ツナ缶・ツナマヨ","マグロの照り焼き・ステーキ"],
+  cross:["カツオ・他の魚と併発あり","ヒスタミン中毒(鮮度低下)と区別が必要"],
+  hid:["だし・シーフードミックス","ツナ入り総菜・サンド","魚醤・魚エキス"],
+  ok:["鶏・豚・大豆など","青魚以外の魚は個別評価"]},
  {id:"wheat",name:"小麦",cat:"mandatory",alias:"こむぎ",fdeia:true,
   avoid:["パン","うどん・そうめん","中華麺・パスタ","餃子・シュウマイの皮","お好み焼き・たこ焼き","ケーキ・クッキー","天ぷら・フライの衣","麩(ふ)"],
   cross:["大麦(麦茶・麦ごはん)","ライ麦","オーツ麦(えん麦)","スペルト小麦・デュラム小麦"],
@@ -3521,6 +3585,201 @@ var ALG_DB = [
   ok:["加熱で食べられる方も(要相談)","バラ科以外を個別評価"]}
 ];
 
+/* View39 非食物(吸入・環境)アレルゲン。ev: est=確立 / rep=報告あり / ltd=限定的 */
+var ALG_ENV = {
+ mite:{name:"ヤケヒョウヒダニ",icon:"🐁",cat:"mite",ev:"est",
+   title:"交差・関連して注意する食べ物",
+   note:"ダニ特異IgEが高い方は、ダニと共通の抗原（トロポミオシン）を持つ<b>えび・かに（甲殻類）、いか・たこ・貝類（軟体類）</b>で症状が出ることがあります。さらに、開封後に常温で長期保存した<b>お好み焼き粉・ホットケーキミックス等の粉物</b>にダニが繁殖し、それを加熱調理して食べてアナフィラキシーを起こす<b>「経口ダニアナフィラキシー（パンケーキ症候群）」</b>が知られています。粉物は開封後は密閉して冷蔵し、古い粉は使わないでください。",
+   foods:["えび・かに","いか・たこ・貝類","開封後の粉物(パンケーキ症候群)"],
+   jumpFood:["shrimp","crab"]},
+ housedust:{name:"ハウスダスト1",icon:"🏠",cat:"mite",ev:"est",
+   title:"交差・関連して注意する食べ物",
+   note:"ハウスダストの主要抗原はダニです。ダニと同様に<b>甲殻類・軟体類</b>との交差、<b>粉物のパンケーキ症候群</b>に注意してください。",
+   foods:["えび・かに","いか・たこ・貝類","開封後の粉物(パンケーキ症候群)"],
+   jumpFood:["shrimp","crab"]},
+ cat:{name:"ネコ（皮屑）",icon:"🐈",cat:"animal",ev:"rep",
+   title:"交差・関連して注意する食べ物",
+   note:"ネコのアルブミン（Fel d 2）と豚肉のアルブミンが交差し、<b>豚肉</b>を食べて蕁麻疹やアナフィラキシーを起こす<b>pork-cat症候群</b>の報告があります。頻度は高くありませんが、ネコ感作が強く豚肉で口や体に症状が出る方は注意してください。",
+   foods:["豚肉（pork-cat症候群）","まれに他の哺乳類肉・乳"],
+   jumpFood:["pork"]},
+ dog:{name:"イヌ（皮屑）",icon:"🐕",cat:"animal",ev:"ltd",
+   title:"食べ物との関連",
+   note:"イヌ感作と食物アレルギーの直接の関連は限定的です。アルブミンを介して豚肉・ネコと交差することがまれに報告される程度で、通常は食事制限の対象になりません。",
+   foods:[],
+   jumpFood:[]},
+ cockroach:{name:"ゴキブリ",icon:"🪳",cat:"insect",ev:"rep",
+   title:"交差・関連して注意する食べ物",
+   note:"ゴキブリはダニ・甲殻類と共通の抗原（トロポミオシン）を持つため、<b>えび・かに・貝類</b>と交差することがあります。",
+   foods:["えび・かに","貝類・軟体類"],
+   jumpFood:["shrimp","crab"]},
+ moth:{name:"ガ（蛾）",icon:"🦋",cat:"insect",ev:"ltd",
+   title:"食べ物との関連",
+   note:"ガ単独での食物との明確な関連は乏しいですが、昆虫（イナゴ・コオロギ等）や甲殻類と抗原を共有することがあり、昆虫食で交差の可能性が話題になっています。",
+   foods:[],
+   jumpFood:[]},
+ cedar:{name:"スギ",icon:"🌲",cat:"tree",ev:"rep",
+   title:"交差・関連して注意する食べ物（PFAS）",
+   note:"スギ花粉と<b>トマト</b>の口腔症状（花粉-食物アレルギー症候群）が報告されています。頻度は高くありません。",
+   foods:["トマト"],
+   jumpTopic:"alg-topicOas"},
+ cypress:{name:"ヒノキ",icon:"🌲",cat:"tree",ev:"rep",
+   title:"交差・関連して注意する食べ物（PFAS）",
+   note:"ヒノキ科の花粉症では<b>トマト・柑橘</b>などで口腔症状が出ることがあります。",
+   foods:["トマト","柑橘類"],
+   jumpTopic:"alg-topicOas"},
+ alder:{name:"ハンノキ",icon:"🌳",cat:"tree",ev:"est",
+   title:"交差・関連して注意する食べ物（PFAS）",
+   note:"カバノキ科のハンノキは<b>バラ科果物（りんご・もも・さくらんぼ・梨）、大豆・豆乳、ナッツ、セロリ、キウイ</b>と交差し、口腔アレルギー症候群を起こします。特に<b>豆乳で強い全身症状</b>の報告があります。",
+   foods:["バラ科果物(りんご・もも等)","大豆・豆乳","ナッツ・セロリ・キウイ"],
+   jumpTopic:"alg-topicOas"},
+ birch:{name:"シラカンバ",icon:"🌳",cat:"tree",ev:"est",
+   title:"交差・関連して注意する食べ物（PFAS）",
+   note:"シラカンバ（カバノキ科）は<b>バラ科果物、大豆・豆乳、ナッツ、セロリ、にんじん</b>と交差し口腔症状を起こします。北日本・高地に多い花粉です。",
+   foods:["バラ科果物(りんご・もも等)","大豆・豆乳","ナッツ・セロリ・にんじん"],
+   jumpTopic:"alg-topicOas"},
+ orchardgrass:{name:"カモガヤ",icon:"🌾",cat:"grass",ev:"rep",
+   title:"交差・関連して注意する食べ物（PFAS）",
+   note:"イネ科（カモガヤ）花粉症では<b>メロン・スイカ・トマト・キウイ・オレンジ・じゃがいも</b>などで口腔症状が出ることがあります。",
+   foods:["メロン・スイカ","トマト・キウイ・オレンジ","じゃがいも"],
+   jumpTopic:"alg-topicOas"},
+ timothy:{name:"オオアワガエリ",icon:"🌾",cat:"grass",ev:"rep",
+   title:"交差・関連して注意する食べ物（PFAS）",
+   note:"イネ科（オオアワガエリ）花粉症でも、メロン・スイカ・トマト・キウイ・オレンジなどで口腔症状が出ることがあります。",
+   foods:["メロン・スイカ","トマト・キウイ・オレンジ"],
+   jumpTopic:"alg-topicOas"},
+ ragweed:{name:"ブタクサ",icon:"🌿",cat:"weed",ev:"rep",
+   title:"交差・関連して注意する食べ物（PFAS）",
+   note:"ブタクサ花粉症では<b>メロン・スイカ・きゅうり・ズッキーニ・バナナ</b>（ウリ科中心）で口腔症状が出ることがあります。",
+   foods:["メロン・スイカ・きゅうり","ズッキーニ","バナナ"],
+   jumpTopic:"alg-topicOas"},
+ mugwort:{name:"ヨモギ",icon:"🌿",cat:"weed",ev:"rep",
+   title:"交差・関連して注意する食べ物（PFAS）",
+   note:"ヨモギ花粉症では<b>セロリ・にんじん・スパイス類（マスタード・クミン・コリアンダー）・マンゴー</b>で症状が出ることがあります（セロリ-ヨモギ-スパイス症候群）。",
+   foods:["セロリ・にんじん","スパイス類","マンゴー"],
+   jumpTopic:"alg-topicOas"},
+ alternaria:{name:"アルテルナリア",icon:"🍄",cat:"fungus",ev:"ltd",
+   title:"食べ物との関連",
+   note:"アルテルナリア（すすかび）は主に<b>喘息・アレルギー性鼻炎の悪化因子・環境曝露</b>のアレルゲンです。食物除去との直接の関連は乏しく、通常は食事制限の対象になりません。",
+   foods:[],
+   jumpTopic:null},
+ aspergillus:{name:"アスペルギルス",icon:"🍄",cat:"fungus",ev:"ltd",
+   title:"食べ物との関連",
+   note:"アスペルギルス（コウジカビ）は主に環境曝露・ABPA等に関わる真菌です。発酵食品・きのことの関連が話題になることはありますが、<b>食物除去の明確な根拠は乏しく</b>、通常は食事制限の対象になりません。",
+   foods:[],
+   jumpTopic:null},
+ candida:{name:"カンジダ",icon:"🍄",cat:"fungus",ev:"ltd",
+   title:"食べ物との関連",
+   note:"カンジダは消化管・皮膚の常在真菌で、感作されている方は珍しくありません。<b>陽性でも食物除去に直接結びつくエビデンスは乏しく</b>、通常は食事制限の対象になりません。",
+   foods:[],
+   jumpTopic:null},
+ malassezia:{name:"マラセチア",icon:"🍄",cat:"fungus",ev:"ltd",
+   title:"食べ物との関連・生活上の注意",
+   note:"マラセチアは皮膚の常在真菌で、<b>脂漏性皮膚炎やアトピー性皮膚炎（特に頭頸部型）の悪化因子</b>として重要です。ただし「マラセチアIgEが陽性だから特定の食品を避ける」という<b>直接の食物除去エビデンスは確立していません</b>。対策は食物除去より、皮脂・発汗のコントロール（抗真菌外用・洗浄）、高糖質/高脂質食・アルコール・睡眠不足・ストレスの管理が中心です。食事で気になる点があれば診察でご相談ください。",
+   foods:[],
+   jumpTopic:null},
+ latex:{name:"ラテックス",icon:"🧤",cat:"other",ev:"est",
+   title:"交差・関連して注意する食べ物",
+   note:"天然ゴム（ラテックス）に感作されている方は、<b>バナナ・アボカド・キウイ・栗</b>（高リスク）などで口腔症状やアナフィラキシーを起こす<b>ラテックス-フルーツ症候群</b>に注意してください。手術・歯科・検査の際は「ラテックスアレルギーの可能性」を必ず申告を。",
+   foods:["バナナ・アボカド・キウイ・栗","パパイヤ・メロン・トマト等"],
+   jumpTopic:"alg-topicLatex"}
+};
+
+var VIEW39 = [
+ {group:"食物 ─ 卵・乳", items:[
+   {type:"food",id:"eggwhite"},{type:"food",id:"ovomucoid"},{type:"food",id:"milk"}]},
+ {group:"食物 ─ 穀物・豆・種実", items:[
+   {type:"food",id:"wheat"},{type:"food",id:"buckwheat"},{type:"food",id:"rice"},
+   {type:"food",id:"soy"},{type:"food",id:"peanut"},{type:"food",id:"sesame"}]},
+ {group:"食物 ─ 魚・甲殻類", items:[
+   {type:"food",id:"tuna"},{type:"food",id:"salmon"},{type:"food",id:"mackerel"},
+   {type:"food",id:"shrimp"},{type:"food",id:"crab"}]},
+ {group:"食物 ─ 肉", items:[
+   {type:"food",id:"beef"},{type:"food",id:"chicken"},{type:"food",id:"pork"}]},
+ {group:"食物 ─ 果物", items:[
+   {type:"food",id:"kiwi"},{type:"food",id:"apple"},{type:"food",id:"banana"}]},
+ {group:"吸入・環境 ─ ダニ・室内塵", items:[
+   {type:"env",id:"mite"},{type:"env",id:"housedust"}]},
+ {group:"吸入・環境 ─ 動物・昆虫", items:[
+   {type:"env",id:"cat"},{type:"env",id:"dog"},{type:"env",id:"cockroach"},{type:"env",id:"moth"}]},
+ {group:"吸入・環境 ─ 樹木花粉", items:[
+   {type:"env",id:"cedar"},{type:"env",id:"cypress"},{type:"env",id:"alder"},{type:"env",id:"birch"}]},
+ {group:"吸入・環境 ─ イネ科・雑草花粉", items:[
+   {type:"env",id:"orchardgrass"},{type:"env",id:"timothy"},{type:"env",id:"ragweed"},{type:"env",id:"mugwort"}]},
+ {group:"吸入・環境 ─ 真菌", items:[
+   {type:"env",id:"alternaria"},{type:"env",id:"aspergillus"},{type:"env",id:"candida"},{type:"env",id:"malassezia"}]},
+ {group:"吸入・環境 ─ その他", items:[
+   {type:"env",id:"latex"}]}
+];
+var algView39Rendered = false;
+var ALG_EVLABEL = {est:"交差・関連：確立",rep:"交差・関連：報告あり",ltd:"食物との関連：限定的"};
+
+function algDbById(id){ for(var i=0;i<ALG_DB.length;i++){ if(ALG_DB[i].id===id) return ALG_DB[i]; } return null; }
+function algView39FoodBody(d){
+  var body = algLayer("avoid","そのものを含む主な食品", d.avoid);
+  body += algLayer("cross","交差反応・注意したい類縁食品", d.cross);
+  body += algLayer("hiddensrc","隠れた原材料（見落としやすい）", d.hid);
+  if(algModeCur==="patient") body += algLayer("ok","代替・食べられる例（主治医と相談を）", d.ok);
+  return '<div class="v39-body">'+body+'</div>';
+}
+function algView39EnvBody(e){
+  var foods = (e.foods&&e.foods.length)
+    ? '<div class="alg-items" style="margin-bottom:10px;">'+e.foods.map(function(x){return '<span class="alg-item">'+algEsc(x)+'</span>';}).join("")+'</div>'
+    : '';
+  var jump = "";
+  if(e.jumpTopic) jump += '<button class="v39-jump" onclick="algOpenTopic(\''+e.jumpTopic+'\')">▶ 関連トピックを見る</button> ';
+  if(e.jumpFood && e.jumpFood.length){
+    jump += '<button class="v39-jump" onclick="algJumpFood(['+e.jumpFood.map(function(x){return "'"+x+"'";}).join(",")+'])">▶ 該当食物を回避食品で選ぶ</button>';
+  }
+  return '<div class="v39-envwrap">'
+    + '<span class="v39-ev '+e.ev+'">'+ALG_EVLABEL[e.ev]+'</span>'
+    + '<div class="v39-ntitle">'+algEsc(e.title)+'</div>'
+    + foods
+    + '<div class="v39-note">'+e.note+'</div>'
+    + jump
+    + '</div>';
+}
+function algRenderView39(filter){
+  filter = (filter||"").trim();
+  var host = document.getElementById("alg-view39-list");
+  var html = "";
+  var total = 0;
+  VIEW39.forEach(function(g){
+    var rows = "";
+    g.items.forEach(function(it){
+      var name, icon, kind, body;
+      if(it.type==="food"){
+        var d = algDbById(it.id); if(!d) return;
+        name = d.name; icon = "🍚"; kind = '<span class="kd food">食物</span>';
+        if(filter && name.indexOf(filter)<0 && !(d.alias&&d.alias.indexOf(filter)>=0)) return;
+        body = algView39FoodBody(d);
+      }else{
+        var e = ALG_ENV[it.id]; if(!e) return;
+        name = e.name; icon = e.icon; kind = '<span class="kd env">吸入/環境</span>';
+        if(filter && name.indexOf(filter)<0) return;
+        body = algView39EnvBody(e);
+      }
+      total++;
+      rows += '<details class="v39-item"><summary><span class="ic">'+icon+'</span>'
+        + '<span class="nm">'+algEsc(name)+'</span>'+kind+'<span class="ar">▶</span></summary>'
+        + body + '</details>';
+    });
+    if(rows){ html += '<div class="v39-cat">'+algEsc(g.group)+'</div>'+rows; }
+  });
+  if(!total) html = '<div class="v39-empty">該当する項目が見つかりません。</div>';
+  host.innerHTML = html;
+}
+function algFilterView39(v){ algRenderView39(v); }
+function algJumpFood(ids){
+  ids.forEach(function(id){ algSel[id]=1; });
+  algSave();
+  var segBtns = document.querySelectorAll('#pg-allergy > .alg-seg button');
+  if(segBtns[0]) segBtns[0].click();
+  algRenderChips(document.getElementById("alg-search").value);
+  algRenderResults();
+  var res = document.getElementById("alg-results");
+  if(res) setTimeout(function(){ res.scrollIntoView({behavior:"smooth",block:"start"}); }, 80);
+}
+
 var ALG_LS = "alg_avoid_state_v1";
 var algSel = {};
 var algModeCur = "clinic";
@@ -3543,7 +3802,9 @@ function algView(v, btn){
   for(var i=0;i<bs.length;i++) bs[i].classList.remove("on");
   btn.classList.add("on");
   document.getElementById("alg-v-avoid").classList.toggle("on", v==="avoid");
+  document.getElementById("alg-v-view39").classList.toggle("on", v==="view39");
   document.getElementById("alg-v-topics").classList.toggle("on", v==="topics");
+  if(v==="view39" && !algView39Rendered){ algRenderView39(); algView39Rendered = true; }
 }
 function algMode(m){
   algModeCur = m;
@@ -3560,6 +3821,7 @@ function algRenderChips(filter){
   wrap.innerHTML = "";
   var shown = 0;
   ALG_DB.forEach(function(d){
+    if(d.v39only) return;
     if(filter && d.name.indexOf(filter)<0 && !(d.alias && d.alias.indexOf(filter)>=0)) return;
     shown++;
     var b = document.createElement("button");
