@@ -479,6 +479,16 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 #pg-allergy .v39-note{font-size:12px;line-height:1.7;color:var(--tx2);margin-bottom:10px;}
 #pg-allergy .v39-jump{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--tc);background:var(--gl);border:none;border-radius:8px;padding:6px 11px;cursor:pointer;font-family:inherit;margin-top:2px;}
 #pg-allergy .v39-empty{text-align:center;color:var(--tx3);font-size:13px;padding:30px 16px;}
+/* 印刷 */
+.alg-print-only{display:none;}
+.alg-print-title{font-size:15px;font-weight:700;color:#2b4f45;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #3d6b5e;}
+@media print{
+  #alg-print-area,#alg-print-area *{visibility:visible;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #alg-print-area{position:absolute;top:0;left:0;width:100%;padding:16px 18px;background:#fff;}
+  #alg-print-area .alg-print-only{display:block!important;}
+  #pg-allergy .alg-card{break-inside:avoid;box-shadow:none;border:1px solid #c9bfae;margin-bottom:10px;}
+  #pg-allergy .alg-head .alg-flag{display:none!important;}
+}
 </style>
 </head>
 <body>
@@ -839,11 +849,14 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
       <button class="alg-pbtn" onclick="window.print()">🖨 印刷/PDF</button>
       <button class="alg-clear" onclick="algClear()">すべて解除</button>
     </div>
+    <div id="alg-print-area">
+    <div class="alg-print-title alg-print-only">回避したほうがよい食品リスト　―　やまもと皮膚科・漢方クリニック</div>
     <div id="alg-results">
       <div class="alg-empty"><span class="tp">🍽</span>アレルゲンを選ぶと、避けたほうがよい食品を「含む食品／交差反応／隠れた原材料」に分けて表示します。</div>
     </div>
     <div class="alg-warn" id="alg-warn" style="display:none;">
       <b>⚠ ご確認ください</b>：一般的な参考情報です。反応の程度・耐性には個人差が大きく、微量で反応する方や加熱・加工で食べられる方もいます。実際の除去範囲・解除は主治医の指示に従い、加工食品は購入時に必ず<b>原材料・アレルギー表示</b>をご確認ください。
+    </div>
     </div>
   </div>
 
