@@ -623,6 +623,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   <button class="tab" data-tab="basics">塗り方の基本</button>
   <button class="tab" data-tab="calc">塗布量 計算</button>
   <button class="tab" data-tab="proactive">プロアクティブ</button>
+  <button class="tab" data-tab="pamph">患者パンフ</button>
   <button class="tab" data-tab="site">部位別ガイド</button>
   <button class="tab" data-tab="mix">当院製剤</button>
 </nav>
@@ -766,6 +767,65 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
           <li>カレンダーや曜日を決めて習慣化（例：月・木に塗る）。</li>
         </ul>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== PAMPH (患者用パンフレット) ===== -->
+  <style id="pamph-css">
+  #pamphWrap{position:relative;width:100%;overflow:hidden;border:1px solid var(--bd);border-radius:10px;background:#6d6459;margin-top:4px;}
+  #pamphFrame{width:794px;border:0;display:block;transform-origin:0 0;background:#6d6459;}
+  #pamph table td.num,#pamph table th.num{text-align:right;white-space:nowrap;}
+  .pamph-hint{font-size:12px;line-height:1.6;color:var(--tx2);margin-top:8px;}
+  </style>
+  <section class="panel" id="pamph">
+    <div class="sectitle">患者用パンフレット（プロアクティブ療法）</div>
+    <div class="lead">診察室で実際に塗って見せながら渡す、A4両面の説明用紙です。対象はプロトピック・コレクチム・モイゼルト・当院製剤（HPCr／HCCr）。</div>
+
+    <div class="block">
+      <h3>軟膏処置の区分と使用量（当院基準）</h3>
+      <table>
+        <thead><tr><th>部位</th><th>面積区分</th><th class="num">使用量</th><th class="num">処置</th></tr></thead>
+        <tbody>
+          <tr><td>顔・手・肘窩・膝窩 など</td><td>100〜500cm&sup2;</td><td class="num">2g</td><td class="num">55点</td></tr>
+          <tr><td>背中全体・体幹</td><td>500〜3,000cm&sup2;</td><td class="num">5g</td><td class="num">85点</td></tr>
+        </tbody>
+      </table>
+      <p class="note">100cm&sup2;未満は基本診療料に含まれ算定不可。カルテには<strong>部位名を必ず記載</strong>すること（面積の記載は不要）。前腕・下腿など中間の部位は処置85点・使用量2gで運用。</p>
+    </div>
+
+    <div class="block">
+      <h3>運用ルール</h3>
+      <ul>
+        <li><strong>処置で使った分は持ち帰らせない。</strong>自宅で続ける分は院内処方で別建てにする。</li>
+        <li>自宅分の量は診察間隔から逆算（「塗布量 計算」タブで算出可）。</li>
+        <li>保湿剤は処置薬剤ではなく院内処方側に回す。</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <h3>説明の手順</h3>
+      <ul>
+        <li>① 実際に塗って見せる（チューブは直接チョンチョン、容器は綿棒で取る）</li>
+        <li>② <strong>ザラザラの有無</strong>でステップが決まることを伝える</li>
+        <li>③ 「良くなっても土日は塗る」が最重要メッセージ</li>
+        <li>④ パンフレットを渡し、下段の空欄に塗る部位を書き込む</li>
+      </ul>
+      <div class="nursebox">
+        <div class="nh">患者説明ポイント</div>
+        <ul>
+          <li>「見た目がきれい＝治った」ではなく、皮膚の中に<strong>火種</strong>が残っていると説明する。</li>
+          <li>ぶり返したら、ひとつ前のステップに戻ればよい。行ったり来たりして構わない。</li>
+          <li>塗り始めのヒリヒリは多くが1週間ほどで軽快する（当院製剤HCCrではほぼ出ない）。</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="print-btn" id="pamphPrint">パンフレットを印刷（A4・2ページ）</button>
+    <div id="pamphWrap"><iframe id="pamphFrame" title="患者用パンフレット"></iframe></div>
+    <p class="pamph-hint">プレビューは縮小表示です。印刷ダイアログで<strong>「背景のグラフィック」をON</strong>、<strong>余白は「なし」</strong>に設定してください。両面印刷推奨。</p>
+
+    <div class="disclaimer">
+      ※ 点数・算定区分は令和6年度改定に基づく院内運用の目安です。実際の算定は最新の点数表と医事担当の確認を優先してください。
     </div>
   </section>
 
@@ -3901,6 +3961,30 @@ function algInit(){
   algRenderChips("");
   algRenderResults();
 }
+/* ---------- 患者用パンフレット ---------- */
+var PAMPH_HTML = "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>ザラザラをくり返さない塗り方｜プロアクティブ療法</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap\" rel=\"stylesheet\">\n<style>\n:root{\n  --washi:#FBF5E6;\n  --washi-d:#F2E9D2;\n  --sumi:#332C25;\n  --shu:#C1432E;\n  --kin:#C08A22;\n  --matsu:#2E5D4B;\n  --ai:#22376B;\n  --usu:#8C8073;\n}\n*{box-sizing:border-box;margin:0;padding:0}\nbody{\n  background:#6d6459;\n  font-family:\"Zen Kaku Gothic New\",\"Hiragino Sans\",\"Yu Gothic\",sans-serif;\n  color:var(--sumi);\n  padding:0;\n}\n.page{\n  width:210mm;height:297mm;margin:0 auto 16px;padding:13mm 12mm 10mm;\n  background:\n    radial-gradient(circle at 12% 18%, rgba(192,138,34,.06) 0 2px, transparent 3px),\n    radial-gradient(circle at 78% 62%, rgba(46,93,75,.05) 0 2px, transparent 3px),\n    linear-gradient(180deg,#FDF9EE 0%, var(--washi) 45%, var(--washi-d) 100%);\n  background-size:180px 180px,140px 140px,100% 100%;\n  box-shadow:0 6px 24px rgba(0,0,0,.35);\n  position:relative;display:flex;flex-direction:column;overflow:hidden;\n}\nh1,h2,h3,.mincho{font-family:\"Shippori Mincho\",serif;}\n\n/* ── 見出し ─────────────── */\n.head{display:flex;align-items:flex-end;gap:10px;border-bottom:3px double var(--kin);padding-bottom:7px}\n.eyebrow{font-size:10.5pt;letter-spacing:.32em;color:var(--matsu);font-weight:700}\nh1{font-size:23pt;font-weight:800;line-height:1.25;color:var(--sumi);letter-spacing:.01em}\nh1 .shu{color:var(--shu)}\n.head .no{margin-left:auto;font-size:9pt;color:var(--usu);letter-spacing:.18em;white-space:nowrap;padding-bottom:3px}\n.lead{margin-top:9px;font-size:10.5pt;line-height:1.75}\n.lead b{background:linear-gradient(transparent 62%, #F6DFA6 62%);font-weight:700}\n\n/* ── 火種ボックス ───────── */\n.hidane{\n  margin-top:9px;border:1.5px solid var(--matsu);border-radius:3px;\n  background:rgba(46,93,75,.05);padding:9px 12px;font-size:10pt;line-height:1.65;\n  display:flex;gap:11px;align-items:center;\n}\n.hidane .ttl{font-family:\"Shippori Mincho\",serif;font-weight:700;color:var(--matsu);font-size:11.5pt;white-space:nowrap;border-right:1px solid rgba(46,93,75,.35);padding-right:11px}\n\n/* ── 階段（署名要素）──────── */\n.kaidan{margin-top:12px;position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;gap:9px}\n.step{\n  display:flex;align-items:stretch;border-radius:4px;overflow:hidden;\n  border:1.5px solid rgba(51,44,37,.22);background:rgba(255,255,255,.62);\n}\n.step:nth-child(1){margin-right:0}\n.step:nth-child(2){margin-right:26mm}\n.step:nth-child(3){margin-right:52mm}\n.tab{\n  width:26mm;flex:none;color:#fff;display:flex;flex-direction:column;\n  align-items:center;justify-content:center;gap:1px;padding:8px 0;\n}\n.s1 .tab{background:var(--shu)}\n.s2 .tab{background:var(--kin)}\n.s3 .tab{background:var(--matsu)}\n.tab .lbl{font-size:8pt;letter-spacing:.2em;opacity:.9}\n.tab .num{font-family:\"Shippori Mincho\",serif;font-size:21pt;font-weight:800;line-height:1}\n.body{padding:9px 13px;flex:1}\n.cond{font-size:10pt;color:#4A4139;font-weight:600}\n.cond em{font-style:normal;font-weight:900;color:var(--sumi);font-size:11.5pt}\n.dose{font-family:\"Shippori Mincho\",serif;font-size:16pt;font-weight:800;margin-top:1px;line-height:1.3}\n.s1 .dose{color:var(--shu)} .s2 .dose{color:#9A6E14} .s3 .dose{color:var(--matsu)}\n.note{font-size:9.5pt;line-height:1.6;margin-top:3px}\n.arrow-down{\n  position:absolute;right:8mm;font-size:9pt;color:var(--usu);letter-spacing:.1em;\n}\n.modoru{\n  margin-top:2px;border:1.5px dashed var(--shu);border-radius:3px;background:rgba(193,67,46,.06);\n  padding:7px 12px;font-size:10pt;line-height:1.6;display:flex;gap:10px;align-items:center;\n}\n.modoru .k{font-family:\"Shippori Mincho\",serif;font-weight:800;color:var(--shu);white-space:nowrap;font-size:11pt}\n\n/* ── 部位記入 ─────────────── */\n.kinyu{margin-top:10px;border:1px solid var(--kin);background:rgba(192,138,34,.07);border-radius:3px;padding:8px 12px;font-size:10pt}\n.kinyu .lab{font-weight:700;color:#8A6410;font-size:9.5pt;letter-spacing:.08em}\n.line{border-bottom:1px dotted var(--usu);height:15px;margin-top:5px}\n.drugs{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}\n.drugs span{background:rgba(255,255,255,.75);border:1px solid rgba(192,138,34,.55);border-radius:3px;\n  padding:3px 9px;font-size:10.5pt;font-weight:700;display:flex;align-items:baseline;gap:4px}\n.drugs i{font-style:normal;font-size:8.5pt;color:var(--usu);font-weight:400}\n.kinyu .line{border-bottom:1px dotted var(--usu);height:14px;margin-top:6px}\n\n/* ── フッター ─────────────── */\nfooter{margin-top:auto;padding-top:8px;border-top:1px solid rgba(51,44,37,.2);\n  display:flex;align-items:center;gap:9px;font-size:9pt;color:var(--usu)}\nfooter .cl{font-family:\"Shippori Mincho\",serif;color:var(--matsu);font-weight:700;font-size:10.5pt}\nfooter .r{margin-left:auto;letter-spacing:.06em}\n\n/* ── 2ページ目：塗り方 ────── */\n.nuri{margin-top:9px;display:flex;flex-direction:column;gap:6px}\n.nstep{display:flex;gap:11px;align-items:flex-start;background:rgba(255,255,255,.6);\n  border:1px solid rgba(51,44,37,.18);border-left:4px solid var(--ai);border-radius:3px;padding:7px 11px}\n.nstep .n{font-family:\"Shippori Mincho\",serif;font-size:17pt;font-weight:800;color:var(--ai);line-height:1;width:20px;flex:none;padding-top:1px}\n.nstep h3{font-size:12.5pt;font-weight:700;line-height:1.35}\n.nstep p{font-size:10pt;line-height:1.65;margin-top:2px}\n.nstep .fig{width:30mm;flex:none;align-self:center}\n.chon{letter-spacing:.06em;color:var(--shu);font-weight:900}\n.two{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:5px}\n.two .col{border:1px solid rgba(34,55,107,.28);border-radius:3px;padding:6px 9px;background:rgba(255,255,255,.55)}\n.two .ct{font-family:\"Shippori Mincho\",serif;font-weight:800;font-size:10.5pt;color:var(--ai);\n  border-bottom:1px solid rgba(34,55,107,.25);padding-bottom:3px;margin-bottom:4px}\n.two p{font-size:9.5pt;line-height:1.6}\n\n.warn{margin-top:8px;border:1.5px solid var(--ai);border-radius:3px;padding:8px 12px;background:rgba(34,55,107,.05)}\n.warn h2{font-size:12.5pt;color:var(--ai);font-weight:800;margin-bottom:4px}\n.warn ul{list-style:none;font-size:9.5pt;line-height:1.7}\n.warn li{padding-left:17px;position:relative}\n.warn li::before{content:\"●\";position:absolute;left:0;color:var(--ai);font-size:7pt;top:5px}\n.warn li b{color:var(--shu)}\n\n.qa{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:7px}\n.qa .card{border:1px solid rgba(51,44,37,.2);border-radius:3px;background:rgba(255,255,255,.6);padding:7px 10px}\n.qa .q{font-family:\"Shippori Mincho\",serif;font-weight:800;font-size:10.5pt;color:var(--matsu);line-height:1.4}\n.qa .a{font-size:9.5pt;line-height:1.6;margin-top:3px}\n\n.mascot-line{margin-top:auto;display:flex;align-items:center;gap:11px;\n  border-top:3px double var(--kin);padding-top:8px}\n.mascot-line .msg{font-family:\"Shippori Mincho\",serif;font-size:11.5pt;line-height:1.6;color:var(--matsu);font-weight:700}\n.mascot-line .msg small{display:block;font-family:\"Zen Kaku Gothic New\",sans-serif;font-size:9.5pt;font-weight:400;color:var(--sumi);margin-top:3px}\n\n/* 印刷 */\n.toolbar{max-width:210mm;margin:0 auto 14px;display:flex;gap:8px;align-items:center}\n.toolbar button{font-family:inherit;font-size:13px;font-weight:700;padding:9px 18px;border:none;border-radius:4px;\n  background:var(--shu);color:#fff;cursor:pointer;letter-spacing:.06em}\n.toolbar span{color:#e6ddcc;font-size:12px}\n@media print{\n  body{background:#fff;padding:0}\n  .toolbar{display:none}\n  .page{margin:0;box-shadow:none;page-break-after:always;width:210mm;height:297mm}\n  .page:last-child{page-break-after:auto}\n}\n@page{size:A4;margin:0}\n</style>\n</head>\n<body>\n\n\n  <p class=\"lead\">\n    塗るとよくなる。やめると、またザラザラ。——そのくり返しを止める方法です。<br>\n    <b>「よくなったら、すぐやめる」ではなく「よくなったら、ゆっくり減らす」</b>。これがコツです。\n  </p>\n\n  <div class=\"hidane\">\n    <div class=\"ttl\">見た目がツルツルでも</div>\n    <div>皮ふの中には炎症の<b>火種</b>が残っています。ここで急にやめると火種がまた燃え上がり、元どおりに。<b>回数をゆっくり減らしながら、火種が消えるのを待ちます。</b></div>\n  </div>\n\n  <div class=\"kaidan\">\n\n    <div class=\"step s1\">\n      <div class=\"tab\"><div class=\"lbl\">STEP</div><div class=\"num\">1</div></div>\n      <div class=\"body\">\n        <div class=\"cond\">いま <em>ザラザラがある</em> あいだ</div>\n        <div class=\"dose\">1日 2回（朝・お風呂あがり）</div>\n        <div class=\"note\">これが基本です。日中にザラザラが気になったときは、<b>そのつど追加で塗ってOK</b>。しっかり塗って、まずはツルツルを目指します。</div>\n      </div>\n    </div>\n\n    <div class=\"step s2\">\n      <div class=\"tab\"><div class=\"lbl\">STEP</div><div class=\"num\">2</div></div>\n      <div class=\"body\">\n        <div class=\"cond\">ザラザラが <em>減ってきた</em> ら</div>\n        <div class=\"dose\">1日 1回</div>\n        <div class=\"note\">お風呂あがりなど、続けやすい時間に決めておくと忘れません。ツルツルの状態をキープできているか、さわって確かめながら続けます。</div>\n      </div>\n    </div>\n\n    <div class=\"step s3\">\n      <div class=\"tab\"><div class=\"lbl\">STEP</div><div class=\"num\">3</div></div>\n      <div class=\"body\">\n        <div class=\"cond\">ザラザラのない状態が <em>続いている</em> なら</div>\n        <div class=\"dose\">週2回（土曜・日曜だけ 1回ずつ）</div>\n        <div class=\"note\">ここが「火種を出さないための塗り方」。<b>症状がなくても、土日は塗ります。</b>曜日を決めておくと習慣にしやすく、続けるほど再発しにくくなります。</div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"modoru\">\n    <div class=\"k\">ぶり返したら</div>\n    <div>ザラザラが戻ってきたら、迷わず<b>ひとつ前のステップに戻して</b>ください。落ち着いたら、また減らしていけば大丈夫です。行ったり来たりして構いません。</div>\n  </div>\n\n  <div class=\"kinyu\">\n    <div class=\"lab\">このパンフレットの対象になるお薬</div>\n    <div class=\"drugs\">\n      <span>プロトピック軟膏<i>タクロリムス</i></span>\n      <span>コレクチム軟膏<i>デルゴシチニブ</i></span>\n      <span>モイゼルト軟膏<i>ジファミラスト</i></span>\n      <span>当院製剤<i>HPCr・HCCr</i></span>\n    </div>\n    <div class=\"line\"></div>\n  </div>\n\n  <footer>\n    <span class=\"cl\">やまもと皮膚科・漢方クリニック</span>\n    <span>ご不安なときは、次の受診でいつでもご相談ください。</span>\n    <span class=\"r\">1 / 2</span>\n  </footer>\n</div>\n\n<!-- ══════════ 2ページ目 ══════════ -->\n<div class=\"page\">\n  <div class=\"head\">\n    <div>\n      <div class=\"eyebrow\">ぬり薬の使い方・その２</div>\n      <h1>上手な<span class=\"shu\">塗り方</span>の 4ステップ</h1>\n    </div>\n    <div class=\"no\">チョンチョン → 手で広げる</div>\n  </div>\n\n  <div class=\"nuri\">\n    <div class=\"nstep\">\n      <div class=\"n\">1</div>\n      <div style=\"flex:1\">\n        <h3>まず、薬を取り出す ── 容器の形で方法がちがいます</h3>\n        <div class=\"two\">\n          <div class=\"col\">\n            <div class=\"ct\">チューブのお薬</div>\n            <p>キャップを外し、<b>ザラザラのところに直接チョンチョンと出して</b>いきます。チューブの口が皮ふや傷にベタッと触れないよう、少し浮かせて出してください。使ったら口を軽く拭いてキャップを閉めます。</p>\n          </div>\n          <div class=\"col\">\n            <div class=\"ct\">容器（つぼ）のお薬</div>\n            <p>指を直接つっこむと薬に雑菌が入ります。<b>毎回きれいな綿棒で</b>必要な分だけ取り出してください。取りすぎた薬を容器に戻すのもNGです。</p>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"nstep\">\n      <div class=\"n\">2</div>\n      <div>\n        <h3>ザラザラするところに、<span class=\"chon\">チョンチョン</span>と置く</h3>\n        <p>いきなり伸ばさず、まずは軟膏を<b>点々（てんてん）に置いていく</b>のがポイント。塗りたい範囲に少し間隔をあけて何ヵ所か置くと、塗りムラがなくなります。</p>\n      </div>\n    </div>\n\n    <div class=\"nstep\">\n      <div class=\"n\">3</div>\n      <div>\n        <h3>手で、やさしく塗り広げる</h3>\n        <p>指の腹を使って、置いた薬を<b>のばし広げる感じ</b>で。ゴシゴシすり込む必要はありません。皮ふの表面に薄い膜をつくるイメージで、やさしく広げてください。</p>\n      </div>\n    </div>\n\n    <div class=\"nstep\">\n      <div class=\"n\">4</div>\n      <div>\n        <h3>量のめやす</h3>\n        <p><b>チューブなら</b>、大人の人差し指の先から第一関節まで出した量が、だいたい<b>手のひら2枚分</b>の広さに塗る量です。<b>共通のめやす</b>として、塗ったところにティッシュを軽くのせて<b>ペタッとくっつけばちょうど良い量</b>。すぐ落ちるなら少し足りません。</p>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"warn\">\n    <h2>ここだけは、覚えてください</h2>\n    <ul>\n      <li><b>自己判断で急にやめない。</b>見た目がきれいになった時点では、まだ皮ふの中は治りきっていません。</li>\n      <li><b>保湿は毎日つづける。</b>ステップが進んでも、保湿ケアは休まず続けてください。土台になります。</li>\n      <li><b>お風呂あがり5分以内</b>がいちばん効きます。水分が逃げる前に塗るのがコツです。</li>\n      <li>塗りはじめの数日、<b>ヒリヒリ・ほてり</b>を感じることがあります。多くは1週間ほどでおさまりますので、続けてみてください。がまんできないときはご相談を。</li>\n      <li>赤みやかゆみが強い・ジュクジュクする・いつもと様子が違うときは、<b>予定を待たずに受診</b>してください。</li>\n    </ul>\n  </div>\n\n  <div class=\"qa\">\n    <div class=\"card\">\n      <div class=\"q\">Q. 土日に塗り忘れました。</div>\n      <div class=\"a\">気づいた日に1回塗れば大丈夫です。まとめて2回分塗る必要はありません。翌週からまた土日に戻しましょう。</div>\n    </div>\n    <div class=\"card\">\n      <div class=\"q\">Q. いつまで続けるの？</div>\n      <div class=\"a\">ザラザラの出ない状態がしっかり続いたら、診察のうえで終了や間隔延長を相談します。自己判断での中止だけ避けてください。</div>\n    </div>\n    <div class=\"card\">\n      <div class=\"q\">Q. 塗る順番は？</div>\n      <div class=\"a\">どちらが先でも構いませんが、迷ったら「薬 → 保湿」の順で。広い範囲の保湿を先に塗る方法もあります。</div>\n    </div>\n    <div class=\"card\">\n      <div class=\"q\">Q. 症状がないのに塗るの？</div>\n      <div class=\"a\">はい。それがこの治療のいちばん大事なところです。「出ていないから塗る」＝出さないための塗り方です。</div>\n    </div>\n  </div>\n\n  <div class=\"mascot-line\">\n    <svg class=\"fig\" width=\"52\" height=\"58\" viewBox=\"0 0 52 58\" aria-hidden=\"true\">\n      <path d=\"M26 58 C25 46 25 40 26 33\" stroke=\"#2E5D4B\" stroke-width=\"3\" fill=\"none\" stroke-linecap=\"round\"/>\n      <path d=\"M26 46 C18 45 13 41 12 36 C19 35 24 39 26 46 Z\" fill=\"#2E5D4B\"/>\n      <path d=\"M26 41 C34 40 39 36 40 31 C33 30 28 34 26 41 Z\" fill=\"#3A7660\"/>\n      <g>\n        <circle cx=\"26\" cy=\"20\" r=\"15\" fill=\"#E8B21F\"/>\n        <circle cx=\"26\" cy=\"20\" r=\"10.5\" fill=\"#F6CD4A\"/>\n        <circle cx=\"21.5\" cy=\"18.5\" r=\"1.7\" fill=\"#332C25\"/>\n        <circle cx=\"30.5\" cy=\"18.5\" r=\"1.7\" fill=\"#332C25\"/>\n        <path d=\"M22.5 24 Q26 27.5 29.5 24\" stroke=\"#332C25\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\"/>\n        <circle cx=\"18.5\" cy=\"23\" r=\"1.8\" fill=\"#E8825F\" opacity=\".55\"/>\n        <circle cx=\"33.5\" cy=\"23\" r=\"1.8\" fill=\"#E8825F\" opacity=\".55\"/>\n      </g>\n    </svg>\n    <div class=\"msg\">\n      「出てから塗る」から、「出さないために塗る」へ。\n      <small>一緒に、ザラザラのない皮ふを続けていきましょう。わからないことは遠慮なく声をかけてくださいね。</small>\n    </div>\n  </div>\n\n  <footer>\n    <span class=\"cl\">やまもと皮膚科・漢方クリニック</span>\n    <span>兵庫県姫路市</span>\n    <span class=\"r\">2 / 2</span>\n  </footer>\n</div>\n\n</body>\n</html>\n";
+(function(){
+  var frame=document.getElementById("pamphFrame");
+  var wrap=document.getElementById("pamphWrap");
+  if(!frame||!wrap) return;
+  var NATURAL_W=794, NATURAL_H=2280;
+  frame.style.height=NATURAL_H+"px";
+  frame.srcdoc=PAMPH_HTML;
+  function fit(){
+    var s=wrap.clientWidth/NATURAL_W;
+    frame.style.transform="scale("+s+")";
+    wrap.style.height=(NATURAL_H*s)+"px";
+  }
+  window.addEventListener("resize",fit);
+  frame.addEventListener("load",fit);
+  setTimeout(fit,60);
+  var btn=document.getElementById("pamphPrint");
+  if(btn) btn.onclick=function(){
+    try{ frame.contentWindow.focus(); frame.contentWindow.print(); }
+    catch(e){ var w=window.open("","_blank"); if(w){ w.document.write(PAMPH_HTML); w.document.close(); setTimeout(function(){w.focus();w.print();},400); } }
+  };
+})();
+
 algInit();
 
 </script>
