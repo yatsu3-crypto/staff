@@ -106,6 +106,39 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .badge{background:var(--gl);color:var(--tc);border-radius:4px;padding:1px 7px;font-size:10.5px;font-weight:600;white-space:nowrap;flex-shrink:0;margin-top:1px;}
 .warn{background:var(--wbg);border:.5px solid var(--wbd);border-radius:8px;padding:10px 13px;font-size:11.5px;color:var(--wtx);line-height:1.65;margin-top:4px;}
 .warn b{display:block;margin-bottom:3px;}
+/* ===== 漸減・終了プロトコル ===== */
+.tpr-lead{font-size:11.5px;color:var(--tx2);line-height:1.6;margin-bottom:12px;}
+.tpr-steps{margin-bottom:4px;}
+.tpr-step{position:relative;padding-left:38px;padding-bottom:12px;}
+.tpr-step::before{content:"";position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--bd);}
+.tpr-step:last-child{padding-bottom:2px;}
+.tpr-step:last-child::before{display:none;}
+.tpr-no{position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--g);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.tpr-step.tpr-end .tpr-no{background:var(--g2);font-size:10px;}
+.tpr-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-height:30px;}
+.tpr-int{font-size:14px;font-weight:700;color:var(--g);}
+.tpr-step.tpr-end .tpr-int{color:var(--tc);}
+.tpr-dur{margin-left:auto;background:var(--gl);color:var(--tc);border-radius:4px;padding:1px 7px;font-size:10.5px;font-weight:600;white-space:nowrap;}
+.tpr-cond{font-size:12px;color:var(--tx2);line-height:1.55;margin-top:2px;}
+.tpr-gauge{height:4px;border-radius:2px;background:var(--g2);opacity:.35;margin-top:6px;}
+.tpr-step.tpr-end .tpr-gauge{opacity:.6;}
+.tpr-total{text-align:right;font-size:11.5px;color:var(--tx2);margin:6px 0 14px;}
+.tpr-total b{color:var(--g);font-weight:700;}
+.tpr-box{background:#eef6f2;border-radius:8px;padding:11px 13px;margin-bottom:10px;}
+.tpr-box.tpr-alert{background:var(--wbg);border:.5px solid var(--wbd);}
+.tpr-box-ttl{font-size:12.5px;font-weight:700;color:var(--g);margin-bottom:7px;}
+.tpr-box.tpr-alert .tpr-box-ttl{color:var(--wtx);}
+.tpr-num{display:flex;align-items:flex-start;gap:7px;margin-bottom:5px;font-size:12.5px;line-height:1.55;}
+.tpr-num:last-child{margin-bottom:0;}
+.tpr-num i{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:var(--g);color:#fff;font-size:10px;font-style:normal;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+.tpr-note{font-size:11px;color:var(--tx2);line-height:1.6;margin-top:8px;padding-top:7px;border-top:.5px dashed var(--bd);}
+.tpr-def{background:#fff;border-radius:6px;padding:7px 10px;font-size:12px;line-height:1.55;color:var(--wtx);margin-bottom:8px;}
+.tpr-def b{font-weight:700;}
+.tpr-li{display:flex;gap:7px;font-size:12.5px;line-height:1.6;color:var(--tx);margin-bottom:5px;}
+.tpr-li:last-child{margin-bottom:0;}
+.tpr-li::before{content:"▸";color:var(--g2);flex-shrink:0;font-weight:700;}
+.tpr-box.tpr-alert .tpr-li{color:var(--wtx);}
+.tpr-box.tpr-alert .tpr-li::before{color:#c07a3a;}
 .back-btn{width:100%;background:none;border:1px solid var(--bd);border-radius:50px;padding:12px;font-size:13px;color:var(--tx2);cursor:pointer;margin-top:4px;}
 .back-btn:active{background:var(--bg);}
 .err{padding:10px 13px;background:#fff0f0;border:.5px solid #f5c0c0;border-radius:8px;font-size:12px;color:#c0392b;margin-bottom:10px;display:none;}
@@ -2763,6 +2796,37 @@ var DRUGS = [
       '感染症合併時は慎重に使用',
       '冷蔵保存（2〜8℃）。投与前に室温に戻す',
     ],
+    taper: {
+      title: '漸減・終了プロトコル（当院・A案）',
+      lead: '痒みが安定した患者さんで、投与間隔を段階的に延ばして終了をめざす手順。各段階の条件を3回連続で満たしたら次へ進む。',
+      steps: [
+        { no:'1', interval:'4週ごと', cond:'条件を3回連続で満たす', dur:'12週', w:33 },
+        { no:'2', interval:'6週ごと', cond:'条件を3回連続で満たす', dur:'18週', w:50 },
+        { no:'3', interval:'8週ごと', cond:'条件を3回連続で満たす', dur:'24週', w:67 },
+        { no:'終了', interval:'投与を止めて経過観察', cond:'12週後に受診して再評価 → 問題なければ完全終了', dur:'12週', w:100, end:true },
+      ],
+      total: '最短で約66週（1年3か月）で終了',
+      criteria: [
+        '痒みNRS 0〜1（週平均）',
+        'IGA 0/1（またはEASI 3以下）',
+        '外用の量が増えていない（プロアクティブ維持のみ）',
+      ],
+      criteriaNote: '判定はすべて次回投与の直前（トラフ）で行う。患者さんには週1回のNRS記録をつけてもらう。',
+      relapseDef: 'NRS 4以上が2週続く／外用のランクアップが必要になった',
+      relapseRules: [
+        '1段階戻して、その段階を3回連続からやり直す',
+        '2回戻ったら、その間隔で維持を固定し減量は終了する',
+      ],
+      after: [
+        '3か月後・6か月後にフォロー受診',
+        '再開の基準は上の「再燃の定義」と同じ',
+        '「しんどくなったらすぐ戻せる」と患者さんに先に伝えておく',
+      ],
+      base: [
+        'プロアクティブ外用は減量中も終了後も維持する。崩れている間は減量を進めない。',
+        '間隔延長は添付文書の用法用量外。カルテに毎回「痒み寛解に伴う漸減、患者同意あり」を1行記載する。',
+      ],
+    },
     points: [
       'デュピクセントと異なりIL-31受容体を標的とするため「痒み」に特化した作用',
       'VAS・NRS等の痒みスコアで効果を評価する',
@@ -2915,6 +2979,47 @@ function initStaff(){
   });
 }
 
+// 漸減・終了プロトコル描画（taper を持つ薬剤のみ）
+function renderTaper(t){
+  var h = '<div class="prod-section"><div class="prod-section-ttl">📉 '+esc(t.title)+'</div>';
+  if(t.lead) h += '<div class="tpr-lead">'+esc(t.lead)+'</div>';
+
+  h += '<div class="tpr-steps">';
+  t.steps.forEach(function(s){
+    h += '<div class="tpr-step'+(s.end?' tpr-end':'')+'">';
+    h += '<span class="tpr-no">'+esc(s.no)+'</span>';
+    h += '<div class="tpr-head"><span class="tpr-int">'+esc(s.interval)+'</span>';
+    h += '<span class="tpr-dur">'+esc(s.dur)+'</span></div>';
+    h += '<div class="tpr-cond">'+esc(s.cond)+'</div>';
+    h += '<div class="tpr-gauge" style="width:'+s.w+'%"></div>';
+    h += '</div>';
+  });
+  h += '</div>';
+  if(t.total) h += '<div class="tpr-total">'+esc(t.total).replace(/(約\S+?)で終了/,'<b>$1</b>で終了')+'</div>';
+
+  h += '<div class="tpr-box"><div class="tpr-box-ttl">次の段階に進む条件（3つすべて）</div>';
+  t.criteria.forEach(function(c,i){
+    h += '<div class="tpr-num"><i>'+(i+1)+'</i><span>'+esc(c)+'</span></div>';
+  });
+  if(t.criteriaNote) h += '<div class="tpr-note">'+esc(t.criteriaNote)+'</div>';
+  h += '</div>';
+
+  h += '<div class="tpr-box tpr-alert"><div class="tpr-box-ttl">再燃したとき</div>';
+  h += '<div class="tpr-def"><b>再燃の定義：</b>'+esc(t.relapseDef)+'</div>';
+  t.relapseRules.forEach(function(r){ h += '<div class="tpr-li">'+esc(r)+'</div>'; });
+  h += '</div>';
+
+  h += '<div class="tpr-box"><div class="tpr-box-ttl">終了したあと</div>';
+  t.after.forEach(function(a){ h += '<div class="tpr-li">'+esc(a)+'</div>'; });
+  h += '</div>';
+
+  h += '<div class="tpr-box"><div class="tpr-box-ttl">全期間の前提</div>';
+  t.base.forEach(function(b){ h += '<div class="tpr-li">'+esc(b)+'</div>'; });
+  h += '</div>';
+
+  return h + '</div>';
+}
+
 function showDrug(id){
   var d = null;
   DRUGS.forEach(function(x){ if(x.id===id) d=x; });
@@ -2933,6 +3038,8 @@ function showDrug(id){
   html += '<div class="prod-section"><div class="prod-section-ttl">💉 用法・用量</div>';
   d.dosage.forEach(function(i){ html += '<div class="prod-item">'+esc(i)+'</div>'; });
   html += '</div>';
+
+  if(d.taper) html += renderTaper(d.taper);
 
   html += '<div class="prod-section"><div class="prod-section-ttl">⚠️ 注意事項・副作用</div>';
   d.cautions.forEach(function(i){ html += '<div class="prod-item">'+esc(i)+'</div>'; });
