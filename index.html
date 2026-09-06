@@ -233,6 +233,29 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 #topguide /* Generic info blocks */
   .block{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 17px;margin-bottom:14px;box-shadow:var(--shadow);}
 #topguide .block h3{margin:0 0 8px;font-size:17px;}
+#azelaic .aza-q{background:#faf9f6;border:1px solid var(--bd);border-radius:11px;padding:13px 14px;}
+#azelaic .aza-qt{font-size:15px;font-weight:700;margin-bottom:3px;}
+#azelaic .aza-qn{font-size:11.5px;color:var(--tx3);margin-bottom:10px;}
+#azelaic .aza-opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--bd);border-left:4px solid var(--g2);
+  border-radius:9px;padding:10px 12px;margin-bottom:7px;font-family:inherit;font-size:13.5px;color:var(--tx);cursor:pointer;line-height:1.5;}
+#azelaic .aza-opt:active{transform:scale(.99);}
+#azelaic .aza-opt b{display:block;font-weight:700;}
+#azelaic .aza-opt em{font-style:normal;font-size:11.5px;color:var(--tx3);}
+#azelaic .aza-res{border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:#fff;}
+#azelaic .aza-rh{padding:12px 14px;color:#fff;display:flex;align-items:center;gap:11px;}
+#azelaic .aza-rh .mk{font-size:26px;font-weight:700;line-height:1;}
+#azelaic .aza-rh .t{font-size:15px;font-weight:700;}
+#azelaic .aza-rh .s{font-size:11.5px;opacity:.9;display:block;font-weight:400;}
+#azelaic .lv-A .aza-rh{background:#2f7a63;} #azelaic .lv-B .aza-rh{background:#2a5b8c;}
+#azelaic .lv-C .aza-rh{background:#9a6a12;} #azelaic .lv-D .aza-rh{background:#7d766c;}
+#azelaic .aza-rb{padding:13px 14px;}
+#azelaic .aza-rb .lead{font-size:13.5px;margin-bottom:11px;}
+#azelaic .aza-h4{font-size:12px;font-weight:700;color:var(--g);border-bottom:1px dotted var(--bd);padding-bottom:3px;margin:12px 0 6px;}
+#azelaic .aza-rb ul{margin:0;padding-left:18px;font-size:13px;}
+#azelaic .aza-rb li{margin:4px 0;}
+#azelaic .aza-talk{background:var(--gl);border:1px dashed var(--g2);border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.75;white-space:pre-wrap;}
+#azelaic .aza-btn{font-family:inherit;font-size:12.5px;padding:8px 15px;border-radius:8px;border:1px solid var(--bd);background:#fff;color:var(--tx2);cursor:pointer;}
+#azelaic .aza-btn.pri{background:var(--g);border-color:var(--g);color:#fff;}
 #topguide .block p{margin:7px 0;font-size:14px;}
 #topguide .block ul{margin:7px 0;padding-left:20px;font-size:14px;}
 #topguide .block li{margin:5px 0;}
@@ -626,6 +649,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   <button class="tab" data-tab="pamph">患者パンフ</button>
   <button class="tab" data-tab="site">部位別ガイド</button>
   <button class="tab" data-tab="mix">当院製剤</button>
+  <button class="tab" data-tab="azelaic">アゼライン酸</button>
 </nav>
 
 <main>
@@ -844,6 +868,71 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
     <div class="block" style="background:var(--accent-soft);border-color:#cfe3da;">
       <h3 style="font-size:15px;">位置づけ（痒み抑制ランキング上の目安）</h3>
       <p style="font-size:13.5px;">資料上、HPCr・HCCr は <strong>Tier 2（中等度に効果的）</strong>。原薬濃度はそれぞれタクロリムス0.03%・デルゴシチニブ0.25%より低いと推定され、抗炎症の即効性は単剤に劣りますが、<strong>保湿効果・刺激軽減・広範囲塗布の安全性</strong>という利点があり、特定の患者群（ステロイドの副作用を避けたい／乾燥肌／広範囲の維持）で有用です。</p>
+    </div>
+  </section>
+
+  <!-- ══════════ アゼライン酸（AZAクリアセラム）══════════ -->
+  <section class="panel" id="azelaic">
+    <div class="sectitle">アゼライン酸 使いどころナビ</div>
+
+    <div class="block">
+      <h3>DRX AZAクリアセラム</h3>
+      <p>ロート製薬・医療機関専売。アゼライン酸 <strong>3%</strong>・26mL。クリーム20%が非解離型を基材に<strong>分散</strong>させた製剤なのに対し、セラムは製剤中に<strong>溶解</strong>させている。浸透率が上がるため3%でも<strong>分散型12%相当</strong>とメーカーは説明。国内では医薬品として未承認で<strong>化粧品扱い＝自費</strong>。20%クリームは当院未採用。</p>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">
+        <span class="tag">ざ瘡</span><span class="tag">酒皶</span><span class="tag">色素沈着</span><span class="tag">マラセチア</span><span class="tag">妊娠・授乳中も可</span>
+      </div>
+      <div class="nursebox">
+        <div class="nh">受付・説明の注意</div>
+        <ul>
+          <li>化粧品扱いのため「治る」「治療薬」など<strong>医薬品的な効能を口頭・掲示で言わない</strong>。保険治療の補助・セルフケアとして案内する。</li>
+          <li>臨床データが積まれているのは15%ゲル・20%クリーム。<strong>浸透率・実質12%相当・アクネ菌への同等性はいずれもメーカー提示の実験レベルのデータ</strong>で、クリームとの臨床比較試験ではない。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>判定フロー</h3>
+      <p style="font-size:13px;color:var(--tx2);margin-bottom:2px">主訴を選ぶと使いどころが出ます。</p>
+      <div id="aza-stage"></div>
+      <div id="aza-ctrl" style="margin-top:11px;display:flex;gap:8px;flex-wrap:wrap"></div>
+    </div>
+
+    <div class="block">
+      <h3>導入プロトコル</h3>
+      <ul>
+        <li><strong>1〜2週</strong>：夜のみ・隔日。洗顔→化粧水のあとパール粒大。ヒリつきを確認する期間。</li>
+        <li><strong>3〜4週</strong>：耐えられれば夜は毎日。乾燥が出れば保湿を先に塗ってから重ねる。</li>
+        <li><strong>5週〜</strong>：朝晩1日2回。<strong>朝は日焼け止めを必ず併用</strong>。</li>
+        <li><strong>判定</strong>：ざ瘡・酒皶は8〜12週、色素沈着は3〜6か月。写真を撮って比較する。</li>
+      </ul>
+      <div class="nursebox">
+        <div class="nh">渡すときに必ず言うこと</div>
+        <ul>
+          <li>初期のピリつきは想定内で数週で軽くなる、と先に伝えると脱落が減る。強い紅斑・浮腫が出たら中止して受診。</li>
+          <li>3%なので刺激は少ないぶん、<strong>「効いた気がしない」で止める人</strong>に注意。8〜12週で判定する旨と写真撮影をセットで案内する。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>マラセチアへの作用と剤形</h3>
+      <p>セラムはクリームより<strong>抗マラセチア作用が強い</strong>とされる。考えられる説明は3つあり、どれかで臨床的な意味が変わる。</p>
+      <ul>
+        <li><strong>溶解型と分散型の差</strong>：分散型20%は大半が溶けきらず結晶で存在し、実際に働くのは溶けている分だけ。溶解型3%は全量が分子分散している。<strong>「3%＝分散型12%相当」も抗マラセチア作用の逆転も、この一点で説明できる</strong>。</li>
+        <li><strong>基剤の脂質</strong>：マラセチアは脂質要求性で、クリーム基剤の油分が増殖基質を供給し薬剤効果を相殺しうる。低脂質のセラムにはその不利がない。</li>
+        <li><strong>試験系による見かけの差</strong>：in vitro（寒天拡散・液体培地）ではクリーム基剤が水系に分散せず、液状剤が有利に出る。皮膚での浸透とは無関係な可能性が残る。</li>
+      </ul>
+      <p>他のルートではクリームが「効果を取りにいく側」だが、<strong>マラセチア関連だけは逆転してセラムを優先する</strong>。脂漏部位に油性基剤を重ねない意味でも理にかなう。ただし初期治療は抗真菌薬で、アゼライン酸は寛解後の維持とざ瘡併存例で価値が出る。</p>
+    </div>
+
+    <div class="block">
+      <h3>漢方の合わせどころ</h3>
+      <ul>
+        <li><strong>ざ瘡</strong>：清上防風湯／荊芥連翹湯／十味敗毒湯／桂枝茯苓丸加薏苡仁／当帰芍薬散</li>
+        <li><strong>酒皶・赤ら顔</strong>：黄連解毒湯／白虎加人参湯／清上防風湯／桂枝茯苓丸／温清飲</li>
+        <li><strong>肝斑・色素沈着</strong>：桂枝茯苓丸／当帰芍薬散／加味逍遙散／温清飲</li>
+        <li><strong>脂漏性皮膚炎・マラセチア</strong>：十味敗毒湯／黄連解毒湯／茵蔯蒿湯</li>
+      </ul>
     </div>
   </section>
 
@@ -1777,6 +1866,7 @@ function copyList(){
 /* ===== init ===== */
 renderCatFilters();renderProducts();renderGrpFilters();renderAllergens();renderSeries();updateBadge();
 </script>
+
 </body>
 </html>
 "></iframe>
@@ -4072,6 +4162,207 @@ var PAMPH_HTML = "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"U
 
 algInit();
 
+</script>
+
+<script>
+/* ══════════ アゼライン酸 判定フロー（AZAクリアセラム 3%） ══════════ */
+(function(){
+  var R={A:{m:"◎",l:"採用を勧める",s:"セラムが第一に活きる場面"},
+         B:{m:"○",l:"併用・追加で検討",s:"今の治療に足すと伸びしろがある"},
+         C:{m:"△",l:"慎重に、少量から",s:"刺激で悪化しうる。開始条件を絞る"},
+         D:{m:"×",l:"まず他の手を",s:"アゼライン酸の出番はその後"}};
+
+  var OUT={
+  acne_preg:{lv:"A",t:"妊娠・授乳中のざ瘡",
+    lead:"アダパレンが使えず、BPOも積極的には勧めにくい局面。数少ない選択肢として残る。",
+    why:["アダパレンは妊婦に投与できず、妊娠可能な女性でも慎重投与","BPO配合剤も妊娠中の使用データが限られる","アゼライン酸は海外で長く妊娠期の選択肢として用いられてきた"],
+    rx:["セラムを全顔に。炎症性皮疹の部位はやや重ねて","夜のみ隔日から開始し、2週かけて朝晩へ"],
+    talk:"妊娠・授乳中は使えるお薬が限られます。アゼライン酸は穀物にも含まれる成分で、海外では長く妊娠中のニキビケアに使われてきました。保険は効かず自費になりますが、この時期の選択肢としてお勧めしています。最初の2週間は夜だけ、1日おきから始めてください。"},
+  acne_naive:{lv:"D",t:"外用未治療のざ瘡",
+    lead:"まず保険の外用を立ち上げる。アゼライン酸は次の一手として取っておく。",
+    why:["アダパレン・BPO・配合剤で保険内のコントロールが可能","自費を先に出すと、効果不十分だったときの手札が減る"],
+    rx:["アダパレン／BPO／配合剤で導入","中等症以上は抗菌薬内服を併用","4〜8週で再評価し、刺激脱落・赤み残存があればセラムへ"],
+    talk:"まずは保険のお薬でしっかり治しましょう。それでヒリつきが強くて続けられない場合や、ニキビが治った後の赤み・色素沈着が気になる場合に、次の選択肢としてご案内できるものがあります。"},
+  acne_irr:{lv:"A",t:"レチノイド／BPOの刺激で継続できない",
+    lead:"脱落理由が刺激なら、セラムへの切り替え・減量併用が現実的。",
+    why:["アダパレンやBPOに比べ刺激が少なく続けやすい","3%セラムは伸びがよく、刺激で脱落した人でも続けやすい","抗菌・角化調整・抗炎症・メラニン抑制を一剤でカバーできる"],
+    rx:["保険外用を隔日〜週2に減らし、セラムを土台に置く","完全に無理なら切り替え","保湿剤を先に塗ってから重ねると刺激が和らぐ"],
+    talk:"今のお薬が肌に合わずヒリヒリするようなので、刺激の少ないタイプに変えてみましょう。アゼライン酸という美容液で、ニキビの詰まり・菌・炎症・色素沈着に同時に働きます。自費で1本です。"},
+  acne_pih:{lv:"A",t:"皮疹は落ち着いたが赤み・色素沈着が残る",
+    lead:"最も価値を出す場面。維持療法と美白を同時に担える。",
+    why:["メラニン生成抑制作用があり、ハイドロキノンと同等の報告もある","抗炎症作用で残存する赤みにも働く","維持療法としてそのまま継続できる"],
+    rx:["セラムを全顔に。色素沈着の濃い部位は薄く二度塗り","朝は日焼け止めを必須に","3〜6か月で写真比較"],
+    talk:"ニキビ自体は落ち着きましたが、跡の赤みと色素沈着が残っています。ここからはアゼライン酸で仕上げていきましょう。色素沈着を薄くする働きがあり、そのまま再発予防にもなります。日焼け止めは毎朝必ず。"},
+  acne_ins:{lv:"B",t:"保険外用中だが効果不十分",
+    lead:"上乗せする一手として。内服・漢方の見直しと同時に検討する。",
+    why:["作用機序が異なるため併用で相加が期待できる","炎症性皮疹への効果はプラセボ比で明確"],
+    rx:["現行外用は継続し、セラムを夜に追加","刺激が重なるので隔日から","抗菌薬内服・漢方も同時に再検討"],
+    talk:"今のお薬に、作用の違うものを足してみましょう。重ねると最初はヒリつきやすいので、まず1日おきの夜だけから始めます。"},
+  acne_ok:{lv:"D",t:"保険外用でコントロール良好",
+    lead:"今は変えない。維持期に色素沈着が気になってきたら出番。",
+    why:["コントロールできている治療を自費で置き換える理由がない"],
+    rx:["現行を継続","減量・維持に移る段階で、跡が気になれば提案"],
+    talk:"今の治療でうまくいっているので、このまま続けましょう。落ち着いた後で跡の赤みが気になるようなら、そのときにご相談ください。"},
+  ros_naive:{lv:"D",t:"酒皶・丘疹膿疱型／外用未治療",
+    lead:"保険適応のあるロゼックスゲルが先。アゼライン酸は次の一手。",
+    why:["ロゼックスゲル0.75%は2022年5月26日に酒さの効能追加が承認済み","忍容性が良く、脱落しにくい"],
+    rx:["ロゼックスゲル1日2回で導入","8〜12週で評価","不十分ならセラムを追加または切替"],
+    talk:"赤ら顔・ぶつぶつには保険のお薬がありますので、まずそちらから始めましょう。数か月みて足りなければ、次の選択肢もご用意しています。"},
+  ros_ins:{lv:"A",t:"酒皶・丘疹膿疱型／ロゼックス効果不十分",
+    lead:"本領。頭対頭試験でメトロニダゾールを上回る報告がある。",
+    why:["炎症性皮疹をプラセボ比で6割程度減らす","頭対頭比較で一部メトロニダゾールを上回る成績","残存する紅斑にも働く"],
+    rx:["ロゼックスに追加、または切替","広い紅斑にセラムで全顔","3%でも分散型12%相当とされるが、15%ゲル・20%クリームの臨床成績とは別物。8〜12週で伸びなければ内服・漢方へ","刺激が出やすいので夜のみ隔日から"],
+    talk:"今のお薬で足りない分を補うものがあります。海外の比較試験では今お使いのものと同等以上の成績が出ています。ただ最初はピリつきやすいので、夜だけ1日おきから慣らしていきましょう。"},
+  ros_intol:{lv:"C",t:"酒皶／ロゼックスが刺激で使えない",
+    lead:"刺激で脱落した人に、そのまま次の外用を渡すと二重に失敗する。条件を絞る。",
+    why:["頭対頭試験でアゼライン酸のほうが有害事象発現率が高い傾向","ただし3%セラムは20%クリームより刺激が少ない"],
+    rx:["まずスキンケア指導・遮光・悪化因子の除去を徹底","保湿を数週間先行させてバリアを整える","試すならセラムを夜のみ週2回、保湿の上から少量","内服・漢方を主軸に置く"],
+    talk:"お薬でヒリヒリが出たとのことなので、まず肌の土台を整えるところから始めましょう。保湿と日焼け対策を数週間しっかりやって、それから少量ずつ試します。飲み薬や漢方も併せて考えます。"},
+  ros_ok:{lv:"D",t:"酒皶／ロゼックスで良好",
+    lead:"現行継続。追加の必要はない。",
+    why:["保険内でコントロールできている"],
+    rx:["ロゼックス継続","再燃時や色素沈着が気になる段階で再検討"],
+    talk:"今のお薬が効いていますので、このまま続けましょう。"},
+  ros_ete:{lv:"C",t:"酒皶・紅斑毛細血管拡張型",
+    lead:"外用刺激そのものが悪化因子。第一選択にはしない。",
+    why:["この病型は外用刺激で紅斑・ほてりが悪化しうる","毛細血管拡張自体には外用の効果が乏しい"],
+    rx:["遮光・温度差・アルコール・香辛料など悪化因子の除去を最優先","保湿とスキンケアの立て直し","試すならセラムを夜のみ週2回、ごく少量から。クリームは向かない","漢方・内服を主軸に、拡張血管はレーザーを検討"],
+    talk:"赤みが中心のタイプは、塗るものの刺激でかえって赤くなることがあります。まず日焼け・温度差・お酒・辛いものなど、赤くなるきっかけを減らすところから。飲み薬や漢方で内側から整えるのが向いています。"},
+  ros_other:{lv:"D",t:"眼型・鼻瘤",
+    lead:"外用の守備範囲を超える。専門的対応を優先。",
+    why:["眼型は眼科的評価が要る","鼻瘤は外科的・物理的治療が中心"],
+    rx:["眼型：眼瞼縁の清拭指導、必要に応じ眼科連携、内服検討","鼻瘤：形成的処置・レーザーを検討"],
+    talk:"このタイプは塗るものだけでは対応が難しいので、別の方法を組み合わせてご説明します。"},
+  pig_pih:{lv:"A",t:"炎症後色素沈着・ざ瘡後",
+    lead:"原疾患の治療と並行して。抗炎症と美白を同時に持っているのが強み。",
+    why:["メラニン生成抑制と抗炎症を兼ねる","炎症が残っている段階から使えるのが他の美白剤との違い"],
+    rx:["セラムを全顔に。濃い部位は薄く二度塗り","朝の日焼け止めは必須","3〜6か月で写真比較"],
+    talk:"炎症の跡の色素沈着です。原因のほうの治療を続けながら、色を薄くするものを合わせましょう。半年ほどかけてゆっくり変わっていきます。日焼け止めをさぼると戻ってしまうので毎朝必ず。"},
+  pig_alt:{lv:"A",t:"肝斑／ハイドロキノン等が使えない",
+    lead:"刺激・妊娠授乳・かぶれで標準治療が組めないときの代替。",
+    why:["ハイドロキノンと同等の美白効果の報告がある","刺激性接触皮膚炎・白斑のリスク構造が異なる","妊娠・授乳中でも選択肢になる"],
+    rx:["セラムを全顔に","トラネキサム酸内服が可能なら併用","遮光の徹底を最優先"],
+    talk:"肝斑によく使うお薬が今は使いにくいので、別の成分でいきましょう。海外の報告では同じくらいの効果が出ています。肝斑は日焼け対策が半分以上なので、そこは徹底してください。"},
+  pig_add:{lv:"B",t:"肝斑／標準治療中",
+    lead:"休薬期のつなぎ、あるいは維持に。",
+    why:["ハイドロキノンは連用を避ける期間があり、その空白を埋められる","長期の維持に向く"],
+    rx:["休薬期にセラムへ切り替え","トラネキサム酸内服は継続","遮光は通年"],
+    talk:"今のお薬をお休みする期間に、代わりに使えるものがあります。切れ目なくケアを続けられます。"},
+  mal_naive:{lv:"D",t:"マラセチア毛包炎／未治療",
+    lead:"まず抗真菌薬で菌量を落とす。アゼライン酸は寛解後の維持で活きる。",
+    why:["初期の菌量減少は抗真菌薬のほうが確実","アゼライン酸の抗マラセチア作用は補助的な位置づけ"],
+    rx:["ケトコナゾール外用、範囲が広ければイトラコナゾール内服","抗菌薬内服中なら中止を検討（毛包炎が誘発される）","高温多湿・多汗・occlusionなど増悪因子の除去","寛解後の再発予防にセラムへ移行"],
+    talk:"ニキビによく似ていますが、カビの一種による毛包炎です。まず抗真菌薬で治しましょう。繰り返しやすいので、落ち着いた後に再発予防のケアをご案内します。"},
+  mal_maint:{lv:"A",t:"マラセチア毛包炎／寛解後の再発予防",
+    lead:"抗真菌薬を延々続けられない再発例に、セラムを維持で置く。",
+    why:["セラムはクリームより抗マラセチア作用が強いとされる","低脂質基剤でマラセチアに脂質を供給しない","角化調整と抗炎症も担え、毛包の閉塞を減らせる"],
+    rx:["寛解後、セラムを1日1〜2回で維持","再燃の兆しで抗真菌外用を短期併用","汗をかいたら早めに洗い流す、通気の指導を併せて"],
+    talk:"このタイプは再発しやすいので、治った後のケアが本番です。抗真菌薬をずっと続けるかわりに、この美容液を毎日のケアに入れておくと再発を抑えやすくなります。ぶり返しそうなときだけ塗り薬を短期間足しましょう。"},
+  mal_mix:{lv:"B",t:"ざ瘡とマラセチア毛包炎の併存・鑑別困難",
+    lead:"どちらにも効きうる数少ない一手。両にらみで置ける。",
+    why:["アクネ菌とマラセチアの両方に抗菌作用がある","角化調整作用が毛包の閉塞を共通して改善する","抗菌薬内服はマラセチアを増やすので、外用で粘れると都合がよい"],
+    rx:["セラムを全顔・患部に","抗菌薬内服中で毛包炎が増えているなら内服を見直す","マラセチアの比重が高そうなら抗真菌外用を2〜4週併用して反応をみる","反応で診断を確かめる"],
+    talk:"ニキビと、カビによる毛包炎が混ざっている可能性があります。この美容液は両方に働くので、まずこれで様子をみましょう。どちらが主役かは、効き方で判断していきます。"},
+  seb:{lv:"B",t:"脂漏性皮膚炎",
+    lead:"標準治療の補助。ただし抗マラセチア作用は、この病態と機序がかみ合う。",
+    why:["抗炎症・抗角化作用による有効性が予備的研究で示唆される段階","セラムはクリームより抗マラセチア作用が強いとされ、病態の中心に届きうる","低脂質基剤で、脂漏部位に塗っても油を足さない","標準治療を置き換える根拠はまだない"],
+    rx:["抗真菌外用±ステロイドが主軸","赤みが遷延する例にセラムを夜追加","ステロイド減量の橋渡しに","脂漏部位に油性基剤を重ねない"],
+    talk:"まずは基本のお薬で治療します。赤みが長引くようなら、補助として足せるものもあります。"},
+  other:{lv:"D",t:"上記以外",
+    lead:"確立した使いどころではない。所見をみて個別に判断。",
+    why:["国内では化粧品扱いで、適応外の期待を持たせない"],
+    rx:["主病名の標準治療を優先","希望が強い場合は自費・効果不確実である旨を明示して"],
+    talk:"この症状に対しては、まず標準的な治療から始めましょう。"}
+  };
+
+  var FLOW={
+  start:{q:"主訴・病態はどれですか",n:"顔面の炎症性皮疹・紅斑・色素沈着を想定",
+    o:[{t:"ざ瘡（尋常性痤瘡）",s:"面皰・丘疹・膿疱が主体",go:"acne1"},
+       {t:"酒皶・赤ら顔",s:"持続する紅斑、ほてり、丘疹膿疱",go:"ros1"},
+       {t:"色素沈着",s:"肝斑、炎症後色素沈着、ざ瘡後の跡",go:"pig1"},
+       {t:"マラセチア毛包炎",s:"大きさの揃った毛包一致性丘疹。ニキビ治療に反応しない",go:"mal1"},
+       {t:"脂漏性皮膚炎",s:"鼻唇溝・眉間・生え際の紅斑と鱗屑",r:"seb"},
+       {t:"その他",s:"上記に当てはまらない",r:"other"}]},
+  acne1:{q:"妊娠中・授乳中、または妊娠を希望していますか",n:"ここが最初の分岐。使える薬が大きく変わる",
+    o:[{t:"はい",s:"妊娠中・授乳中・妊活中",r:"acne_preg"},
+       {t:"いいえ",s:"該当しない",go:"acne2"}]},
+  acne2:{q:"保険の外用（アダパレン／BPO／配合剤）はどうなっていますか",n:"現在の治療状況で出番が決まる",
+    o:[{t:"まだ使っていない",s:"外用未治療",r:"acne_naive"},
+       {t:"刺激が強くて続けられない",s:"乾燥・落屑・ヒリつきで脱落",r:"acne_irr"},
+       {t:"効いているが赤み・色素沈着が残る",s:"皮疹は落ち着いた",r:"acne_pih"},
+       {t:"使用中だが炎症性皮疹が残る",s:"効果不十分",r:"acne_ins"},
+       {t:"使用中で概ね良好",s:"コントロールできている",r:"acne_ok"}]},
+  ros1:{q:"酒皶の病型はどれですか",n:"病型で位置づけが逆転する",
+    o:[{t:"丘疹膿疱型（II型）",s:"丘疹・膿疱が目立つ",go:"ros2"},
+       {t:"紅斑毛細血管拡張型（I型）",s:"赤みとほてりが主体",r:"ros_ete"},
+       {t:"眼型・鼻瘤",s:"眼症状、鼻の肥大",r:"ros_other"}]},
+  ros2:{q:"ロゼックスゲル（メトロニダゾール）の状況は",n:"2022年5月に酒さの適応が承認され、保険で組める",
+    o:[{t:"まだ使っていない",s:"外用未治療",r:"ros_naive"},
+       {t:"使用中だが効果不十分",s:"8〜12週使って残存",r:"ros_ins"},
+       {t:"刺激・不耐で使えない",s:"かぶれ・ヒリつきで中止",r:"ros_intol"},
+       {t:"効果良好",s:"コントロールできている",r:"ros_ok"}]},
+  pig1:{q:"色素沈着のタイプは",n:"",
+    o:[{t:"肝斑",s:"頬骨部の左右対称な淡褐色斑",go:"pig2"},
+       {t:"炎症後色素沈着・ざ瘡後",s:"皮疹のあった部位に一致",r:"pig_pih"}]},
+  pig2:{q:"ハイドロキノン／トレチノインは使えますか",n:"",
+    o:[{t:"使えない・続けられない",s:"刺激、かぶれ、妊娠授乳中など",r:"pig_alt"},
+       {t:"現在使用中",s:"標準治療が組めている",r:"pig_add"}]},
+  mal1:{q:"抗真菌治療の状況は",n:"アゼライン酸はマラセチアにも抗菌作用を持つ。セラムのほうが強いとされる",
+    o:[{t:"未治療・これから始める",s:"診断がついたばかり",r:"mal_naive"},
+       {t:"抗真菌薬で改善するが再発を繰り返す",s:"寛解と再燃のくり返し",r:"mal_maint"},
+       {t:"ざ瘡と併存、または鑑別が難しい",s:"混在している",r:"mal_mix"}]}
+  };
+
+  var path=[], node="start";
+  function esc2(x){return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function trace(){var n="start";for(var i=0;i<path.length;i++){var o=null;FLOW[n].o.forEach(function(x){if(x.t===path[i])o=x;});if(!o||o.r)return n;n=o.go;}return n;}
+
+  function ctrl(){
+    var c=document.getElementById("aza-ctrl");
+    if(!path.length){c.innerHTML="";return;}
+    c.innerHTML='<button class="aza-btn" id="aza-back">1つ戻る</button><button class="aza-btn pri" id="aza-reset">最初から</button>';
+    document.getElementById("aza-back").onclick=function(){path.pop();node=trace();render();};
+    document.getElementById("aza-reset").onclick=function(){path=[];node="start";render();};
+  }
+
+  function render(){
+    var n=FLOW[node], st=document.getElementById("aza-stage");
+    var h='<div class="aza-q"><div class="aza-qt">'+esc2(n.q)+'</div>';
+    if(n.n) h+='<div class="aza-qn">'+esc2(n.n)+'</div>';
+    n.o.forEach(function(o,i){h+='<button class="aza-opt" data-i="'+i+'"><b>'+esc2(o.t)+'</b><em>'+esc2(o.s)+'</em></button>';});
+    st.innerHTML=h+'</div>';
+    Array.prototype.forEach.call(st.querySelectorAll(".aza-opt"),function(b){
+      b.onclick=function(){var o=FLOW[node].o[+b.dataset.i];path.push(o.t);
+        if(o.r){show(o.r);}else{node=o.go;render();}};
+    });
+    ctrl();
+  }
+
+  function show(k){
+    var d=OUT[k], m=R[d.lv];
+    var h='<div class="aza-res lv-'+d.lv+'"><div class="aza-rh"><div class="mk">'+m.m+'</div>'
+      +'<div><div class="t">'+m.l+'</div><span class="s">'+esc2(d.t)+'</span></div></div><div class="aza-rb">'
+      +'<div class="lead">'+esc2(d.lead)+'</div>'
+      +'<div class="aza-h4">そう判断する理由</div><ul>';
+    d.why.forEach(function(x){h+='<li>'+esc2(x)+'</li>';});
+    h+='</ul><div class="aza-h4">具体的な進め方</div><ul>';
+    d.rx.forEach(function(x){h+='<li>'+esc2(x)+'</li>';});
+    h+='</ul><div class="aza-h4">患者さんへの説明</div><div class="aza-talk">'+esc2(d.talk)+'</div>'
+      +'<div style="margin-top:9px"><button class="aza-btn" id="aza-cp">説明文をコピー</button></div>'
+      +'</div></div>';
+    document.getElementById("aza-stage").innerHTML=h;
+    document.getElementById("aza-cp").onclick=function(){
+      var b=this;
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(d.talk).then(function(){b.textContent="コピーしました";
+          setTimeout(function(){b.textContent="説明文をコピー";},1800);});
+      }else{b.textContent="長押しで選択してください";}
+    };
+    ctrl();
+  }
+
+  if(document.getElementById("aza-stage")) render();
+})();
 </script>
 </body>
 </html>
