@@ -319,6 +319,18 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 #topguide .anchor{font-size:11px;color:var(--accent);text-decoration:none;}
 /* integrated overrides */
 #pg-topical{padding:0;max-width:600px;margin:0 auto;}
+/* 当院流フロー */
+#topguide .flow-step{display:flex;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:10px;box-shadow:var(--shadow);}
+#topguide .flow-num{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px;margin-top:2px;}
+#topguide .flow-num.zen{background:var(--accent-deep);font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:14px;}
+#topguide .flow-main{flex:1;min-width:0;}
+#topguide .flow-main h4{margin:0 0 4px;font-size:15.5px;font-weight:700;}
+#topguide .flow-main p{margin:4px 0;font-size:13.5px;line-height:1.7;}
+#topguide .flow-tip{background:var(--accent-soft);border-radius:9px;padding:8px 10px;font-size:12.5px;margin-top:7px;color:var(--accent-deep);line-height:1.6;}
+#topguide .flow-caution{background:#fae9e6;border-left:3px solid var(--warn);border-radius:8px;padding:8px 10px;font-size:12.5px;margin-top:7px;line-height:1.6;}
+#topguide .flow-phase{background:var(--accent-deep);color:#f4f1ea;border-radius:12px;padding:13px 15px;margin:6px 0 14px;}
+#topguide .flow-phase h4{margin:0 0 5px;font-size:14.5px;}
+#topguide .flow-print{display:block;width:100%;margin:0 0 16px;padding:12px;border:none;border-radius:12px;background:var(--nurse);color:#fff;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:var(--shadow);}
 #topguide{font-size:15px;}
 #topguide .modebar{background:var(--accent-soft);margin:12px 16px 0;}
 #topguide .modebar label{color:var(--ink);}
@@ -643,6 +655,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 <nav class="tabs" id="tabs">
   <button class="tab active" data-tab="drugs">外用薬一覧</button>
   <button class="tab" data-tab="rank">ランキング</button>
+  <button class="tab" data-tab="flow">当院流フロー</button>
   <button class="tab" data-tab="basics">塗り方の基本</button>
   <button class="tab" data-tab="calc">塗布量 計算</button>
   <button class="tab" data-tab="proactive">プロアクティブ</button>
@@ -670,6 +683,56 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
     <div class="disclaimer">
       ※ レビュー／ネットワークメタ解析および院内資料に基づく相対的な目安です。RR・OR・SMD等は出典文献に由来し、リドメックス・メサデルム・当院製剤などは推定値を含みます。実際の選択は重症度・部位・患者背景を総合して判断してください。
     </div>
+  </section>
+
+  <!-- ===== FLOW（当院流アトピー外用フロー） ===== -->
+  <section class="panel" id="flow">
+    <div class="sectitle">当院流 アトピー外用フロー</div>
+    <div class="lead">基本は<strong>1日2回（入浴後・起床時）</strong>。「痒みを鎮める → 周囲のくすぶりを覆う → 乾けば保湿」の三層構造で考えます。</div>
+    <button class="flow-print no-print" onclick="printFlowHandout()">🖨　患者用プリントを作成（A4）</button>
+
+    <div class="flow-step"><div class="flow-num zen">禅</div><div class="flow-main">
+      <h4>坐禅で整える（一呼吸）</h4>
+      <p>心を平静に保ち、掻く前に一拍おく。<strong>“今どこが痒いのか”を自分で確かめる</strong>ことで、掻破を抑え、塗る場所の精度も上がる。</p>
+      <div class="flow-tip">小児・多忙時は「深呼吸ひとつ」の軽量版でも可。</div>
+    </div></div>
+
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-main">
+      <h4>痒点にステロイド外用</h4>
+      <p>痒いところに<strong>ステロイドをスポット</strong>で塗り、痒みを鎮める。</p>
+      <div class="flow-caution"><strong>収まらない／すぐ再燃するとき</strong>は無理に続けず、ステロイドのランクアップ・抗アレルギー薬や漢方内服を考慮するので<strong>早めに受診</strong>を。</div>
+      <div class="flow-tip"><strong>根拠・注意：</strong>ステロイドは病変ピンポイントが原則。次のHPCrを真上から厚く重ねると“スポット”が周囲へ延び、狙った部位の実効濃度が下がる。<strong>重ね塗りは避けるか数分あける</strong>。</div>
+    </div></div>
+
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-main">
+      <h4>病変＋周囲にHPCr等（ステロイド以外）を広めに</h4>
+      <p>ステロイドを塗った所と<strong>その周囲まで含めて</strong>、HPCr（または プロトピック／コレクチム／モイゼルト）を広く塗り、目に見えない<strong>くすぶり（subclinical inflammation）</strong>を覆う。</p>
+      <div class="flow-tip"><strong>部位の目安：</strong>顔・首＝プロトピック／モイゼルト／コレクチム。体幹・四肢＝いずれも可、広範囲維持はHCCr・HPCr。</div>
+      <div class="flow-caution">HPCrは<strong>希釈タクロリムス</strong>のため、びらん面はしみやすい。<strong>起床時に塗った部位は強い日焼けを避ける</strong>。</div>
+    </div></div>
+
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-main">
+      <h4>乾いたら、その都度 保湿</h4>
+      <p>乾燥を感じたら回数を問わず保湿。<strong>薬を塗らない時間帯・部位も保湿は継続</strong>する。</p>
+    </div></div>
+
+    <div class="flow-phase">
+      <h4>▶ 寛解後（引き算フェーズ）</h4>
+      <p style="margin:0;font-size:13.5px;">ツルツルになったら<strong>ステロイドを外し</strong>、HPCr／TCIを<strong>週2〜3回のプロアクティブ</strong>＋<strong>保湿は毎日</strong>へ移行。導入から維持まで一気通貫に。</p>
+    </div>
+
+    <div class="nursebox"><div class="nh">患者説明ポイント（やさしい言葉で）</div>
+      <ul>
+        <li>お風呂あがりと朝の<strong>2回</strong>が基本です。</li>
+        <li>① まず<strong>ひと呼吸</strong>おいて、今かゆい場所を確かめましょう。</li>
+        <li>② かゆいところに<strong>“かゆみ止め（ステロイド）”</strong>をちょんと塗ります。かゆみが止まらない時は、我慢せず受診してください。</li>
+        <li>③ その上と<strong>まわりに、白いお薬（HPCr）を広めに</strong>塗ります。</li>
+        <li>④ <strong>カサカサしたら、そのつど保湿</strong>を。</li>
+        <li>よくなってきたら、かゆみ止めは減らし、<strong>白いお薬と保湿を続けます</strong>。</li>
+      </ul>
+    </div>
+
+    <div class="disclaimer">※ 当院の標準的な考え方です。重症度・部位・年齢により医師が個別に調整します。</div>
   </section>
 
   <!-- ===== BASICS ===== -->
@@ -4410,6 +4473,58 @@ algInit();
 
   if(document.getElementById("aza-stage")) render();
 })();
+</script>
+<script>
+window.printFlowHandout = function(){
+  var css = ""
+    + "@page{size:A4;margin:15mm;}"
+    + "*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}"
+    + "body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic','Meiryo',sans-serif;color:#222;line-height:1.85;margin:0;}"
+    + ".serif{font-family:'Hiragino Mincho ProN','Yu Mincho',serif;}"
+    + ".top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #2f7d6f;padding-bottom:8px;margin-bottom:6px;}"
+    + ".clinic{font-size:12px;color:#2f7d6f;font-weight:700;letter-spacing:.04em;}"
+    + ".meta{font-size:11px;color:#555;text-align:right;}"
+    + "h1{font-size:22px;margin:14px 0 2px;letter-spacing:.02em;}"
+    + ".badge{display:inline-block;background:#e4efe9;color:#1f5a4f;font-weight:700;font-size:13px;border-radius:20px;padding:4px 14px;margin:6px 0 16px;}"
+    + ".step{display:flex;gap:14px;border:1.5px solid #d9e4df;border-radius:12px;padding:12px 14px;margin-bottom:10px;page-break-inside:avoid;}"
+    + ".num{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#2f7d6f;color:#fff;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;}"
+    + ".num.zen{background:#1f5a4f;font-family:'Hiragino Mincho ProN','Yu Mincho',serif;font-size:15px;}"
+    + ".st{flex:1;}"
+    + ".st h3{margin:2px 0 3px;font-size:16px;}"
+    + ".st p{margin:2px 0;font-size:14px;}"
+    + ".warn{background:#fae9e6;border-left:4px solid #b23b3b;border-radius:8px;padding:9px 12px;font-size:13.5px;margin:12px 0;font-weight:600;}"
+    + ".after{background:#1f5a4f;color:#fff;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:6px;}"
+    + ".rx{border:1.5px dashed #bbb;border-radius:10px;padding:12px 14px;margin-top:14px;}"
+    + ".rx div{font-size:13.5px;margin:7px 0;}"
+    + ".rx .line{display:inline-block;border-bottom:1px solid #888;min-width:60%;}"
+    + ".foot{margin-top:14px;font-size:11px;color:#666;text-align:center;}";
+  var html = "<!DOCTYPE html><html lang='ja'><head><meta charset='utf-8'>"
+    + "<title>アトピーのお薬の塗り方</title><style>" + css + "</style></head><body>"
+    + "<div class='top'><div class='clinic'>やまもと皮膚科・漢方クリニック</div>"
+    + "<div class='meta'>お名前：____________　様<br>日付：　　年　　月　　日</div></div>"
+    + "<h1 class='serif'>アトピーのお薬の塗り方</h1>"
+    + "<div class='badge'>1日2回　お風呂あがり ・ 朝</div>"
+    + "<div class='step'><div class='num zen'>禅</div><div class='st'><h3>まず、ひと呼吸</h3>"
+    + "<p>心を落ち着けて、今かゆい場所を確かめましょう。かく前に、ひと呼吸おくのがコツです。</p></div></div>"
+    + "<div class='step'><div class='num'>1</div><div class='st'><h3>かゆみ止め（ステロイド）を塗る</h3>"
+    + "<p>かゆいところに、ちょんと塗って、かゆみをしずめます。</p></div></div>"
+    + "<div class='step'><div class='num'>2</div><div class='st'><h3>白いお薬（HPCr）を広めに塗る</h3>"
+    + "<p>かゆみ止めを塗ったところと、その<b>まわりまで広く</b>塗って、見えない炎症をおおいます。</p></div></div>"
+    + "<div class='step'><div class='num'>3</div><div class='st'><h3>カサカサしたら、保湿</h3>"
+    + "<p>乾いたと感じたら、そのつど保湿しましょう。回数は多くてかまいません。</p></div></div>"
+    + "<div class='warn'>⚠ かゆみが止まらない・赤みやジュクジュクが強い時は、がまんせず受診してください。</div>"
+    + "<div class='after'><b>よくなってきたら：</b>かゆみ止めは少しずつ減らし、白いお薬と保湿を続けましょう。</div>"
+    + "<div class='rx'><b>あなたのお薬</b>"
+    + "<div>かゆみ止め：<span class='line'>&nbsp;</span></div>"
+    + "<div>白いお薬：<span class='line'>&nbsp;</span></div>"
+    + "<div>保&nbsp;&nbsp;湿：<span class='line'>&nbsp;</span></div></div>"
+    + "<div class='foot'>やまもと皮膚科・漢方クリニック　／　ご不明な点はスタッフにおたずねください</div>"
+    + "</body></html>";
+  var w = window.open('', '_blank');
+  if(!w){ alert('ポップアップがブロックされました。ブラウザの設定で許可してください。'); return; }
+  w.document.open(); w.document.write(html); w.document.close(); w.focus();
+  setTimeout(function(){ try{ w.print(); }catch(e){} }, 350);
+};
 </script>
 </body>
 </html>
