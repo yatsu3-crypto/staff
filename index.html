@@ -410,6 +410,61 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 #pg-vitamin .vit-view.on{display:block;}
 #pg-vitamin .vit-note{font-size:10.5px;color:var(--tx3);line-height:1.6;text-align:center;padding:14px 6px 4px;}
 </style>
+<style id="findings-css">
+/* ===== 所見別ナビ ===== */
+#pg-findings .fn-intro{font-size:11.5px;color:var(--tx2);line-height:1.75;}
+#pg-findings .fn-grp{margin-bottom:13px;}
+#pg-findings .fn-grp:last-child{margin-bottom:0;}
+.fn-grp-t{font-size:10.5px;font-weight:700;color:var(--g);letter-spacing:.08em;margin-bottom:7px;}
+.fn-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.fn-chip{background:var(--bg);border:1px solid var(--bd);border-radius:18px;padding:7px 12px;font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;font-family:inherit;line-height:1.35;text-align:left;transition:all .13s;}
+.fn-chip:active{transform:scale(.96);}
+.fn-chip.on{background:var(--g);border-color:var(--g);color:#fff;}
+.fn-bar{display:flex;gap:8px;align-items:center;margin-top:12px;}
+.fn-count{flex:1;font-size:11.5px;color:var(--tx3);}
+.fn-clear{background:none;border:1px solid var(--bd);border-radius:16px;padding:6px 13px;font-size:11.5px;font-weight:600;color:var(--tx2);font-family:inherit;cursor:pointer;}
+.fn-clear:active{background:var(--bg);}
+
+.fn-empty{font-size:12.5px;color:var(--tx3);text-align:center;padding:30px 14px;line-height:1.9;}
+.fn-sec{margin-bottom:15px;}
+.fn-sec-h{font-size:11px;font-weight:700;letter-spacing:.07em;color:var(--tx2);margin-bottom:8px;padding-left:2px;}
+.fn-card{border:1px solid var(--bd);border-radius:11px;background:#fff;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.fn-card.c-dx{border-left:4px solid var(--g);}
+.fn-card.c-mod{border-left:4px solid #6d84a8;}
+.fn-card.c-self{border-left:4px solid #c08a3e;}
+.fn-card.c-stop{border-left:4px solid #b8603f;background:#fdf8f6;}
+.fn-hd{padding:11px 13px;cursor:pointer;display:flex;gap:9px;align-items:flex-start;}
+.fn-hd-x{flex:1;min-width:0;}
+.fn-t{font-size:13px;font-weight:700;color:var(--tx);line-height:1.4;}
+.fn-lead{font-size:11.5px;color:var(--tx2);margin-top:4px;line-height:1.6;}
+.fn-caret{font-size:11px;color:var(--tx3);flex-shrink:0;margin-top:3px;transition:transform .2s;}
+.fn-card.open .fn-caret{transform:rotate(180deg);}
+.fn-body{padding:0 13px 13px;display:none;}
+.fn-card.open .fn-body{display:block;}
+.fn-h{font-size:10px;font-weight:700;color:var(--g);letter-spacing:.09em;margin:12px 0 5px;}
+.fn-card.c-stop .fn-h{color:#a8502c;}
+.fn-li{font-size:12px;color:var(--tx);line-height:1.65;padding-left:14px;position:relative;margin-bottom:4px;}
+.fn-li:before{content:"";position:absolute;left:4px;top:8px;width:4px;height:4px;border-radius:50%;background:var(--g2);}
+.fn-card.c-stop .fn-li:before{background:#c07a5c;}
+.fn-talk{background:#f6f3ed;border-radius:9px;padding:10px 12px;font-size:12px;line-height:1.8;color:var(--tx);}
+.fn-copy{margin-top:7px;background:var(--gl);color:var(--tc);border:none;border-radius:15px;padding:6px 14px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;}
+.fn-copy:active{opacity:.7;}
+.fn-ev{margin-top:11px;background:var(--gd);color:#fff;border-radius:9px;padding:9px 12px;font-size:11.5px;line-height:1.6;}
+.fn-prods{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;}
+.fn-prods button{background:var(--gl);color:var(--tc);border:none;border-radius:14px;padding:6px 11px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;}
+.fn-prods button:active{opacity:.7;}
+
+.fn-warn{background:#fdf3ef;border:1px solid #eac4b6;border-left:4px solid #b8603f;border-radius:10px;padding:10px 13px;margin-bottom:8px;}
+.fn-warn-t{font-size:12px;font-weight:700;color:#9c4a2c;margin-bottom:4px;}
+.fn-warn-d{font-size:11.5px;color:#6b4030;line-height:1.7;}
+
+.fn-base{background:#fff;border:1px solid var(--bd);border-radius:11px;padding:13px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.fn-base-t{font-size:12px;font-weight:700;color:var(--g);margin-bottom:8px;}
+.fn-base-r{font-size:12px;color:var(--tx);line-height:1.75;margin-bottom:6px;}
+.fn-base-r b{color:var(--tc);}
+.fn-note{font-size:10.5px;color:var(--tx3);line-height:1.7;margin-top:10px;padding-top:9px;border-top:.5px solid var(--bd);}
+.fn-disc{font-size:10.5px;color:var(--tx3);line-height:1.7;text-align:center;padding:14px 6px 4px;}
+</style>
 <style id="patch-embed-css">
 /* タブが6個になっても崩れないよう横スクロール対応 */
 .tab-nav{overflow-x:auto;-webkit-overflow-scrolling:touch;}
@@ -540,6 +595,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   <button class="tab-btn" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
   <button class="tab-btn" onclick="switchTab('patch')">🩹 パッチ</button>
   <button class="tab-btn" onclick="switchTab('allergy')">🍽 食物アレルギー</button>
+  <button class="tab-btn" onclick="switchTab('findings')">🔍 所見別ナビ</button>
 </div>
 
 <!-- 入力ページ -->
@@ -1036,6 +1092,20 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 </div>
 
 <!-- 食物アレルギーページ -->
+<!-- 所見別ナビ -->
+<div class="page" id="pg-findings">
+  <div class="card">
+    <div class="card-hd"><span class="dot"></span>所見から組み立てる</div>
+    <div class="card-body">
+      <div class="fn-intro">見えている所見を選んでください。保険で拾えるものを先に出し、自費は最後に出ます。複数選択できます。</div>
+      <div style="height:12px;"></div>
+      <div id="fn-chipbox"></div>
+    </div>
+  </div>
+  <div id="fn-result"></div>
+  <div class="fn-disc">※ 本ナビは診療補助の参照ツールです。最終判断は診察所見と最新のガイドラインに基づいてください。</div>
+</div>
+
 <div class="page" id="pg-allergy">
   <div class="alg-seg">
     <button class="on" onclick="algView('avoid',this)">回避食品</button>
@@ -2928,6 +2998,8 @@ function switchTab(tab) {
   var _pgp=document.getElementById('pg-patch'); if(_pgp) _pgp.classList.toggle('active', tab === 'patch');
   if(tabs[6]) tabs[6].classList.toggle('active', tab === 'allergy');
   var _pga=document.getElementById('pg-allergy'); if(_pga) _pga.classList.toggle('active', tab === 'allergy');
+  if(tabs[7]) tabs[7].classList.toggle('active', tab === 'findings');
+  var _pgf=document.getElementById('pg-findings'); if(_pgf) _pgf.classList.toggle('active', tab === 'findings');
   window.scrollTo(0, 0);
 }
 
@@ -4526,5 +4598,401 @@ window.printFlowHandout = function(){
   setTimeout(function(){ try{ w.print(); }catch(e){} }, 350);
 };
 </script>
+<script>
+/* ══════════════════════════════════════════════
+   所見別ナビ　— 所見から入り、保険→自費の順で組む
+   設計：自費は最後にしか出てこない
+   ══════════════════════════════════════════════ */
+(function(){
+"use strict";
+
+/* ---------- 所見チップ ---------- */
+var FN_GROUPS = [
+  {t:'炎症・皮疹の所見', items:[
+    {id:'comedo',   l:'面皰が触れる（白・黒）'},
+    {id:'papule',   l:'炎症性丘疹・膿疱'},
+    {id:'nodule',   l:'硬結・嚢腫'},
+    {id:'scale',    l:'鱗屑（鼻唇溝・眉間・生え際）'},
+    {id:'ppRos',    l:'鼻・頬の紅斑＋丘疹膿疱'},
+    {id:'flush',    l:'赤みがほてる・灼熱感'},
+    {id:'telang',   l:'毛細血管拡張'},
+    {id:'milium',   l:'硬い白色丘疹（押しても出ない）'}
+  ]},
+  {t:'毛穴', items:[
+    {id:'poreA', l:'ザラつく・白い角栓が出る'},
+    {id:'poreB', l:'Tゾーンのテカリ＋丸く開大'},
+    {id:'poreC', l:'頬の涙型（引き上げると消える）'}
+  ]},
+  {t:'色調・その他の美容主訴', items:[
+    {id:'lentigo', l:'境界明瞭な茶色い斑'},
+    {id:'melasma', l:'両頬にびまん性・左右対称'},
+    {id:'pih',     l:'ニキビ跡の茶色い沈着'},
+    {id:'pie',     l:'ニキビ跡の赤み'},
+    {id:'wrinkle', l:'小じわ・ハリ低下・くすみ'},
+    {id:'sebum',   l:'皮脂が多い（所見に乏しい）'}
+  ]},
+  {t:'治療歴・条件', items:[
+    {id:'preg',    l:'妊娠・授乳中／妊娠の可能性'},
+    {id:'intol',   l:'保険外用が刺激で続かなかった'},
+    {id:'insuff',  l:'保険外用中だが効果不十分'},
+    {id:'onRet',   l:'現在レチノイド外用中'},
+    {id:'peeling', l:'ピーリング施術を併用中／希望'}
+  ]}
+];
+
+/* 所見 → 終着点 */
+var FN_MAP = {
+  comedo:['acne_comedo','pore_comedo'], papule:['acne_inflam'], nodule:['acne_severe'],
+  scale:['seb_derm'], ppRos:['rosacea_pp'], flush:['rosacea_ete'], telang:['rosacea_ete'],
+  milium:['milium'],
+  poreA:['pore_comedo'], poreB:['pore_sebum'], poreC:['pore_sag'],
+  lentigo:['lentigo'], melasma:['melasma'], pih:['pih'], pie:['pie'],
+  wrinkle:['photoaging'], sebum:['sebum_only','seb_check'],
+  preg:['preg'], intol:['intol'], insuff:['insuff'], onRet:['retinoid_now'], peeling:[]
+};
+
+/* 表示順（この順に並ぶ） */
+var FN_ORDER = ['rosacea_ete','pore_sebum','milium',
+  'acne_comedo','acne_inflam','acne_severe','seb_derm','rosacea_pp','seb_check',
+  'preg','intol','insuff','retinoid_now',
+  'pore_comedo','pie','pih','melasma','lentigo','pore_sag','photoaging','sebum_only'];
+
+/* ---------- 終着点 ---------- */
+var FN_OUT = {
+
+/* ===== 出さない・先に片づける ===== */
+rosacea_ete:{cat:'stop',t:'酒皶（紅斑毛細血管拡張型）／外用を増やさない',
+ lead:'外用刺激そのものが悪化因子。ここは「売らない」判断をする局面。',
+ why:['この病型は外用刺激で紅斑・ほてりが悪化しうる','毛細血管拡張そのものには外用の効果が乏しい','美容主訴を理由に外用を積み増すと確実に悪化する'],
+ rx:['遮光・温度差・アルコール・香辛料など悪化因子の除去を最優先','保湿とスキンケアの立て直し','漢方・内服を主軸に。拡張血管はレーザーを検討','トレチノイン・ハイドロキノン・ピーリングは避ける'],
+ talk:'赤みが中心のタイプは、塗るものの刺激でかえって赤くなることがあります。まず日焼け・温度差・お酒・辛いものなど、赤くなるきっかけを減らすところから始めましょう。飲み薬や漢方で内側から整えるのが向いています。',
+ ev:'外用を足す前に、悪化因子の除去を4週。ここを飛ばさない'},
+
+pore_sebum:{cat:'stop',t:'毛穴・皮脂型／外用では毛穴径は変わらない',
+ lead:'守備範囲外。正直に言うのが一番トラブルが少ない。',
+ why:['皮脂腺の体積そのものが大きく、外用で毛穴径は縮まない','テカリと詰まりは抑えられるが「開きが閉じる」わけではない','ここで期待値を誤ると、自費だけが積み上がって不満が出る'],
+ rx:['「閉じる」ではなく「目立ちにくくする」と言い換える','詰まり対策としてセラムは可。ただし毛穴径への効果は謳わない','洗いすぎ・スクラブは角層を薄くしてかえって目立たせる','本格的な縮小はイソトレチノイン・フラクショナル系＝当院の採用外'],
+ talk:'毛穴の大きさは、もともとの皮脂腺の大きさで決まる部分が大きく、塗り薬では小さくなりません。テカリや詰まりは抑えられますので、そこを目標にしましょう。',
+ ev:'—（目標設定を変える。外用を足さない）'},
+
+milium:{cat:'stop',t:'稗粒腫・毛包嚢腫／外用は無効',
+ lead:'外用で消えない。混在したまま評価すると「効かない」判定になる。',
+ why:['角質が袋状に囲まれた構造で、外用剤は届かない','面皰圧出では内容が出ない'],
+ rx:['針で開孔して内容を摘出','これを理由にニキビ外用を継続しない'],
+ talk:'これはニキビではなく、皮膚の中に角質が袋状にたまったものです。塗り薬では消えないので、細い針で開けて取り出します。',
+ ev:'処置で完結'},
+
+/* ===== 保険で先に拾う ===== */
+acne_comedo:{cat:'dx',t:'尋常性痤瘡（面皰主体）',
+ lead:'面皰に直接効くのはアダパレン。ここは保険が第一選択。',
+ why:['アダパレンは毛包漏斗部の異常角化を是正し、既存面皰の排出と新生抑制の両方に働く','BPOは抗菌と軽度の角質剥離が主で、面皰への直接作用は弱い','自費を先に出すと、効果不十分だったときの手札が減る'],
+ rx:['面皰のみ・炎症なし：アダパレン単独','面皰＋炎症が混在：配合剤（アダパレン＋BPO）','保湿を先に塗ってから重ねると刺激が和らぐ','妊娠の可能性があればアダパレンは外す'],
+ talk:'ニキビの「芯」に効くお薬から始めます。最初の2〜4週は、隠れていた芯が押し出されて一時的に増えたように見えますが、これは効いているサインです。ここでやめてしまう方が多いので、3か月は続けてください。',
+ ev:'8〜12週で判定。面皰の改善は遅い'},
+
+acne_inflam:{cat:'dx',t:'尋常性痤瘡（炎症性丘疹・膿疱）',
+ lead:'炎症があるならBPOの抗菌作用が要る。配合剤が合理的。',
+ why:['BPOはC. acnesを叩き、耐性菌を作らない','面皰と炎症は同一症例に混在することがほとんど','中等症以上は抗菌薬内服の併用を検討'],
+ rx:['配合剤（アダパレン＋BPO、またはBPO＋クリンダマイシン）で導入','中等症以上は抗菌薬内服を併用。漢方も同時に検討','脱色（タオル・枕カバー・衣類）を必ず説明','4〜8週で再評価'],
+ talk:'赤く炎症を起こしているので、菌を抑える成分の入ったお薬を使います。タオルや枕カバーが脱色することがあるのでご注意ください。',
+ ev:'4〜8週で再評価'},
+
+acne_severe:{cat:'dx',t:'硬結・嚢腫型の痤瘡',
+ lead:'外用だけでは届かない。内服と漢方を主軸に、早めに動く。',
+ why:['瘢痕形成のリスクが高く、時間をかけると不可逆になる','外用の積み増しで粘るより、早期に内服へ移す'],
+ rx:['抗菌薬内服を導入','漢方：柴苓湯（嚢腫型）、荊芥連翹湯（深めの炎症）を検討','難治例は専門施設への紹介も視野に'],
+ talk:'このタイプは跡が残りやすいので、塗り薬だけでなく飲み薬も一緒に使って早めに抑えます。',
+ ev:'4週で反応を確認。動かなければ方針変更'},
+
+seb_derm:{cat:'dx',t:'脂漏性皮膚炎',
+ lead:'「皮脂が多い」「ちょっと赤い」の相当数がこれ。保険で拾える。',
+ why:['鼻唇溝・眉間・生え際・眉の鱗屑を伴う紅斑が典型','マラセチアが関与するため抗真菌外用が要る','見落とすと、痤瘡・酒皶の治療をしても改善しない'],
+ rx:['抗真菌外用（ケトコナゾール等）を主軸に','急性期は弱めのステロイドを短期併用','洗いすぎの是正とシャンプーの見直し','漢方：黄連解毒湯、清上防風湯を検討'],
+ talk:'皮脂を好む常在菌が関与しているタイプの湿疹で、ニキビとは治療が違います。保険のお薬で対応できます。',
+ ev:'2〜4週で改善を確認'},
+
+rosacea_pp:{cat:'dx',t:'酒皶（丘疹膿疱型）',
+ lead:'ロゼックスが保険適応。まずここから。',
+ why:['メトロニダゾール0.75%ゲルは2022年5月に酒さの効能が追加された','忍容性がよく脱落しにくい','自費より先に保険で組める'],
+ rx:['ロゼックスゲル1日2回で導入','遮光・悪化因子（温度差・アルコール・香辛料）の除去を同時に','8〜12週で評価。不十分ならセラムを追加または切替'],
+ talk:'赤ら顔とぶつぶつには保険のお薬がありますので、まずそちらから始めましょう。数か月みて足りなければ、次の選択肢もご用意しています。',
+ ev:'8〜12週で評価'},
+
+seb_check:{cat:'dx',t:'まず脂漏性皮膚炎を除外',
+ lead:'「皮脂が多い」だけで自費に進む前に、鱗屑を一度見る。',
+ why:['鼻唇溝・眉間・生え際に鱗屑があれば保険で拾える','ここを飛ばすと、自費外用を続けても改善しない'],
+ rx:['鼻唇溝・眉間・生え際・眉・耳介後部を確認','鱗屑があれば抗真菌外用へ','なければ美容主訴として自費の検討に進む'],
+ talk:'皮脂が多く見えるとき、湿疹が隠れていることがあります。まず保険のお薬で拾えるかどうかを確認します。',
+ ev:'—（分岐のための確認）'},
+
+/* ===== 条件（上書き） ===== */
+preg:{cat:'mod',t:'妊娠・授乳中／妊娠の可能性',
+ lead:'使えるものが大きく絞られる。ここを外すと事故になる。',
+ why:['アダパレン・トレチノインは妊婦に投与できない','BPO配合剤も妊娠中の使用データが限られる','ハイドロキノン・バクチオールも妊娠中のデータが乏しい','アゼライン酸は海外で長く妊娠期の選択肢として用いられてきた'],
+ rx:['外す：トレチノイン、アダパレン、ハイドロキノン、バクチオール、ピーリング','主軸：AZAクリアセラム。夜のみ隔日から、2週かけて朝晩へ','遮光とヘリオケアは継続可','色素斑の本格治療は出産・授乳終了後に組み直す'],
+ talk:'妊娠・授乳中は使えるお薬が限られます。アゼライン酸は穀物にも含まれる成分で、海外では長くこの時期のケアに使われてきました。保険は効かず自費になりますが、今の時期の選択肢としてお勧めしています。',
+ ev:'授乳終了後に治療を組み直す', prod:['azaclear_serum','heliocare']},
+
+intol:{cat:'mod',t:'保険外用が刺激で続かなかった',
+ lead:'脱落理由が刺激なら、そのまま次の外用を渡すと二重に失敗する。',
+ why:['アダパレンやBPOに比べアゼライン酸は刺激が少なく続けやすい','3%セラムは伸びがよく、脱落した人でも継続しやすい','抗菌・角化調整・抗炎症・メラニン抑制を一剤でカバーできる'],
+ rx:['保険外用を隔日〜週2に減らし、セラムを土台に置く','完全に無理なら切り替え','保湿剤を先に塗ってから重ねる','ピーリング施術・ソープは一旦止める'],
+ talk:'今のお薬が肌に合わずヒリヒリするようなので、刺激の少ないタイプに変えてみましょう。アゼライン酸という美容液で、詰まり・菌・炎症・色素沈着に同時に働きます。',
+ ev:'4週で忍容性、8〜12週で効果', prod:['azaclear_serum','astaxanthin']},
+
+insuff:{cat:'mod',t:'保険外用中だが効果不十分',
+ lead:'外用を積み増す前に、内服・漢方の見直しを同時に。',
+ why:['作用機序が異なるため併用で相加が期待できる','自費外用だけを足していくと総額が膨らみ、満足度がかえって下がる'],
+ rx:['現行外用は継続し、セラムを夜に追加（隔日から）','抗菌薬内服・漢方を同時に再検討','8〜12週で伸びなければ、外用ではなく内服・レーザーへ軸を移す'],
+ talk:'今のお薬に、作用の違うものを足してみましょう。重ねると最初はヒリつきやすいので、まず1日おきの夜だけから始めます。',
+ ev:'8〜12週。ここで伸びなければ軸を移す', prod:['azaclear_serum']},
+
+retinoid_now:{cat:'mod',t:'レチノイド外用中',
+ lead:'レチノイド系の重複に注意。原則1つに絞る。',
+ why:['アダパレン・トレチノイン・バクチオールは作用が重なる','重ねても効果は足し算にならず、刺激だけが積み上がる'],
+ rx:['同時に2つ以上は原則なし','保険のアダパレン中にバクチセラムDRを追加しない','BPOとトレチノインは同時に塗らない（朝BPO・夜トレチノイン）','アダパレンはBPOに安定なので配合剤が存在する、という違いを説明材料に'],
+ talk:'今お使いのお薬と似た働きのものなので、重ねずにどちらか一方にしましょう。',
+ ev:'—（現行を確認してから足す）'},
+
+/* ===== 自費の出番 ===== */
+pore_comedo:{cat:'self',t:'毛穴・角栓型',
+ lead:'3タイプのうち、外用が最もよく効くのはここ。',
+ why:['角栓が毛穴を押し広げている状態なので、角化調整で改善する','面皰があれば保険のアダパレンが第一選択'],
+ rx:['面皰があればアダパレン／配合剤（保険）が先','面皰がなければAZAクリアセラムを夜に','ピーリングソープは週2〜3まで。洗いすぎは逆効果','ピーリング施術は外用が安定してから'],
+ talk:'毛穴の詰まりが原因のタイプなので、塗り薬でかなり良くなります。数週間から2か月で変化が出ます。',
+ ev:'4〜8週で変化', prod:['azaclear_serum']},
+
+pie:{cat:'self',t:'炎症後紅斑（ニキビ跡の赤み）',
+ lead:'抗炎症作用で残存する赤みに働く。維持療法をそのまま兼ねる。',
+ why:['炎症が遷延している状態で、放置するとPIHに移行する','保険外用は活動期の皮疹向けで、残存紅斑には適応が乏しい'],
+ rx:['AZAクリアセラムを夜。刺激が出やすければ隔日から','遮光の徹底','ほてる・熱を持つ赤みなら酒皶を疑い、外用を止める'],
+ talk:'ニキビの跡の赤みは、まだ炎症がくすぶっている状態です。ここを抑えておくと、茶色いシミになるのを防げます。',
+ ev:'3か月で写真比較', prod:['azaclear_serum']},
+
+pih:{cat:'self',t:'炎症後色素沈着（ニキビ跡の茶色）',
+ lead:'保険の適応がない領域。セラムが最も価値を出す場面。',
+ why:['アゼライン酸はメラニン生成抑制作用があり、ハイドロキノンと同等の報告もある','抗炎症作用があるため、そのまま維持療法として継続できる'],
+ rx:['AZAクリアセラムを全顔に。濃い部位は薄く二度塗り','ビタミンCローション（朝）を併用','朝は日焼け止めを必須に','3〜6か月で写真比較'],
+ talk:'ニキビ自体は落ち着きましたが、跡の色素沈着が残っています。ここからはアゼライン酸で仕上げていきましょう。そのまま再発予防にもなります。日焼け止めは毎朝必ず。',
+ ev:'3〜6か月で写真比較', prod:['azaclear_serum','vc_lotion']},
+
+melasma:{cat:'self',t:'肝斑（両頬にびまん性・左右対称）',
+ lead:'内服が主軸。外用刺激はむしろ悪化因子。',
+ why:['摩擦・刺激で悪化するため、強い外用やピーリングは慎重に','紫外線だけでなく可視光・熱も増悪因子'],
+ rx:['美白・肝斑セット（内服／外用ハイブリッド）を主軸に','ビタミンCローション（朝）で土台づくり','ハイドロキノンは短期・限局。漫然と続けない','ヘリオケア＋遮光。擦らない洗顔指導を必ず'],
+ talk:'肝斑は擦る刺激で濃くなるタイプのシミです。飲み薬を軸にして、塗るものは控えめにします。洗顔でゴシゴシしないことが治療の一部です。',
+ ev:'3か月で評価、半年で判断', prod:['bihaku_set','vc_lotion','heliocare']},
+
+lentigo:{cat:'self',t:'境界明瞭な色素斑（老人性色素斑）',
+ lead:'限局・短期で回す。漫然と続けない。',
+ why:['境界が明瞭で左右非対称なら肝斑ではない','ハイドロキノンはメラニン産生を強く抑える治療的な位置づけ','ビタミンCローションは予防・土台づくり寄りで、役割が違う'],
+ rx:['ハイドロキノン＋トレチノインを限局・短期で','またはレーザー＋術後のハイドロキノン','遮光は必須。怠ると確実に再発する','刺激性接触皮膚炎・白斑に注意し、休薬期間を設ける'],
+ talk:'境界がはっきりした濃いシミです。強めのお薬を狭い範囲に短期間だけ使う方法と、レーザーで取る方法があります。どちらも日焼け対策をしないと戻ります。',
+ ev:'8〜12週で判定。休薬期間を設ける', prod:['hydroquinone','tretinoin','heliocare']},
+
+pore_sag:{cat:'self',t:'毛穴・たるみ型（涙型）',
+ lead:'光老化。真皮に働くものを半年単位で。',
+ why:['真皮の弾性繊維の劣化が本態','引き上げると消えるのが特徴','外用による変化は半年〜1年単位'],
+ rx:['トレチノイン（限局・短期で回す）','レチノイド不耐・長期継続にはバクチセラムDR','ビタミンCローション（朝）＋アスタキサンチンジェル','ヘリオケア＋遮光を必須に','本格的にはフラクショナル系の物理治療'],
+ talk:'頬の毛穴が涙型に伸びているタイプは、たるみ＝光老化が原因です。半年単位で土台を作る治療になります。日焼け対策が治療の半分です。',
+ ev:'6か月で写真比較', prod:['tretinoin','bakuchiol','vc_lotion','astaxanthin','heliocare']},
+
+photoaging:{cat:'self',t:'光老化・小じわ・くすみ',
+ lead:'維持期。1本ずつ、長く続けられるものを選ぶ。',
+ why:['変化は半年〜1年単位で、自覚的な実感が乏しい','最初から複数渡すと続かず、全部やめる'],
+ rx:['朝：ビタミンCローション → 保湿 → 日焼け止め','夜：レチノイド系を1つだけ（トレチノインまたはバクチセラムDR）','刺激が出るならアスタキサンチンジェルへ（脂溶性で重ねてよい）','ヘリオケア内服を併用','初診時に写真。比較しないと「効かない」評価になる'],
+ talk:'変化がゆっくりな治療なので、3か月で評価、半年で判断とお考えください。最初は1本だけにして、続けられることを優先します。',
+ ev:'3か月で評価、6か月で判断', prod:['vc_lotion','bakuchiol','astaxanthin','tretinoin','heliocare']},
+
+sebum_only:{cat:'self',t:'皮脂が多い（所見に乏しい）',
+ lead:'まず洗いすぎの是正。外用は詰まり対策として。',
+ why:['過度な洗浄はかえって皮脂分泌と毛穴の目立ちを招く','皮脂量そのものが減るとは言わない。「詰まりにくくなる」に言い換える'],
+ rx:['洗顔は1日2回まで。ピーリングソープは週2〜3','AZAクリアセラムを夜に（詰まり・赤みに）','漢方：黄連解毒湯、清上防風湯を検討'],
+ talk:'皮脂の量そのものをお薬で減らすことは難しいのですが、詰まりにくくして、赤みを抑えることはできます。洗いすぎがかえって悪くしていることも多いので、まずそこから見直しましょう。',
+ ev:'3か月で評価', prod:['azaclear_serum']}
+};
+
+/* ---------- 併用の注意 ---------- */
+var FN_WARN = [
+ {w:function(S){return S.preg;},
+  t:'妊娠・授乳中：外すもの',
+  d:'トレチノイン・アダパレン・ハイドロキノン・バクチオール・ピーリングは外す。AZAクリアセラムを主軸に組み直す。'},
+ {w:function(S){return S.onRet && (S.lentigo||S.poreC||S.wrinkle);},
+  t:'レチノイドの三重投与',
+  d:'アダパレン／トレチノイン／バクチオールは作用が重なる。同時に2つ以上は原則なし。現在の外用を確認してから足す。'},
+ {w:function(S){return (S.comedo||S.papule) && (S.poreC||S.wrinkle||S.lentigo);},
+  t:'BPO × トレチノイン',
+  d:'BPOはトレチノインを酸化分解する。朝BPO・夜トレチノインに時間帯を分ける。アダパレンはBPOに安定なので配合剤が存在する。'},
+ {w:function(S){return (S.comedo||S.papule) && S.lentigo;},
+  t:'BPO × ハイドロキノン',
+  d:'ハイドロキノンが酸化して局所が一時的に茶色くなることがある。時間帯を分けるか、どちらかにする。'},
+ {w:function(S){return S.peeling && (S.comedo||S.papule||S.ppRos||S.poreA);},
+  t:'角質剥離の重複',
+  d:'保険外用＋ピーリング施術＋ピーリングソープ＋AZAで4重になりがち。外用中はソープを週2〜3、施術は外用が安定してから。'},
+ {w:function(S){return S.peeling && S.melasma;},
+  t:'肝斑にピーリング',
+  d:'摩擦・刺激で悪化しうる。施行するなら低刺激・低頻度に絞り、内服を主軸に置く。'},
+ {w:function(S){return (S.flush||S.telang) && (S.poreA||S.poreB||S.poreC||S.lentigo||S.wrinkle||S.sebum||S.peeling);},
+  t:'赤みがほてるなら外用を増やさない',
+  d:'紅斑毛細血管拡張型が疑わしい。美容主訴を理由に外用・施術を足すと悪化する。遮光と内服・漢方に寄せる。'},
+ {w:function(S){return S.milium && (S.comedo||S.papule||S.poreA);},
+  t:'稗粒腫が混在',
+  d:'外用では消えない。残したまま評価すると「効かない」判定になる。処置で先に取る。'},
+ {w:function(S){return S.intol && S.peeling;},
+  t:'刺激で脱落した人にピーリング',
+  d:'二重に失敗する。保湿とバリア回復を数週間先行させてから、再検討する。'}
+];
+
+/* ---------- 状態 ---------- */
+var fnSel = {};
+
+function fe(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+/* ---------- チップ描画 ---------- */
+function fnChips(){
+  var h='';
+  FN_GROUPS.forEach(function(g){
+    h+='<div class="fn-grp"><div class="fn-grp-t">'+fe(g.t)+'</div><div class="fn-chips">';
+    g.items.forEach(function(it){
+      h+='<button class="fn-chip'+(fnSel[it.id]?' on':'')+'" data-f="'+it.id+'">'+fe(it.l)+'</button>';
+    });
+    h+='</div></div>';
+  });
+  var n=Object.keys(fnSel).length;
+  h+='<div class="fn-bar"><div class="fn-count">'+(n?n+'件を選択中':'所見をタップしてください（複数可）')+'</div>'
+    +'<button class="fn-clear" id="fn-clear">選択をクリア</button></div>';
+  var box=document.getElementById('fn-chipbox');
+  box.innerHTML=h;
+  box.querySelectorAll('.fn-chip').forEach(function(b){
+    b.onclick=function(){
+      var k=b.dataset.f;
+      if(fnSel[k]) delete fnSel[k]; else fnSel[k]=1;
+      fnChips(); fnResult();
+    };
+  });
+  document.getElementById('fn-clear').onclick=function(){ fnSel={}; fnChips(); fnResult(); };
+}
+
+/* ---------- 結果描画 ---------- */
+function fnResult(){
+  var box=document.getElementById('fn-result');
+  var keys=Object.keys(fnSel);
+  if(!keys.length){
+    box.innerHTML='<div class="fn-empty">所見を選ぶと、<br>保険で拾うもの → 自費の出番 の順に並びます。<br>自費は最後にしか出てきません。</div>';
+    return;
+  }
+  /* 該当する終着点を集める */
+  var hit={};
+  keys.forEach(function(k){ (FN_MAP[k]||[]).forEach(function(o){ hit[o]=1; }); });
+  var list=FN_ORDER.filter(function(o){ return hit[o]; });
+
+  var h='';
+
+  /* 併用の注意 */
+  var warns=FN_WARN.filter(function(r){ return r.w(fnSel); });
+  if(warns.length){
+    h+='<div class="fn-sec"><div class="fn-sec-h">⚠ 併用・禁忌の確認</div>';
+    warns.forEach(function(r){
+      h+='<div class="fn-warn"><div class="fn-warn-t">'+fe(r.t)+'</div><div class="fn-warn-d">'+fe(r.d)+'</div></div>';
+    });
+    h+='</div>';
+  }
+
+  var secs=[
+    {c:'stop', t:'✋ まず外す・やらない'},
+    {c:'dx',   t:'① 保険で先に拾う'},
+    {c:'mod',  t:'② 条件による上書き'},
+    {c:'self', t:'③ 自費の出番'}
+  ];
+  secs.forEach(function(s){
+    var items=list.filter(function(o){ return FN_OUT[o].cat===s.c; });
+    if(!items.length) return;
+    h+='<div class="fn-sec"><div class="fn-sec-h">'+fe(s.t)+'</div>';
+    items.forEach(function(o){ h+=fnCard(o); });
+    h+='</div>';
+  });
+
+  /* 自費が出るときは共通ベースを添える */
+  if(list.some(function(o){ return FN_OUT[o].cat==='self'; })){
+    h+='<div class="fn-sec"><div class="fn-sec-h">共通ベースと期待値</div><div class="fn-base">'
+      +'<div class="fn-base-t">1日の置き方</div>'
+      +'<div class="fn-base-r"><b>朝</b>　洗顔 →（ビタミンCローション）→ 保湿 → 日焼け止め ＋ ヘリオケア内服</div>'
+      +'<div class="fn-base-r"><b>夜</b>　洗顔（ピーリングソープは週2〜3）→ 保険外用 or セラム／トレチノイン → 保湿</div>'
+      +'<div class="fn-base-r">アスタキサンチンジェルは脂溶性なので、刺激の緩衝材として保湿の後に重ねてよい。</div>'
+      +'<div class="fn-base-t" style="margin-top:12px;">期待値の置き方</div>'
+      +'<div class="fn-base-r">・初診時に写真を撮る。薄いシミ・軽い赤みは比較しないと「効かない」になる</div>'
+      +'<div class="fn-base-r">・「3か月で評価、半年で判断」と先に言い切る</div>'
+      +'<div class="fn-base-r">・1本目は1つだけ渡す。複数持たせると続かず全部やめる</div>'
+      +'<div class="fn-base-r">・評価時期をカルテに先に書いておく（自費の積み増しを防ぐ）</div>'
+      +'<div class="fn-note">保険診療と自費の物販は明確に分けて説明する。保険で拾えるものを先に拾ったことを伝えてから自費の話に入ると、物販感が消える。</div>'
+      +'</div></div>';
+  }
+
+  box.innerHTML=h;
+
+  box.querySelectorAll('.fn-hd').forEach(function(hd){
+    hd.onclick=function(){ hd.parentNode.classList.toggle('open'); };
+  });
+  box.querySelectorAll('[data-copy]').forEach(function(b){
+    b.onclick=function(e){
+      e.stopPropagation();
+      var t=FN_OUT[b.dataset.copy].talk;
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t); }
+      else { var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(err){} ta.remove(); }
+      b.textContent='コピーしました'; setTimeout(function(){ b.textContent='説明文をコピー'; },1400);
+    };
+  });
+  box.querySelectorAll('[data-prod]').forEach(function(b){
+    b.onclick=function(e){
+      e.stopPropagation();
+      if(typeof switchTab==='function') switchTab('products');
+      if(typeof showProduct==='function') showProduct(b.dataset.prod);
+    };
+  });
+}
+
+function fnCard(id){
+  var o=FN_OUT[id];
+  var h='<div class="fn-card c-'+o.cat+'"><div class="fn-hd"><div class="fn-hd-x">'
+    +'<div class="fn-t">'+fe(o.t)+'</div><div class="fn-lead">'+fe(o.lead)+'</div></div>'
+    +'<div class="fn-caret">▼</div></div><div class="fn-body">';
+  if(o.why&&o.why.length){
+    h+='<div class="fn-h">根拠・考え方</div>';
+    o.why.forEach(function(x){ h+='<div class="fn-li">'+fe(x)+'</div>'; });
+  }
+  if(o.rx&&o.rx.length){
+    h+='<div class="fn-h">実際の組み立て</div>';
+    o.rx.forEach(function(x){ h+='<div class="fn-li">'+fe(x)+'</div>'; });
+  }
+  if(o.talk){
+    h+='<div class="fn-h">患者さんへの説明</div><div class="fn-talk">'+fe(o.talk)+'</div>'
+      +'<button class="fn-copy" data-copy="'+id+'">説明文をコピー</button>';
+  }
+  if(o.prod&&o.prod.length){
+    h+='<div class="fn-prods">';
+    o.prod.forEach(function(p){
+      var nm=p;
+      try{ (PRODUCTS||[]).forEach(function(x){ if(x.id===p) nm=x.name; }); }catch(e){}
+      h+='<button data-prod="'+p+'">'+fe(nm)+' ›</button>';
+    });
+    h+='</div>';
+  }
+  if(o.ev){ h+='<div class="fn-ev">評価：'+fe(o.ev)+'</div>'; }
+  h+='</div></div>';
+  return h;
+}
+
+/* ---------- 初期化 ---------- */
+function fnInit(){
+  if(!document.getElementById('fn-chipbox')) return;
+  fnChips(); fnResult();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fnInit);
+else fnInit();
+
+})();
+</script>
+
 </body>
 </html>
