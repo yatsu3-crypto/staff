@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FBF5E6">
+<title>爪白癬 内服薬ナビ｜やまもと皮膚科・漢方クリニック</title>
+<!-- 唯一許可された外部リソース: Google Fonts（オフライン時はシステムフォントに自動フォールバック） -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ===== 和紙デザインシステム トークン ===== */
+:root{
+  --washi:#FBF5E6;   /* 画面背景（和紙） */
+  --washi-d:#F2E9D2; /* 背景の濃い面・ヘッダー下端 */
+  --card:#FFFCF4;    /* カード・入力欄の面 */
+  --line:#D9CDB3;    /* 罫線・枠線 */
+  --sumi:#332C25;    /* 本文（墨） */
+  --sumi2:#5B5247;   /* 補足テキスト */
+  --usu:#8C8073;     /* 薄墨: キャプション・プレースホルダ */
+  --shu:#C1432E;     /* 朱: 強調・警告・選択中チップ */
+  --shu-d:#9A3A2E;   /* 朱の濃色: 注意書きの太字 */
+  --kin:#C08A22;     /* 金茶: アクセント・フォーカス・数値・二重罫線 */
+  --kin-d:#8A6410;   /* 金茶の濃色: 小見出し文字 */
+  --matsu:#2E5D4B;   /* 松葉: クリニック名・見出し前置き・肯定 */
+  --ai:#22376B;      /* 藍: 主要アクション・選択中タブ・リンク */
+  --akane:#8A4A5A;   /* 茜: カテゴリ色（補助） */
+  --shadow:0 1px 0 rgba(0,0,0,.04),0 6px 18px -10px rgba(60,45,25,.35);
+  --r:12px;          /* 標準角丸 */
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",-apple-system,sans-serif;
+  color:var(--sumi);background:var(--washi);
+  background-image:
+    radial-gradient(circle at 18% 12%,rgba(192,138,34,.05),transparent 40%),
+    radial-gradient(circle at 82% 78%,rgba(34,55,107,.05),transparent 42%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix type='matrix' values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.25 0 0 0 0.025 0'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");
+  font-size:15px;line-height:1.65;-webkit-text-size-adjust:100%;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+h1,h2,h3,.mincho{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:700;letter-spacing:.02em}
+
+/* ===== ヘッダー ===== */
+header{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(180deg,rgba(251,245,230,.97),rgba(251,245,230,.9));
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  padding:calc(env(safe-area-inset-top) + 10px) 16px 8px;
+}
+.brand{display:flex;align-items:center;gap:11px}
+.brand h1{font-size:18px;margin:0}
+.brand .sub{font-size:11px;color:var(--sumi2);letter-spacing:.04em;margin-top:1px}
+.tampopo{width:34px;height:34px;flex:0 0 auto}
+.tabs{display:flex;gap:4px;margin-top:10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--sumi2);
+  padding:7px 13px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;min-height:34px}
+.tab.on{background:var(--ai);color:#fff;border-color:var(--ai)}
+
+/* ===== レイアウト ===== */
+main{max-width:760px;margin:0 auto;padding:14px 14px 90px}
+.view{display:none;animation:fade .25s ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.sectitle{font-size:12px;letter-spacing:.16em;color:var(--matsu);font-weight:700;margin:20px 2px 8px}
+.lead{color:var(--sumi2);font-size:14px;margin:4px 2px 14px}
+
+/* ===== 入力（選択タブ） ===== */
+.field{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;margin-bottom:8px}
+.field .lbl{font-size:12px;color:var(--sumi2);font-weight:700;letter-spacing:.05em;margin-bottom:7px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--sumi2);padding:6px 12px;border-radius:999px;
+  font-size:13px;cursor:pointer;font-weight:600;font-family:inherit;min-height:36px}
+.chip.on{background:var(--shu);color:#fff;border-color:var(--shu)}
+.numrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.numrow input,.datein{width:120px;max-width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:10px;
+  font-size:16px;background:var(--card);color:var(--sumi);font-family:inherit;min-height:44px}
+.datein{width:200px}
+.numrow input:focus,.datein:focus,textarea:focus{outline:none;border-color:var(--kin);box-shadow:0 0 0 3px rgba(192,138,34,.15)}
+.numrow .unit{font-size:13px;color:var(--sumi2)}
+.sub-field{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.hint{font-size:11.5px;color:var(--usu);margin-top:5px}
+
+/* ===== 判定結果 ===== */
+.rec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow);position:relative;overflow:hidden;margin-bottom:10px}
+.rec .catband{position:absolute;left:0;top:0;bottom:0;width:4px}
+.rec .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--matsu);font-weight:700}
+.rec h2{font-size:21px;margin:4px 0 2px;line-height:1.3;overflow-wrap:anywhere}
+.rec .brandname{font-size:12px;color:var(--sumi2)}
+.rec.none h2{color:var(--shu)}
+.st{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:var(--card);white-space:nowrap;vertical-align:middle}
+.st.ok{color:var(--matsu);border-color:var(--matsu)}
+.st.caution{color:var(--kin-d);border-color:var(--kin)}
+.st.avoid{color:var(--shu);border-color:var(--shu)}
+.st.ng{color:#fff;background:var(--shu);border-color:var(--shu)}
+.why{margin:8px 0 0;padding:0;list-style:none;font-size:13px}
+.why li{padding:3px 0 3px 18px;position:relative;line-height:1.5}
+.why li::before{content:"";position:absolute;left:4px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--kin)}
+.why li.plus::before{background:var(--matsu)}
+.why li.minus::before{background:var(--shu)}
+.why li.info::before{background:var(--usu)}
+.drugrow{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;margin-bottom:8px;position:relative;overflow:hidden}
+.drugrow .catband{position:absolute;left:0;top:0;bottom:0;width:4px}
+.drugrow .dn{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14.5px;font-weight:700}
+.summary{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.pill.warn{color:var(--shu);border-color:var(--shu)}
+.mark{font-size:10px;font-weight:700;color:var(--kin-d);border:1px solid var(--kin);border-radius:4px;padding:0 4px;margin-left:4px;white-space:nowrap;vertical-align:middle}
+
+/* ===== ノート・注意 ===== */
+.note{background:linear-gradient(0deg,rgba(192,138,34,.06),rgba(192,138,34,.06)),var(--card);
+  border:1px solid var(--line);border-left:3px solid var(--kin);border-radius:10px;padding:10px 13px;font-size:13px;margin:10px 0 16px}
+.note b{color:var(--shu-d)}
+.caution{background:rgba(193,67,46,.06);border:1.5px dashed var(--shu);border-radius:10px;padding:9px 13px;font-size:13px;margin:10px 0}
+.caution b{color:var(--shu)}
+.caution ul,.note ul{margin:6px 0 0;padding-left:18px}
+.caution li,.note li{margin:2px 0}
+
+/* ===== モニタリング表 ===== */
+.sched{display:flex;flex-direction:column;gap:7px}
+.srow{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;min-height:52px}
+.srow .when{flex:0 0 96px;font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:800;font-size:15px;line-height:1.3;color:var(--sumi)}
+.srow .when small{display:block;font-family:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;font-weight:600;font-size:11px;color:var(--sumi2);margin-top:2px}
+.srow .body{flex:1;min-width:0}
+.srow .date{font-size:13px;font-weight:700;color:var(--kin-d)}
+.srow .date.empty{color:var(--usu);font-weight:500}
+.srow .items{font-size:11.5px;color:var(--sumi2);margin-top:2px;line-height:1.5}
+.srow .items b{color:var(--shu-d)}
+.items-box{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.items-box .pill{font-size:12px}
+
+/* ===== アコーディオン ===== */
+.acc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;overflow:hidden;position:relative}
+.acc summary{padding:12px 14px 12px 18px;font-weight:700;font-size:14.5px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;min-height:48px}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary .gn{margin-left:auto;font-size:11px;color:var(--sumi2);font-weight:600;white-space:nowrap}
+.acc summary .sn{flex:1;min-width:0}
+.acc summary .sn small{display:block;font-size:11px;color:var(--sumi2);font-weight:500}
+.acc .ac-body{padding:0 14px 12px 18px}
+.kv{margin:8px 0 0}
+.kv .k{font-size:11px;letter-spacing:.1em;color:var(--matsu);font-weight:700;margin-top:10px}
+.kv .v{font-size:13.5px;line-height:1.6;margin-top:2px}
+.kv .v .num{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:800;font-size:18px;color:var(--kin-d)}
+.kv ul{margin:2px 0 0;padding-left:18px}
+.kv li{margin:2px 0}
+textarea.memo{width:100%;min-height:84px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;line-height:1.5;
+  background:var(--card);color:var(--sumi);font-family:inherit;resize:vertical;margin-top:4px}
+textarea.memo::placeholder{color:var(--usu)}
+
+/* ===== ボタン ===== */
+.btn{border:1px solid var(--ai);background:var(--ai);color:#fff;border-radius:10px;padding:10px 14px;font-size:14px;
+  font-weight:700;cursor:pointer;font-family:inherit;min-height:44px}
+.btn.ghost{background:var(--card);color:var(--ai)}
+.btn.warn{border-color:var(--shu);background:var(--card);color:var(--shu)}
+.btn.block{display:block;width:100%}
+.btn:active{transform:scale(.98)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* ===== トースト・フッター ===== */
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);
+  background:var(--sumi);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:80;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.disc{font-size:11.5px;color:var(--sumi2);border-top:1px dashed var(--line);margin-top:24px;padding-top:14px;line-height:1.6}
+.foot{text-align:center;font-size:11px;color:var(--sumi2);margin-top:18px}
+
+/* ===== 印刷 ===== */
+@media print{
+  header,.tabs,.btn,.disc,.foot,.toast{display:none!important}
+  body{background:#fff;background-image:none}
+  .rec,.drugrow,.srow,.acc{break-inside:avoid;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg class="tampopo" viewBox="0 0 48 48" aria-hidden="true">
+      <g fill="none">
+        <line x1="24" y1="46" x2="24" y2="24" stroke="#5a6e48" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M24 40c-4-1-7-4-8-7" stroke="#5a6e48" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="24" cy="18" r="7.5" fill="#a87d35"/>
+        <g stroke="#c9a24a" stroke-width="1.5" stroke-linecap="round">
+          <line x1="24" y1="18" x2="24" y2="4"/><line x1="24" y1="18" x2="34" y2="8"/>
+          <line x1="24" y1="18" x2="38" y2="18"/><line x1="24" y1="18" x2="34" y2="28"/>
+          <line x1="24" y1="18" x2="14" y2="8"/><line x1="24" y1="18" x2="10" y2="18"/>
+          <line x1="24" y1="18" x2="14" y2="28"/><line x1="24" y1="18" x2="31" y2="3"/>
+          <line x1="24" y1="18" x2="17" y2="3"/><line x1="24" y1="18" x2="39" y2="11"/>
+          <line x1="24" y1="18" x2="9" y2="11"/>
+        </g>
+        <g fill="#fff8e8"><circle cx="24" cy="4" r="2.1"/><circle cx="34" cy="8" r="2.1"/><circle cx="38" cy="18" r="2.1"/><circle cx="34" cy="28" r="2.1"/><circle cx="14" cy="8" r="2.1"/><circle cx="10" cy="18" r="2.1"/><circle cx="14" cy="28" r="2.1"/><circle cx="31" cy="3" r="1.8"/><circle cx="17" cy="3" r="1.8"/><circle cx="39" cy="11" r="1.8"/><circle cx="9" cy="11" r="1.8"/></g>
+      </g>
+    </svg>
+    <div>
+      <h1>爪白癬 内服薬ナビ</h1>
+      <div class="sub">スタッフ用｜薬剤選択・肝機能モニタリング・薬剤一覧</div>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-v="sel">選択</button>
+    <button class="tab" data-v="mon">モニタリング</button>
+    <button class="tab" data-v="drug">薬剤一覧</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ===== 1. 選択 ===== -->
+  <section class="view on" id="v-sel">
+    <p class="lead">患者さんの条件を選ぶと、当院の使い分けと禁忌から候補薬と注意点を表示します。氏名などの個人情報は入力しません。</p>
+
+    <div class="sectitle">入力条件</div>
+    <div class="field">
+      <div class="lbl">年齢</div>
+      <div class="numrow"><input type="number" id="in-age" inputmode="numeric" min="0" max="120" placeholder="例: 72"><span class="unit">歳</span></div>
+    </div>
+    <div class="field">
+      <div class="lbl">肝疾患の既往</div>
+      <div class="seg" data-k="liver"><button class="chip" data-val="no">なし</button><button class="chip" data-val="yes">あり</button></div>
+    </div>
+    <div class="field">
+      <div class="lbl">重篤な肝障害</div>
+      <div class="seg" data-k="sliver"><button class="chip" data-val="no">なし</button><button class="chip" data-val="yes">あり</button></div>
+    </div>
+    <div class="field">
+      <div class="lbl">うっ血性心不全（またはその既往）</div>
+      <div class="seg" data-k="chf"><button class="chip" data-val="no">なし</button><button class="chip" data-val="yes">あり</button></div>
+    </div>
+    <div class="field">
+      <div class="lbl">併用薬</div>
+      <div class="seg" data-k="comed"><button class="chip" data-val="no">なし</button><button class="chip" data-val="yes">あり</button></div>
+      <div class="sub-field" id="comed-n" hidden>
+        <div class="lbl">剤数</div>
+        <div class="numrow"><input type="number" id="in-n" inputmode="numeric" min="1" max="30" placeholder="例: 3"><span class="unit">剤</span></div>
+      </div>
+    </div>
+    <div class="field">
+      <div class="lbl">妊娠の可能性</div>
+      <div class="seg" data-k="preg"><button class="chip" data-val="na">該当せず</button><button class="chip" data-val="no">なし</button><button class="chip" data-val="yes">あり</button></div>
+    </div>
+    <div class="field">
+      <div class="lbl">爪の罹患範囲</div>
+      <div class="seg" data-k="sev"><button class="chip" data-val="mild">軽症（遠位1/3以内、1〜2趾）</button><button class="chip" data-val="mod">中等症</button><button class="chip" data-val="sev">重症</button></div>
+    </div>
+    <div class="field">
+      <div class="lbl">服薬アドヒアランスへの不安</div>
+      <div class="seg" data-k="adh"><button class="chip" data-val="no">なし</button><button class="chip" data-val="yes">あり</button></div>
+    </div>
+    <div class="btnrow"><button class="btn ghost" id="btn-reset">入力をクリア</button></div>
+
+    <div class="sectitle">判定結果</div>
+    <div id="result"></div>
+
+    <div class="sectitle">当院での使い分け</div>
+    <div class="note">
+      <b>第一選択：ホスラブコナゾール</b>（12週で完了、相互作用が比較的少ない）<br>
+      併用薬が多い高齢者：ホスラブコナゾール または テルビナフィン<br>
+      薬価・自己負担を抑えたい場合：テルビナフィン
+    </div>
+    <div class="caution">
+      <b>避ける患者像</b>
+      <ul>
+        <li>肝疾患の既往</li>
+        <li>多剤併用（特にイトラコナゾール）</li>
+        <li>妊娠の可能性</li>
+        <li>授乳中（入力項目にはありません。該当する場合は医師に相談）</li>
+      </ul>
+    </div>
+
+    <div class="disc">※本アプリは院内スタッフの確認補助用です。最終判断は医師が行います。</div>
+    <div class="foot mincho">やまもと皮膚科・漢方クリニック　🌼 たんぽぽちゃん</div>
+  </section>
+
+  <!-- ===== 2. モニタリング ===== -->
+  <section class="view" id="v-mon">
+    <p class="lead">薬剤を選ぶと肝機能検査のスケジュールと中止基準を表示します。開始日を入れると予定日を計算します（開始日は保存されません）。</p>
+    <div class="sectitle">薬剤</div>
+    <div class="seg" id="mon-drugs" style="margin-bottom:10px"></div>
+    <div class="field" id="nail-field" hidden>
+      <div class="lbl">部位（テルビナフィンの投与期間）</div>
+      <div class="seg" data-k="nail"><button class="chip" data-val="foot">足爪（6ヶ月）</button><button class="chip" data-val="hand">手爪（3ヶ月）</button></div>
+    </div>
+    <div class="field">
+      <div class="lbl">内服開始日（任意・保存しません）</div>
+      <div class="numrow"><input type="date" id="in-start" class="datein"><button class="btn ghost" id="btn-clear-date" style="min-height:44px">クリア</button></div>
+    </div>
+
+    <div class="sectitle">検査スケジュール</div>
+    <div id="mon-head"></div>
+    <div class="sched" id="mon-sched"></div>
+
+    <div class="sectitle">検査項目（毎回）</div>
+    <div class="items-box" id="mon-items"></div>
+    <div id="mon-note"></div>
+
+    <div class="sectitle">中止・要相談の基準</div>
+    <div class="caution">
+      <b>中止して医師へ報告</b>
+      <ul>
+        <li>AST または ALT が<b>基準値上限の3倍</b>を超えた → 中止し医師へ報告</li>
+        <li>数値にかかわらず、<b>倦怠感・食欲不振・黄疸・褐色尿・発熱・皮疹</b>が出たら即中止して医師へ</li>
+        <li><b>好中球減少（好中球 1000/μL 未満）</b>でも中止</li>
+      </ul>
+    </div>
+    <div class="note">
+      <b>医師に報告して継続可否を判断</b><br>
+      AST または ALT が<b>基準値上限の2倍</b>を超えた時点で医師に報告し、継続可否を判断する。
+    </div>
+
+    <div class="disc">※本アプリは院内スタッフの確認補助用です。最終判断は医師が行います。</div>
+    <div class="foot mincho">やまもと皮膚科・漢方クリニック　🌼 たんぽぽちゃん</div>
+  </section>
+
+  <!-- ===== 3. 薬剤一覧 ===== -->
+  <section class="view" id="v-drug">
+    <p class="lead">3剤の用法用量・期間・併用注意・禁忌。各薬剤のメモはこの端末に保存されます（患者情報は書かないでください）。</p>
+    <div id="drug-list"></div>
+    <div class="disc">※本アプリは院内スタッフの確認補助用です。最終判断は医師が行います。</div>
+    <div class="foot mincho">やまもと皮膚科・漢方クリニック　🌼 たんぽぽちゃん</div>
+  </section>
+</main>
+
+<div class="toast" id="toast">保存しました</div>
+
+<script>
+/* =====================================================================
+   データ（医師が編集しやすいよう先頭にまとめています）
+   ※ 医学的内容は依頼文の記載どおり。ここを直せば表示も判定も変わります。
+   ===================================================================== */
+
+/* --- 判定に使うしきい値（依頼文に数値の指定がないため仮置き。要確認） --- */
+var ELDERLY_AGE  = 65; /* 「高齢者」とみなす年齢（以上）。要確認 */
+var MANY_DRUGS_N = 3;  /* 「併用薬が多い高齢者」の剤数（以上）: ホスラブ/テルビの推奨理由に使う */
+var ITR_WARN_N   = 1;  /* イトラコナゾール: この剤数以上で「必ず添付文書を確認」（医師指示） */
+var ITR_AVOID_N  = 3;  /* イトラコナゾール: この剤数以上で「避ける」（医師指示） */
+var POLY_N       = 5;  /* 「多剤併用」の注意文（避ける患者像バナー）を出す剤数（以上）。判定は変えない。要確認 */
+
+/* --- 検査項目（全剤共通、毎回） --- */
+var LAB_ITEMS = ["AST","ALT","γ-GTP","ALP","T-Bil","血算（白血球分画含む）"];
+
+/* --- 薬剤データ。推奨順（当院の使い分け）に並べる: ホスラブ → テルビ → イトラ --- */
+var DRUGS = [
+  {
+    id:"fos", name:"ホスラブコナゾール", brand:"ネイリン カプセル100mg", color:"var(--matsu)",
+    dose:"100mg 1日1回", how:"連日", duration:"12週間",
+    role:"第一選択（12週で完了、相互作用が比較的少ない）",
+    interact:["CYP3A4阻害はイトラコナゾールより弱いが、シンバスタチン等に注意"],
+    contra:["妊婦・妊娠の可能性のある女性"],
+    monText:"開始前 → 2週 → 4週 → 8週 → 12週",
+    /* off: 開始日からのオフセット（w=週, m=月, d=日） */
+    sched:[
+      {label:"開始前", off:{d:0}},
+      {label:"2週",  off:{w:2}},
+      {label:"4週",  off:{w:4}},
+      {label:"8週",  off:{w:8}},
+      {label:"12週", off:{w:12}, sub:"投与終了"}
+    ]
+  },
+  {
+    id:"ter", name:"テルビナフィン", brand:"ラミシール錠125mg", color:"var(--ai)",
+    dose:"125mg 1日1回 食後", how:"連日", duration:"足爪 6ヶ月・手爪 3ヶ月 を目安",
+    role:"薬価・自己負担を抑えたい場合／併用薬が多い高齢者",
+    interact:["CYP2D6阻害：三環系抗うつ薬、SSRI、β遮断薬、抗不整脈薬、カフェイン"],
+    contra:["重篤な肝障害","汎血球減少などの血液障害"],
+    monText:"開始前 → 投与後1ヶ月 → 以降1〜2ヶ月ごと（血算を毎回必須）",
+    monNote:"汎血球減少・無顆粒球症の報告があるため、血算（白血球分画含む）を毎回必須とする。",
+    /* テルビナフィンは部位で期間が変わるため関数で生成。「以降1〜2ヶ月ごと」は1ヶ月間隔で表示（要確認） */
+    schedFn:function(nail){
+      var months = (nail==="hand") ? 3 : 6;
+      var rows=[{label:"開始前", off:{d:0}},{label:"1ヶ月", off:{m:1}}];
+      for(var m=2;m<=months;m++){ rows.push({label:m+"ヶ月", off:{m:m}, sub:(m===months?"投与終了目安":"1〜2ヶ月ごと")}); }
+      return rows;
+    }
+  },
+  {
+    id:"itr", name:"イトラコナゾール", brand:"イトリゾール", color:"var(--shu)",
+    dose:"パルス療法：400mg/日 分2 食直後", how:"1週間内服 → 3週間休薬", duration:"3サイクル",
+    role:"CYP3A4を強力に阻害し併用禁忌が非常に多い。併用薬が1剤でもあれば必ず添付文書を確認",
+    interact:["代表例：ピモジド、キニジン、ベプリジル、トリアゾラム、シンバスタチン、アゼルニジピン、エプレレノン、ブロナンセリン、タダラフィル、リバーロキサバン、ダビガトラン、チカグレロル など","併用薬が1剤でもあれば必ず添付文書を確認"],
+    contra:["妊婦・妊娠の可能性のある女性","うっ血性心不全またはその既往"],
+    monText:"開始前 → 各パルスサイクル終了後（計3回）",
+    /* 1サイクル = 内服1週 + 休薬3週 = 4週 として計算（要確認） */
+    sched:[
+      {label:"開始前", off:{d:0}},
+      {label:"第1サイクル", off:{w:4},  sub:"終了後"},
+      {label:"第2サイクル", off:{w:8},  sub:"終了後"},
+      {label:"第3サイクル", off:{w:12}, sub:"終了後"}
+    ]
+  }
+];
+function drugById(id){ for(var i=0;i<DRUGS.length;i++){ if(DRUGS[i].id===id) return DRUGS[i]; } return null; }
+
+/* =====================================================================
+   状態と保存（localStorage キーは <app>_<item>_v1 の形式）
+   保存するのは: 最後に見たタブ・入力条件・モニタリングの薬剤/部位・薬剤ごとのスタッフメモ のみ。
+   開始日と患者個人情報は保存しない。
+   ===================================================================== */
+var LS_STATE = "onyc_state_v1";
+var LS_MEMO  = "onyc_memo_v1";
+var store = {
+  get:function(k){ try{ return JSON.parse(localStorage.getItem(k)||"null"); }catch(e){ return null; } },
+  set:function(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+var DEFAULT_SEL = { age:"", liver:"", sliver:"", chf:"", comed:"", n:"", preg:"", sev:"", adh:"" };
+var state = store.get(LS_STATE) || {};
+if(!state.tab) state.tab="sel";
+state.sel = Object.assign({}, DEFAULT_SEL, state.sel||{});
+if(!state.monDrug) state.monDrug="fos";
+if(!state.nail) state.nail="foot";
+var memo = store.get(LS_MEMO) || {};
+var startDate = ""; /* メモリ上のみ。保存しない */
+
+function save(){ store.set(LS_STATE, state); }
+function saveMemo(){ store.set(LS_MEMO, memo); }
+
+var $  = function(s){ return document.querySelector(s); };
+/* querySelectorAll をスコープ付きで使う小ヘルパー（root 省略時は document） */
+function $$(s, root){ return Array.prototype.slice.call((root||document).querySelectorAll(s)); }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+/* ===== タブ切替 ===== */
+function showTab(v){
+  state.tab = v; save();
+  $$(".tab").forEach(function(b){ b.classList.toggle("on", b.dataset.v===v); });
+  $$(".view").forEach(function(s){ s.classList.toggle("on", s.id==="v-"+v); });
+  window.scrollTo(0,0);
+}
+$$(".tab").forEach(function(b){ b.addEventListener("click", function(){ showTab(b.dataset.v); }); });
+
+/* ===== トースト ===== */
+var toastTimer;
+function toast(msg){ var t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove("on"); },1600); }
+
+/* =====================================================================
+   1. 選択タブ：入力と判定
+   ===================================================================== */
+var STATUS_RANK  = { ok:0, caution:1, avoid:2, ng:3 };
+var STATUS_LABEL = { ok:"推奨可", caution:"医師相談", avoid:"避ける", ng:"不可（禁忌）" };
+
+/* 判定ロジック：依頼文の「当院での使い分け」と「禁忌」から素直に導く。
+   迷う点は要確認としてUIに [要確認] を付けている。 */
+function judge(s){
+  var r = {};
+  DRUGS.forEach(function(d){ r[d.id] = { st:"ok", plus:[], minus:[], info:[] }; });
+  var banners = []; /* 避ける患者像に該当した条件 */
+  var general = []; /* 全体への補足 */
+  function worsen(id, st, why){ if(STATUS_RANK[st] > STATUS_RANK[r[id].st]) r[id].st = st; r[id].minus.push(why); }
+
+  var age = parseInt(s.age,10); if(isNaN(age)) age = null;
+  var n   = parseInt(s.n,10);   if(isNaN(n)) n = 0;
+  var comed = (s.comed==="yes");
+  if(comed && n<1) n = 1; /* 「あり」で剤数未入力は1剤として扱う */
+
+  /* 基本の位置づけ（当院での使い分け） */
+  r.fos.plus.push("第一選択：12週で完了、相互作用が比較的少ない");
+  r.ter.plus.push("薬価・自己負担を抑えたい場合の選択肢");
+  r.itr.info.push("CYP3A4を強力に阻害し併用禁忌が非常に多い");
+  if(s.chf!=="yes" && s.chf!=="no") r.itr.info.push("うっ血性心不全（既往含む）は禁忌 — 未入力のため確認");
+
+  /* 妊娠の可能性 */
+  if(s.preg==="yes"){
+    worsen("itr","ng","妊婦・妊娠の可能性のある女性：禁忌");
+    worsen("fos","ng","妊婦・妊娠の可能性のある女性：禁忌");
+    worsen("ter","avoid","妊娠の可能性：有益性投与の扱いだが第一選択とはしない → 医師相談");
+    banners.push("妊娠の可能性あり");
+  }
+
+  /* うっ血性心不全（またはその既往） → イトラコナゾール禁忌 */
+  if(s.chf==="yes"){
+    worsen("itr","ng","うっ血性心不全またはその既往：禁忌");
+  }
+
+  /* 重篤な肝障害 → テルビナフィン禁忌、他剤も医師判断が必要（単独推奨しない） */
+  var needDoctor = false;
+  if(s.sliver==="yes"){
+    worsen("ter","ng","重篤な肝障害：禁忌");
+    worsen("fos","caution","重篤な肝障害あり：医師判断が必要（単独推奨しない）");
+    worsen("itr","caution","重篤な肝障害あり：医師判断が必要（単独推奨しない）");
+    banners.push("重篤な肝障害");
+    needDoctor = true;
+  }
+
+  /* 肝疾患の既往 → 全剤「医師相談」 */
+  if(s.liver==="yes"){
+    DRUGS.forEach(function(d){ worsen(d.id,"caution","肝疾患の既往：避ける患者像 → 医師相談"); });
+    if(s.sliver!=="yes") r.ter.info.push("重篤な肝障害は禁忌");
+    banners.push("肝疾患の既往");
+  }
+
+  /* 併用薬 */
+  if(comed){
+    if(n>=ITR_WARN_N) worsen("itr","caution","併用薬 "+n+"剤：1剤でもあれば必ず添付文書で併用禁忌を確認");
+    if(n>=ITR_AVOID_N) worsen("itr","avoid","併用薬 "+ITR_AVOID_N+"剤以上：避ける");
+    r.ter.info.push("CYP2D6阻害：三環系抗うつ薬・SSRI・β遮断薬・抗不整脈薬・カフェインに注意");
+    r.fos.info.push("CYP3A4阻害は弱いがシンバスタチン等に注意");
+    if(n>=POLY_N){
+      /* 多剤併用: イトラは3剤以上で既に「避ける」。ここでは注意文のみ（判定は変えない） */
+      banners.push("多剤併用（"+n+"剤）");
+      r.fos.info.push("多剤併用（"+POLY_N+"剤以上 [要確認]）：避ける患者像。併用薬の相互作用を確認");
+      r.ter.info.push("多剤併用（"+POLY_N+"剤以上 [要確認]）：避ける患者像。併用薬の相互作用を確認");
+    }
+    if(age!==null && age>=ELDERLY_AGE && n>=MANY_DRUGS_N){
+      r.fos.plus.push("併用薬が多い高齢者（"+ELDERLY_AGE+"歳以上 [要確認]・"+MANY_DRUGS_N+"剤以上）：当院の使い分けで推奨");
+      r.ter.plus.push("併用薬が多い高齢者（"+ELDERLY_AGE+"歳以上 [要確認]・"+MANY_DRUGS_N+"剤以上）：当院の使い分けで推奨");
+      r.itr.minus.push("併用薬が多い高齢者：ホスラブコナゾール または テルビナフィンを選ぶ");
+    }
+  }
+
+  /* 服薬アドヒアランスへの不安：判定は変えず、服用スケジュールの参考を出す（要確認） */
+  if(s.adh==="yes"){
+    general.push("服薬アドヒアランスに不安あり：服用スケジュールを確認 — ホスラブコナゾール 12週連日 ／ テルビナフィン 3〜6ヶ月連日 ／ イトラコナゾール 1週内服＋3週休薬×3サイクル（休薬管理が必要） [要確認：判定への反映ルール未設定]");
+  }
+
+  /* 推奨薬：推奨順で最初に ok または 医師相談 の薬剤 */
+  var rec = null;
+  for(var i=0;i<DRUGS.length;i++){ var st=r[DRUGS[i].id].st; if(st==="ok"||st==="caution"){ rec=DRUGS[i].id; break; } }
+  return { r:r, rec:rec, banners:banners, general:general, needDoctor:needDoctor, mild:(s.sev==="mild"), preg:(s.preg==="yes") };
+}
+
+var SEV_LABEL = { mild:"軽症（遠位1/3以内、1〜2趾）", mod:"中等症", sev:"重症" };
+function renderResult(){
+  var s = state.sel;
+  var filled = (s.liver||s.sliver||s.chf||s.comed||s.preg||s.sev||s.adh||s.age);
+  var box = $("#result");
+  if(!filled){
+    box.innerHTML = '<div class="drugrow" style="text-align:center;color:var(--sumi2);padding:22px 12px"><div style="font-size:32px">🌼</div>条件を選ぶと候補薬が表示されます</div>';
+    return;
+  }
+  var j = judge(s);
+  var h = "";
+
+  /* 軽症 → まず外用を検討（画面上部に表示） */
+  if(j.mild){
+    h += '<div class="caution"><b>軽症（遠位1/3以内、1〜2趾）：</b>まず外用抗真菌薬（エフィナコナゾール等）を検討。内服は外用無効例・中等症以上で。</div>';
+  }
+
+  /* 入力条件のまとめ */
+  var pills = [];
+  if(s.age!=="") pills.push(esc(s.age)+"歳");
+  if(s.liver) pills.push("肝疾患既往 "+(s.liver==="yes"?"あり":"なし"));
+  if(s.sliver) pills.push("重篤な肝障害 "+(s.sliver==="yes"?"あり":"なし"));
+  if(s.chf) pills.push("うっ血性心不全 "+(s.chf==="yes"?"あり":"なし"));
+  if(s.comed) pills.push("併用薬 "+(s.comed==="yes"?("あり"+(s.n?"・"+esc(s.n)+"剤":"")):"なし"));
+  if(s.preg) pills.push("妊娠の可能性 "+({yes:"あり",no:"なし",na:"該当せず"})[s.preg]);
+  if(s.sev) pills.push("罹患範囲 "+SEV_LABEL[s.sev]);
+  if(s.adh) pills.push("アドヒアランス不安 "+(s.adh==="yes"?"あり":"なし"));
+  h += '<div class="summary">'+pills.map(function(p){ return '<span class="pill">'+p+'</span>'; }).join("")+'</div>';
+
+  /* 避ける患者像に該当 */
+  if(j.banners.length){
+    h += '<div class="caution"><b>避ける患者像に該当：</b>'+j.banners.map(esc).join("、")+'<br>内服の適否を含めて医師に相談してください。</div>';
+  }
+
+  /* 推奨薬 */
+  if(j.rec){
+    var d = drugById(j.rec), rr = j.r[j.rec];
+    h += '<div class="rec"><span class="catband" style="background:'+d.color+'"></span>'
+       + '<div class="eyebrow">'+(rr.st==="ok"?"候補薬":(j.needDoctor?"候補薬（医師判断が必要・単独推奨しない）":"候補薬（医師相談のうえ）"))+'</div>'
+       + '<h2>'+esc(d.name)+' <span class="st '+rr.st+'">'+STATUS_LABEL[rr.st]+'</span></h2>'
+       + '<div class="brandname">'+esc(d.brand)+'｜'+esc(d.dose)+'・'+esc(d.how)+'（'+esc(d.duration)+'）</div>'
+       + '<ul class="why">'+whyList(rr)+'</ul>'
+       + '<div class="btnrow"><button class="btn" data-mon="'+d.id+'">この薬のモニタリング表を見る</button></div>'
+       + (j.preg ? '<div class="note" style="margin:10px 0 0"><b>妊娠の可能性あり：</b>爪白癬は治療を急ぐ疾患ではないため、妊娠・授乳終了後の開始を原則とします。テルビナフィンは有益性投与の扱いですが第一選択とはしません。</div>' : '')
+       + '</div>';
+  }else{
+    h += '<div class="rec none"><span class="catband" style="background:var(--shu)"></span><div class="eyebrow">候補薬</div><h2>推奨できる薬剤がありません</h2><div class="brandname">3剤とも禁忌または避ける患者像に該当します。内服の適否を医師に相談してください。</div>'
+       + (j.preg ? '<div class="note" style="margin:10px 0 0"><b>妊娠の可能性あり：</b>爪白癬は治療を急ぐ疾患ではないため、妊娠・授乳終了後の開始を原則とします。テルビナフィンは有益性投与の扱いですが第一選択とはしません。</div>' : '')
+       + '</div>';
+  }
+
+  /* その他の薬剤 */
+  var others = DRUGS.filter(function(d){ return d.id!==j.rec; });
+  if(others.length){
+    h += '<div class="sectitle" style="margin-top:14px">ほかの薬剤</div>';
+    others.forEach(function(d){
+      var rr = j.r[d.id];
+      h += '<div class="drugrow"><span class="catband" style="background:'+d.color+'"></span>'
+         + '<div class="dn">'+esc(d.name)+' <span class="st '+rr.st+'">'+STATUS_LABEL[rr.st]+'</span></div>'
+         + '<ul class="why">'+whyList(rr)+'</ul>'
+         + '<div class="btnrow" style="margin-top:8px"><button class="btn ghost" data-mon="'+d.id+'" style="min-height:40px;padding:6px 12px;font-size:13px">モニタリング表</button></div>'
+         + '</div>';
+    });
+  }
+  if(j.general.length){
+    h += '<div class="note">'+j.general.map(function(g){ return markify(esc(g)); }).join("<br>")+'</div>';
+  }
+  box.innerHTML = h;
+  $$("#result [data-mon]").forEach(function(b){ b.addEventListener("click", function(){ setMonDrug(b.dataset.mon); showTab("mon"); }); });
+}
+function markify(t){ return t.replace(/\[要確認[^\]]*\]/g, function(m){ return '<span class="mark">'+m.slice(1,-1)+'</span>'; }); }
+function whyList(rr){
+  var li = "";
+  rr.minus.forEach(function(t){ li += '<li class="minus">'+markify(esc(t))+'</li>'; });
+  rr.plus.forEach(function(t){ li += '<li class="plus">'+markify(esc(t))+'</li>'; });
+  rr.info.forEach(function(t){ li += '<li class="info">'+markify(esc(t))+'</li>'; });
+  return li;
+}
+
+/* 入力UIの同期 */
+function syncSelUI(){
+  var s = state.sel;
+  $("#in-age").value = s.age;
+  $("#in-n").value = s.n;
+  $$("#v-sel .seg[data-k]").forEach(function(seg){
+    var k = seg.dataset.k;
+    $$(".chip", seg).forEach(function(c){ c.classList.toggle("on", c.dataset.val===s[k]); });
+  });
+  $("#comed-n").hidden = (s.comed!=="yes");
+  renderResult();
+}
+$$("#v-sel .seg[data-k] .chip").forEach(function(c){
+  c.addEventListener("click", function(){
+    var k = c.parentNode.dataset.k;
+    state.sel[k] = (state.sel[k]===c.dataset.val) ? "" : c.dataset.val; /* 同じチップ再タップで解除 */
+    if(k==="comed" && state.sel.comed!=="yes") state.sel.n="";
+    save(); syncSelUI(); toast("条件を保存しました");
+  });
+});
+$("#in-age").addEventListener("input", function(){ state.sel.age = this.value; save(); renderResult(); });
+$("#in-n").addEventListener("input", function(){ state.sel.n = this.value; save(); renderResult(); });
+$("#btn-reset").addEventListener("click", function(){ state.sel = Object.assign({}, DEFAULT_SEL); save(); syncSelUI(); toast("入力をクリアしました"); });
+
+/* =====================================================================
+   2. モニタリングタブ
+   ===================================================================== */
+function addOffset(base, off){
+  var d = new Date(base.getTime());
+  if(off.m) d.setMonth(d.getMonth()+off.m);
+  if(off.w) d.setDate(d.getDate()+off.w*7);
+  if(off.d) d.setDate(d.getDate()+off.d);
+  return d;
+}
+function fmtDate(d){
+  var w = ["日","月","火","水","木","金","土"][d.getDay()];
+  return d.getFullYear()+"/"+("0"+(d.getMonth()+1)).slice(-2)+"/"+("0"+d.getDate()).slice(-2)+"（"+w+"）";
+}
+function parseDate(s){
+  if(!s) return null;
+  var p = s.split("-"); if(p.length!==3) return null;
+  var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+  return isNaN(d.getTime()) ? null : d;
+}
+function setMonDrug(id){ state.monDrug = id; save(); renderMon(); }
+
+function renderMon(){
+  var d = drugById(state.monDrug) || DRUGS[0];
+  /* 薬剤チップ */
+  $("#mon-drugs").innerHTML = DRUGS.map(function(x){
+    return '<button class="chip'+(x.id===d.id?" on":"")+'" data-id="'+x.id+'">'+esc(x.name)+'</button>';
+  }).join("");
+  $$("#mon-drugs .chip").forEach(function(c){ c.addEventListener("click", function(){ setMonDrug(c.dataset.id); toast("薬剤を切り替えました"); }); });
+  /* 部位（テルビナフィンのみ） */
+  $("#nail-field").hidden = (d.id!=="ter");
+  $$("#nail-field .chip").forEach(function(c){ c.classList.toggle("on", c.dataset.val===state.nail); });
+
+  var rows = d.schedFn ? d.schedFn(state.nail) : d.sched;
+  var base = parseDate(startDate);
+  $("#mon-head").innerHTML = '<div class="drugrow"><span class="catband" style="background:'+d.color+'"></span>'
+    + '<div class="dn">'+esc(d.name)+'</div><div style="font-size:12.5px;color:var(--sumi2);margin-top:2px">'+esc(d.dose)+'・'+esc(d.how)+'（'+esc(d.duration)+'）</div>'
+    + '<div style="font-size:13px;margin-top:4px"><b>検査：</b>'+esc(d.monText)+'</div>'
+    + (base ? '' : '<div class="hint">開始日を入力すると各回の予定日を表示します</div>')
+    + '</div>';
+
+  $("#mon-sched").innerHTML = rows.map(function(r,i){
+    var dt = base ? fmtDate(addOffset(base, r.off)) : "";
+    var items = LAB_ITEMS.map(function(it){ return (d.id==="ter" && it.indexOf("血算")===0) ? "<b>"+esc(it)+"（必須）</b>" : esc(it); }).join(" / ");
+    return '<div class="srow"><div class="when">'+esc(r.label)+(r.sub?'<small>'+esc(r.sub)+'</small>':'')+'</div>'
+      + '<div class="body"><div class="date'+(dt?'':' empty')+'">'+(dt? (i===0?"〜 ":"")+dt : "予定日：開始日未入力")+'</div>'
+      + '<div class="items">'+items+'</div></div></div>';
+  }).join("");
+
+  $("#mon-items").innerHTML = LAB_ITEMS.map(function(it){ return '<span class="pill">'+esc(it)+'</span>'; }).join("");
+  $("#mon-note").innerHTML = d.monNote ? '<div class="note"><b>'+esc(d.name)+'：</b>'+esc(d.monNote)+'</div>' : '';
+}
+$$("#nail-field .chip").forEach(function(c){ c.addEventListener("click", function(){ state.nail=c.dataset.val; save(); renderMon(); toast("部位を切り替えました"); }); });
+$("#in-start").addEventListener("change", function(){ startDate = this.value; renderMon(); });
+$("#in-start").addEventListener("input",  function(){ startDate = this.value; renderMon(); });
+$("#btn-clear-date").addEventListener("click", function(){ startDate=""; $("#in-start").value=""; renderMon(); });
+
+/* =====================================================================
+   3. 薬剤一覧タブ
+   ===================================================================== */
+function renderDrugs(){
+  $("#drug-list").innerHTML = DRUGS.map(function(d,i){
+    return '<details class="acc"'+(i===0?' open':'')+'><span class="catband" style="background:'+d.color+'"></span>'
+      + '<summary><span class="sn">'+esc(d.name)+'<small>'+esc(d.brand)+'</small></span><span class="gn">'+esc(d.duration)+'</span></summary>'
+      + '<div class="ac-body"><div class="kv">'
+      + '<div class="k">用法・用量</div><div class="v">'+esc(d.dose)+'</div>'
+      + '<div class="k">投与期間</div><div class="v">'+esc(d.how)+'<br><span class="num">'+esc(d.duration)+'</span></div>'
+      + '<div class="k">位置づけ（当院）</div><div class="v">'+esc(d.role)+'</div>'
+      + '<div class="k">併用注意</div><div class="v"><ul>'+d.interact.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+'</ul></div>'
+      + '<div class="k">禁忌</div><div class="v"><ul>'+d.contra.map(function(t){ return '<li><b style="color:var(--shu-d)">'+esc(t)+'</b></li>'; }).join("")+'</ul></div>'
+      + '<div class="k">肝機能検査</div><div class="v">'+esc(d.monText)+(d.monNote?'<br><span style="font-size:12px;color:var(--sumi2)">'+esc(d.monNote)+'</span>':'')+'</div>'
+      + '<div class="k">スタッフメモ（この端末に保存）</div>'
+      + '<textarea class="memo" data-id="'+d.id+'" placeholder="院内の運用メモなど。患者さんの氏名・IDは書かないでください">'+esc(memo[d.id]||"")+'</textarea>'
+      + '<div class="btnrow" style="margin-top:8px"><button class="btn ghost" data-mon="'+d.id+'" style="min-height:40px;padding:6px 12px;font-size:13px">モニタリング表</button></div>'
+      + '</div></div></details>';
+  }).join("");
+  var memoTimer = {};
+  $$("#drug-list textarea.memo").forEach(function(t){
+    t.addEventListener("input", function(){
+      var id = t.dataset.id; memo[id] = t.value; saveMemo();
+      clearTimeout(memoTimer[id]); memoTimer[id] = setTimeout(function(){ toast("メモを保存しました"); }, 600);
+    });
+  });
+  $$("#drug-list [data-mon]").forEach(function(b){ b.addEventListener("click", function(){ setMonDrug(b.dataset.mon); showTab("mon"); }); });
+}
+
+/* ===== 初期化 ===== */
+syncSelUI();
+renderMon();
+renderDrugs();
+showTab(state.tab);
+</script>
+</body>
+</html>
