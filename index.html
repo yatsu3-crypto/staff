@@ -3019,6 +3019,7 @@ function generate(){
   document.getElementById('pg-input').classList.remove('active');
   document.getElementById('pg-result').classList.add('active');
   window.scrollTo(0,0);
+  routeSet('guidance/result');
 }
 
 function sec(icon, title, items){
@@ -3053,11 +3054,7 @@ function printResult(){
   window.print();
 }
 
-function goBack(){
-  document.getElementById('pg-result').classList.remove('active');
-  document.getElementById('pg-input').classList.add('active');
-  window.scrollTo(0,0);
-}
+function goBack(){ routeBack('guidance'); }
 
 // ==============================================
 // 製品データベース
@@ -3590,6 +3587,69 @@ var PRODUCTS = [
 // ==============================================
 // タブ切り替え
 // ==============================================
+// ==============================================
+// 画面の状態を URL ハッシュに残す（リロード・Safari 切替・戻るボタン対応）
+//   #<tab>                 例: #topical
+//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39
+//   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
+//   #search/<語>           横断検索
+//   ハッシュが無い起動（ホーム画面アイコン等）は最後に開いた画面を localStorage から復元する
+// ==============================================
+var ROUTE = {cur:'', depth:0, applying:false};
+var ROUTE_LS = 'app_route_v1';
+function routeSet(path, replace){
+  if(ROUTE.applying || !path || path === ROUTE.cur) return;
+  ROUTE.cur = path;
+  try{
+    if(replace || !history.pushState){ history.replaceState({r:path}, '', '#'+path); }
+    else { history.pushState({r:path}, '', '#'+path); ROUTE.depth++; }
+  }catch(e){ try{ location.hash = path; }catch(e2){} }
+  if(!/^search\//.test(path)){ try{ localStorage.setItem(ROUTE_LS, path); }catch(e){} }   // 検索語は次回起動に持ち越さない
+}
+function routeTab(){ var b=document.querySelector('.tab-btn.active'); return b ? b.dataset.tab : 'guidance'; }
+/* 「戻る」ボタン共通：自分で積んだ履歴があればブラウザの戻る、無ければ fallback へ */
+function routeBack(fallback){
+  if(ROUTE.depth > 0 && history.length > 1){ history.back(); return; }
+  routeApply(fallback); routeSet(fallback, true);
+}
+function routeApply(path){
+  path = String(path||'').replace(/^#/, '');
+  var seg = path.split('/'), tab = seg[0], sub = seg.slice(1).join('/');
+  ROUTE.applying = true;
+  try{
+    if(tab === 'search'){
+      var q = decodeURIComponent(sub||'');
+      var inp = document.getElementById('gs-input');
+      if(inp && window.gsRender){ inp.value = q; gsRender(q); }
+      return;
+    }
+    if(!TAB_PAGES[tab]) tab = 'guidance';
+    switchTab(tab);
+    if(!sub) return;
+    if(tab === 'products'){ showProduct(sub); }
+    else if(tab === 'staff'){ showDrug(sub); }
+    else if(tab === 'topical' && window.__topical){ __topical.jump(sub); }
+    else if(tab === 'vitamin'){ var vb=document.querySelector('#pg-vitamin .vit-seg button:nth-child('+({agents:1,dis:2,table:3}[sub]||1)+')'); if(vb) vitView(sub, vb); }
+    else if(tab === 'allergy'){ var ab=document.querySelector('#pg-allergy > .alg-seg button:nth-child('+({avoid:1,view39:2,topics:3}[sub]||1)+')'); if(ab) algView(sub, ab); }
+    /* guidance/result は選択内容を持たないので入力画面のまま */
+  } finally { ROUTE.applying = false; ROUTE.cur = path; }
+}
+window.addEventListener('popstate', function(){
+  ROUTE.depth = Math.max(0, ROUTE.depth - 1);
+  var p = (location.hash||'').slice(1) || 'guidance';
+  routeApply(p);
+  if(!/^search\//.test(p)){ try{ localStorage.setItem(ROUTE_LS, p); }catch(e){} }
+});
+function routeInit(){
+  var p = (location.hash||'').slice(1);
+  if(!p){ try{ p = localStorage.getItem(ROUTE_LS) || ''; }catch(e){} }
+  if(/^guidance\/result/.test(p)) p = 'guidance';
+  routeApply(p || 'guidance');
+  p = ROUTE.cur || 'guidance';
+  try{ history.replaceState({r:p}, '', '#'+p); }catch(e){}
+  if(!/^search\//.test(p)){ try{ localStorage.setItem(ROUTE_LS, p); }catch(e){} }
+}
+
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
   vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings'};
 function switchTab(tab) {
@@ -3600,6 +3660,7 @@ function switchTab(tab) {
   document.querySelectorAll('.page').forEach(function(p){ p.classList.toggle('active', p.id === TAB_PAGES[tab]); });
   if(tab === 'patch') fitPatchFrame();
   window.scrollTo(0, 0);
+  routeSet(tab);
 }
 // パッチ iframe の高さ：ヘッダー＋タブ＋検索欄の実高さから算出
 function fitPatchFrame(){
@@ -3660,13 +3721,10 @@ function showProduct(id) {
   document.getElementById('pg-products').classList.remove('active');
   document.getElementById('pg-prod-detail').classList.add('active');
   window.scrollTo(0, 0);
+  routeSet('products/'+id);
 }
 
-function goBackProd() {
-  document.getElementById('pg-prod-detail').classList.remove('active');
-  document.getElementById('pg-products').classList.add('active');
-  window.scrollTo(0, 0);
-}
+function goBackProd() { routeBack('products'); }
 
 // ==============================================
 // 薬剤データベース（医師・看護師向け）
@@ -3913,13 +3971,10 @@ function showDrug(id){
   document.getElementById('pg-staff').classList.remove('active');
   document.getElementById('pg-staff-detail').classList.add('active');
   window.scrollTo(0,0);
+  routeSet('staff/'+id);
 }
 
-function goBackStaff(){
-  document.getElementById('pg-staff-detail').classList.remove('active');
-  document.getElementById('pg-staff').classList.add('active');
-  window.scrollTo(0,0);
-}
+function goBackStaff(){ routeBack('staff'); }
 
 
 /* ===== 外用薬ガイド（統合・スコープ隔離） ===== */
@@ -4210,6 +4265,7 @@ tabs.forEach(function(t){
     document.getElementById(t.dataset.tab).classList.add("active");
     document.getElementById("searchwrap").style.display=(t.dataset.tab==="drugs")?"block":"none";
     window.scrollTo(0,0);
+    if(window.routeSet) routeSet("topical/"+t.dataset.tab);
   };
 });
 
@@ -4384,6 +4440,7 @@ function vitView(v, btn){
   document.getElementById("vit-v-agents").classList.toggle("on", v==="agents");
   document.getElementById("vit-v-dis").classList.toggle("on", v==="dis");
   document.getElementById("vit-v-table").classList.toggle("on", v==="table");
+  routeSet("vitamin/"+v);
 }
 function vitFilter(f, btn){
   document.getElementById("vit-filters").querySelectorAll(".vit-chip").forEach(function(c){ c.classList.remove("on"); });
@@ -4868,6 +4925,7 @@ function algView(v, btn){
   document.getElementById("alg-v-view39").classList.toggle("on", v==="view39");
   document.getElementById("alg-v-topics").classList.toggle("on", v==="topics");
   if(v==="view39" && !algView39Rendered){ algRenderView39(); algView39Rendered = true; }
+  routeSet("allergy/"+v);
 }
 function algMode(m){
   algModeCur = m;
@@ -5825,6 +5883,7 @@ function render(q){
   if(!terms.length){ close(); return; }
   if(!INDEX) build();
   bar.classList.add('has-q'); document.body.classList.add('gs-on');
+  if(window.routeSet) routeSet('search/'+encodeURIComponent(q.trim()), /^search\//.test(ROUTE.cur));
   var hits=INDEX.filter(function(it){ return terms.every(function(t){ return it.hay.indexOf(t)>=0; }); });
   /* タイトル一致を先に */
   hits.forEach(function(it){ it.score=terms.some(function(t){ return norm(it.title).indexOf(t)>=0; })?0:1; });
@@ -5860,8 +5919,9 @@ function close(){
   bar.classList.toggle('has-q', !!input.value);   // 語が残っていれば ✕ は出したまま
   document.body.classList.remove('gs-on'); box.innerHTML='';
 }
-function reset(){ input.value=''; close(); }
+function reset(){ input.value=''; close(); if(window.routeSet && /^search\//.test(ROUTE.cur)) routeSet(routeTab(), true); }
 window.gsClose=close;
+window.gsRender=render;
 
 var timer=null;
 input.addEventListener('input',function(){ clearTimeout(timer); var v=input.value; timer=setTimeout(function(){ render(v); },120); });
@@ -5872,6 +5932,9 @@ input.addEventListener('keydown',function(e){
 });
 clearBtn.onclick=function(){ reset(); input.focus(); };
 })();
+
+/* 全モジュール定義後に、URL ハッシュ／前回の画面を復元 */
+routeInit();
 </script>
 
 

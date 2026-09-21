@@ -14,7 +14,8 @@
 
 - `index.html` — 「生活指導アシスタント」。8タブ構成（生活指導 / 当院製品 / 医師・看護師 / 外用薬 / ビタミン剤 / パッチ / 食物アレルギー / 所見別ナビ）。約 5,400 行の単一ファイル。パッチテスト画面と患者用パンフレットは `<script type="text/html" id="patch-src">` / `id="pamph-src"` に素の HTML として置き、読み込み時に iframe の `srcdoc` へ流し込んでいる（ブロック内で `</script>` を書くときは `<\/script>`）。
   - 全文を一度に読まない。`grep -n` で場所を特定してから `sed -n` で必要範囲だけ読む。
-  - 既存の localStorage キー：`ptd_list`、`vit_fav_v1`、`vit_memo_v1`、`alg_avoid_state_v1`。
+  - 既存の localStorage キー：`ptd_list`、`vit_fav_v1`、`vit_memo_v1`、`alg_avoid_state_v1`、`app_route_v1`（最後に開いた画面）。
+  - 画面の状態は URL ハッシュで表す（`#<tab>`、`#products/<id>`、`#topical/<subtab>`、`#search/<語>` など。`routeApply` を参照）。新しい画面や詳細ページを足すときは `routeSet()` で記録し、`routeApply()` に復元処理を足す。
   - 新規アプリを作るときは index.html を改変しない（別ファイルにする）。
   - **データを直したら `DATA_META`（`var DATA_META = {` で検索）の該当タブの `updated` を今日の日付にする。** 各タブ末尾に更新日が表示され、12か月を超えると「更新なし」の注意が自動で出る。版を上げるときは `APP_VERSION`。
   - 同じ薬剤が複数タブに出るときの「用法・注意の正本」は `CANON_RULES` で定義している（当院製品 / 外用薬一覧 / 当院製剤 / 医師・看護師 / ビタミン剤）。薬剤や別名を追加したらここにも足す。
