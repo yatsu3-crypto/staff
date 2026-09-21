@@ -48,10 +48,37 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tdel:active{opacity:1;}
 .tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
 
-/* タブナビ */
-.tab-nav{display:flex;background:var(--gd);padding:0 13px;}
-.tab-btn{flex:1;padding:11px 6px;font-size:13px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:.03em;}
+/* タブナビ：8タブを 4列×2段 で常時全表示（横スクロールにしない） */
+.tab-nav{display:grid;grid-template-columns:repeat(4,1fr);background:var(--gd);padding:0 8px;}
+.tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
+.tab-btn .tab-ic{font-size:15px;line-height:1;}
 .tab-btn.active{color:#fff;border-bottom-color:#fff;}
+/* 横断検索 */
+.gs-bar{position:relative;background:var(--gd);padding:8px 13px 10px;}
+.gs-bar svg{position:absolute;left:25px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--tx3);fill:none;stroke-width:2;stroke-linecap:round;pointer-events:none;}
+.gs-bar input{width:100%;font-family:inherit;font-size:16px;padding:10px 40px 10px 38px;border-radius:11px;border:1px solid rgba(255,255,255,.25);background:#fff;color:var(--tx);outline:none;-webkit-appearance:none;appearance:none;}
+.gs-bar input::-webkit-search-cancel-button{display:none;}
+.gs-bar input:focus{border-color:var(--g2);}
+.gs-clear{position:absolute;right:17px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:none;border-radius:50%;background:var(--bg);color:var(--tx2);font-size:16px;cursor:pointer;display:none;align-items:center;justify-content:center;font-family:inherit;}
+.gs-bar.has-q .gs-clear{display:flex;}
+.gs-results{display:none;padding:14px 13px 40px;max-width:540px;margin:0 auto;}
+body.gs-on .page{display:none!important;}
+body.gs-on .gs-results{display:block;}
+.gs-sec{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--gd);display:flex;align-items:center;gap:7px;margin:14px 2px 7px;}
+.gs-sec:first-child{margin-top:2px;}
+.gs-sec::after{content:"";flex:1;height:1px;background:var(--bd);}
+.gs-sec .n{font-weight:400;color:var(--tx3);letter-spacing:0;}
+.gs-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--card);border:.5px solid var(--bd);border-radius:11px;padding:11px 12px;margin-bottom:7px;box-shadow:0 1px 4px rgba(0,0,0,.05);cursor:pointer;font-family:inherit;color:var(--tx);min-height:48px;}
+.gs-item:active{background:var(--gl);}
+.gs-item .ic{flex:none;width:28px;height:28px;border-radius:8px;background:var(--gl);display:inline-flex;align-items:center;justify-content:center;font-size:15px;}
+.gs-item .tx{flex:1;min-width:0;}
+.gs-item .tt{font-size:14px;font-weight:600;line-height:1.35;}
+.gs-item .sb{font-size:11.5px;color:var(--tx2);line-height:1.5;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.gs-item .ar{flex:none;color:var(--tx3);font-size:12px;}
+.gs-item mark{background:#fdf0d8;color:#7a3a10;border-radius:3px;padding:0 1px;}
+.gs-more{font-size:11.5px;color:var(--tx3);text-align:right;margin:-2px 4px 6px;}
+.gs-empty{text-align:center;color:var(--tx3);font-size:13px;padding:36px 16px;line-height:1.7;}
+.gs-hint{font-size:11px;color:var(--tx3);line-height:1.6;text-align:center;padding:10px 6px 0;}
 /* 生成ボタン */
 .gen-btn{width:100%;background:var(--g);color:#fff;border:none;border-radius:50px;padding:15px;font-size:15px;font-weight:600;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;margin-top:4px;}
 .gen-btn:active{background:var(--gd);transform:scale(.98);}
@@ -342,9 +369,6 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 
 
 /* ===== ビタミン剤タブ ===== */
-.tab-nav{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.tab-nav::-webkit-scrollbar{display:none;}
-.tab-btn{font-size:12px;padding:11px 4px;letter-spacing:0;white-space:nowrap;}
 #pg-vitamin .vit-seg{display:flex;gap:6px;background:#fff;border:.5px solid var(--bd);border-radius:11px;padding:4px;margin-bottom:12px;box-shadow:0 1px 5px rgba(0,0,0,.06);}
 #pg-vitamin .vit-seg button{flex:1;border:none;background:none;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--tx2);padding:9px 4px;border-radius:8px;cursor:pointer;transition:.2s;}
 #pg-vitamin .vit-seg button.on{background:var(--g);color:#fff;}
@@ -466,13 +490,9 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .fn-disc{font-size:10.5px;color:var(--tx3);line-height:1.7;text-align:center;padding:14px 6px 4px;}
 </style>
 <style id="patch-embed-css">
-/* タブが6個になっても崩れないよう横スクロール対応 */
-.tab-nav{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.tab-nav::-webkit-scrollbar{display:none;}
-.tab-nav .tab-btn{flex:1 0 auto;}
-/* パッチテストアプリ埋め込み(iframe完全分離) */
+/* パッチテストアプリ埋め込み(iframe完全分離)。高さは fitPatchFrame() が実測で設定 */
 #pg-patch{padding:0;max-width:none;margin:0;}
-#pg-patch iframe{display:block;width:100%;height:calc(100dvh - 112px);min-height:480px;border:0;background:#f3ecdd;}
+#pg-patch iframe{display:block;width:100%;height:calc(100dvh - 170px);min-height:480px;border:0;background:#f3ecdd;}
 @supports not (height:100dvh){#pg-patch iframe{height:calc(100vh - 112px);}}
 </style>
 <style id="allergy-css">
@@ -588,15 +608,21 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
   <div><h1>やまもと皮膚科・漢方クリニック</h1><p>生活指導・当院製品のご案内</p></div>
 </div>
 <div class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('guidance')">⚕ 生活指導</button>
-  <button class="tab-btn" onclick="switchTab('products')">🌿 当院製品</button>
-  <button class="tab-btn" onclick="switchTab('staff')">👨‍⚕️ 医師・看護師</button>
-  <button class="tab-btn" onclick="switchTab('topical')">💊 外用薬</button>
-  <button class="tab-btn" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
-  <button class="tab-btn" onclick="switchTab('patch')">🩹 パッチ</button>
-  <button class="tab-btn" onclick="switchTab('allergy')">🍽 食物アレルギー</button>
-  <button class="tab-btn" onclick="switchTab('findings')">🔍 所見別ナビ</button>
+  <button class="tab-btn active" data-tab="guidance" onclick="switchTab('guidance')"><span class="tab-ic">⚕</span>生活指導</button>
+  <button class="tab-btn" data-tab="products" onclick="switchTab('products')"><span class="tab-ic">🌿</span>当院製品</button>
+  <button class="tab-btn" data-tab="staff" onclick="switchTab('staff')"><span class="tab-ic">👨‍⚕️</span>医師・看護師</button>
+  <button class="tab-btn" data-tab="topical" onclick="switchTab('topical')"><span class="tab-ic">💊</span>外用薬</button>
+  <button class="tab-btn" data-tab="vitamin" onclick="switchTab('vitamin')"><span class="tab-ic">🟡</span>ビタミン剤</button>
+  <button class="tab-btn" data-tab="patch" onclick="switchTab('patch')"><span class="tab-ic">🩹</span>パッチ</button>
+  <button class="tab-btn" data-tab="allergy" onclick="switchTab('allergy')"><span class="tab-ic">🍽</span>食物アレルギー</button>
+  <button class="tab-btn" data-tab="findings" onclick="switchTab('findings')"><span class="tab-ic">🔍</span>所見別ナビ</button>
 </div>
+<div class="gs-bar" id="gs-bar">
+  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+  <input id="gs-input" type="search" placeholder="薬・製品・疾患・成分を横断検索" autocomplete="off" autocorrect="off" enterkeyhint="search" aria-label="横断検索">
+  <button class="gs-clear" id="gs-clear" type="button" aria-label="検索をクリア">✕</button>
+</div>
+<div class="gs-results" id="gs-results"></div>
 
 <!-- 入力ページ -->
 <div class="page active" id="pg-input">
@@ -1998,6 +2024,8 @@ function copyList(){
 
 /* ===== init ===== */
 renderCatFilters();renderProducts();renderGrpFilters();renderAllergens();renderSeries();updateBadge();
+/* 親ページの横断検索から参照する */
+window.PTD_DATA={PRODUCTS:PRODUCTS,A:A,GROUPS:GROUPS};
 </script>
 
 </body>
@@ -3050,30 +3078,24 @@ var PRODUCTS = [
 // ==============================================
 // タブ切り替え
 // ==============================================
+var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
+  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings'};
 function switchTab(tab) {
-  var tabs = document.querySelectorAll('.tab-btn');
-  tabs[0].classList.toggle('active', tab === 'guidance');
-  tabs[1].classList.toggle('active', tab === 'products');
-  tabs[2].classList.toggle('active', tab === 'staff');
-  if(tabs[3]) tabs[3].classList.toggle('active', tab === 'topical');
-  if(tabs[4]) tabs[4].classList.toggle('active', tab === 'vitamin');
-
-  document.getElementById('pg-input').classList.toggle('active', tab === 'guidance');
-  document.getElementById('pg-result').classList.remove('active');
-  document.getElementById('pg-products').classList.toggle('active', tab === 'products');
-  document.getElementById('pg-prod-detail').classList.remove('active');
-  document.getElementById('pg-staff').classList.toggle('active', tab === 'staff');
-  document.getElementById('pg-staff-detail').classList.remove('active');
-  document.getElementById('pg-topical').classList.toggle('active', tab === 'topical');
-  document.getElementById('pg-vitamin').classList.toggle('active', tab === 'vitamin');
-  if(tabs[5]) tabs[5].classList.toggle('active', tab === 'patch');
-  var _pgp=document.getElementById('pg-patch'); if(_pgp) _pgp.classList.toggle('active', tab === 'patch');
-  if(tabs[6]) tabs[6].classList.toggle('active', tab === 'allergy');
-  var _pga=document.getElementById('pg-allergy'); if(_pga) _pga.classList.toggle('active', tab === 'allergy');
-  if(tabs[7]) tabs[7].classList.toggle('active', tab === 'findings');
-  var _pgf=document.getElementById('pg-findings'); if(_pgf) _pgf.classList.toggle('active', tab === 'findings');
+  if(!TAB_PAGES[tab]) return;
+  if(window.gsClose) gsClose();
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === tab); });
+  // 詳細ページ（pg-result / pg-prod-detail / pg-staff-detail）も同時に閉じる
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.toggle('active', p.id === TAB_PAGES[tab]); });
+  if(tab === 'patch') fitPatchFrame();
   window.scrollTo(0, 0);
 }
+// パッチ iframe の高さ：ヘッダー＋タブ＋検索欄の実高さから算出
+function fitPatchFrame(){
+  var f = document.querySelector('#pg-patch iframe'); if(!f) return;
+  var top = f.getBoundingClientRect().top + window.scrollY;
+  f.style.height = Math.max(480, window.innerHeight - top) + 'px';
+}
+window.addEventListener('resize', function(){ if(document.getElementById('pg-patch').classList.contains('active')) fitPatchFrame(); });
 
 // ==============================================
 // 製品ボタン初期化
@@ -3695,6 +3717,28 @@ renderRank();
 renderCalc();
 
 window.toggleCard=toggleCard; window.calcStep=calcStep;
+
+/* 横断検索（gs）用フック：データ参照と、サブタブ／薬剤カードへのジャンプ */
+window.__topical={
+  data:function(){ return {drugs:drugs, mixes:mixes, sites:sites}; },
+  jump:function(view, i){
+    for(var k=0;k<tabs.length;k++){ if(tabs[k].dataset.tab===view){ tabs[k].onclick(); break; } }
+    if(view==="drugs"){
+      document.getElementById("search").value="";
+      renderDrugs("");
+      if(typeof i==="number"){
+        var card=document.querySelector('#drugList .card[data-i="'+i+'"]');
+        if(card){
+          card.classList.add("open");
+          setTimeout(function(){   // 固定ヘッダーの分だけ下げて止める
+            var hdr=document.querySelector(".hdr"); var off=(hdr?hdr.offsetHeight:0)+10;
+            window.scrollTo({top:card.getBoundingClientRect().top+window.scrollY-off, behavior:"smooth"});
+          },50);
+        }
+      }
+    }
+  }
+};
 })();
 
 initButtons();
@@ -5063,8 +5107,254 @@ function fnInit(){
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fnInit);
 else fnInit();
 
+/* 横断検索（gs）用フック */
+window.__fn={
+  data:function(){ return {OUT:FN_OUT, GROUPS:FN_GROUPS, MAP:FN_MAP}; },
+  select:function(ids){
+    fnSel={}; (ids||[]).forEach(function(k){ fnSel[k]=1; });
+    fnChips(); fnResult();
+  }
+};
+
 })();
 </script>
+
+<script>
+/* ══════════════════════════════════════════════
+   横断検索（gs）— 全タブのデータをひとつの検索欄から引く
+   索引は初回検索時に各タブのデータから組み立てる（データは各タブ側が正）
+   ══════════════════════════════════════════════ */
+(function(){
+"use strict";
+var input=document.getElementById('gs-input');
+var bar=document.getElementById('gs-bar');
+var box=document.getElementById('gs-results');
+var clearBtn=document.getElementById('gs-clear');
+if(!input||!box) return;
+
+var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
+var MAX_PER_SEC=8;
+var SEC_ORDER=['topical','staff','products','vitamin','guidance','findings','allergy','patch'];
+var SEC_LABEL={topical:'外用薬', staff:'医師・看護師（新薬・専門薬剤）', products:'当院製品', vitamin:'ビタミン剤（内服）',
+  guidance:'生活指導', findings:'所見別ナビ', allergy:'食物アレルギー', patch:'パッチテスト'};
+
+/* ひらがな→カタカナ・全角→半角・小文字化して比較する。
+   1文字→1文字の変換に限定し、元文字列と長さを揃える（ハイライト位置計算のため） */
+var NORM_CACHE={};
+function normChar(c){
+  if(NORM_CACHE[c]!==undefined) return NORM_CACHE[c];
+  var r=c;
+  try{ var k=c.normalize('NFKC'); if(k.length===1) r=k; }catch(e){}
+  r=r.toLowerCase(); if(r.length!==1) r=c;
+  r=r.replace(/[\u3041-\u3096]/,function(h){ return String.fromCharCode(h.charCodeAt(0)+0x60); });
+  return (NORM_CACHE[c]=r);
+}
+function norm(s){
+  s=String(s==null?'':s); var out='';
+  for(var i=0;i<s.length;i++) out+=normChar(s.charAt(i));
+  return out;
+}
+function flat(v){
+  if(v==null) return '';
+  if(Array.isArray(v)) return v.map(flat).join(' ');
+  if(typeof v==='object') return Object.keys(v).map(function(k){ return flat(v[k]); }).join(' ');
+  return String(v).replace(/<[^>]+>/g,' ');
+}
+function add(sec, icon, title, sub, hayParts, go){
+  INDEX.push({sec:sec, icon:icon, title:title, sub:sub||'', raw:flat([title,sub].concat(hayParts)), go:go});
+}
+/* 固定ヘッダーの下に要素が来るようスクロール */
+function scrollToEl(id){
+  var el=document.getElementById(id); if(!el) return;
+  setTimeout(function(){
+    var hdr=document.querySelector('.hdr'); var off=(hdr?hdr.offsetHeight:0)+10;
+    window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off, behavior:'smooth'});
+  },50);
+}
+function segBtn(pageId, idx){ return document.querySelector('#'+pageId+' .vit-seg button:nth-child('+(idx+1)+'), #'+pageId+' .alg-seg button:nth-child('+(idx+1)+')'); }
+
+function build(){
+  INDEX=[];
+  /* 外用薬（一覧・当院製剤・部位別・サブタブ） */
+  if(window.__topical){
+    var t=__topical.data();
+    t.drugs.forEach(function(d,i){
+      add('topical','💊',d.name,d.generic,[d.cat,d.pill,d.tags,d.point,d.caution,d.nurse,d.site],function(){ switchTab('topical'); __topical.jump('drugs',i); });
+    });
+    t.mixes.forEach(function(m){
+      add('topical','🧪',m.name+'（当院製剤）',m.recipe,[m.conc,m.use,m.merit,m.demerit,m.nurse,'混合 院内製剤'],function(){ switchTab('topical'); __topical.jump('mix'); });
+    });
+    t.sites.forEach(function(x){
+      add('topical','📍','部位別ガイド：'+x.area,x.rec,[x.avoid],function(){ switchTab('topical'); __topical.jump('site'); });
+    });
+    [['rank','痒み抑制効果ランキング','ステロイド TCI JAK PDE4 Tier 強さ ランク 順位'],
+     ['flow','当院流 アトピー外用フロー','アトピー 三層 坐禅 HPCr 保湿 ステロイド プリント 患者用'],
+     ['basics','塗り方の基本','FTU 塗布量 指先 入浴後 回数 すり込まない'],
+     ['calc','塗布量 計算','FTU 処方量 g 本数 日数 部位 計算'],
+     ['proactive','プロアクティブ療法','週2回 維持 再燃 寛解 プロアクティブ リアクティブ'],
+     ['pamph','患者パンフ（プロアクティブ）','ザラザラ 印刷 A4 パンフレット 患者説明'],
+     ['azelaic','アゼライン酸 判定フロー','AZAクリア セラム ざ瘡 にきび 酒皶 マラセチア 色素沈着 妊娠']
+    ].forEach(function(r){
+      add('topical','📑','外用薬 › '+r[1],'',[r[2]],function(){ switchTab('topical'); __topical.jump(r[0]); });
+    });
+  }
+  /* 医師・看護師向け薬剤 */
+  if(window.DRUGS) DRUGS.forEach(function(d){
+    add('staff',d.icon||'💉',d.name,String(d.sub||'').split('\n')[0],[d.sub,d.tags,d.indications,d.dosage,d.cautions,d.points],function(){ switchTab('staff'); showDrug(d.id); });
+  });
+  /* 当院製品 */
+  if(window.PRODUCTS) PRODUCTS.forEach(function(p){
+    add('products',p.icon||'🌿',p.name,String(p.sub||'').split('\n')[0],[p.sub,p.tags,p.features,p.usage,p.recommend,p.points],function(){ switchTab('products'); showProduct(p.id); });
+  });
+  /* ビタミン剤 */
+  if(window.VIT_AGENTS) VIT_AGENTS.forEach(function(a){
+    add('vitamin','🟡',a.name,a.brand,[a.tag,a.mech,a.diseases,a.doses,a.tableDis,a.warn],function(){
+      switchTab('vitamin'); var b=segBtn('pg-vitamin',0); if(b) vitView('agents',b);
+      var q=a.name.split(' ')[0]; document.getElementById('vit-search').value=q; vitSearch(q);
+    });
+  });
+  /* 生活指導（疾患） */
+  if(window.DB) Object.keys(DB).forEach(function(name){
+    var d=DB[name];
+    add('guidance','⚕',name,'生活指導・患者指導を表示',[d.care,d.life,d.night,d.env,d.add],function(){
+      switchTab('guidance');
+      Object.keys(selected).forEach(function(k){ delete selected[k]; });
+      selected[name]=true;
+      document.querySelectorAll('#dis-grid .dis-btn').forEach(function(b){ b.classList.toggle('sel', b.dataset.dis===name); });
+      generate();
+    });
+  });
+  /* 所見別ナビ */
+  if(window.__fn){
+    var f=__fn.data();
+    var outToFindings={};
+    Object.keys(f.MAP).forEach(function(k){ f.MAP[k].forEach(function(o){ (outToFindings[o]=outToFindings[o]||[]).push(k); }); });
+    Object.keys(f.OUT).forEach(function(id){
+      var o=f.OUT[id]; var fids=outToFindings[id]||[];
+      add('findings','🔍',o.t,o.lead,[o.why,o.rx,o.talk],function(){ switchTab('findings'); __fn.select(fids.length?[fids[0]]:[]); scrollToEl('fn-result'); });
+    });
+    f.GROUPS.forEach(function(g){ g.items.forEach(function(it){
+      add('findings','◇','所見：'+it.l,g.t,[],function(){ switchTab('findings'); __fn.select([it.id]); scrollToEl('fn-result'); });
+    }); });
+  }
+  /* 食物アレルギー */
+  if(window.ALG_DB) ALG_DB.forEach(function(d){
+    add('allergy','🍽',d.name,d.alias,[d.avoid,d.cross,d.hid,d.ok],function(){
+      switchTab('allergy');
+      if(d.v39only){   // 回避食品チップに無い項目は View39 側で開く
+        var b2=segBtn('pg-allergy',1); if(b2) algView('view39',b2);
+        var inp=document.getElementById('v39-search'); if(inp){ inp.value=d.name; algFilterView39(d.name); }
+        return;
+      }
+      var b=segBtn('pg-allergy',0); if(b) algView('avoid',b);
+      document.getElementById('alg-search').value=d.name;
+      if(!algSel[d.id]) algToggle(d.id); else algRenderChips(d.name);
+    });
+  });
+  if(window.ALG_ENV) Object.keys(ALG_ENV).forEach(function(k){
+    var e=ALG_ENV[k];
+    add('allergy',e.icon||'🌫',e.name,e.title,[e.note,e.foods],function(){
+      switchTab('allergy'); var b=segBtn('pg-allergy',1); if(b) algView('view39',b);
+      var inp=document.getElementById('v39-search'); if(inp){ inp.value=e.name; algFilterView39(e.name); }
+    });
+  });
+  /* パッチテスト（iframe 内の辞書） */
+  var pf=document.querySelector('#pg-patch iframe');
+  var cw=null; try{ cw=pf&&pf.contentWindow; if(cw&&!cw.PTD_DATA) cw=null; }catch(e){ cw=null; }
+  if(cw){
+    var P=cw.PTD_DATA;
+    P.PRODUCTS.forEach(function(p){
+      add('patch',p.e||'🩹',p.n,'製品（'+p.cat+'）',[p.pearls,(p.groups||[]).map(function(g){ return (g[1]||[]).map(function(id){ return P.A[id]?P.A[id].n:''; }); })],function(){
+        switchTab('patch'); cw.switchView('products'); cw.document.getElementById('psearch').value=p.n; cw.renderProducts();
+      });
+    });
+    Object.keys(P.A).forEach(function(id){
+      var a=P.A[id]; var g=P.GROUPS[a.g];
+      add('patch','🧫',a.n,(g?g.n+'・':'')+(a.x||''),[a.c,a.d],function(){
+        switchTab('patch'); cw.switchView('allergens'); cw.document.getElementById('asearch').value=a.n; cw.renderAllergens();
+      });
+    });
+  }
+  INDEX.forEach(function(it){ it.hay=norm(it.raw); });
+}
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function hl(text, terms){
+  var h=esc(text); if(!terms.length) return h;
+  var n=norm(text); if(n.length!==text.length) return h;   // 正規化で長さが変わる場合は装飾しない
+  var out='', i=0;
+  while(i<text.length){
+    var len=0;
+    terms.forEach(function(t){ if(n.substr(i,t.length)===t && t.length>len) len=t.length; });
+    if(len){ out+='<mark>'+esc(text.substr(i,len))+'</mark>'; i+=len; } else { out+=esc(text.charAt(i)); i++; }
+  }
+  return out;
+}
+/* 一致した本文の前後を切り出す（タイトルに一致がないとき用） */
+function snippet(it, terms){
+  var raw=it.raw, n=it.hay;
+  if(n.length!==raw.length) return it.sub;
+  var pos=-1; terms.forEach(function(t){ var p=n.indexOf(t); if(p>=0&&(pos<0||p<pos)) pos=p; });
+  if(pos<0) return it.sub;
+  var st=Math.max(0,pos-18), en=Math.min(raw.length,pos+42);
+  return (st>0?'…':'')+raw.slice(st,en).replace(/\s+/g,' ')+(en<raw.length?'…':'');
+}
+
+var shown=[];
+function render(q){
+  var terms=norm(q).split(/\s+/).filter(Boolean);
+  if(!terms.length){ close(); return; }
+  if(!INDEX) build();
+  bar.classList.add('has-q'); document.body.classList.add('gs-on');
+  var hits=INDEX.filter(function(it){ return terms.every(function(t){ return it.hay.indexOf(t)>=0; }); });
+  /* タイトル一致を先に */
+  hits.forEach(function(it){ it.score=terms.some(function(t){ return norm(it.title).indexOf(t)>=0; })?0:1; });
+  shown=[];
+  if(!hits.length){
+    box.innerHTML='<div class="gs-empty">「'+esc(q)+'」に一致する項目がありません。<br>薬剤名・製品名・疾患名・成分名で検索してください。</div>';
+    return;
+  }
+  var bySec={}; hits.forEach(function(it){ (bySec[it.sec]=bySec[it.sec]||[]).push(it); });
+  /* 名前が一致した項目を含むセクションを先に、その中は SEC_ORDER 順 */
+  var secs=SEC_ORDER.filter(function(k){ return bySec[k]; });
+  secs.forEach(function(k){ bySec[k].sort(function(a,b){ return a.score-b.score; }); });
+  secs.sort(function(a,b){ return (bySec[a][0].score-bySec[b][0].score) || (SEC_ORDER.indexOf(a)-SEC_ORDER.indexOf(b)); });
+  var html='';
+  secs.forEach(function(sec){
+    var list=bySec[sec];
+    html+='<div class="gs-sec">'+esc(SEC_LABEL[sec])+'<span class="n">'+list.length+'件</span></div>';
+    list.slice(0,MAX_PER_SEC).forEach(function(it){
+      var i=shown.push(it)-1;
+      var sub=it.score===0?it.sub:snippet(it,terms);
+      html+='<button class="gs-item" type="button" data-i="'+i+'"><span class="ic">'+esc(it.icon)+'</span>'
+        +'<span class="tx"><span class="tt">'+hl(it.title,terms)+'</span>'+(sub?'<span class="sb">'+hl(sub,terms)+'</span>':'')+'</span><span class="ar">›</span></button>';
+    });
+    if(list.length>MAX_PER_SEC) html+='<div class="gs-more">他 '+(list.length-MAX_PER_SEC)+'件 — 語を足して絞り込んでください</div>';
+  });
+  html+='<div class="gs-hint">タップすると該当タブの該当項目を開きます。</div>';
+  box.innerHTML=html;
+  box.querySelectorAll('.gs-item').forEach(function(b){
+    b.onclick=function(){ var it=shown[+b.dataset.i]; if(!it) return; close(); it.go(); };
+  });
+}
+function close(){
+  bar.classList.toggle('has-q', !!input.value);   // 語が残っていれば ✕ は出したまま
+  document.body.classList.remove('gs-on'); box.innerHTML='';
+}
+function reset(){ input.value=''; close(); }
+window.gsClose=close;
+
+var timer=null;
+input.addEventListener('input',function(){ clearTimeout(timer); var v=input.value; timer=setTimeout(function(){ render(v); },120); });
+input.addEventListener('focus',function(){ if(input.value.trim()) render(input.value); });
+input.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){ reset(); input.blur(); }
+  if(e.key==='Enter'){ e.preventDefault(); input.blur(); if(shown.length===1) box.querySelector('.gs-item').click(); }
+});
+clearBtn.onclick=function(){ reset(); input.focus(); };
+})();
+</script>
+
 
 </body>
 </html>
