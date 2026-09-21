@@ -53,6 +53,17 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
 .tab-btn.active{color:#fff;border-bottom-color:#fff;}
+/* 正本リンク（他タブに出てくる薬剤名 → 用法・注意の正本へ） */
+.canon-box{margin-top:14px;padding:10px 12px;background:#faf9f6;border:.5px dashed var(--bd);border-radius:10px;}
+.canon-ttl{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--tx3);margin-bottom:7px;}
+.canon-chip{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:600;color:var(--tc);background:var(--gl);border:none;border-radius:20px;padding:7px 11px;margin:0 6px 6px 0;cursor:pointer;min-height:32px;}
+.canon-chip:active{background:var(--g2);color:#fff;}
+.canon-chip .cs{font-size:9.5px;font-weight:500;color:var(--g);opacity:.85;}
+.canon-chip:active .cs{color:#fff;}
+.canon-self{font-size:10.5px;color:var(--tx3);line-height:1.6;margin:-4px 0 12px;padding:6px 10px;border-left:2px solid var(--gl);}
+.canon-xref{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--tx2);line-height:1.6;background:#fff;border:.5px solid var(--bd);border-radius:10px;padding:9px 12px;margin:0 0 12px;}
+.canon-xref button{flex:none;font-family:inherit;font-size:12px;font-weight:600;color:var(--tc);background:var(--gl);border:none;border-radius:8px;padding:7px 10px;cursor:pointer;min-height:32px;white-space:nowrap;}
+@media print{.canon-box,.canon-self,.canon-xref{display:none!important;}}
 /* 横断検索 */
 .gs-bar{position:relative;background:var(--gd);padding:8px 13px 10px;}
 .gs-bar svg{position:absolute;left:25px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--tx3);fill:none;stroke-width:2;stroke-linecap:round;pointer-events:none;}
@@ -1019,6 +1030,7 @@ body.gs-on .gs-results{display:block;}
   <!-- ══════════ アゼライン酸（AZAクリアセラム）══════════ -->
   <section class="panel" id="azelaic">
     <div class="sectitle">アゼライン酸 使いどころナビ</div>
+    <div class="canon-xref"><span>製品の用法・注意の正本は <b>当院製品 › AZAクリアセラム</b>。所見（面皰・赤み・色素沈着…）から治療全体を組む場合は <b>所見別ナビ</b> を使います。</span><button type="button" onclick="switchTab('findings')">所見別ナビ ›</button></div>
 
     <div class="block">
       <h3>DRX AZAクリアセラム</h3>
@@ -1124,6 +1136,8 @@ body.gs-on .gs-results{display:block;}
     <div class="card-hd"><span class="dot"></span>所見から組み立てる</div>
     <div class="card-body">
       <div class="fn-intro">見えている所見を選んでください。保険で拾えるものを先に出し、自費は最後に出ます。複数選択できます。</div>
+      <div style="height:10px;"></div>
+      <div class="canon-xref" style="margin-bottom:0"><span>アゼライン酸単剤の使いどころ（ざ瘡・酒皶・マラセチア・肝斑の場面別判定）は <b>外用薬 › アゼライン酸</b> にあります。</span><button type="button" onclick="switchTab('topical');__topical.jump('azelaic')">開く ›</button></div>
       <div style="height:12px;"></div>
       <div id="fn-chipbox"></div>
     </div>
@@ -2034,6 +2048,123 @@ window.PTD_DATA={PRODUCTS:PRODUCTS,A:A,GROUPS:GROUPS};
 </div>
 
 <script>
+/* ══════════════════════════════════════════════
+   薬剤の「正本」レジストリ
+   同じ薬が複数タブに出てくるため、用法・注意の正本を 1 か所に決め、
+   他タブの記載からは正本へジャンプするチップを自動で付ける。
+   ・当院製品（自費）   → 当院製品タブ
+   ・保険外用薬         → 外用薬 › 外用薬一覧
+   ・新薬・専門薬剤     → 医師・看護師タブ
+   ・内服ビタミン等     → ビタミン剤タブ
+   名前の別名（一般名・略称）はここに追加する。
+   ══════════════════════════════════════════════ */
+var CANON_RULES=[
+  /* 当院製品 */
+  {k:['ハイドロキノン'],                    sec:'products', id:'hydroquinone'},
+  {k:['トレチノイン'],                      sec:'products', id:'tretinoin'},
+  {k:['AZAクリア','アゼライン酸'],          sec:'products', id:'azaclear_serum'},
+  {k:['ビタミンCローション','VCローション'],sec:'products', id:'vc_lotion'},
+  {k:['美白・肝斑セット'],                  sec:'products', id:'bihaku_set'},
+  {k:['ヘリオケア'],                        sec:'products', id:'heliocare'},
+  {k:['バクチセラム','バクチオール'],       sec:'products', id:'bakuchiol'},
+  {k:['レチノステム'],                      sec:'products', id:'retinostem'},
+  {k:['TAレチノファースト'],                sec:'products', id:'ta_retino_first'},
+  {k:['TAレチノアドバンス'],                sec:'products', id:'ta_retino_advance'},
+  {k:['アスタキサンチン'],                  sec:'products', id:'astaxanthin'},
+  {k:['ステムラッシュ'],                    sec:'products', id:'stemlash'},
+  {k:['黄金の薬湯'],                        sec:'products', id:'ougon_yaku'},
+  {k:['銀の薬湯'],                          sec:'products', id:'gin_yaku'},
+  {k:['銅の薬湯'],                          sec:'products', id:'do_yaku'},
+  /* 保険外用薬（外用薬一覧のカード名で指定） */
+  {k:['プロトピック','タクロリムス'],       sec:'topical', name:'プロトピック軟膏'},
+  {k:['コレクチム','デルゴシチニブ'],       sec:'topical', name:'コレクチム軟膏'},
+  {k:['モイゼルト','ジファミラスト'],       sec:'topical', name:'モイゼルト軟膏'},
+  {k:['ブイタマー','タピナロフ'],           sec:'topical', name:'ブイタマークリーム'},
+  {k:['ヒルドイド','ヘパリン類似物質'],     sec:'topical', name:'保湿剤（ヘパリン類似物質ほか）'},
+  {k:['デルモベート','ジフラール','ダイアコート'],                                   sec:'topical', name:'ストロンゲスト（最強）'},
+  {k:['マイザー','アンテベート','フルメタ','トプシム','ネリゾナ','パンデル','リンデロンDP'], sec:'topical', name:'ベリーストロング（非常に強い）'},
+  {k:['リンデロンV','ボアラ','メサデルム','エクラー','フルコート'],                  sec:'topical', name:'ストロング（強い）'},
+  {k:['ロコイド','キンダベート','リドメックス','アルメタ','レダコート'],             sec:'topical', name:'ミディアム（中等度）'},
+  {k:['HPCr'], sec:'mix'}, {k:['HCCr'], sec:'mix'},
+  /* 新薬・専門薬剤 */
+  {k:['デュピクセント','デュピルマブ'],     sec:'staff', id:'dupixent'},
+  {k:['ミチーガ','ネモリズマブ'],           sec:'staff', id:'mitchga'},
+  {k:['ネオーラル','シクロスポリン'],       sec:'staff', id:'neoral'},
+  {k:['オテズラ','アプレミラスト'],         sec:'staff', id:'otezla'},
+  {k:['ソーティクツ','デュークラバシチニブ'],sec:'staff', id:'sotyktu'},
+  {k:['ワイキャンス','カンタリジン'],       sec:'staff', id:'wyikyans'},
+  /* 内服ビタミン等 */
+  {k:['トラネキサム酸','トランサミン'],     sec:'vitamin', id:'txa'},
+  {k:['ハイチオール','L-システイン'],       sec:'vitamin', id:'cys'},
+  {k:['タチオン','グルタチオン'],           sec:'vitamin', id:'gsh'},
+  {k:['シナール'],                          sec:'vitamin', id:'c'},
+  {k:['ユベラ'],                            sec:'vitamin', id:'e'},
+  {k:['ピドキサール'],                      sec:'vitamin', id:'b6'},
+  {k:['フラビタン','ハイボン'],             sec:'vitamin', id:'b2'}
+];
+var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'当院製剤', staff:'医師・看護師', vitamin:'ビタミン剤'};
+
+(function(){
+  /* 表示名：正本側のデータから引く（データ更新に追従） */
+  function labelOf(r){
+    try{
+      if(r.sec==='products'){ var p=null; PRODUCTS.forEach(function(x){ if(x.id===r.id) p=x; }); return p?p.name:r.k[0]; }
+      if(r.sec==='staff'){ var d=null; DRUGS.forEach(function(x){ if(x.id===r.id) d=x; }); return d?d.name:r.k[0]; }
+      if(r.sec==='vitamin'){ var v=null; VIT_AGENTS.forEach(function(x){ if(x.id===r.id) v=x; }); return v?v.name.split(' ')[0]:r.k[0]; }
+      if(r.sec==='topical') return r.name;
+      if(r.sec==='mix') return r.k[0]+'（当院製剤）';
+    }catch(e){}
+    return r.k[0];
+  }
+  function keyOf(r){ return r.sec+':'+(r.id||r.name||r.k[0]); }
+  function esc(x){ return String(x==null?'':x).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  /* text に出てくる薬剤名から正本チップの HTML を作る。
+     self: 自分自身の正本キー（'products:hydroquinone' など）。exclude: 除外する製品 id 配列 */
+  window.canonLinks=function(text, self, exclude){
+    var t=String(text==null?'':text).replace(/<[^>]+>/g,' ').toLowerCase();
+    if(!t) return '';
+    exclude=exclude||[];
+    var out='';
+    CANON_RULES.forEach(function(r,i){
+      var key=keyOf(r);
+      if(key===self) return;
+      if(r.sec==='products' && exclude.indexOf(r.id)>=0) return;
+      var hit=r.k.some(function(k){ return t.indexOf(k.toLowerCase())>=0; });
+      if(!hit) return;
+      out+='<button type="button" class="canon-chip" data-canon="'+i+'">'+esc(labelOf(r))+'<span class="cs">'+esc(CANON_SEC_LABEL[r.sec])+' ›</span></button>';
+    });
+    if(!out) return '';
+    return '<div class="canon-box no-print"><div class="canon-ttl">📎 用法・注意の正本を開く</div>'+out+'</div>';
+  };
+  window.canonSelfNote=function(){
+    return '<div class="canon-self">🔖 この画面が用法・注意の正本です。他タブに出てくる同じ薬剤の記載は要点の抜粋なので、更新はここを直してください。</div>';
+  };
+  /* チップのタップ：ページ全体で 1 つのリスナーに委譲 */
+  window.canonGo=function(i){
+    var r=CANON_RULES[i]; if(!r) return;
+    if(r.sec==='products'){ switchTab('products'); showProduct(r.id); }
+    else if(r.sec==='staff'){ switchTab('staff'); showDrug(r.id); }
+    else if(r.sec==='vitamin'){
+      switchTab('vitamin');
+      var b=document.querySelector('#pg-vitamin .vit-seg button'); if(b) vitView('agents',b);
+      var q=labelOf(r); document.getElementById('vit-search').value=q; vitSearch(q);
+    }
+    else if(r.sec==='mix'){ switchTab('topical'); __topical.jump('mix'); }
+    else if(r.sec==='topical'){
+      switchTab('topical');
+      var idx=-1; __topical.data().drugs.forEach(function(d,j){ if(d.name===r.name) idx=j; });
+      __topical.jump('drugs', idx>=0?idx:undefined);
+    }
+  };
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('.canon-chip'); if(!b) return;
+    e.preventDefault(); canonGo(+b.dataset.canon);
+  });
+})();
+</script>
+
+<script>
 // ==============================================
 // 疾患データ（28疾患）
 // ==============================================
@@ -2503,7 +2634,7 @@ function generate(){
     html += '</div>';
   }
 
-  document.getElementById('r-body').innerHTML = html;
+  document.getElementById('r-body').innerHTML = html + (window.canonLinks ? canonLinks(html) : '');
   document.getElementById('pg-input').classList.remove('active');
   document.getElementById('pg-result').classList.add('active');
   window.scrollTo(0,0);
@@ -3143,6 +3274,7 @@ function showProduct(id) {
   });
   html += '</div>';
 
+  if(window.canonLinks) html += canonSelfNote() + canonLinks(html, 'products:'+p.id);
   document.getElementById('prod-detail-body').innerHTML = html;
   document.getElementById('pg-products').classList.remove('active');
   document.getElementById('pg-prod-detail').classList.add('active');
@@ -3395,6 +3527,7 @@ function showDrug(id){
   });
   html += '</div>';
 
+  if(window.canonLinks) html += canonSelfNote() + canonLinks(html, 'staff:'+d.id);
   document.getElementById('staff-detail-body').innerHTML = html;
   document.getElementById('pg-staff').classList.remove('active');
   document.getElementById('pg-staff-detail').classList.add('active');
@@ -3578,6 +3711,7 @@ function renderSites(){
     return '<div class="block"><h3 style="font-size:15.5px;">'+s.area+'</h3>'
       +'<div class="row"><div class="k">推奨</div><div class="v">'+s.rec+'</div></div>'
       +(s.avoid!=="—"?'<div class="row" style="border-top:1px dashed var(--line)"><div class="k">注意</div><div class="v">'+s.avoid+'</div></div>':'')
+      +(window.canonLinks?canonLinks(s.rec+' '+s.avoid):'')
       +'</div>';
   }).join("");
 }
@@ -3593,6 +3727,7 @@ function renderMix(){
       +'<div class="row"><div class="k">利点</div><div class="v">'+m.merit.map(function(x){return '・'+x;}).join("<br>")+'</div></div>'
       +'<div class="row"><div class="k">留意</div><div class="v">'+m.demerit.map(function(x){return '・'+x;}).join("<br>")+'</div></div>'
       +'<div class="nursebox"><div class="nh">患者説明ポイント</div><ul>'+m.nurse.map(function(n){return '<li>'+n+'</li>';}).join("")+'</ul></div>'
+      +(window.canonLinks?canonLinks(m.recipe+' '+m.use, 'mix:'+m.name):'')
       +'</div>';
   }).join("");
 }
@@ -4647,6 +4782,7 @@ algInit();
     d.rx.forEach(function(x){h+='<li>'+esc2(x)+'</li>';});
     h+='</ul><div class="aza-h4">患者さんへの説明</div><div class="aza-talk">'+esc2(d.talk)+'</div>'
       +'<div style="margin-top:9px"><button class="aza-btn" id="aza-cp">説明文をコピー</button></div>'
+      +(window.canonLinks?canonLinks([d.t,d.lead,d.why,d.rx,d.talk].join(' ')):'')
       +'</div></div>';
     document.getElementById("aza-stage").innerHTML=h;
     document.getElementById("aza-cp").onclick=function(){
@@ -5095,6 +5231,7 @@ function fnCard(id){
     h+='</div>';
   }
   if(o.ev){ h+='<div class="fn-ev">評価：'+fe(o.ev)+'</div>'; }
+  if(window.canonLinks) h+=canonLinks([o.lead,o.why,o.rx,o.talk].join(' '), null, o.prod||[]);
   h+='</div></div>';
   return h;
 }
