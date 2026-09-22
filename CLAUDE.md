@@ -12,6 +12,7 @@
 
 ## 既存アプリ
 
+- 論文ダイジェスト（`papers.html`）と `paper-digest` スキルは別リポジトリ `yatsu3-crypto/papers`（ローカルは `~/papers`）にある。ここには置かない。
 - `index.html` — 「生活指導アシスタント」。8タブ構成（生活指導 / 当院製品 / 医師・看護師 / 外用薬 / ビタミン剤 / パッチ / 食物アレルギー / 所見別ナビ）。約 5,400 行の単一ファイル。パッチテスト画面と患者用パンフレットは `<script type="text/html" id="patch-src">` / `id="pamph-src"` に素の HTML として置き、読み込み時に iframe の `srcdoc` へ流し込んでいる（ブロック内で `</script>` を書くときは `<\/script>`）。
   - 全文を一度に読まない。`grep -n` で場所を特定してから `sed -n` で必要範囲だけ読む。
   - 既存の localStorage キー：`ptd_list`、`vit_fav_v1`、`vit_memo_v1`、`alg_avoid_state_v1`、`app_route_v1`（最後に開いた画面）。
