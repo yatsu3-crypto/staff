@@ -3390,7 +3390,10 @@ function kensaGo(id){
 }
 (function(){
   var f=document.getElementById('kensaFrame'); if(!f) return;
-  f.addEventListener('load', function(){ if(KENSA_PENDING!==null){ var id=KENSA_PENDING; KENSA_PENDING=null; kensaGo(id); } });
+  f.addEventListener('load', function(){
+    if(KENSA_PENDING!==null){ var id=KENSA_PENDING; KENSA_PENDING=null; kensaGo(id); }
+    if(window.fillKensaXref) fillKensaXref();   // 読み込み前に開いた薬剤詳細のリンクを埋める
+  });
   f.srcdoc=embeddedHTML('kensa-src');
 })();
 
@@ -4868,12 +4871,10 @@ function showDrug(id){
   });
   html += '</div>';
 
-  if(d.tags.indexOf('生物学的製剤') >= 0){
-    html += '<div class="canon-xref" style="margin-top:12px"><span>導入前スクリーニング（結核・HBV 等）と維持期モニタリングの検査は <b>検査パネル › 生物学的製剤</b> にあります。</span>'
-          + '<button type="button" style="min-height:44px" onclick="switchTab(\'kensa\');kensaGo(\'bio\')">開く ›</button></div>';
-  }
+  html += '<div id="kensa-xref" data-drug="'+esc(d.id)+'"></div>';   // 検査パネルへのリンク（fillKensaXref が埋める）
   if(window.canonLinks) html += canonSelfNote() + canonLinks(html, 'staff:'+d.id);
   document.getElementById('staff-detail-body').innerHTML = html;
+  fillKensaXref();
   document.getElementById('pg-staff').classList.remove('active');
   document.getElementById('pg-staff-detail').classList.add('active');
   window.scrollTo(0,0);
@@ -4881,6 +4882,36 @@ function showDrug(id){
 }
 
 function goBackStaff(){ routeBack('staff'); }
+
+/* 薬剤詳細に「検査パネル › 生物学的製剤」へのリンクを出す。
+   出し分けはタグではなく、検査パネルの「クラス別の強弱」（bio の drugs 欄）に載っている薬剤名で判定する。
+   薬剤名は tl の各項目（「一般名（製品名）」の形も可）と、カードの製品名・一般名（sub の1行目の括弧前）を照合 */
+function kensaBioDrugNames(){
+  var w=kensaWin(); if(!w) return null;
+  var bio=w.KENSA.DATA.filter(function(x){ return x.id==='bio'; })[0]; if(!bio) return [];
+  var names=[];
+  bio.sections.forEach(function(s){
+    if(s.kind!=='drugs') return;
+    (s.items||[]).forEach(function(x){
+      (x.tl||[]).forEach(function(t){
+        String(t).split(/[（）()]/).forEach(function(n){ n=n.trim(); if(n) names.push(n); });
+      });
+    });
+  });
+  return names;
+}
+function fillKensaXref(){
+  var box=document.getElementById('kensa-xref'); if(!box) return;
+  var names=kensaBioDrugNames(); if(!names) return;   // iframe 読み込み前は load 後にもう一度呼ばれる
+  var d=null; DRUGS.forEach(function(x){ if(x.id===box.getAttribute('data-drug')) d=x; });
+  if(!d) return;
+  var generic=String(d.sub||'').split('\n')[0].split(/[（(]/)[0].trim();
+  var hit=names.some(function(n){ return n===d.name || n===generic; });
+  box.innerHTML = hit
+    ? '<div class="canon-xref" style="margin-top:12px"><span>導入前スクリーニング（結核・HBV 等）と維持期モニタリングの検査は <b>検査パネル › 生物学的製剤</b> にあります。</span>'
+      + '<button type="button" style="min-height:44px" onclick="switchTab(\'kensa\');kensaGo(\'bio\')">開く ›</button></div>'
+    : '';
+}
 
 
 /* ===== 外用薬ガイド（統合・スコープ隔離） ===== */
