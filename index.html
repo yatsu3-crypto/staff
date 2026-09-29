@@ -48,8 +48,8 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tdel:active{opacity:1;}
 .tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
 
-/* タブナビ：8タブを 4列×2段 で常時全表示（横スクロールにしない） */
-.tab-nav{display:grid;grid-template-columns:repeat(4,1fr);background:var(--gd);padding:0 8px;}
+/* タブナビ：9タブを 3列×3段 で常時全表示（横スクロールにしない） */
+.tab-nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--gd);padding:0 8px;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
 .tab-btn.active{color:#fff;border-bottom-color:#fff;}
@@ -507,10 +507,12 @@ body.gs-on .gs-results{display:block;}
 .fn-disc{font-size:10.5px;color:var(--tx3);line-height:1.7;text-align:center;padding:14px 6px 4px;}
 </style>
 <style id="patch-embed-css">
-/* パッチテストアプリ埋め込み(iframe完全分離)。高さは fitPatchFrame() が実測で設定 */
-#pg-patch{padding:0;max-width:none;margin:0;}
-#pg-patch iframe{display:block;width:100%;height:calc(100dvh - 170px);min-height:480px;border:0;background:#f3ecdd;}
-@supports not (height:100dvh){#pg-patch iframe{height:calc(100vh - 112px);}}
+/* パッチテスト・検査パネルの埋め込み(iframe完全分離)。高さは fitEmbedFrame() が実測で設定。
+   下の calc は JS が動く前の初期値（ヘッダー＋タブ3段＋横断検索欄の高さ） */
+#pg-patch,#pg-kensa{padding:0;max-width:none;margin:0;}
+#pg-patch iframe,#pg-kensa iframe{display:block;width:100%;height:calc(100dvh - 272px);min-height:480px;border:0;background:#f3ecdd;}
+#pg-kensa iframe{background:#f6f1e6;min-height:240px;}
+@supports not (height:100dvh){#pg-patch iframe,#pg-kensa iframe{height:calc(100vh - 272px);}}
 </style>
 <style id="allergy-css">
 /* ===== 食物アレルギータブ ===== */
@@ -633,6 +635,7 @@ body.gs-on .gs-results{display:block;}
   <button class="tab-btn" data-tab="patch" onclick="switchTab('patch')"><span class="tab-ic">🩹</span>パッチ</button>
   <button class="tab-btn" data-tab="allergy" onclick="switchTab('allergy')"><span class="tab-ic">🍽</span>食物アレルギー</button>
   <button class="tab-btn" data-tab="findings" onclick="switchTab('findings')"><span class="tab-ic">🔍</span>所見別ナビ</button>
+  <button class="tab-btn" data-tab="kensa" onclick="switchTab('kensa')"><span class="tab-ic">🧪</span>検査パネル</button>
 </div>
 <div class="gs-bar" id="gs-bar">
   <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -2495,17 +2498,901 @@ var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'�
 })();
 </script>
 
+<!-- 検査パネル（独立アプリをiframeで埋め込み） -->
+<div class="page" id="pg-kensa">
+  <iframe title="検査パネル（疾患別の検査セット）" id="kensaFrame"></iframe>
+  <!-- 検査パネルの本体。読み込み時に上の iframe の srcdoc へ流し込む。
+       普通の HTML として編集してよい。ただし本体内の </script> は <\/script> と書く。 -->
+  <script type="text/html" id="kensa-src">
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>検査パネル｜やまもと皮膚科・漢方クリニック</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --washi:#f6f1e6;
+  --washi2:#fbf8f2;
+  --washi3:#efe8d8;
+  --sumi:#2f2a26;
+  --sumi-l:#6b625a;
+  --line:#ddd2bd;
+  --shu:#b8453a;
+  --shu-bg:#fbeeec;
+  --kincha:#a8762a;
+  --kincha-bg:#faf2e2;
+  --matsuba:#4e6b4a;
+  --matsuba-bg:#eef3ec;
+  --ai:#2c4a7c;
+  --ai-bg:#eceff6;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--washi);
+  color:var(--sumi);
+  font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:15px;line-height:1.75;
+  padding-bottom:env(safe-area-inset-bottom);
+  -webkit-text-size-adjust:100%;
+}
+.mincho{font-family:"Shippori Mincho",serif}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:40;
+  background:rgba(246,241,230,.96);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px}
+.seal{
+  width:34px;height:34px;flex:none;border-radius:6px;
+  background:var(--shu);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Shippori Mincho",serif;font-weight:700;font-size:18px;
+  box-shadow:0 1px 3px rgba(0,0,0,.18);
+}
+.hd h1{margin:0;font-family:"Shippori Mincho",serif;font-size:17px;font-weight:700;letter-spacing:.04em;line-height:1.3}
+.hd .sub{font-size:11px;color:var(--sumi-l);letter-spacing:.06em;line-height:1.3}
+.searchwrap{max-width:760px;margin:0 auto;padding:0 16px 10px}
+#q{
+  width:100%;padding:9px 12px;font-size:16px;
+  font-family:inherit;color:var(--sumi);
+  background:var(--washi2);border:1px solid var(--line);border-radius:8px;
+  outline:none;
+}
+#q:focus{border-color:var(--ai);background:#fff}
+
+/* ---------- home ---------- */
+main{max-width:760px;margin:0 auto;padding:16px 16px 120px}
+.cards{display:grid;gap:10px}
+@media(min-width:620px){.cards{grid-template-columns:1fr 1fr}}
+.card{
+  background:var(--washi2);border:1px solid var(--line);border-radius:10px;
+  padding:13px 14px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .08s,box-shadow .12s;
+}
+.card:active{transform:scale(.985)}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--bar,var(--ai))}
+.card h2{margin:0 0 2px;font-family:"Shippori Mincho",serif;font-size:17px;font-weight:700;padding-left:8px}
+.card .cs{font-size:12.5px;color:var(--sumi-l);padding-left:8px;line-height:1.6}
+.badge{
+  display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+  padding:2px 7px;border-radius:99px;margin-left:8px;vertical-align:2px;
+  background:var(--bg,var(--ai-bg));color:var(--bar,var(--ai));
+}
+.t-cause{--bar:var(--ai);--bg:var(--ai-bg)}
+.t-triage{--bar:var(--shu);--bg:var(--shu-bg)}
+.t-manage{--bar:var(--matsuba);--bg:var(--matsuba-bg)}
+.t-protocol{--bar:var(--kincha);--bg:var(--kincha-bg)}
+.hitline{font-size:12px;color:var(--shu);padding-left:8px;margin-top:4px}
+
+/* ---------- detail ---------- */
+.back{
+  display:inline-flex;align-items:center;gap:5px;
+  background:none;border:none;color:var(--ai);font-family:inherit;font-size:14px;
+  min-height:44px;padding:0 16px 0 0;margin-bottom:2px;cursor:pointer;
+}
+.dhead{border-bottom:2px solid var(--bar,var(--ai));padding-bottom:8px;margin-bottom:14px}
+.dhead h2{margin:0;font-family:"Shippori Mincho",serif;font-size:22px;font-weight:700}
+.dhead .ds{font-size:13px;color:var(--sumi-l);margin-top:4px;line-height:1.7}
+
+section{margin-bottom:20px}
+.sh{
+  font-family:"Shippori Mincho",serif;font-size:15.5px;font-weight:700;
+  margin:0 0 8px;padding-left:9px;border-left:3px solid var(--bar,var(--ai));
+  line-height:1.5;
+}
+.sh small{font-weight:400;font-size:12px;color:var(--sumi-l);margin-left:6px;font-family:"Zen Kaku Gothic New",sans-serif}
+
+/* tests */
+ul.tests{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--washi2)}
+ul.tests li{display:flex;gap:9px;padding:9px 11px;min-height:44px;border-bottom:1px solid var(--line);align-items:flex-start;cursor:pointer}
+ul.tests li:last-child{border-bottom:none}
+ul.tests li.on{background:var(--ai-bg)}
+.cb{
+  width:19px;height:19px;flex:none;margin-top:3px;border-radius:4px;
+  border:1.5px solid var(--line);background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:#fff;line-height:1;
+}
+li.on .cb{background:var(--ai);border-color:var(--ai)}
+.tn{font-weight:500;font-size:14.5px;line-height:1.55}
+.td{font-size:12.5px;color:var(--sumi-l);line-height:1.6;margin-top:1px}
+.must{
+  display:inline-block;font-size:10px;font-weight:700;color:#fff;background:var(--shu);
+  border-radius:3px;padding:1px 5px;margin-left:6px;vertical-align:2px;letter-spacing:.04em;
+}
+
+/* branch */
+.branch{display:grid;gap:7px}
+.br{background:var(--washi2);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+.br .c{font-weight:700;font-size:13.5px;line-height:1.6;color:var(--sumi)}
+.br .c::before{content:"▸ ";color:var(--bar,var(--ai))}
+.br .a{font-size:13.5px;line-height:1.65;margin-top:3px;padding-left:14px;border-left:2px solid var(--line)}
+
+/* bullets */
+ul.bl{margin:0;padding-left:1.15em;font-size:14px;line-height:1.85}
+ul.bl li{margin-bottom:3px}
+
+/* callouts */
+.call{border-radius:9px;padding:11px 13px;font-size:13.5px;line-height:1.75}
+.call .ct{font-weight:700;font-size:13px;letter-spacing:.04em;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.call ul{margin:0;padding-left:1.15em}
+.call li{margin-bottom:3px}
+.c-stop{background:var(--shu-bg);border:1px solid #e8c4bf;color:#7d2b22}
+.c-stop .ct{color:var(--shu)}
+.c-warn{background:var(--kincha-bg);border:1px solid #e6d3ab;color:#6d4c11}
+.c-warn .ct{color:var(--kincha)}
+.c-note{background:var(--matsuba-bg);border:1px solid #cfdccb;color:#385034}
+.c-note .ct{color:var(--matsuba)}
+
+/* timeline */
+.tl{position:relative;padding-left:22px;margin:0}
+.tl::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl .tli{position:relative;margin-bottom:11px}
+.tl .tli::before{
+  content:"";position:absolute;left:-19px;top:7px;width:10px;height:10px;border-radius:50%;
+  background:var(--bar,var(--matsuba));border:2px solid var(--washi);
+}
+.tl .tt{font-weight:700;font-size:13.5px;color:var(--bar,var(--matsuba))}
+.tl .tc{font-size:13.5px;line-height:1.7}
+
+/* drug cards */
+.drug{background:var(--washi2);border:1px solid var(--line);border-radius:10px;padding:12px 13px;margin-bottom:10px}
+.drug h4{margin:0 0 3px;font-family:"Shippori Mincho",serif;font-size:16px;font-weight:700}
+.dtag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:7px;vertical-align:2px}
+.lv3{background:var(--shu-bg);color:var(--shu)}
+.lv2{background:var(--kincha-bg);color:var(--kincha)}
+.lv1{background:var(--matsuba-bg);color:var(--matsuba)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0 6px}
+.chip{font-size:11.5px;background:var(--washi3);border:1px solid var(--line);border-radius:99px;padding:2px 9px;white-space:nowrap}
+.chip.sep{border:none;background:none;padding:2px 0;color:var(--sumi-l)}
+
+/* copy bar */
+#bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(47,42,38,.97);color:#fff;
+  padding:10px 16px max(14px, env(safe-area-inset-bottom));
+  display:none;align-items:center;gap:10px;
+  box-shadow:0 -2px 10px rgba(0,0,0,.15);
+}
+#bar.show{display:flex}
+#bar .n{font-size:13px;flex:1;line-height:1.5}
+#bar .n b{font-size:16px;font-family:"Shippori Mincho",serif}
+#bar button{
+  font-family:inherit;font-size:13.5px;font-weight:700;border:none;border-radius:7px;
+  min-height:44px;padding:8px 16px;cursor:pointer;
+}
+.bcopy{background:var(--shu);color:#fff}
+.bclear{background:rgba(255,255,255,.16);color:#fff}
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:60;
+  background:var(--sumi);color:#fff;font-size:13px;padding:8px 16px;border-radius:99px;
+  opacity:0;transition:opacity .2s;pointer-events:none;
+}
+.toast.show{opacity:1}
+.empty{text-align:center;color:var(--sumi-l);font-size:14px;padding:40px 0}
+footer{max-width:760px;margin:0 auto;padding:0 16px 30px;font-size:11.5px;color:var(--sumi-l);line-height:1.8}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <div class="seal mincho">検</div>
+    <div>
+      <h1>検査パネル</h1>
+      <div class="sub">やまもと皮膚科・漢方クリニック</div>
+    </div>
+  </div>
+  <div class="searchwrap"><input id="q" type="search" placeholder="疾患名・検査名で検索（例：IGRA、ポルフィリン）" autocomplete="off"></div>
+</header>
+
+<main id="app"></main>
+
+<footer id="ft"></footer>
+
+<div id="bar">
+  <div class="n"><b id="cnt">0</b> 項目を選択中</div>
+  <button class="bclear" id="clr">解除</button>
+  <button class="bcopy" id="cpy">コピー</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   データ
+   ============================================================ */
+var TYPES = {
+  cause:    {label:'原因検索型', cls:'t-cause'},
+  triage:   {label:'トリアージ型', cls:'t-triage'},
+  manage:   {label:'治療管理型', cls:'t-manage'},
+  protocol: {label:'院内手順型', cls:'t-protocol'}
+};
+
+var DATA = [
+/* ---------------- 1. 結節性紅斑 ---------------- */
+{
+id:'en', name:'結節性紅斑', type:'cause',
+summary:'特発性が3〜5割。溶連菌感染とサルコイドーシスが二大原因。初回で一括提出し、随伴症状で第2段階へ分岐。',
+sections:[
+ {h:'第1段階', note:'初診時に一括提出', kind:'tests', items:[
+  {n:'CBC＋白血球分画', d:'好中球優位／好酸球増多／異型リンパ球の確認'},
+  {n:'ESR、CRP'},
+  {n:'ASO ＋ ASK', d:'ASO単独では溶連菌感染の検出漏れあり。併用が実務的'},
+  {n:'咽頭迅速抗原 または 咽頭培養', d:'先行感染から2〜3週経過で陰性化するが、有症状なら価値あり'},
+  {n:'生化学一式', d:'AST/ALT/ALP/γ-GTP/LDH、BUN/Cr、電解質、Ca（サルコイドーシスの高Ca血症）'},
+  {n:'ACE、可溶性IL-2受容体（sIL-2R）', d:'サルコイドーシス検索。日本では溶連菌に次ぐ主要原因で初回から入れる価値が高い'},
+  {n:'尿検査（沈渣込み）', d:'血管炎・腎障害のスクリーニング'},
+  {n:'胸部X線', must:1, d:'両側肺門リンパ節腫脹の確認。IGRAの適応判断にも直結'},
+  {n:'妊娠反応', d:'妊娠可能年齢の女性。妊娠自体が誘因で、以後の投薬選択にも影響'},
+  {n:'IGRA', d:'胸部X線異常、硬結性紅斑（Bazin）を疑う分布なら必須'}
+ ]},
+ {h:'第2段階', note:'随伴症状に応じて追加', kind:'branch', items:[
+  {c:'口腔内アフタ・外陰部潰瘍・眼症状', a:'HLA-B51、眼科紹介（ベーチェット病）'},
+  {c:'腹痛・下痢・血便・体重減少', a:'便潜血、Fe／フェリチン、消化器内科紹介（IBD、Yersinia・Campylobacter腸炎後）'},
+  {c:'関節痛・光線過敏・レイノー', a:'ANA、RF、補体（C3/C4）'},
+  {c:'紫斑・網状皮斑・下肢潰瘍を伴う', a:'MPO／PR3-ANCA、D-dimer（皮膚型結節性多発動脈炎、血栓性静脈炎の鑑別）'},
+  {c:'遷延・再発性、リンパ節腫脹、B症状', a:'LDH、sIL-2R、末梢血像（血液疾患・悪性腫瘍の随伴）'},
+  {c:'咳嗽・上気道症状が先行', a:'マイコプラズマ抗体、EBV抗体'},
+  {c:'リスク行動歴・非典型経過', a:'梅毒（RPR/TP抗体）、HBs抗原・HCV抗体、HIV'},
+  {c:'甲状腺症状', a:'TSH、FT4'}
+ ]},
+ {h:'問診で押さえる', note:'検査より感度が高い', kind:'bullets', items:[
+  '発症2〜3週前の先行感染（咽頭炎、腸炎）',
+  '薬剤歴 — 経口避妊薬、スルホンアミド、ヨード剤・臭素剤、一部の分子標的薬',
+  '妊娠の有無、海外渡航歴'
+ ]},
+ {kind:'warn', t:'算定・運用', items:[
+  'ACE・sIL-2Rは「サルコイドーシス疑い」の病名がないと査定されやすい。オーダー時に病名を紐付ける',
+  'HLA-B51は算定条件が施設・審査で揺れやすい。外注先に事前確認',
+  '特発性が最多（3〜5割）。全項目陰性だった場合の患者説明を初回から準備しておく'
+ ]}
+]},
+
+/* ---------------- 2. 蜂窩織炎 ---------------- */
+{
+id:'cell', name:'蜂窩織炎', type:'triage',
+summary:'全身症状のない軽症例は臨床診断のみで治療開始可。検査を足すかどうかは重症度トリガーで判断する。誤診率は約3割。',
+sections:[
+ {kind:'note', t:'原則', items:[
+  '典型的な非化膿性蜂窩織炎では、ルーチンの血液培養・穿刺・生検は不要',
+  '軽症＝臨床診断のみ。検査に踏み込む閾値を明文化してスタッフと共有する'
+ ]},
+ {h:'初回で足す価値があるもの', kind:'tests', items:[
+  {n:'足趾間の視診 ＋ 真菌鏡検（KOH）', must:1, d:'足白癬・趾間びらんが最大の侵入門戸。ここを治療しないと再発を繰り返す'},
+  {n:'随時血糖・HbA1c', d:'未診断糖尿病を拾える頻度が高い。下肢例の再発リスク評価と足病変管理に直結'},
+  {n:'CBC（WBC>10,000/μL）、生化学', d:'中等症以上の判断がつかない例では初回から。Cr、Alb、Na'}
+ ]},
+ {h:'軽症扱いをやめるトリガー', note:'ひとつでも該当すれば検査・紹介へ', kind:'stop', t:'重症度トリガー', items:[
+  '38℃以上の発熱、頻脈、悪寒戦慄',
+  '所見に不釣り合いな激痛、急速進行、出血性水疱、知覚低下、握雪感 → 壊死性軟部組織感染症を疑い即紹介',
+  '糖尿病、肝硬変、免疫抑制剤・生物学的製剤使用中、脾摘後',
+  'リンパ浮腫・慢性静脈うっ滞の合併',
+  '経口抗菌薬48〜72時間で改善しない'
+ ]},
+ {h:'状況別の追加検査', kind:'branch', items:[
+  {c:'発熱・悪寒戦慄、免疫不全、動物咬傷・水系曝露、顔面／眼窩周囲', a:'血液培養2セット。陽性率は数%程度で、外来では紹介先に委ねる形が現実的'},
+  {c:'膿瘍・排膿・穿刺可能な部位がある', a:'膿の培養を必ず提出。MRSAの判定はこれ次第'},
+  {c:'壊死性筋膜炎を疑う', a:'CK、AST、LDH（LRINEC＝CRP/WBC/Hb/Na/Cr/Glu）。感度は高くないので、疑ったら検査を待たず紹介'},
+  {c:'片側下腿の腫脹・疼痛', a:'D-dimer、下肢エコー。D-dimer単独は蜂窩織炎でも上昇するのでWells scoreと併用'},
+  {c:'再発性・反復性の下肢蜂窩織炎', a:'ASO／ASK。急性期の診断には役立たない'},
+  {c:'両側性・非発熱・再発性（pseudocellulitis疑い）', a:'ANA、リウマチ関連'}
+ ]},
+ {h:'鑑別', note:'検査以上に重要', kind:'bullets', items:[
+  'うっ滞性皮膚炎 — 両側性、発熱なし、掻痒優位。最多の誤診元',
+  '接触皮膚炎 — 境界明瞭、掻痒',
+  'DVT／血栓性静脈炎',
+  '痛風・偽痛風 — 関節中心',
+  '壊死性軟部組織感染症',
+  '固定薬疹、Sweet病'
+ ]},
+ {kind:'warn', t:'現場ルール', items:[
+  '「両側性・発熱なし・掻痒あり」の3点が揃えば蜂窩織炎らしくない',
+  'プロカルシトニンは外来で当日結果が返らず費用対効果も薄い。補助的位置づけにとどめる',
+  '再発予防：足白癬治療、スキンケア、浮腫管理。年4回以上の再発例では予防投与を検討'
+ ]}
+]},
+
+/* ---------------- 3. 円形脱毛症 ---------------- */
+{
+id:'aa', name:'円形脱毛症（反復・拡大型）', type:'cause',
+summary:'自己免疫背景の検索と、治療導入前スクリーニングを分けて組む。反復例ではJAK阻害薬を視野に入れた前検査へ接続する。',
+sections:[
+ {h:'第1段階', note:'反復・拡大型で初回一括', kind:'tests', items:[
+  {n:'TSH、FT4'},
+  {n:'抗TPO抗体 ＋ 抗サイログロブリン抗体', d:'機能正常でも抗体陽性例は一定数あり。機能異常確認後の追加とすると二度手間になる'},
+  {n:'CBC＋白血球分画'},
+  {n:'フェリチン', d:'CBCだけでは潜在性鉄欠乏を拾えない。女性の反復例で特に有用'},
+  {n:'亜鉛', d:'日本では低亜鉛血症が拾いやすく、補充で改善する余地がある'},
+  {n:'HbA1c', d:'自己免疫背景（1型糖尿病）およびステロイド投与前の基準値'},
+  {n:'梅毒血清反応（RPR/TP抗体）', d:'梅毒性脱毛は虫食い状で紛らわしい。多発型では鑑別に入れる'},
+  {n:'ANA', d:'皮膚所見・関節症状がある場合。瘢痕性脱毛の除外も意識する'},
+  {n:'生化学一式', d:'AST/ALT/Cr/電解質/Alb。治療導入前の基準値'}
+ ]},
+ {kind:'note', t:'セットから外す判断', items:[
+  '25-OHビタミンD — メタ解析で関連は示されるが治療方針を直接左右するエビデンスは限定的、保険適用も骨粗鬆症等に限られる。査定上もセット外とし、必要時のみ扱いが無難'
+ ]},
+ {h:'第2段階', note:'臨床像に応じて', kind:'branch', items:[
+  {c:'爪の点状陥凹・粗糙化', a:'予後不良因子として記録（検査ではないが重症度評価に直結）'},
+  {c:'白斑合併', a:'抗胃壁細胞抗体、ビタミンB12'},
+  {c:'関節症状・光線過敏・脱毛部の瘢痕化', a:'ANA力価と染色型、抗DNA抗体、補体、皮膚生検（瘢痕性脱毛の除外は生検が確実）'},
+  {c:'びまん性脱毛、分娩後／ダイエット後', a:'休止期脱毛としてフェリチン、TSH、Alb中心に評価'},
+  {c:'小児例、家族歴濃厚、汎発型', a:'総IgE、特異的IgE。アトピー素因の合併は予後不良因子'},
+  {c:'消化器症状、体重減少', a:'抗TTG抗体等（セリアック病。日本では稀だが除外の意義はある）'},
+  {c:'急速進行、全頭型／汎発型', a:'JAK阻害薬導入を見据えた前スクリーニングへ移行'}
+ ]},
+ {h:'JAK阻害薬 導入前スクリーニング', note:'バリシチニブ・リトレシチニブ', kind:'tests', items:[
+  {n:'血算（好中球・リンパ球・Hb）、生化学、脂質、CK'},
+  {n:'IGRA（QFT／T-SPOT）＋ 胸部X線', must:1, d:'潜在性結核の除外は必須'},
+  {n:'HBs抗原、HBs抗体、HBc抗体、HCV抗体', must:1, d:'HBs抗原陰性でHBc／HBs抗体陽性ならHBV-DNAのフォロー体制が必要'},
+  {n:'妊娠反応'},
+  {n:'帯状疱疹ワクチン接種歴の確認'}
+ ]},
+ {kind:'warn', t:'算定・運用', items:[
+  '甲状腺抗体は「甲状腺機能低下症疑い」等、亜鉛は「低亜鉛血症疑い」の病名が必要',
+  '反復例では「いつ・どの範囲・どの治療で・どう反応したか」の時系列が治療選択を決める。SALTスコアの経時記録を併用する'
+ ]}
+]},
+
+/* ---------------- 4. 光線過敏 ---------------- */
+{
+id:'photo', name:'光線過敏', type:'cause',
+summary:'問診で光線過敏らしさを確定し、薬剤を切り分ける段階が決定的。ポルフィリンは検体の遮光・冷蔵を外すと偽陰性になる。',
+sections:[
+ {h:'第1段階', note:'院内で一括', kind:'tests', items:[
+  {n:'ANA、抗Ro/SSA、抗La/SSB抗体', d:'薬剤誘発性ループス、SLEの除外'},
+  {n:'抗ヒストン抗体、抗dsDNA抗体、補体（C3/C4）', d:'抗ヒストン抗体は薬剤性で高率陽性'},
+  {n:'CK、アルドラーゼ、抗ARS抗体／抗MDA5抗体', d:'皮膚筋炎のV領域・項背部紅斑は光線過敏と紛らわしい。反復例で価値が高い'},
+  {n:'CBC、生化学（肝機能重視）、フェリチン、血清鉄', d:'PCTの背景検索'},
+  {n:'HCV抗体、HBs抗原（必要に応じHIV）', d:'PCTはHCV・飲酒・鉄過剰・エストロゲンが誘因。ここを外すと原因に届かない'},
+  {n:'尿中ウロポルフィリン・コプロポルフィリン'},
+  {n:'赤血球プロトポルフィリン（血中遊離プロトポルフィリン）', must:1, d:'EPPでは尿中ポルフィリンが正常。尿検査だけでは確実に見逃す。小児・若年発症では必須'}
+ ]},
+ {h:'第2段階', note:'臨床像で分岐', kind:'branch', items:[
+  {c:'曝露後数分〜30分の灼熱感・刺すような疼痛が主体、皮疹は乏しい／小児発症', a:'EPP。赤血球プロトポルフィリン、肝機能（肝合併症が予後を決める）'},
+  {c:'手背の水疱・びらん・皮膚脆弱性、瘢痕、多毛、色素沈着', a:'PCT。尿中ウロポルフィリン、HCV、鉄・フェリチン、飲酒・エストロゲン歴'},
+  {c:'中高年男性、露光部の苔癬化・難治性湿疹、慢性経過', a:'慢性光線性皮膚炎（CAD）。光線試験＋光パッチテストと通常パッチテスト（キク科植物、香料、ゴム）'},
+  {c:'湿布貼付部位とその周辺', a:'ケトプロフェンテープによる光接触皮膚炎。日本では最多クラス。貼付中止後も数週〜数か月持続する'},
+  {c:'小児、雀卵斑様色素斑の早期出現、神経症状', a:'色素性乾皮症。遺伝子検査を含め専門施設へ'},
+  {c:'反復する顔面の水疱・壊死・痂皮、発熱', a:'種痘様水疱症。EBV-DNA定量'},
+  {c:'露光部の境界明瞭な皮膚炎 ＋ 下痢・認知機能低下、多飲・偏食', a:'ペラグラ。Alb、ビタミンB群、栄養評価'},
+  {c:'確定困難例', a:'大学病院でのMED測定・光線照射試験へ紹介'}
+ ]},
+ {h:'問診で先に切る', note:'検査より感度が高い', kind:'bullets', items:[
+  '曝露から発症までの時間 — 数分＝EPP／数時間＝多形日光疹／24〜48時間＝薬剤性・光接触',
+  'ガラス越し・曇天でも起こるか（UVA主体の示唆）',
+  '薬剤歴 — ケトプロフェンテープ、ヒドロクロロチアジド、ニューキノロン、テトラサイクリン系、NSAIDs、アミオダロン、ボリコナゾール、ピロキシカム、サルファ剤、フロセミド',
+  'サンスクリーン・化粧品・香料の使用開始時期',
+  '分布 — 顔・V領域・手背に限局し、上眼瞼・鼻下・顎下（陰になる部位）が抜けるか'
+ ]},
+ {kind:'stop', t:'検体取扱い（最重要）', items:[
+  'ポルフィリン検体は遮光・冷蔵が必須。通常のスピッツで室温放置すると偽陰性になる',
+  '採血管をアルミホイル等で遮光。尿も遮光容器で提出',
+  '搬送条件を外注先に事前確認し、オーダー画面に注意書きを出す'
+ ]},
+ {kind:'warn', t:'算定・運用', items:[
+  '抗ヒストン抗体・抗MDA5抗体は病名要件が厳しい',
+  '光パッチテストはUVA照射装置が必要。院内／紹介の分岐を明記しておく'
+ ]}
+]},
+
+/* ---------------- 5. 爪白癬 内服 ---------------- */
+{
+id:'onycho', name:'爪白癬 内服', type:'manage',
+summary:'診断確定 → 肝・血液の前値 → 相互作用チェックの3点セット。前2つを飛ばすと査定と有害事象の両方でリスクになる。',
+sections:[
+ {kind:'stop', t:'内服開始前に必須', items:[
+  '直接鏡検（KOH）で菌要素を確認。保険上も鏡検または培養での確認が求められる',
+  '爪甲下角質を深部から採取する（表層のみだと偽陰性）。陰性なら1〜2週後に再検、または培養併用',
+  '鏡検陰性のまま開始すると、爪乾癬・爪扁平苔癬・外傷性爪甲変形に無効な薬を3か月投与することになる'
+ ]},
+ {h:'治療前検査（共通ベース）', kind:'tests', items:[
+  {n:'肝機能：AST、ALT、ALP、γ-GTP、T-Bil', must:1, d:'ALP・ビリルビンは胆汁うっ滞型を拾うために必須'},
+  {n:'血算＋白血球分画、血小板', d:'テルビナフィンの汎血球減少・無顆粒球症の前値'},
+  {n:'腎機能：Cr（eGFR）、BUN'},
+  {n:'妊娠反応', d:'妊娠可能年齢。3剤とも妊婦禁忌'},
+  {n:'問診：飲酒量、肝疾患既往、B/C型肝炎、常用薬の全リスト、サプリメント', d:'お薬手帳の実物を確認する'},
+  {n:'HBs抗原、HCV抗体、PT、Alb', d:'肝疾患既往・多量飲酒がある場合に追加。内服自体の再検討も'}
+ ]},
+ {h:'薬剤別モニタリング', kind:'drugs', items:[
+  {n:'テルビナフィン', lv:'lv3', tag:'検査要件 最も厳格',
+   tl:['投与前','1か月','2か月','以後2〜3か月ごと（総6か月）'],
+   d:['添付文書上、投与前および投与開始後2か月間は月1回の肝機能検査と血液検査',
+      '重篤な肝障害・血液障害は禁忌',
+      '肝障害の発現は投与開始2か月以内が多い。この期間の採血を落とさない',
+      '味覚障害、SJS/TENの説明も併せて行う']},
+  {n:'イトラコナゾール', lv:'lv2', tag:'相互作用が最大の関門',
+   tl:['投与前','各パルス前','終了後'],
+   d:['CYP3A4阻害が強く併用禁忌が非常に多い — トリアゾラム、シンバスタチン、ピモジド、アゼルニジピン、エプレレノン、リバーロキサバン、スボレキサント、ブロナンセリン、チカグレロル 等',
+      'うっ血性心不全およびその既往に禁忌（陰性変力作用）',
+      '高齢の多剤併用患者では現実的に第一選択から外れることが多い']},
+  {n:'ホスラブコナゾール', lv:'lv1', tag:'相互作用の制約が小さい',
+   tl:['投与前','4週','8〜12週'],
+   d:['1日1回12週間。投与前および投与中に定期的な肝機能検査',
+      '併用禁忌の設定がなく、イトラコナゾールに比べ制約が小さい',
+      'ただしCYP3A4阻害作用はあり、ワルファリン、ミダゾラム、免疫抑制剤などの併用注意薬は確認が必要',
+      '血算のモニタリング要件はテルビナフィンほど厳格ではないが、前値は取っておく']}
+ ]},
+ {h:'中止・減量の閾値', kind:'stop', t:'中止判断', items:[
+  'ALTまたはAST が正常上限の3倍超 → 中止を検討し再検',
+  '総ビリルビン上昇を伴う → 直ちに中止（Hy\u0027s lawの考え方）',
+  '黄疸、濃色尿、右季肋部痛、強い倦怠感、食欲不振 → 採血を待たず中止・受診指示',
+  '好中球 <1,000/μL → テルビナフィン中止'
+ ]},
+ {h:'内服を選ばない分岐', kind:'branch', items:[
+  {c:'高齢・多剤併用・肝障害既往・採血通院が困難', a:'外用（エフィナコナゾール、ルリコナゾール）'},
+  {c:'罹患爪が1〜2枚で軽症、爪母に及ばない', a:'外用で十分な場合が多い'}
+ ]},
+ {kind:'warn', t:'算定・患者説明', items:[
+  '「肝機能検査を毎月」は病名と算定回数で査定されやすい。爪白癬＋抗真菌薬内服中の病名紐付けと、添付文書の記載を根拠として残す',
+  '初回に「3か月飲んで、伸びきるまでさらに半年〜1年かかる」を明示すると、途中脱落と「効かない」というクレームが減る',
+  '3剤の添付文書は改訂があり得るため、検査頻度の記載は最新版で確認する'
+ ]}
+]},
+
+/* ---------------- 6. 生物学的製剤 ---------------- */
+{
+id:'bio', name:'生物学的製剤', type:'manage',
+summary:'導入前スクリーニングと維持期モニタリングで見るものが変わり、薬剤クラスごとに厳格さが大きく違う。結核とHBVは絶対に落とせない。',
+sections:[
+ {h:'導入前：感染症', kind:'tests', items:[
+  {n:'IGRA（QFT-Plus または T-SPOT）', must:1, d:'潜在結核の除外。判定保留なら再検または胸部CT併用で判断'},
+  {n:'胸部X線', must:1, d:'全例必須。陳旧性病変があれば胸部CTへ'},
+  {n:'HBs抗原、HBs抗体、HBc抗体', must:1, d:'3点セットで出す。HBs抗原陰性でもHBc／HBs抗体陽性なら既往感染＝再活性化リスク群'},
+  {n:'HCV抗体'},
+  {n:'HIV抗原・抗体', d:'免疫抑制導入前として、説明のうえ実施'},
+  {n:'β-D-グルカン', d:'ニューモシスチス肺炎の前値'}
+ ]},
+ {h:'導入前：血液・生化学・その他', kind:'tests', items:[
+  {n:'CBC＋分画、AST/ALT/ALP/γ-GTP/T-Bil、BUN/Cr、電解質、Alb'},
+  {n:'CRP、ESR'},
+  {n:'脂質（TC、LDL、HDL、TG）', d:'IL-6阻害薬・JAK阻害薬では脂質上昇あり。前値必須。代謝背景の把握にも'},
+  {n:'HbA1c'},
+  {n:'妊娠反応'},
+  {n:'KL-6、SP-D', d:'間質性肺疾患の前値。MTX併用例、TNF阻害薬で特に'},
+  {n:'ANA', d:'TNF阻害薬による薬剤誘発性ループスの前値。必須ではないが後で助かる'},
+  {n:'ワクチン接種歴の確認', d:'生ワクチンは導入後は禁忌。帯状疱疹はシングリックス（不活化）なら投与中も可'}
+ ]},
+ {h:'HBV既往感染例の扱い', note:'実務で最も抜けやすい', kind:'stop', t:'HBV再活性化（最重要）', items:[
+  'HBs抗原陽性 → 専門医紹介。核酸アナログ先行投与が原則',
+  'HBs抗原陰性 ＋ HBc抗体 or HBs抗体陽性 → HBV-DNA定量を測定',
+  '　└ 検出感度未満 → 投与可。投与中および終了後12か月まで HBV-DNA を1〜3か月ごとに測定',
+  '　└ 20 IU/mL（1.3 LogIU/mL）以上を検出 → 核酸アナログ開始、肝臓専門医と連携',
+  'この定期HBV-DNAをオーダーセットに自動で組み込む形にしておく'
+ ]},
+ {h:'潜在結核陽性例の扱い', kind:'bullets', items:[
+  'IGRA陽性または胸部画像で陳旧性病変 → INH 300mg/日を6〜9か月、生物学的製剤開始の3週間前から先行投与',
+  '活動性結核が否定できなければ呼吸器内科へ',
+  '投与中は結核症状（咳嗽2週以上、発熱、寝汗、体重減少）の問診を毎回'
+ ]},
+ {h:'維持期モニタリング', kind:'timeline', items:[
+  {t:'導入後 1か月', c:'CBC、生化学、CRP'},
+  {t:'以後 3か月ごと', c:'CBC、生化学、CRP、（脂質）'},
+  {t:'6〜12か月ごと', c:'胸部X線'},
+  {t:'HBV既往感染例', c:'HBV-DNA を1〜3か月ごと（投与終了後12か月まで継続）'}
+ ]},
+ {h:'クラス別の強弱', kind:'drugs', items:[
+  {n:'IL-23阻害薬', lv:'lv1', tag:'負荷 軽',
+   tl:['グセルクマブ','リサンキズマブ','チルドラキズマブ'],
+   d:['現行クラスで最も安全性プロファイルが良好','採血頻度は3〜6か月ごとでも実務上許容されることが多い']},
+  {n:'IL-4/13阻害薬', lv:'lv1', tag:'負荷 軽',
+   tl:['デュピルマブ'],
+   d:['免疫抑制作用が弱く、結核スクリーニングもルーチン採血も必須ではない',
+      '結膜炎と好酸球増多の確認が中心',
+      'ADで最も使用頻度が高い薬剤。他クラスと同じ重い枠組みに入れないことがクリニック運用上は重要']},
+  {n:'IL-31阻害薬', lv:'lv1', tag:'負荷 軽', tl:['ネモリズマブ'], d:['モニタリング負荷は軽い']},
+  {n:'IL-17阻害薬', lv:'lv2', tag:'問診で補う',
+   tl:['セクキヌマブ','イキセキズマブ','ブロダルマブ'],
+   d:['カンジダ症の問診（口腔、外陰部）を毎回',
+      '炎症性腸疾患の増悪に注意（腹痛・下痢・血便の聴取）',
+      'ブロダルマブは自殺念慮の記載があり、精神症状の確認']},
+  {n:'TNF阻害薬', lv:'lv3', tag:'最も慎重に',
+   tl:['アダリムマブ','インフリキシマブ','セルトリズマブ'],
+   d:['結核再燃、脱髄疾患、うっ血性心不全増悪、薬剤誘発性ループス、悪性リンパ腫',
+      '胸部X線を年1〜2回、症状聴取を厚く']},
+  {n:'JAK阻害薬（内服）', lv:'lv3', tag:'最も厳格',
+   tl:['ウパダシチニブ','アブロシチニブ','バリシチニブ'],
+   d:['生物学的製剤ではないが並べて管理する必要あり',
+      'CBC（リンパ球・好中球・Hb）、脂質、CK、肝機能を1〜3か月ごと',
+      '帯状疱疹、静脈血栓塞栓症、悪性腫瘍、心血管イベントのリスク評価',
+      '65歳以上・喫煙者・心血管リスク保有者では適応を慎重に']}
+ ]},
+ {h:'中止・休薬の閾値', kind:'stop', t:'休薬判断', items:[
+  '発熱を伴う感染症 → 改善まで休薬',
+  '好中球 <1,000/μL、リンパ球 <500/μL（JAK阻害薬）→ 休薬',
+  'ALT/AST が正常上限3倍超 → 精査・休薬検討',
+  'HBV-DNA が検出感度以上 → 生物学的製剤は継続可だが、直ちに核酸アナログ開始＋専門医連携',
+  '手術予定 → 半減期に応じた休薬（皮膚科小手術程度なら継続可のことが多い）'
+ ]},
+ {kind:'warn', t:'運用', items:[
+  'HBV-DNA定量は実施間隔の管理が煩雑。「生物学的製剤投与中・HBV既往感染」の患者リストを別管理し、次回測定予定日を持たせないと確実に漏れる',
+  '使用にあたり施設要件・登録が絡むものがあるため、導入予定の薬剤ごとに要件を確認する',
+  '患者携帯用の「生物学的製剤使用中カード」（他院受診時・救急時に提示）を渡す運用にしておく'
+ ]}
+]},
+
+/* ---------------- 7. 術前感染症 ---------------- */
+{
+id:'preop', name:'小手術 術前感染症', type:'protocol',
+summary:'医学的必要性より、院内感染対策と職業曝露対応の枠組みで設計する。検査の目的は手技を変えることではなく、針刺し事故時の初動を即決できること。',
+sections:[
+ {h:'標準4項目', kind:'tests', items:[
+  {n:'HBs抗原'},
+  {n:'HCV抗体'},
+  {n:'梅毒血清反応（RPR ＋ TP抗体）'},
+  {n:'HIV抗原・抗体（第4世代）', d:'外す施設もあるが、針刺し事故時の初動は時間勝負。入れておく方が職員を守れる'}
+ ]},
+ {h:'同時採血で足すと有用', kind:'tests', items:[
+  {n:'血算（Hb、血小板）', d:'血小板減少、貧血の把握'},
+  {n:'PT-INR、APTT', d:'抗凝固薬内服者では必須。ワルファリン継続下で手術するかの判断に直結'},
+  {n:'随時血糖・HbA1c', d:'創傷治癒と感染リスク。未診断糖尿病を拾える'},
+  {n:'Cr、eGFR', d:'局麻・術後鎮痛薬の選択に'}
+ ]},
+ {kind:'note', t:'抗血栓薬', items:[
+  '皮膚科小手術では原則継続（休薬による血栓症リスクの方が重大）。局所止血で対応。DOAC内服例も同様',
+  '前値としてPT-INRを取っておけば、術中止血に難渋したときの判断材料になる'
+ ]},
+ {h:'適応の線引き', kind:'branch', items:[
+  {c:'採血する', a:'切除＋縫合を伴う手術、爪手術、皮弁・植皮、出血量が多い処置'},
+  {c:'省略可', a:'小さな凍結療法、炭酸ガスレーザー、ホクロの削り取り、切開排膿のみ'},
+  {c:'実務上の基準', a:'「縫合糸と縫合針を使うか」を基準にするとスタッフが迷わない'},
+  {c:'HBs抗原陽性だった場合', a:'HBe抗原／抗体、HBV-DNA定量（ウイルス量が曝露リスクの程度を左右する）、肝機能、内科紹介'}
+ ]},
+ {h:'HIV検査の同意', note:'他3項目と扱いを分ける', kind:'stop', t:'同意と告知', items:[
+  '口頭でよいので必ず個別に説明し、同意を得る。「術前検査に含まれています」と黙って出すのは、陽性時に深刻なトラブルになる',
+  '術前説明書に4項目を明記し、署名をもらう',
+  '陽性時の伝達手順を事前に決めておく — 誰が、どこで、どう伝え、どこに紹介するか。拠点病院への紹介ルートを先に把握する'
+ ]},
+ {h:'偽陽性への備え', kind:'bullets', items:[
+  'HIV：スクリーニング陽性は確定診断ではない。確認検査（イムノクロマト法、核酸増幅検査）が必須。有病率の低い集団では偽陽性が相当数出る。確認前に「HIVです」と伝えない',
+  '梅毒：RPR単独陽性は生物学的偽陽性がある。TP抗体との組み合わせで解釈。既往治療後はTP抗体が生涯陽性のまま'
+ ]},
+ {kind:'note', t:'標準予防策との関係', items:[
+  '検査結果にかかわらず全例で標準予防策。陰性だから手袋を省略する運用にしない',
+  '検査の目的は手技を変えることではなく、針刺し事故発生時に初動を即座に決められること'
+ ]},
+ {h:'針刺し事故フロー', note:'この検査とセットで持つ', kind:'bullets', items:[
+  '曝露直後の洗浄、報告先、記録様式を手順書に明記',
+  'HBV：職員のHBs抗体価を平時から把握（未獲得者へのワクチン接種）。曝露後はHBIG＋ワクチンをなるべく早く',
+  'HIV：曝露後予防は可能な限り速やかに（数時間以内が望ましい）開始。姫路市内でどこに連絡すれば薬が手に入るか、電話番号ごと手順書に書いておく',
+  'HCV：曝露後予防はなく、フォロー採血で対応',
+  '職員のHBs抗体価把握は、この検査パネルより優先度が高い'
+ ]},
+ {kind:'warn', t:'算定・運用', items:[
+  '実施日が手術日から離れすぎると査定対象になり得る。有効期間（例：3か月以内）を院内ルールとして決めておく',
+  '他院で最近実施済みの結果を持参した場合に、どこまで採用するかも決めておく'
+ ]}
+]}
+];
+
+/* ============================================================
+   検索インデックス
+   ============================================================ */
+function flatten(it){
+  var s = it.name + ' ' + it.summary + ' ' + TYPES[it.type].label;
+  it.sections.forEach(function(sec){
+    if(sec.h) s += ' ' + sec.h;
+    if(sec.t) s += ' ' + sec.t;
+    (sec.items||[]).forEach(function(x){
+      if(typeof x === 'string'){ s += ' ' + x; return; }
+      if(x.n) s += ' ' + x.n;
+      if(x.d) s += ' ' + (Array.isArray(x.d) ? x.d.join(' ') : x.d);
+      if(x.c) s += ' ' + x.c;
+      if(x.a) s += ' ' + x.a;
+      if(x.t) s += ' ' + x.t;
+      if(x.tl) s += ' ' + x.tl.join(' ');
+    });
+  });
+  return s;
+}
+DATA.forEach(function(it){ it._idx = flatten(it); });
+
+/* ============================================================
+   状態
+   ============================================================ */
+var view = 'home', current = null, picked = [];
+var app = document.getElementById('app');
+var qEl = document.getElementById('q');
+
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+/* 親ページ（index.html）に埋め込まれているときは、画面の状態を親の URL ハッシュに記録する */
+function route(path){
+  try{ if(window.parent!==window && window.parent.routeSet) window.parent.routeSet(path); }catch(e){}
+}
+function hl(s,q){
+  s = esc(s);
+  if(!q) return s;
+  try{
+    var re = new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+    return s.replace(re,'<mark style="background:#f7e7a8;color:inherit;border-radius:2px">$1</mark>');
+  }catch(e){ return s; }
+}
+
+/* ============================================================
+   ホーム
+   ============================================================ */
+function renderHome(){
+  var q = qEl.value.trim();
+  var list = DATA.filter(function(it){
+    return !q || it._idx.toLowerCase().indexOf(q.toLowerCase()) >= 0;
+  });
+  if(!list.length){
+    app.innerHTML = '<div class="empty">該当する項目がありません</div>';
+    return;
+  }
+  var h = '<div class="cards">';
+  list.forEach(function(it){
+    var T = TYPES[it.type];
+    var hit = '';
+    if(q){
+      var m = findHits(it,q);
+      if(m.length) hit = '<div class="hitline">該当：' + esc(m.slice(0,3).join('／')) + (m.length>3?' ほか'+(m.length-3):'') + '</div>';
+    }
+    h += '<div class="card '+T.cls+'" data-id="'+it.id+'">'
+       + '<h2>'+hl(it.name,q)+'<span class="badge">'+T.label+'</span></h2>'
+       + '<div class="cs">'+esc(it.summary)+'</div>'
+       + hit + '</div>';
+  });
+  h += '</div>';
+  app.innerHTML = h;
+  Array.prototype.forEach.call(app.querySelectorAll('.card'), function(c){
+    c.addEventListener('click', function(){ open(c.getAttribute('data-id')); });
+  });
+}
+
+function findHits(it,q){
+  var out = [], lq = q.toLowerCase();
+  it.sections.forEach(function(sec){
+    (sec.items||[]).forEach(function(x){
+      var label = null;
+      if(typeof x === 'string') label = x;
+      else label = x.n || x.c || null;
+      if(!label) return;
+      var blob = (typeof x === 'string') ? x : (label + ' ' + (x.d?(Array.isArray(x.d)?x.d.join(' '):x.d):'') + ' ' + (x.a||''));
+      if(blob.toLowerCase().indexOf(lq) >= 0){
+        var t = label.length > 24 ? label.slice(0,24)+'…' : label;
+        if(out.indexOf(t) < 0) out.push(t);
+      }
+    });
+  });
+  return out;
+}
+
+/* ============================================================
+   詳細
+   ============================================================ */
+function open(id){
+  current = DATA.filter(function(d){ return d.id===id; })[0];
+  if(!current){ goHome(); return; }
+  view = 'detail'; picked = [];
+  updateBar();
+  renderDetail();
+  window.scrollTo(0,0);
+  route('kensa/'+id);
+}
+function goHome(){
+  view='home'; current=null; picked=[]; updateBar(); renderHome(); window.scrollTo(0,0);
+}
+
+function renderDetail(){
+  var it = current, T = TYPES[it.type];
+  var h = '<button class="back" id="bk">← 一覧へ</button>';
+  h += '<div class="dhead '+T.cls+'"><h2>'+esc(it.name)+'<span class="badge">'+T.label+'</span></h2>'
+     + '<div class="ds">'+esc(it.summary)+'</div></div>';
+
+  it.sections.forEach(function(sec,si){
+    h += '<section class="'+T.cls+'">';
+    if(sec.h){
+      h += '<h3 class="sh">'+esc(sec.h)+(sec.note?'<small>'+esc(sec.note)+'</small>':'')+'</h3>';
+    }
+    h += renderSection(sec, si);
+    h += '</section>';
+  });
+  app.innerHTML = h;
+
+  document.getElementById('bk').addEventListener('click', function(){
+    /* 埋め込み時は親の履歴を戻る（戻った先の #kensa で一覧に戻る） */
+    try{ if(window.parent!==window && window.parent.routeBack){ window.parent.routeBack('kensa'); return; } }catch(e){}
+    goHome();
+  });
+  Array.prototype.forEach.call(app.querySelectorAll('ul.tests li'), function(li){
+    li.addEventListener('click', function(){
+      var name = li.getAttribute('data-n');
+      var i = picked.indexOf(name);
+      if(i>=0){ picked.splice(i,1); li.classList.remove('on'); li.querySelector('.cb').textContent=''; }
+      else { picked.push(name); li.classList.add('on'); li.querySelector('.cb').textContent='✓'; }
+      updateBar();
+    });
+  });
+}
+
+function renderSection(sec, si){
+  var k = sec.kind;
+
+  if(k==='tests'){
+    var h = '<ul class="tests">';
+    (sec.items||[]).forEach(function(x){
+      h += '<li data-n="'+esc(x.n)+'"><span class="cb"></span><span><span class="tn">'+esc(x.n)
+        + (x.must?'<span class="must">必須</span>':'') + '</span>'
+        + (x.d?'<div class="td">'+esc(x.d)+'</div>':'') + '</span></li>';
+    });
+    return h + '</ul>';
+  }
+
+  if(k==='branch'){
+    var h = '<div class="branch">';
+    (sec.items||[]).forEach(function(x){
+      h += '<div class="br"><div class="c">'+esc(x.c)+'</div><div class="a">'+esc(x.a)+'</div></div>';
+    });
+    return h + '</div>';
+  }
+
+  if(k==='bullets'){
+    var h = '<ul class="bl">';
+    (sec.items||[]).forEach(function(x){ h += '<li>'+esc(x)+'</li>'; });
+    return h + '</ul>';
+  }
+
+  if(k==='timeline'){
+    var h = '<div class="tl">';
+    (sec.items||[]).forEach(function(x){
+      h += '<div class="tli"><div class="tt">'+esc(x.t)+'</div><div class="tc">'+esc(x.c)+'</div></div>';
+    });
+    return h + '</div>';
+  }
+
+  if(k==='drugs'){
+    var h = '';
+    (sec.items||[]).forEach(function(x){
+      h += '<div class="drug"><h4>'+esc(x.n)+'<span class="dtag '+x.lv+'">'+esc(x.tag)+'</span></h4>';
+      if(x.tl && x.tl.length){
+        h += '<div class="chips">';
+        x.tl.forEach(function(t,i){
+          if(i) h += '<span class="chip sep">→</span>';
+          h += '<span class="chip">'+esc(t)+'</span>';
+        });
+        h += '</div>';
+      }
+      h += '<ul class="bl">';
+      (x.d||[]).forEach(function(d){ h += '<li>'+esc(d)+'</li>'; });
+      h += '</ul></div>';
+    });
+    return h;
+  }
+
+  if(k==='stop' || k==='warn' || k==='note'){
+    var cls = k==='stop' ? 'c-stop' : (k==='warn' ? 'c-warn' : 'c-note');
+    var mark = k==='stop' ? '■' : (k==='warn' ? '▲' : '●');
+    var h = '<div class="call '+cls+'">';
+    if(sec.t) h += '<div class="ct">'+mark+' '+esc(sec.t)+'</div>';
+    h += '<ul>';
+    (sec.items||[]).forEach(function(x){ h += '<li>'+esc(x)+'</li>'; });
+    return h + '</ul></div>';
+  }
+
+  return '';
+}
+
+/* ============================================================
+   選択バー
+   ============================================================ */
+var bar = document.getElementById('bar');
+function updateBar(){
+  document.getElementById('cnt').textContent = picked.length;
+  if(picked.length) bar.classList.add('show'); else bar.classList.remove('show');
+}
+document.getElementById('clr').addEventListener('click', function(){
+  picked = [];
+  Array.prototype.forEach.call(app.querySelectorAll('ul.tests li'), function(li){
+    li.classList.remove('on'); li.querySelector('.cb').textContent='';
+  });
+  updateBar();
+});
+document.getElementById('cpy').addEventListener('click', function(){
+  if(!picked.length) return;
+  var txt = picked.join('、');
+  copyText(txt);
+});
+function copyText(txt){
+  function done(){ toast('コピーしました（'+picked.length+'項目）'); }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done, fallback);
+  } else fallback();
+  function fallback(){
+    var ta = document.createElement('textarea');
+    ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){ toast('コピーできませんでした'); }
+    document.body.removeChild(ta);
+  }
+}
+var tEl = document.getElementById('toast'), tTimer;
+function toast(m){
+  tEl.textContent = m; tEl.classList.add('show');
+  clearTimeout(tTimer);
+  tTimer = setTimeout(function(){ tEl.classList.remove('show'); }, 1800);
+}
+
+/* ============================================================
+   検索
+   ============================================================ */
+qEl.addEventListener('input', function(){
+  if(view==='detail'){ view='home'; current=null; picked=[]; updateBar(); route('kensa'); }
+  renderHome();
+});
+
+/* ============================================================
+   起動
+   ============================================================ */
+document.getElementById('ft').innerHTML =
+  '院内参照用。添付文書・ガイドラインは改訂があり得るため、検査頻度と算定要件は最新版で確認してください。検査の選択を含め、最終判断は医師が行います。<br>'
+  + '最終更新 2026-09-29／7項目';
+renderHome();
+/* 親ページ（横断検索・URL ハッシュ）から参照する */
+window.KENSA = {
+  DATA: DATA, TYPES: TYPES,
+  open: open, home: goHome,
+  path: function(){ return (view==='detail' && current) ? 'kensa/'+current.id : 'kensa'; }
+};
+<\/script>
+</body>
+</html>
+  </script>
+</div>
+
 <script>
 /* <script type="text/html"> に素の HTML として置いた埋め込み画面を取り出す（<\/script> は復元） */
 function embeddedHTML(id){ var el=document.getElementById(id); return el ? el.textContent.replace(/<\\\/script>/g,'<\/script>') : ''; }
 (function(){ var f=document.getElementById('patchFrame'); if(f) f.srcdoc=embeddedHTML('patch-src'); })();
+/* 検査パネル：kensaGo('bio') で詳細、kensaGo('') で一覧。iframe の読み込み前に呼ばれたら読み込み後に反映 */
+var KENSA_PENDING = null;
+function kensaWin(){ try{ var f=document.getElementById('kensaFrame'); var w=f&&f.contentWindow; return (w&&w.KENSA) ? w : null; }catch(e){ return null; } }
+function kensaGo(id){
+  var w=kensaWin();
+  if(!w){ KENSA_PENDING=id||''; return; }
+  if(id) w.KENSA.open(id); else w.KENSA.home();
+}
+(function(){
+  var f=document.getElementById('kensaFrame'); if(!f) return;
+  f.addEventListener('load', function(){ if(KENSA_PENDING!==null){ var id=KENSA_PENDING; KENSA_PENDING=null; kensaGo(id); } });
+  f.srcdoc=embeddedHTML('kensa-src');
+})();
 
 // ==============================================
 // 版・データ更新日
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.1';
+var APP_VERSION = '2.2';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-03-29', check:'各疾患の最新ガイドライン'},
@@ -2516,7 +3403,8 @@ var DATA_META = {
   vitamin:  {updated:'2026-06-24', check:'添付文書・日本人の食事摂取基準'},
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
-  findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'}
+  findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
+  kensa:    {updated:'2026-09-29', check:'添付文書・各疾患の診療ガイドライン・算定要件'}
 };
 function metaAgeText(ymd){
   var d=new Date(ymd+'T00:00:00'); if(isNaN(d)) return {txt:'', stale:false};
@@ -3590,7 +4478,7 @@ var PRODUCTS = [
 // ==============================================
 // 画面の状態を URL ハッシュに残す（リロード・Safari 切替・戻るボタン対応）
 //   #<tab>                 例: #topical
-//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39
+//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39, #kensa/bio
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #search/<語>           横断検索
 //   ハッシュが無い起動（ホーム画面アイコン等）は最後に開いた画面を localStorage から復元する
@@ -3625,6 +4513,7 @@ function routeApply(path){
     }
     if(!TAB_PAGES[tab]) tab = 'guidance';
     switchTab(tab);
+    if(tab === 'kensa'){ kensaGo(sub); return; }   // sub なしは一覧に戻す（戻るボタンで詳細→一覧）
     if(!sub) return;
     if(tab === 'products'){ showProduct(sub); }
     else if(tab === 'staff'){ showDrug(sub); }
@@ -3651,24 +4540,30 @@ function routeInit(){
 }
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
-  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings'};
+  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa'};
 function switchTab(tab) {
   if(!TAB_PAGES[tab]) return;
   if(window.gsClose) gsClose();
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === tab); });
   // 詳細ページ（pg-result / pg-prod-detail / pg-staff-detail）も同時に閉じる
   document.querySelectorAll('.page').forEach(function(p){ p.classList.toggle('active', p.id === TAB_PAGES[tab]); });
-  if(tab === 'patch') fitPatchFrame();
+  if(tab === 'patch' || tab === 'kensa') fitEmbedFrame(tab);
   window.scrollTo(0, 0);
-  routeSet(tab);
+  // 検査パネルは iframe 内で開いている詳細も含めて記録する
+  var kw = (tab === 'kensa') ? kensaWin() : null;
+  routeSet(kw ? kw.KENSA.path() : tab);
 }
-// パッチ iframe の高さ：ヘッダー＋タブ＋検索欄の実高さから算出
-function fitPatchFrame(){
-  var f = document.querySelector('#pg-patch iframe'); if(!f) return;
+// 埋め込み iframe（パッチ・検査パネル）の高さ：ヘッダー＋タブ＋検索欄の実高さから算出し、
+// iframe の下端を画面の下端に合わせる（検査パネルの選択バーが画面下に固定されて見える）
+function fitEmbedFrame(tab){
+  var f = document.querySelector('#'+TAB_PAGES[tab]+' iframe'); if(!f) return;
   var top = f.getBoundingClientRect().top + window.scrollY;
-  f.style.height = Math.max(480, window.innerHeight - top) + 'px';
+  // 検査パネルは選択バーを画面内に収めるため、低い画面（SE の Safari 等）でも画面高に合わせる
+  f.style.height = Math.max(tab === 'kensa' ? 240 : 480, window.innerHeight - top) + 'px';
 }
-window.addEventListener('resize', function(){ if(document.getElementById('pg-patch').classList.contains('active')) fitPatchFrame(); });
+window.addEventListener('resize', function(){
+  ['patch','kensa'].forEach(function(t){ if(document.getElementById(TAB_PAGES[t]).classList.contains('active')) fitEmbedFrame(t); });
+});
 
 // ==============================================
 // 製品ボタン初期化
@@ -3966,6 +4861,10 @@ function showDrug(id){
   });
   html += '</div>';
 
+  if(d.tags.indexOf('生物学的製剤') >= 0){
+    html += '<div class="canon-xref" style="margin-top:12px"><span>導入前スクリーニング（結核・HBV 等）と維持期モニタリングの検査は <b>検査パネル › 生物学的製剤</b> にあります。</span>'
+          + '<button type="button" style="min-height:44px" onclick="switchTab(\'kensa\');kensaGo(\'bio\')">開く ›</button></div>';
+  }
   if(window.canonLinks) html += canonSelfNote() + canonLinks(html, 'staff:'+d.id);
   document.getElementById('staff-detail-body').innerHTML = html;
   document.getElementById('pg-staff').classList.remove('active');
@@ -5711,8 +6610,8 @@ if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=8;
-var SEC_ORDER=['topical','staff','products','vitamin','guidance','findings','allergy','patch'];
-var SEC_LABEL={topical:'外用薬', staff:'医師・看護師（新薬・専門薬剤）', products:'当院製品', vitamin:'ビタミン剤（内服）',
+var SEC_ORDER=['topical','staff','kensa','products','vitamin','guidance','findings','allergy','patch'];
+var SEC_LABEL={topical:'外用薬', staff:'医師・看護師（新薬・専門薬剤）', kensa:'検査パネル', products:'当院製品', vitamin:'ビタミン剤（内服）',
   guidance:'生活指導', findings:'所見別ナビ', allergy:'食物アレルギー', patch:'パッチテスト'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
@@ -5852,6 +6751,18 @@ function build(){
       });
     });
   }
+  /* 検査パネル（iframe 内のデータ）。検査名・分岐・注意書きまで本文に含めるので IGRA・ポルフィリン・HBV-DNA 等でも引ける */
+  var kw=kensaWin();
+  if(kw){
+    var K=kw.KENSA;
+    K.DATA.forEach(function(it){
+      var text=it.sections.map(function(s){   // 表示される文字だけを拾う（kind・must 等の内部値は入れない）
+        return [s.h, s.note, s.t, (s.items||[]).map(function(x){ return typeof x==='string' ? x : [x.n, x.d, x.c, x.a, x.t, x.tag, x.tl]; })];
+      });
+      add('kensa','🧪',it.name,(K.TYPES[it.type]||{}).label||'',[it.summary,text],function(){ switchTab('kensa'); kensaGo(it.id); });
+    });
+    INDEX.hasKensa=true;
+  }
   INDEX.forEach(function(it){ it.hay=norm(it.raw); });
 }
 
@@ -5881,7 +6792,7 @@ var shown=[];
 function render(q){
   var terms=norm(q).split(/\s+/).filter(Boolean);
   if(!terms.length){ close(); return; }
-  if(!INDEX) build();
+  if(!INDEX || (!INDEX.hasKensa && kensaWin())) build();   // 検査パネルの iframe が後から読み込まれた場合も索引に入れる
   bar.classList.add('has-q'); document.body.classList.add('gs-on');
   if(window.routeSet) routeSet('search/'+encodeURIComponent(q.trim()), /^search\//.test(ROUTE.cur));
   var hits=INDEX.filter(function(it){ return terms.every(function(t){ return it.hay.indexOf(t)>=0; }); });
