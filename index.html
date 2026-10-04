@@ -618,6 +618,34 @@ body.gs-on .gs-results{display:block;}
   #pg-allergy .alg-card{break-inside:avoid;box-shadow:none;border:1px solid #c9bfae;margin-bottom:10px;}
   #pg-allergy .alg-head .alg-flag{display:none!important;}
 }
+/* ===== 処方上限 ===== */
+#pg-joge .jg-rules{background:var(--card);border:1px solid var(--g2);border-radius:13px;padding:12px 15px 11px;margin-bottom:12px;box-shadow:0 1px 5px rgba(0,0,0,.06);}
+#pg-joge .jg-rules-h{font-size:12px;font-weight:700;color:var(--g);margin-bottom:6px;}
+#pg-joge .jg-rules ol{margin:0;padding:0 0 0 1.4em;}
+#pg-joge .jg-rules li{font-size:13px;line-height:1.6;color:var(--tx);padding:2px 0;}
+#pg-joge .jg-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;}
+#pg-joge .jg-nav button{min-height:44px;padding:4px 2px;font-family:inherit;font-size:11.5px;font-weight:600;line-height:1.25;color:var(--tx2);background:var(--card);border:1px solid var(--bd);border-radius:10px;cursor:pointer;}
+#pg-joge .jg-nav button.has-chk{border-color:var(--wbd);}
+#pg-joge .jg-legend{display:flex;gap:8px;align-items:flex-start;font-size:11.5px;line-height:1.6;color:var(--tx2);background:var(--wbg);border:.5px solid var(--wbd);border-radius:10px;padding:9px 12px;margin-bottom:14px;}
+#pg-joge .jg-sec{font-size:12px;font-weight:700;color:var(--g);margin:16px 2px 8px;display:flex;align-items:center;gap:8px;scroll-margin-top:80px;}
+#pg-joge .jg-sec::after{content:"";flex:1;height:1px;background:var(--bd);}
+#pg-joge .jg-card{background:var(--card);border:.5px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:9px;box-shadow:0 1px 4px rgba(0,0,0,.05);scroll-margin-top:80px;transition:box-shadow .3s;}
+#pg-joge .jg-card.jg-chk{border:1px solid var(--wbd);border-left:5px solid #d9a426;background:#fffdf6;}
+#pg-joge .jg-card.flash{box-shadow:0 0 0 3px var(--g2);}
+#pg-joge .jg-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
+#pg-joge .jg-name{font-size:15px;font-weight:700;color:var(--tx);line-height:1.35;}
+#pg-joge .jg-badge{flex-shrink:0;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--wtx);background:#fdf0d8;border:1px solid var(--wbd);border-radius:7px;padding:3px 8px;white-space:nowrap;}
+#pg-joge .jg-need{font-size:12px;font-weight:600;color:var(--wtx);background:var(--wbg);border:.5px dashed var(--wbd);border-radius:8px;padding:6px 10px;margin-bottom:8px;}
+#pg-joge .jg-need b{font-weight:700;}
+#pg-joge .jg-lim{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;background:#f0ece4;border-radius:9px;padding:8px 11px;margin-bottom:7px;}
+#pg-joge .jg-lbl{font-size:10.5px;font-weight:600;color:var(--tx3);white-space:nowrap;}
+#pg-joge .jg-lim .v{font-size:15px;font-weight:700;color:var(--gd);line-height:1.4;}
+#pg-joge .jg-kv{display:grid;grid-template-columns:1fr 1.4fr;gap:6px;margin-bottom:7px;}
+#pg-joge .jg-kv > div{border:.5px solid var(--bd);border-radius:8px;padding:6px 10px;}
+#pg-joge .jg-kv .v{display:block;font-size:13px;color:var(--tx);line-height:1.45;margin-top:1px;}
+#pg-joge .jg-note{font-size:12.5px;line-height:1.65;color:var(--tx2);}
+#pg-joge .jg-note .jg-lbl{display:inline-block;margin-right:6px;}
+#pg-joge .jg-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
 </style>
 </head>
 <body>
@@ -636,6 +664,7 @@ body.gs-on .gs-results{display:block;}
   <button class="tab-btn" data-tab="allergy" onclick="switchTab('allergy')"><span class="tab-ic">🍽</span>食物アレルギー</button>
   <button class="tab-btn" data-tab="findings" onclick="switchTab('findings')"><span class="tab-ic">🔍</span>所見別ナビ</button>
   <button class="tab-btn" data-tab="kensa" onclick="switchTab('kensa')"><span class="tab-ic">🧪</span>検査パネル</button>
+  <button class="tab-btn" data-tab="joge" onclick="switchTab('joge')"><span class="tab-ic">📏</span>処方上限</button>
 </div>
 <div class="gs-bar" id="gs-bar">
   <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -3398,6 +3427,112 @@ window.KENSA = {
   </script>
 </div>
 
+<!-- 処方上限ページ（データは下の JOGE。院内の「外用薬 処方上限表」Excel の内容のみ） -->
+<div class="page" id="pg-joge">
+  <div class="jg-rules">
+    <div class="jg-rules-h">基本ルール</div>
+    <ol id="jg-rules"></ol>
+  </div>
+  <div class="jg-nav" id="jg-nav"></div>
+  <div class="jg-legend" id="jg-legend"></div>
+  <div id="jg-list"></div>
+  <div class="jg-foot" id="jg-foot"></div>
+</div>
+
+<script>
+/* ==============================================
+   処方上限（外用薬）
+   ★ 出典は院内の「外用薬 処方上限表」（Excel）。記載を直したら DATA_META.joge.updated を今日の日付にする
+   chk：Excel で黄色（例外扱い）だった行。dx＝病名確認／test＝検査記録必須／period＝期間制限
+   ============================================== */
+var JOGE = (function(){
+  var CHK = {
+    dx:     {l:'病名確認'},
+    test:   {l:'検査記録必須'},
+    period: {l:'期間制限'}
+  };
+  var RULES = [
+    '上限は「次回受診までの日数分」',
+    '最大3か月分まで',
+    '処方箋・カルテに塗布部位を必ず記載',
+    '量の基準は顔のみ／標準範囲。広範囲の場合は部位を記載のうえ2倍まで'
+  ];
+  var GROUPS = [
+    {id:'acne',    n:'ざ瘡'},
+    {id:'hyper',   n:'多汗症'},
+    {id:'seb',     n:'脂漏性皮膚炎'},
+    {id:'steroid', n:'ステロイド'},
+    {id:'moist',   n:'保湿'},
+    {id:'alopecia',n:'脱毛症'},
+    {id:'tinea',   n:'白癬'}
+  ];
+  var DRUGS = [
+    {id:'differin',  g:'acne', n:'ディフェリンゲル',     size:'15g',   per:'約4週', lim:'3本', note:'維持療法で長期処方可'},
+    {id:'bepio',     g:'acne', n:'ベピオゲル',           size:'15g',   per:'約4週', lim:'3本', note:'維持療法で長期処方可'},
+    {id:'epiduo',    g:'acne', n:'エピデュオゲル',       size:'15g',   per:'約4週', lim:'3本', note:'維持療法で長期処方可'},
+    {id:'bepiowash', g:'acne', n:'ベピオウォッシュゲル', size:'20g',   per:'4〜6週', lim:'3本', note:'維持療法で長期処方可'},
+    {id:'duac',      g:'acne', n:'デュアック',           size:'―',     per:'約4週', lim:'1か月分まで', note:'抗菌薬を含むため急性炎症期のみ。12週で終了し、維持療法には使わない', chk:'period'},
+    {id:'ecclock',   g:'hyper', n:'エクロックゲル',       size:'20g',   per:'約4週', lim:'3本', note:'原発性腋窩多汗症の病名が必須', chk:'dx'},
+    {id:'apohide',   g:'hyper', n:'アポハイドローション', size:'4.5mL', per:'約7日', lim:'1か月4本・最大12本', note:'原発性手掌多汗症の病名が必須。長期処方なら18mL製剤（約28日分）が有利', chk:'dx'},
+    {id:'antebate',  g:'seb', n:'アンテベートローション', size:'10g',  per:'頭皮で約2週', lim:'1か月2本・最大6本', note:'寛解したら減量するか、ニゾラールでの維持に切り替える。顔には使わない'},
+    {id:'nizoral',   g:'seb', n:'ニゾラールローション',   size:'10g',  per:'頭皮で約2週', lim:'1か月2〜3本・最大6本', note:'維持療法として長期処方可'},
+    {id:'myser',     g:'steroid', n:'マイザー軟膏',       size:'―',    per:'範囲による', lim:'1か月50g（広範囲なら100g）', note:'顔・陰部には原則使わない。100gを超える場合は症状詳記を書く'},
+    {id:'hirudoid',  g:'moist', n:'ヒルドイド系',         size:'―',    per:'―', lim:'1回500g（1000gまで可）', note:'皮膚疾患名と部位が必須。美容目的は不可。500gを超える場合は範囲を記載'},
+    {id:'frozin',    g:'alopecia', n:'フロジン外用液',    size:'30mL', per:'2〜4週', lim:'1か月2本・最大6本', note:'適応病名が必須。AGAは保険適用外', chk:'dx'},
+    {id:'lulicon',   g:'tinea', n:'ルリコンクリーム',     size:'10g',  per:'両足で2〜3週', lim:'1か月2本・最大6本', note:'真菌検査の記録が必須', chk:'test'},
+    {id:'clenafin',  g:'tinea', n:'クレナフィン爪外用液', size:'3.56g', per:'母趾1〜2本で約1か月', lim:'1か月1〜2本・最大4本', note:'確定診断の記録と、治療する爪の数の記載が必須', chk:'test'}
+  ];
+  var LEGEND = '例外扱い（デュアック：期間制限／ルリコン・クレナフィン：検査記録必須／フロジン・アポハイド・エクロック：病名確認）';
+  var FOOT = ['容量は一般的な規格。採用規格と異なる場合は修正してください。半年ごとに査定事例をもとに見直し。'];
+  return {CHK:CHK, RULES:RULES, GROUPS:GROUPS, DRUGS:DRUGS, LEGEND:LEGEND, FOOT:FOOT};
+})();
+
+(function(){
+  function e(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function card(d){
+    var c = d.chk ? JOGE.CHK[d.chk] : null;
+    var h = '<div class="jg-card'+(c?' jg-chk':'')+'" id="jg-'+d.id+'">';
+    h += '<div class="jg-hd"><div class="jg-name">'+e(d.n)+'</div>'+(c?'<span class="jg-badge">⚠ 要確認</span>':'')+'</div>';
+    if(c) h += '<div class="jg-need">必要なもの：<b>'+e(c.l)+'</b></div>';
+    h += '<div class="jg-lim"><span class="jg-lbl">上限</span><span class="v">'+e(d.lim)+'</span></div>';
+    h += '<div class="jg-kv"><div><span class="jg-lbl">規格（1本）</span><span class="v">'+e(d.size)+'</span></div>'
+       + '<div><span class="jg-lbl">1本の使用期間の目安</span><span class="v">'+e(d.per)+'</span></div></div>';
+    h += '<div class="jg-note"><span class="jg-lbl">注意点</span>'+e(d.note)+'</div>';
+    return h + '</div>';
+  }
+  function render(){
+    var rl = document.getElementById('jg-rules'); if(!rl) return;
+    rl.innerHTML = JOGE.RULES.map(function(r){ return '<li>'+e(r)+'</li>'; }).join('');
+    document.getElementById('jg-nav').innerHTML = JOGE.GROUPS.map(function(g){
+      var chk = JOGE.DRUGS.some(function(d){ return d.g===g.id && d.chk; });
+      return '<button type="button" data-g="'+g.id+'"'+(chk?' class="has-chk"':'')+'>'+e(g.n)+'</button>';
+    }).join('');
+    document.getElementById('jg-legend').innerHTML = '<span class="jg-badge">⚠ 要確認</span><span>'+e(JOGE.LEGEND)+'</span>';
+    document.getElementById('jg-list').innerHTML = JOGE.GROUPS.map(function(g){
+      return '<div class="jg-sec" id="jg-'+g.id+'">'+e(g.n)+'</div>'
+        + JOGE.DRUGS.filter(function(d){ return d.g===g.id; }).map(card).join('');
+    }).join('');
+    document.getElementById('jg-foot').innerHTML = JOGE.FOOT.map(e).join('<br>')
+      + '<br>最終判断は医師が行います。';
+    document.querySelectorAll('#jg-nav button').forEach(function(b){
+      b.onclick = function(){ jogeGo(b.dataset.g); };
+    });
+  }
+  /* #joge/<薬剤id または 分類id> へ移動。sub なしはタブ先頭 */
+  window.jogeGo = function(sub){
+    var el = sub && document.getElementById('jg-'+sub);
+    if(!el) return;
+    if(window.routeSet) routeSet('joge/'+sub);
+    setTimeout(function(){
+      var hdr=document.querySelector('.hdr'); var off=(hdr?hdr.offsetHeight:0)+10;
+      window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off, behavior:'smooth'});
+      if(el.classList.contains('jg-card')){ el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); },1400); }
+    },50);
+  };
+  render();
+})();
+</script>
+
 <script>
 /* <script type="text/html"> に素の HTML として置いた埋め込み画面を取り出す（<\/script> は復元） */
 function embeddedHTML(id){ var el=document.getElementById(id); return el ? el.textContent.replace(/<\\\/script>/g,'<\/script>') : ''; }
@@ -3424,7 +3559,7 @@ function kensaGo(id){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.2';
+var APP_VERSION = '2.3';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-03-29', check:'各疾患の最新ガイドライン'},
@@ -3436,7 +3571,8 @@ var DATA_META = {
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
-  kensa:    {updated:'2026-10-03', check:'添付文書・各疾患の診療ガイドライン・算定要件'}
+  kensa:    {updated:'2026-10-03', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
+  joge:     {updated:'2026-10-04', check:'院内の外用薬 処方上限表・査定事例（半年ごとに見直し）'}
 };
 function metaAgeText(ymd){
   var d=new Date(ymd+'T00:00:00'); if(isNaN(d)) return {txt:'', stale:false};
@@ -4510,7 +4646,7 @@ var PRODUCTS = [
 // ==============================================
 // 画面の状態を URL ハッシュに残す（リロード・Safari 切替・戻るボタン対応）
 //   #<tab>                 例: #topical
-//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39, #kensa/bio
+//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39, #kensa/bio, #joge/duac
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #search/<語>           横断検索
 //   ハッシュが無い起動（ホーム画面アイコン等）は最後に開いた画面を localStorage から復元する
@@ -4549,6 +4685,7 @@ function routeApply(path){
     if(!sub) return;
     if(tab === 'products'){ showProduct(sub); }
     else if(tab === 'staff'){ showDrug(sub); }
+    else if(tab === 'joge'){ jogeGo(sub); }
     else if(tab === 'topical' && window.__topical){ __topical.jump(sub); }
     else if(tab === 'vitamin'){ var vb=document.querySelector('#pg-vitamin .vit-seg button:nth-child('+({agents:1,dis:2,table:3}[sub]||1)+')'); if(vb) vitView(sub, vb); }
     else if(tab === 'allergy'){ var ab=document.querySelector('#pg-allergy > .alg-seg button:nth-child('+({avoid:1,view39:2,topics:3}[sub]||1)+')'); if(ab) algView(sub, ab); }
@@ -4572,7 +4709,7 @@ function routeInit(){
 }
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
-  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa'};
+  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge'};
 function switchTab(tab) {
   if(!TAB_PAGES[tab]) return;
   if(window.gsClose) gsClose();
@@ -6675,8 +6812,8 @@ if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=8;
-var SEC_ORDER=['topical','staff','kensa','products','vitamin','guidance','findings','allergy','patch'];
-var SEC_LABEL={topical:'外用薬', staff:'医師・看護師（新薬・専門薬剤）', kensa:'検査パネル', products:'当院製品', vitamin:'ビタミン剤（内服）',
+var SEC_ORDER=['topical','joge','staff','kensa','products','vitamin','guidance','findings','allergy','patch'];
+var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師（新薬・専門薬剤）', kensa:'検査パネル', products:'当院製品', vitamin:'ビタミン剤（内服）',
   guidance:'生活指導', findings:'所見別ナビ', allergy:'食物アレルギー', patch:'パッチテスト'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
@@ -6737,6 +6874,17 @@ function build(){
      ['azelaic','アゼライン酸 判定フロー','AZAクリア セラム ざ瘡 にきび 酒皶 マラセチア 色素沈着 妊娠']
     ].forEach(function(r){
       add('topical','📑','外用薬 › '+r[1],'',[r[2]],function(){ switchTab('topical'); __topical.jump(r[0]); });
+    });
+  }
+  /* 処方上限（薬剤名・分類名のどちらでも引けるよう、薬剤に分類名を、分類に薬剤名を含める） */
+  if(window.JOGE){
+    var jgName={}; JOGE.GROUPS.forEach(function(g){ jgName[g.id]=g.n; });
+    JOGE.DRUGS.forEach(function(d){
+      var c=d.chk?JOGE.CHK[d.chk]:null;
+      add('joge','📏',d.n,jgName[d.g]+'・上限 '+d.lim+(c?'（要確認：'+c.l+'）':''),[d.size,d.per,d.note,'処方上限'],function(){ switchTab('joge'); jogeGo(d.id); });
+    });
+    JOGE.GROUPS.forEach(function(g){
+      add('joge','📏','処方上限 › '+g.n,JOGE.DRUGS.filter(function(d){ return d.g===g.id; }).map(function(d){ return d.n; }).join('・'),[],function(){ switchTab('joge'); jogeGo(g.id); });
     });
   }
   /* 医師・看護師向け薬剤 */
