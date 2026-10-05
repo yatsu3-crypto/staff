@@ -705,6 +705,272 @@ body.gs-on .gs-results{display:block;}
 
   <div class="err" id="err-msg"></div>
   <button class="gen-btn" onclick="generate()">⚕ 生活指導を生成する</button>
+
+  <!-- ===== 抗炎症の食事ガイド（乾癬・アトピー性皮膚炎） ===== -->
+  <style id="diet-css">
+  #diet-ch{margin-top:22px;scroll-margin-top:12px;}
+  #diet-ch .diet-ttl{font-size:15px;font-weight:700;color:var(--gd);margin:0 2px 10px;display:flex;align-items:center;gap:7px;}
+  #diet-ch .diet-ttl small{font-size:11px;font-weight:500;color:var(--tx3);}
+  #diet-ch .diet-pts{list-style:none;margin:0;padding:0;}
+  #diet-ch .diet-pts li{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.65;color:var(--tx);padding:9px 0;border-bottom:1px dashed var(--bd);}
+  #diet-ch .diet-pts li:last-child{border-bottom:none;padding-bottom:0;}
+  #diet-ch .diet-pts li:first-child{padding-top:0;}
+  #diet-ch .diet-pts .n{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--g);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  #diet-ch .diet-pts li.top .n{background:#b93a26;}
+  #diet-ch .diet-pts b{color:var(--gd);}
+  #diet-ch .diet-pts li.top b{color:#b93a26;}
+  #diet-ch .diet-pts .s{display:block;font-size:12px;color:var(--tx2);margin-top:2px;}
+  #diet-ch .diet-col{border:1px solid var(--bd);border-radius:11px;overflow:hidden;margin-bottom:10px;background:#fff;}
+  #diet-ch .diet-col:last-child{margin-bottom:0;}
+  #diet-ch .diet-col h4{margin:0;padding:8px 13px;font-size:13px;font-weight:700;color:#fff;letter-spacing:.06em;}
+  #diet-ch .diet-col.good h4{background:#43604a;}
+  #diet-ch .diet-col.mid h4{background:#b8863b;}
+  #diet-ch .diet-col.bad h4{background:#b93a26;}
+  #diet-ch .diet-col dl{margin:0;padding:4px 13px;}
+  #diet-ch .diet-col dt{font-size:13px;font-weight:600;color:var(--tx);padding-top:7px;}
+  #diet-ch .diet-col dd{margin:0;font-size:12px;line-height:1.55;color:var(--tx2);padding-bottom:7px;border-bottom:1px dashed var(--bd);}
+  #diet-ch .diet-col dd:last-child{border-bottom:none;}
+  #dietWrap{position:relative;width:100%;overflow:hidden;border:1px solid var(--bd);border-radius:10px;background:#6d6459;}
+  #dietFrame{width:794px;border:0;display:block;transform-origin:0 0;background:#6d6459;}
+  #diet-ch .diet-hint{font-size:12px;line-height:1.6;color:var(--tx2);margin-top:8px;}
+  #diet-ch .diet-note{font-size:11.5px;line-height:1.6;color:var(--tx3);margin-top:10px;}
+  /* 印刷はパンフ iframe 内の文書だけで行う。親ページを印刷しても章（スタッフ用の内容）は出さない */
+  @media print{#diet-ch{display:none!important;}}
+  </style>
+  <section id="diet-ch">
+    <div class="diet-ttl">🥗 抗炎症の食事ガイド<small>乾癬・アトピー性皮膚炎</small></div>
+
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>指導のポイント（スタッフ用）</div>
+      <div class="card-body">
+        <ul class="diet-pts">
+          <li><span class="n">1</span><span><b>対象：乾癬・アトピー性皮膚炎</b><span class="s">どちらも体の中で慢性の炎症が続く病気。おすすめは「地中海食」型で、青魚や大豆をよく使う和食と相性がよい。</span></span></li>
+          <li class="top"><span class="n">2</span><span><b>BMI 25以上なら、体重管理が最優先</b><span class="s">体重が5%減ると（例：70kg→66.5kg）、乾癬の皮疹が軽くなり、お薬の効きも良くなることが報告されている。食事の質の改善＋週150分の早歩きから。</span></span></li>
+          <li><span class="n">3</span><span><b>特定食品の除去は原則不要。「絶対禁止」を作らない</b><span class="s">完璧より「回数を増やす・減らす」。続けられる形で、家族と同じ食卓で。</span></span></li>
+          <li><span class="n">4</span><span><b>食事はお薬の代わりではなく「土台」</b><span class="s">治療は続けてもらう。</span></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>食品ガイド ― 和食でできる地中海食</div>
+      <div class="card-body" id="diet-foods"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>患者配布用パンフレット（A4・1枚）</div>
+      <div class="card-body">
+        <button class="print-btn" id="dietPrint">🖨 食事ガイドを印刷（A4・1ページ）</button>
+        <div id="dietWrap"><iframe id="dietFrame" title="抗炎症の食事ガイド（患者用パンフレット）"></iframe></div>
+        <p class="diet-hint">プレビューは縮小表示です。印刷ダイアログで<strong>「背景のグラフィック」をON</strong>、<strong>余白は「なし」</strong>に設定してください。下部のQRコードから食事スコアアプリ（https://yatsu3-crypto.github.io/diet/）が開きます。</p>
+        <p class="diet-note">本紙は一般的な生活指導であり、診断・治療に代わるものではありません。最終判断は医師が行います。</p>
+      </div>
+    </div>
+    <!-- 患者パンフレット（A4・1ページ）の本体。読み込み時に上の iframe の srcdoc へ流し込む。
+         上の「食品ガイド」もここの .foods から組み立てるので、食品を直すときはここだけ直せばよい。
+         QR は https://yatsu3-crypto.github.io/diet/ を一度だけ生成した静的 SVG。本体内に </script> を書く場合は <\/script> とする。 -->
+    <script type="text/html" id="diet-src">
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>抗炎症の食事ガイド パンフレット|やまもと皮膚科・漢方クリニック</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --washi:#f7f2e7; --sumi:#3a3229;
+  --shu:#b93a26; --kincha:#b8863b; --matsuba:#43604a; --ai:#2b4a6f;
+  --line:#d8cbb0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  background:#6d6459;color:var(--sumi);line-height:1.6;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+
+/* ===== A4本体 ===== */
+.sheet{
+  width:210mm;min-height:296mm;margin:0 auto;padding:10mm 13mm 7mm;
+  background:var(--washi);
+  background-image:
+    radial-gradient(ellipse at 15% 8%, rgba(184,134,59,.05), transparent 55%),
+    radial-gradient(ellipse at 88% 92%, rgba(67,96,74,.05), transparent 55%);
+  display:flex;flex-direction:column;
+}
+header{border-bottom:3px double var(--kincha);padding-bottom:3mm;margin-bottom:3.5mm;text-align:center}
+.clinic{font-size:9.5pt;letter-spacing:.3em;color:var(--kincha);font-weight:700}
+h1{font-size:20pt;font-weight:800;letter-spacing:.12em;margin-top:1mm}
+h1 .accent{color:var(--shu)}
+.sub{font-size:9.5pt;color:#7a6f5d;letter-spacing:.08em;margin-top:1mm}
+
+h2{
+  font-size:11.5pt;font-weight:800;letter-spacing:.1em;
+  padding-left:3mm;border-left:4px solid var(--shu);margin:3mm 0 1.5mm;
+}
+p{font-size:9.5pt}
+.two-col{display:flex;gap:6mm}
+.two-col>div{flex:1}
+
+/* 食品3分類 */
+.foods{display:flex;gap:3mm;margin-top:1.5mm}
+.fcol{flex:1;border:1px solid var(--line);border-radius:2mm;overflow:hidden;background:#fffdf7}
+.fhead{color:#fffdf7;font-weight:800;font-size:9.5pt;letter-spacing:.08em;text-align:center;padding:1.6mm 0}
+.f-good .fhead{background:var(--matsuba)}
+.f-mid  .fhead{background:var(--kincha)}
+.f-bad  .fhead{background:var(--shu)}
+.fbody{padding:2mm 2.5mm;font-size:8.5pt;line-height:1.55}
+.fbody b{display:block;font-size:8.5pt}
+.fbody span{color:#6a5f4e;display:block;margin-bottom:.8mm;font-size:7.5pt}
+
+/* 置き換え表 */
+table{width:100%;border-collapse:collapse;margin-top:1.5mm;background:#fffdf7}
+th,td{border:1px solid var(--line);padding:1.4mm 2mm;font-size:8.5pt;text-align:center}
+th{background:#efe6d3;font-weight:800;letter-spacing:.05em}
+td .arrow{color:var(--shu);font-weight:800;margin:0 1mm}
+
+/* 約束 */
+.yakusoku{
+  background:#fffdf7;border:1px solid var(--line);border-radius:2mm;
+  padding:2.5mm 4mm;font-size:9pt;margin-top:1mm;
+}
+.yakusoku b{color:var(--matsuba)}
+
+/* 体重 */
+.weightbox{
+  background:#fbeeea;border:1px solid var(--shu);border-radius:2mm;
+  padding:2.5mm 4mm;font-size:9pt;
+}
+.weightbox b{color:var(--shu)}
+
+/* QRブロック */
+.qr-block{
+  margin-top:auto;
+  border-top:3px double var(--kincha);padding-top:3.5mm;
+  display:flex;align-items:center;gap:6mm;
+}
+.qr-box{
+  flex:none;background:#fff;border:1px solid var(--line);border-radius:2mm;
+  padding:2.5mm;
+}
+.qr-box svg{display:block;width:30mm;height:30mm}
+.qr-text{flex:1}
+.qr-text .big{font-size:12pt;font-weight:800;letter-spacing:.08em;color:var(--ai)}
+.qr-text p{font-size:8.5pt;color:#5d5344;margin-top:1mm}
+.qr-steps{font-size:8.5pt;margin-top:1mm;color:var(--sumi)}
+.qr-steps b{color:var(--shu)}
+footer{
+  text-align:center;font-size:7.5pt;color:#8a7d68;letter-spacing:.05em;
+  margin-top:2mm;
+}
+
+/* ===== 印刷設定 ===== */
+@page{size:A4;margin:0}
+@media print{
+  body{background:none}
+  body>*:not(.sheet){display:none!important}
+  .sheet{box-shadow:none;margin:0;width:210mm;height:297mm}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <div class="clinic">やまもと皮膚科・漢方クリニック</div>
+    <h1>🌼 抗炎症の<span class="accent">食事</span>ガイド</h1>
+    <div class="sub">乾癬・アトピー性皮膚炎の方へ ― 地中海食のすすめ</div>
+  </header>
+
+  <div class="two-col">
+    <div>
+      <h2>なぜ「食事」なのですか?</h2>
+      <p>乾癬もアトピー性皮膚炎も、体の中で<b>慢性の炎症</b>が続いている病気です。毎日の食事のパターンは、この炎症の「燃えやすさ」に影響します。おすすめは<b>「地中海食」型</b>。全粒穀物・野菜・果物・豆類・ナッツ・魚・オリーブ油を中心にした食べ方で、青魚や大豆をよく使う<b>和食との相性は抜群</b>です。</p>
+      <p style="margin-top:1.5mm;font-size:8.5pt;color:#7a6f5d">※食事はお薬の代わりではなく「土台」です。治療は続けましょう。特定の食品の除去は原則不要です。</p>
+    </div>
+    <div>
+      <h2>肥満がある方は、まず体重から</h2>
+      <div class="weightbox">
+        <b>BMI 25以上の方は、体重管理が最優先です。</b><br>
+        体重が<b>5%</b>減ると(例:70kg→66.5kg)、乾癬の皮疹が軽くなり、お薬の効きも良くなることが報告されています。食事の質の改善+週150分の早歩きから始めましょう。
+      </div>
+      <div class="yakusoku" style="margin-top:2mm">
+        <b>3つの約束</b><br>
+        一、完璧より「回数を増やす・減らす」<br>
+        二、「絶対禁止」の食品は作らない<br>
+        三、続けられる形で、家族と同じ食卓で
+      </div>
+    </div>
+  </div>
+
+  <h2>食品ガイド ― 和食でできる地中海食</h2>
+  <div class="foods">
+    <div class="fcol f-good">
+      <div class="fhead">◎ 積極的に</div>
+      <div class="fbody">
+        <b>魚(特に青魚)</b><span>サバ・イワシ・鮭。週3回以上。缶詰も可</span>
+        <b>野菜</b><span>1日小鉢5皿(約350g)</span>
+        <b>果物</b><span>1日1〜2回、果実で</span>
+        <b>豆・大豆製品</b><span>納豆・豆腐・味噌をほぼ毎日</span>
+        <b>全粒穀物</b><span>麦ごはん・玄米・雑穀・オートミール</span>
+        <b>ナッツ</b><span>素焼き・無塩を週3回以上</span>
+        <b>良い油</b><span>オリーブ油・菜種油を基本に</span>
+        <b>海藻・きのこ</b><span>食物繊維の補給源として毎日</span>
+      </div>
+    </div>
+    <div class="fcol f-mid">
+      <div class="fhead">○ 適量なら良い</div>
+      <div class="fbody">
+        <b>鶏肉・卵</b><span>肉は鶏を中心に。卵は1日1個程度</span>
+        <b>乳製品</b><span>無糖ヨーグルト・チーズを少量</span>
+        <b>赤身肉(牛・豚)</b><span>週2回まで。脂身の少ない部位を</span>
+        <b>白米・うどん</b><span>麦や玄米を混ぜて「格上げ」</span>
+        <b>アルコール</b><span>乾癬では悪化因子。控えめに</span>
+      </div>
+    </div>
+    <div class="fcol f-bad">
+      <div class="fhead">△ 控えめに</div>
+      <div class="fbody">
+        <b>加工肉</b><span>ハム・ソーセージ・ベーコンは週1回以下</span>
+        <b>甘い飲み物</b><span>お茶・水に置き換え</span>
+        <b>菓子・菓子パン</b><span>精製糖+飽和脂肪は特に控える</span>
+        <b>揚げ物・ファストフード</b><span>週1回以下。家は「焼く・蒸す・煮る」</span>
+        <b>バター・ラード・超加工食品</b><span>頻度を減らす</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>今日からできる「置き換え」</h2>
+  <table>
+    <tr><th>白ごはん</th><th>おやつ</th><th>ウインナー</th><th>ジュース</th><th>バター</th></tr>
+    <tr>
+      <td><span class="arrow">▼</span>麦ごはん</td>
+      <td><span class="arrow">▼</span>ナッツ・果物</td>
+      <td><span class="arrow">▼</span>焼き魚・卵</td>
+      <td><span class="arrow">▼</span>緑茶・炭酸水</td>
+      <td><span class="arrow">▼</span>オリーブ油</td>
+    </tr>
+  </table>
+  <p style="font-size:8.5pt;color:#7a6f5d;margin-top:1mm">まずは1つ選んで、2週間続けてみましょう。</p>
+
+  <div class="qr-block">
+    <div class="qr-box"><svg role="img" aria-label="食事スコアアプリのQRコード（https://yatsu3-crypto.github.io/diet/）" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"  preserveAspectRatio="xMinYMin meet"><rect width="100%" height="100%" fill="white" cx="0" cy="0"/><path d="M2,2l4,0 0,4 -4,0 0,-4z M6,2l4,0 0,4 -4,0 0,-4z M10,2l4,0 0,4 -4,0 0,-4z M14,2l4,0 0,4 -4,0 0,-4z M18,2l4,0 0,4 -4,0 0,-4z M22,2l4,0 0,4 -4,0 0,-4z M26,2l4,0 0,4 -4,0 0,-4z M34,2l4,0 0,4 -4,0 0,-4z M38,2l4,0 0,4 -4,0 0,-4z M42,2l4,0 0,4 -4,0 0,-4z M54,2l4,0 0,4 -4,0 0,-4z M74,2l4,0 0,4 -4,0 0,-4z M78,2l4,0 0,4 -4,0 0,-4z M82,2l4,0 0,4 -4,0 0,-4z M90,2l4,0 0,4 -4,0 0,-4z M94,2l4,0 0,4 -4,0 0,-4z M98,2l4,0 0,4 -4,0 0,-4z M102,2l4,0 0,4 -4,0 0,-4z M106,2l4,0 0,4 -4,0 0,-4z M110,2l4,0 0,4 -4,0 0,-4z M114,2l4,0 0,4 -4,0 0,-4z M2,6l4,0 0,4 -4,0 0,-4z M26,6l4,0 0,4 -4,0 0,-4z M34,6l4,0 0,4 -4,0 0,-4z M46,6l4,0 0,4 -4,0 0,-4z M50,6l4,0 0,4 -4,0 0,-4z M54,6l4,0 0,4 -4,0 0,-4z M74,6l4,0 0,4 -4,0 0,-4z M82,6l4,0 0,4 -4,0 0,-4z M90,6l4,0 0,4 -4,0 0,-4z M114,6l4,0 0,4 -4,0 0,-4z M2,10l4,0 0,4 -4,0 0,-4z M10,10l4,0 0,4 -4,0 0,-4z M14,10l4,0 0,4 -4,0 0,-4z M18,10l4,0 0,4 -4,0 0,-4z M26,10l4,0 0,4 -4,0 0,-4z M38,10l4,0 0,4 -4,0 0,-4z M42,10l4,0 0,4 -4,0 0,-4z M54,10l4,0 0,4 -4,0 0,-4z M58,10l4,0 0,4 -4,0 0,-4z M74,10l4,0 0,4 -4,0 0,-4z M82,10l4,0 0,4 -4,0 0,-4z M90,10l4,0 0,4 -4,0 0,-4z M98,10l4,0 0,4 -4,0 0,-4z M102,10l4,0 0,4 -4,0 0,-4z M106,10l4,0 0,4 -4,0 0,-4z M114,10l4,0 0,4 -4,0 0,-4z M2,14l4,0 0,4 -4,0 0,-4z M10,14l4,0 0,4 -4,0 0,-4z M14,14l4,0 0,4 -4,0 0,-4z M18,14l4,0 0,4 -4,0 0,-4z M26,14l4,0 0,4 -4,0 0,-4z M34,14l4,0 0,4 -4,0 0,-4z M46,14l4,0 0,4 -4,0 0,-4z M50,14l4,0 0,4 -4,0 0,-4z M62,14l4,0 0,4 -4,0 0,-4z M66,14l4,0 0,4 -4,0 0,-4z M70,14l4,0 0,4 -4,0 0,-4z M78,14l4,0 0,4 -4,0 0,-4z M90,14l4,0 0,4 -4,0 0,-4z M98,14l4,0 0,4 -4,0 0,-4z M102,14l4,0 0,4 -4,0 0,-4z M106,14l4,0 0,4 -4,0 0,-4z M114,14l4,0 0,4 -4,0 0,-4z M2,18l4,0 0,4 -4,0 0,-4z M10,18l4,0 0,4 -4,0 0,-4z M14,18l4,0 0,4 -4,0 0,-4z M18,18l4,0 0,4 -4,0 0,-4z M26,18l4,0 0,4 -4,0 0,-4z M50,18l4,0 0,4 -4,0 0,-4z M54,18l4,0 0,4 -4,0 0,-4z M58,18l4,0 0,4 -4,0 0,-4z M62,18l4,0 0,4 -4,0 0,-4z M66,18l4,0 0,4 -4,0 0,-4z M78,18l4,0 0,4 -4,0 0,-4z M82,18l4,0 0,4 -4,0 0,-4z M90,18l4,0 0,4 -4,0 0,-4z M98,18l4,0 0,4 -4,0 0,-4z M102,18l4,0 0,4 -4,0 0,-4z M106,18l4,0 0,4 -4,0 0,-4z M114,18l4,0 0,4 -4,0 0,-4z M2,22l4,0 0,4 -4,0 0,-4z M26,22l4,0 0,4 -4,0 0,-4z M46,22l4,0 0,4 -4,0 0,-4z M50,22l4,0 0,4 -4,0 0,-4z M58,22l4,0 0,4 -4,0 0,-4z M78,22l4,0 0,4 -4,0 0,-4z M82,22l4,0 0,4 -4,0 0,-4z M90,22l4,0 0,4 -4,0 0,-4z M114,22l4,0 0,4 -4,0 0,-4z M2,26l4,0 0,4 -4,0 0,-4z M6,26l4,0 0,4 -4,0 0,-4z M10,26l4,0 0,4 -4,0 0,-4z M14,26l4,0 0,4 -4,0 0,-4z M18,26l4,0 0,4 -4,0 0,-4z M22,26l4,0 0,4 -4,0 0,-4z M26,26l4,0 0,4 -4,0 0,-4z M34,26l4,0 0,4 -4,0 0,-4z M42,26l4,0 0,4 -4,0 0,-4z M50,26l4,0 0,4 -4,0 0,-4z M58,26l4,0 0,4 -4,0 0,-4z M66,26l4,0 0,4 -4,0 0,-4z M74,26l4,0 0,4 -4,0 0,-4z M82,26l4,0 0,4 -4,0 0,-4z M90,26l4,0 0,4 -4,0 0,-4z M94,26l4,0 0,4 -4,0 0,-4z M98,26l4,0 0,4 -4,0 0,-4z M102,26l4,0 0,4 -4,0 0,-4z M106,26l4,0 0,4 -4,0 0,-4z M110,26l4,0 0,4 -4,0 0,-4z M114,26l4,0 0,4 -4,0 0,-4z M34,30l4,0 0,4 -4,0 0,-4z M38,30l4,0 0,4 -4,0 0,-4z M42,30l4,0 0,4 -4,0 0,-4z M54,30l4,0 0,4 -4,0 0,-4z M58,30l4,0 0,4 -4,0 0,-4z M66,30l4,0 0,4 -4,0 0,-4z M70,30l4,0 0,4 -4,0 0,-4z M74,30l4,0 0,4 -4,0 0,-4z M78,30l4,0 0,4 -4,0 0,-4z M2,34l4,0 0,4 -4,0 0,-4z M10,34l4,0 0,4 -4,0 0,-4z M14,34l4,0 0,4 -4,0 0,-4z M22,34l4,0 0,4 -4,0 0,-4z M26,34l4,0 0,4 -4,0 0,-4z M30,34l4,0 0,4 -4,0 0,-4z M38,34l4,0 0,4 -4,0 0,-4z M42,34l4,0 0,4 -4,0 0,-4z M46,34l4,0 0,4 -4,0 0,-4z M54,34l4,0 0,4 -4,0 0,-4z M58,34l4,0 0,4 -4,0 0,-4z M66,34l4,0 0,4 -4,0 0,-4z M70,34l4,0 0,4 -4,0 0,-4z M74,34l4,0 0,4 -4,0 0,-4z M90,34l4,0 0,4 -4,0 0,-4z M102,34l4,0 0,4 -4,0 0,-4z M110,34l4,0 0,4 -4,0 0,-4z M114,34l4,0 0,4 -4,0 0,-4z M2,38l4,0 0,4 -4,0 0,-4z M6,38l4,0 0,4 -4,0 0,-4z M14,38l4,0 0,4 -4,0 0,-4z M30,38l4,0 0,4 -4,0 0,-4z M34,38l4,0 0,4 -4,0 0,-4z M46,38l4,0 0,4 -4,0 0,-4z M66,38l4,0 0,4 -4,0 0,-4z M78,38l4,0 0,4 -4,0 0,-4z M82,38l4,0 0,4 -4,0 0,-4z M90,38l4,0 0,4 -4,0 0,-4z M94,38l4,0 0,4 -4,0 0,-4z M98,38l4,0 0,4 -4,0 0,-4z M114,38l4,0 0,4 -4,0 0,-4z M6,42l4,0 0,4 -4,0 0,-4z M10,42l4,0 0,4 -4,0 0,-4z M14,42l4,0 0,4 -4,0 0,-4z M18,42l4,0 0,4 -4,0 0,-4z M26,42l4,0 0,4 -4,0 0,-4z M30,42l4,0 0,4 -4,0 0,-4z M34,42l4,0 0,4 -4,0 0,-4z M46,42l4,0 0,4 -4,0 0,-4z M50,42l4,0 0,4 -4,0 0,-4z M58,42l4,0 0,4 -4,0 0,-4z M66,42l4,0 0,4 -4,0 0,-4z M70,42l4,0 0,4 -4,0 0,-4z M74,42l4,0 0,4 -4,0 0,-4z M82,42l4,0 0,4 -4,0 0,-4z M86,42l4,0 0,4 -4,0 0,-4z M98,42l4,0 0,4 -4,0 0,-4z M106,42l4,0 0,4 -4,0 0,-4z M110,42l4,0 0,4 -4,0 0,-4z M14,46l4,0 0,4 -4,0 0,-4z M18,46l4,0 0,4 -4,0 0,-4z M42,46l4,0 0,4 -4,0 0,-4z M54,46l4,0 0,4 -4,0 0,-4z M58,46l4,0 0,4 -4,0 0,-4z M66,46l4,0 0,4 -4,0 0,-4z M78,46l4,0 0,4 -4,0 0,-4z M82,46l4,0 0,4 -4,0 0,-4z M86,46l4,0 0,4 -4,0 0,-4z M90,46l4,0 0,4 -4,0 0,-4z M114,46l4,0 0,4 -4,0 0,-4z M18,50l4,0 0,4 -4,0 0,-4z M22,50l4,0 0,4 -4,0 0,-4z M26,50l4,0 0,4 -4,0 0,-4z M34,50l4,0 0,4 -4,0 0,-4z M42,50l4,0 0,4 -4,0 0,-4z M70,50l4,0 0,4 -4,0 0,-4z M82,50l4,0 0,4 -4,0 0,-4z M86,50l4,0 0,4 -4,0 0,-4z M94,50l4,0 0,4 -4,0 0,-4z M102,50l4,0 0,4 -4,0 0,-4z M106,50l4,0 0,4 -4,0 0,-4z M2,54l4,0 0,4 -4,0 0,-4z M10,54l4,0 0,4 -4,0 0,-4z M14,54l4,0 0,4 -4,0 0,-4z M22,54l4,0 0,4 -4,0 0,-4z M30,54l4,0 0,4 -4,0 0,-4z M38,54l4,0 0,4 -4,0 0,-4z M46,54l4,0 0,4 -4,0 0,-4z M54,54l4,0 0,4 -4,0 0,-4z M62,54l4,0 0,4 -4,0 0,-4z M66,54l4,0 0,4 -4,0 0,-4z M78,54l4,0 0,4 -4,0 0,-4z M86,54l4,0 0,4 -4,0 0,-4z M90,54l4,0 0,4 -4,0 0,-4z M106,54l4,0 0,4 -4,0 0,-4z M110,54l4,0 0,4 -4,0 0,-4z M114,54l4,0 0,4 -4,0 0,-4z M14,58l4,0 0,4 -4,0 0,-4z M18,58l4,0 0,4 -4,0 0,-4z M22,58l4,0 0,4 -4,0 0,-4z M26,58l4,0 0,4 -4,0 0,-4z M30,58l4,0 0,4 -4,0 0,-4z M34,58l4,0 0,4 -4,0 0,-4z M46,58l4,0 0,4 -4,0 0,-4z M58,58l4,0 0,4 -4,0 0,-4z M66,58l4,0 0,4 -4,0 0,-4z M78,58l4,0 0,4 -4,0 0,-4z M90,58l4,0 0,4 -4,0 0,-4z M106,58l4,0 0,4 -4,0 0,-4z M110,58l4,0 0,4 -4,0 0,-4z M114,58l4,0 0,4 -4,0 0,-4z M6,62l4,0 0,4 -4,0 0,-4z M10,62l4,0 0,4 -4,0 0,-4z M18,62l4,0 0,4 -4,0 0,-4z M34,62l4,0 0,4 -4,0 0,-4z M38,62l4,0 0,4 -4,0 0,-4z M54,62l4,0 0,4 -4,0 0,-4z M62,62l4,0 0,4 -4,0 0,-4z M66,62l4,0 0,4 -4,0 0,-4z M74,62l4,0 0,4 -4,0 0,-4z M90,62l4,0 0,4 -4,0 0,-4z M94,62l4,0 0,4 -4,0 0,-4z M98,62l4,0 0,4 -4,0 0,-4z M110,62l4,0 0,4 -4,0 0,-4z M14,66l4,0 0,4 -4,0 0,-4z M18,66l4,0 0,4 -4,0 0,-4z M22,66l4,0 0,4 -4,0 0,-4z M26,66l4,0 0,4 -4,0 0,-4z M38,66l4,0 0,4 -4,0 0,-4z M74,66l4,0 0,4 -4,0 0,-4z M98,66l4,0 0,4 -4,0 0,-4z M102,66l4,0 0,4 -4,0 0,-4z M110,66l4,0 0,4 -4,0 0,-4z M6,70l4,0 0,4 -4,0 0,-4z M18,70l4,0 0,4 -4,0 0,-4z M22,70l4,0 0,4 -4,0 0,-4z M30,70l4,0 0,4 -4,0 0,-4z M34,70l4,0 0,4 -4,0 0,-4z M38,70l4,0 0,4 -4,0 0,-4z M54,70l4,0 0,4 -4,0 0,-4z M62,70l4,0 0,4 -4,0 0,-4z M74,70l4,0 0,4 -4,0 0,-4z M82,70l4,0 0,4 -4,0 0,-4z M94,70l4,0 0,4 -4,0 0,-4z M102,70l4,0 0,4 -4,0 0,-4z M106,70l4,0 0,4 -4,0 0,-4z M110,70l4,0 0,4 -4,0 0,-4z M2,74l4,0 0,4 -4,0 0,-4z M14,74l4,0 0,4 -4,0 0,-4z M22,74l4,0 0,4 -4,0 0,-4z M26,74l4,0 0,4 -4,0 0,-4z M34,74l4,0 0,4 -4,0 0,-4z M42,74l4,0 0,4 -4,0 0,-4z M62,74l4,0 0,4 -4,0 0,-4z M66,74l4,0 0,4 -4,0 0,-4z M82,74l4,0 0,4 -4,0 0,-4z M90,74l4,0 0,4 -4,0 0,-4z M94,74l4,0 0,4 -4,0 0,-4z M98,74l4,0 0,4 -4,0 0,-4z M106,74l4,0 0,4 -4,0 0,-4z M22,78l4,0 0,4 -4,0 0,-4z M30,78l4,0 0,4 -4,0 0,-4z M46,78l4,0 0,4 -4,0 0,-4z M50,78l4,0 0,4 -4,0 0,-4z M62,78l4,0 0,4 -4,0 0,-4z M66,78l4,0 0,4 -4,0 0,-4z M70,78l4,0 0,4 -4,0 0,-4z M74,78l4,0 0,4 -4,0 0,-4z M82,78l4,0 0,4 -4,0 0,-4z M86,78l4,0 0,4 -4,0 0,-4z M94,78l4,0 0,4 -4,0 0,-4z M106,78l4,0 0,4 -4,0 0,-4z M6,82l4,0 0,4 -4,0 0,-4z M14,82l4,0 0,4 -4,0 0,-4z M26,82l4,0 0,4 -4,0 0,-4z M34,82l4,0 0,4 -4,0 0,-4z M46,82l4,0 0,4 -4,0 0,-4z M50,82l4,0 0,4 -4,0 0,-4z M54,82l4,0 0,4 -4,0 0,-4z M62,82l4,0 0,4 -4,0 0,-4z M66,82l4,0 0,4 -4,0 0,-4z M70,82l4,0 0,4 -4,0 0,-4z M74,82l4,0 0,4 -4,0 0,-4z M82,82l4,0 0,4 -4,0 0,-4z M86,82l4,0 0,4 -4,0 0,-4z M90,82l4,0 0,4 -4,0 0,-4z M94,82l4,0 0,4 -4,0 0,-4z M98,82l4,0 0,4 -4,0 0,-4z M102,82l4,0 0,4 -4,0 0,-4z M106,82l4,0 0,4 -4,0 0,-4z M34,86l4,0 0,4 -4,0 0,-4z M46,86l4,0 0,4 -4,0 0,-4z M50,86l4,0 0,4 -4,0 0,-4z M54,86l4,0 0,4 -4,0 0,-4z M58,86l4,0 0,4 -4,0 0,-4z M74,86l4,0 0,4 -4,0 0,-4z M78,86l4,0 0,4 -4,0 0,-4z M82,86l4,0 0,4 -4,0 0,-4z M98,86l4,0 0,4 -4,0 0,-4z M102,86l4,0 0,4 -4,0 0,-4z M106,86l4,0 0,4 -4,0 0,-4z M110,86l4,0 0,4 -4,0 0,-4z M114,86l4,0 0,4 -4,0 0,-4z M2,90l4,0 0,4 -4,0 0,-4z M6,90l4,0 0,4 -4,0 0,-4z M10,90l4,0 0,4 -4,0 0,-4z M14,90l4,0 0,4 -4,0 0,-4z M18,90l4,0 0,4 -4,0 0,-4z M22,90l4,0 0,4 -4,0 0,-4z M26,90l4,0 0,4 -4,0 0,-4z M34,90l4,0 0,4 -4,0 0,-4z M38,90l4,0 0,4 -4,0 0,-4z M42,90l4,0 0,4 -4,0 0,-4z M54,90l4,0 0,4 -4,0 0,-4z M66,90l4,0 0,4 -4,0 0,-4z M78,90l4,0 0,4 -4,0 0,-4z M82,90l4,0 0,4 -4,0 0,-4z M90,90l4,0 0,4 -4,0 0,-4z M98,90l4,0 0,4 -4,0 0,-4z M102,90l4,0 0,4 -4,0 0,-4z M110,90l4,0 0,4 -4,0 0,-4z M2,94l4,0 0,4 -4,0 0,-4z M26,94l4,0 0,4 -4,0 0,-4z M34,94l4,0 0,4 -4,0 0,-4z M38,94l4,0 0,4 -4,0 0,-4z M46,94l4,0 0,4 -4,0 0,-4z M62,94l4,0 0,4 -4,0 0,-4z M82,94l4,0 0,4 -4,0 0,-4z M98,94l4,0 0,4 -4,0 0,-4z M102,94l4,0 0,4 -4,0 0,-4z M110,94l4,0 0,4 -4,0 0,-4z M114,94l4,0 0,4 -4,0 0,-4z M2,98l4,0 0,4 -4,0 0,-4z M10,98l4,0 0,4 -4,0 0,-4z M14,98l4,0 0,4 -4,0 0,-4z M18,98l4,0 0,4 -4,0 0,-4z M26,98l4,0 0,4 -4,0 0,-4z M42,98l4,0 0,4 -4,0 0,-4z M50,98l4,0 0,4 -4,0 0,-4z M58,98l4,0 0,4 -4,0 0,-4z M70,98l4,0 0,4 -4,0 0,-4z M74,98l4,0 0,4 -4,0 0,-4z M82,98l4,0 0,4 -4,0 0,-4z M86,98l4,0 0,4 -4,0 0,-4z M90,98l4,0 0,4 -4,0 0,-4z M94,98l4,0 0,4 -4,0 0,-4z M98,98l4,0 0,4 -4,0 0,-4z M106,98l4,0 0,4 -4,0 0,-4z M2,102l4,0 0,4 -4,0 0,-4z M10,102l4,0 0,4 -4,0 0,-4z M14,102l4,0 0,4 -4,0 0,-4z M18,102l4,0 0,4 -4,0 0,-4z M26,102l4,0 0,4 -4,0 0,-4z M34,102l4,0 0,4 -4,0 0,-4z M42,102l4,0 0,4 -4,0 0,-4z M46,102l4,0 0,4 -4,0 0,-4z M50,102l4,0 0,4 -4,0 0,-4z M58,102l4,0 0,4 -4,0 0,-4z M62,102l4,0 0,4 -4,0 0,-4z M66,102l4,0 0,4 -4,0 0,-4z M86,102l4,0 0,4 -4,0 0,-4z M94,102l4,0 0,4 -4,0 0,-4z M98,102l4,0 0,4 -4,0 0,-4z M102,102l4,0 0,4 -4,0 0,-4z M114,102l4,0 0,4 -4,0 0,-4z M2,106l4,0 0,4 -4,0 0,-4z M10,106l4,0 0,4 -4,0 0,-4z M14,106l4,0 0,4 -4,0 0,-4z M18,106l4,0 0,4 -4,0 0,-4z M26,106l4,0 0,4 -4,0 0,-4z M34,106l4,0 0,4 -4,0 0,-4z M42,106l4,0 0,4 -4,0 0,-4z M50,106l4,0 0,4 -4,0 0,-4z M58,106l4,0 0,4 -4,0 0,-4z M70,106l4,0 0,4 -4,0 0,-4z M74,106l4,0 0,4 -4,0 0,-4z M78,106l4,0 0,4 -4,0 0,-4z M94,106l4,0 0,4 -4,0 0,-4z M106,106l4,0 0,4 -4,0 0,-4z M114,106l4,0 0,4 -4,0 0,-4z M2,110l4,0 0,4 -4,0 0,-4z M26,110l4,0 0,4 -4,0 0,-4z M42,110l4,0 0,4 -4,0 0,-4z M46,110l4,0 0,4 -4,0 0,-4z M54,110l4,0 0,4 -4,0 0,-4z M62,110l4,0 0,4 -4,0 0,-4z M74,110l4,0 0,4 -4,0 0,-4z M78,110l4,0 0,4 -4,0 0,-4z M82,110l4,0 0,4 -4,0 0,-4z M86,110l4,0 0,4 -4,0 0,-4z M94,110l4,0 0,4 -4,0 0,-4z M98,110l4,0 0,4 -4,0 0,-4z M102,110l4,0 0,4 -4,0 0,-4z M110,110l4,0 0,4 -4,0 0,-4z M2,114l4,0 0,4 -4,0 0,-4z M6,114l4,0 0,4 -4,0 0,-4z M10,114l4,0 0,4 -4,0 0,-4z M14,114l4,0 0,4 -4,0 0,-4z M18,114l4,0 0,4 -4,0 0,-4z M22,114l4,0 0,4 -4,0 0,-4z M26,114l4,0 0,4 -4,0 0,-4z M34,114l4,0 0,4 -4,0 0,-4z M42,114l4,0 0,4 -4,0 0,-4z M58,114l4,0 0,4 -4,0 0,-4z M62,114l4,0 0,4 -4,0 0,-4z M74,114l4,0 0,4 -4,0 0,-4z M78,114l4,0 0,4 -4,0 0,-4z M82,114l4,0 0,4 -4,0 0,-4z M86,114l4,0 0,4 -4,0 0,-4z M90,114l4,0 0,4 -4,0 0,-4z M94,114l4,0 0,4 -4,0 0,-4z M98,114l4,0 0,4 -4,0 0,-4z M102,114l4,0 0,4 -4,0 0,-4z M110,114l4,0 0,4 -4,0 0,-4z " stroke="transparent" fill="black"/></svg></div>
+    <div class="qr-text">
+      <div class="big">スマホで「食事スコア」をチェック</div>
+      <p>このQRコードを読み取ると、専用アプリが開きます。アプリでは、12項目のチェックであなたの食事の「抗炎症度」を判定し、記録できます。BMIの計算と体重の記録もできます。</p>
+      <div class="qr-steps"><b>①</b> カメラでQRを読み取る → <b>②</b> 12項目にチェック → <b>③</b> 判定結果を次回の診察でお見せください</div>
+    </div>
+  </div>
+
+  <footer>
+    やまもと皮膚科・漢方クリニック 監修|本紙は一般的な生活指導であり、診断・治療に代わるものではありません。
+  </footer>
+</div>
+</body>
+</html>
+
+    </script>
+  </section>
 </div>
 
 <!-- 製品一覧ページ -->
@@ -3562,7 +3828,8 @@ function kensaGo(id){
 var APP_VERSION = '2.3';
 var STALE_MONTHS = 12;
 var DATA_META = {
-  guidance: {updated:'2026-03-29', check:'各疾患の最新ガイドライン'},
+  guidance: {updated:'2026-10-05', check:'各疾患の最新ガイドライン',
+             parts:[{n:'疾患別の生活指導', updated:'2026-03-29'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'}]},
   products: {updated:'2026-10-01', check:'各製品の添付資料・メーカー情報'},
   staff:    {updated:'2026-10-03', check:'添付文書・最適使用推進ガイドライン'},
   topical:  {updated:'2026-06-24', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
@@ -4648,6 +4915,7 @@ var PRODUCTS = [
 //   #<tab>                 例: #topical
 //   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39, #kensa/bio, #joge/duac
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
+//   #guidance/diet         生活指導タブ内「抗炎症の食事ガイド」の章
 //   #search/<語>           横断検索
 //   ハッシュが無い起動（ホーム画面アイコン等）は最後に開いた画面を localStorage から復元する
 // ==============================================
@@ -4689,6 +4957,7 @@ function routeApply(path){
     else if(tab === 'topical' && window.__topical){ __topical.jump(sub); }
     else if(tab === 'vitamin'){ var vb=document.querySelector('#pg-vitamin .vit-seg button:nth-child('+({agents:1,dis:2,table:3}[sub]||1)+')'); if(vb) vitView(sub, vb); }
     else if(tab === 'allergy'){ var ab=document.querySelector('#pg-allergy > .alg-seg button:nth-child('+({avoid:1,view39:2,topics:3}[sub]||1)+')'); if(ab) algView(sub, ab); }
+    else if(tab === 'guidance' && sub === 'diet'){ dietGo(); }
     /* guidance/result は選択内容を持たないので入力画面のまま */
   } finally { ROUTE.applying = false; ROUTE.cur = path; }
 }
@@ -6133,6 +6402,62 @@ var PAMPH_HTML = embeddedHTML('pamph-src');
     catch(e){ var w=window.open("","_blank"); if(w){ w.document.write(PAMPH_HTML); w.document.close(); setTimeout(function(){w.focus();w.print();},400); } }
   };
 })();
+/* ---------- 抗炎症の食事ガイド（生活指導タブの章） ---------- */
+var DIET_HTML = embeddedHTML('diet-src');
+/* 食品ガイドはパンフ本体の .foods から読む（パンフと画面の内容を一致させるため）。横断検索もこれを使う */
+var DIET_FOODS = (function(){
+  var out=[];
+  try{
+    var d=new DOMParser().parseFromString(DIET_HTML,'text/html');
+    d.querySelectorAll('.foods .fcol').forEach(function(col){
+      var items=[], body=col.querySelector('.fbody');
+      body.querySelectorAll('b').forEach(function(b){
+        var sp=b.nextElementSibling;
+        items.push({n:b.textContent, d:(sp&&sp.tagName==='SPAN')?sp.textContent:''});
+      });
+      out.push({cls:col.classList.contains('f-good')?'good':col.classList.contains('f-mid')?'mid':'bad', head:col.querySelector('.fhead').textContent, items:items});
+    });
+  }catch(e){}
+  return out;
+})();
+function dietGo(){
+  switchTab('guidance');
+  routeSet('guidance/diet');
+  var el=document.getElementById('diet-ch'); if(!el) return;
+  setTimeout(function(){
+    var hdr=document.querySelector('.hdr'); var off=(hdr?hdr.offsetHeight:0)+10;
+    window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off, behavior:'smooth'});
+  },50);
+}
+(function(){
+  var box=document.getElementById("diet-foods");
+  if(box) box.innerHTML=DIET_FOODS.map(function(c){
+    return '<div class="diet-col '+c.cls+'"><h4>'+esc(c.head)+'</h4><dl>'+c.items.map(function(it){
+      return '<dt>'+esc(it.n)+'</dt><dd>'+esc(it.d)+'</dd>';
+    }).join('')+'</dl></div>';
+  }).join('');
+  var frame=document.getElementById("dietFrame");
+  var wrap=document.getElementById("dietWrap");
+  if(!frame||!wrap) return;
+  var NATURAL_W=794, NATURAL_H=1123;
+  frame.style.height=NATURAL_H+"px";
+  frame.srcdoc=DIET_HTML;
+  function fit(){
+    if(!wrap.clientWidth) return;   // 非表示タブでは幅0になるので、表示されたときに合わせ直す
+    var s=wrap.clientWidth/NATURAL_W;
+    frame.style.transform="scale("+s+")";
+    wrap.style.height=(NATURAL_H*s)+"px";
+  }
+  window.addEventListener("resize",fit);
+  frame.addEventListener("load",fit);
+  setTimeout(fit,60);
+  if(window.ResizeObserver) new ResizeObserver(fit).observe(wrap);   // 別タブから戻ったとき（幅0→実幅）も合わせ直す
+  var btn=document.getElementById("dietPrint");
+  if(btn) btn.onclick=function(){
+    try{ frame.contentWindow.focus(); frame.contentWindow.print(); }
+    catch(e){ var w=window.open("","_blank"); if(w){ w.document.write(DIET_HTML); w.document.close(); setTimeout(function(){w.focus();w.print();},400); } }
+  };
+})();
 
 algInit();
 
@@ -6913,6 +7238,15 @@ function build(){
       generate();
     });
   });
+  /* 生活指導 › 抗炎症の食事ガイド（章全体と、食品ごと） */
+  if(window.DIET_FOODS){
+    add('guidance','🥗','抗炎症の食事ガイド（乾癬・アトピー性皮膚炎）','指導のポイント・食品ガイド・A4パンフ印刷',
+      ['食事 食事指導 地中海食 和食 BMI 体重 肥満 減量 5% 早歩き 除去 絶対禁止 土台 乾癬 アトピー 抗炎症 パンフレット 印刷 A4 QR 食事スコア',
+       DIET_FOODS.map(function(c){ return c.items.map(function(it){ return it.n; }); })], dietGo);
+    DIET_FOODS.forEach(function(c){ c.items.forEach(function(it){
+      add('guidance','🥗','食事ガイド：'+it.n,c.head+'｜'+it.d,['食事 地中海食'], dietGo);
+    }); });
+  }
   /* 所見別ナビ */
   if(window.__fn){
     var f=__fn.data();
