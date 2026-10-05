@@ -4274,7 +4274,8 @@ var JOGE = (function(){
    ind：適応症（製剤）ごとに年齢が違う薬は適応症別に書き分ける（i＝「製剤｜適応症」、min＝下限月齢、maxM＝上限月齢（この月齢未満）、adult＝成人のみ、t＝表示文）
    正本が医師・看護師タブの薬は、cautions のうち先頭が【重要】の行もここに表示する
    kg：体重換算（mg/kg/日）。freq：標準の分割回数。max：1日最大量（mg）。hold：体重換算を止めている理由
-   kgDose：kg が「1回量」の薬（lo〜hi mg/kg/回、dayMax＝1日総量の上限 mg/kg）。計算は hi で行い、1日量は dayMax で頭打ち
+   kgDose：kg が「1回量」の薬（lo〜hi mg/kg/回、dayMax＝1日総量の上限 mg/kg、adultDose／adultDay＝成人の1回・1日上限 mg、
+           liver＝これを超える1日量で肝機能検査の注意を出す mg）。計算は hi で行い、1回量は adultDose、1日量は dayMax と adultDay の小さい方で頭打ち
    maxM だけあり min がない適応（例：12歳未満）は、上限未満なら「◯（下限年齢の明記なし）」と判定する
    specs：[規格名, 1単位あたり mg, 単位]
    link：用法・注意の正本が他タブにある薬（sec:'staff' は医師・看護師の id、sec:'topical' は外用薬一覧のカード名）。
@@ -4289,8 +4290,8 @@ var AGE = (function(){
   ];
   var DRUGS = [
     /* ===== 内服 ===== */
-    {id:'calonal', n:'カロナール', gen:'アセトアミノフェン', rt:'内服', cat:'解熱鎮痛薬', form:'錠・散・シロップ', kg:15, kgDose:{lo:10, hi:15, dayMax:60}, freq:3, min:0, age:'全年齢で使用可',
-     notes:'1回10〜15mg/kg、4〜6時間以上あけて、1日総量60mg/kgまで。NSAIDsより安全性高い。肝機能障害患者は慎重に。',
+    {id:'calonal', n:'カロナール', gen:'アセトアミノフェン', rt:'内服', cat:'解熱鎮痛薬', form:'錠・散・シロップ', kg:15, kgDose:{lo:10, hi:15, dayMax:60, adultDose:1000, adultDay:4000, liver:1500}, freq:3, min:0, age:'全年齢で使用可',
+     notes:'小児：1回10〜15mg/kg、4〜6時間以上あけて、1日総量60mg/kgまで。ただし成人の用量を超えないこと。成人：1回300〜1000mg、投与間隔4〜6時間以上、1日総量4000mgまで。1日総量1500mgを超える高用量で長期投与する場合は、定期的に肝機能等を確認する。NSAIDsより安全性高い。肝機能障害患者は慎重に。',
      specs:[['200mg錠',200,'錠'],['500mg錠',500,'錠'],['細粒20%',200,'g（1g中200mg）'],['シロップ2.4%',24,'mL（1mL中24mg）']]},
     {id:'zyzal', n:'ザイザル', gen:'レボセチリジン', rt:'内服', cat:'抗アレルギー薬', form:'錠・シロップ', max:5, freq:1, min:6, age:'6か月以上',
      notes:'1日1回就寝前。眠気に注意。',
@@ -4499,7 +4500,7 @@ var AGE = (function(){
       + '<div><span>分類</span>'+e(d.cat)+'</div><div><span>剤形</span>'+e(d.form)+'</div>'
       + '<div><span>体重換算</span>'+(!d.kg ? '登録なし' : d.hold ? '確認待ち（停止中）'
           : d.kgDose ? '1回 '+e(d.kgDose.lo)+'〜'+e(d.kgDose.hi)+' mg/kg' : e(d.kg)+' mg/kg/日（'+e(d.freq)+'回分割）')+'</div>'
-      + '<div><span>1日最大量</span>'+(d.kgDose ? e(d.kgDose.dayMax)+' mg/kg/日' : d.kg && d.max ? e(d.max)+' mg/日' : '—')+'</div></div>';
+      + '<div><span>1日最大量</span>'+(d.kgDose ? e(d.kgDose.dayMax)+' mg/kg/日（成人量 '+e(d.kgDose.adultDay)+' mg/日を超えない）' :d.kg && d.max ? e(d.max)+' mg/日' : '—')+'</div></div>';
     if(d.hold) h+='<div class="ag-lbl">体重換算について</div><div class="ag-hold">'+e(d.hold)+'</div>';
     if(d.specs && d.specs.length){
       h+='<div class="ag-lbl">規格</div><table><thead><tr><th>規格名</th><th>1単位あたり</th></tr></thead><tbody>'
@@ -4578,13 +4579,18 @@ var AGE = (function(){
     function r2(x){ return Math.round(x*100)/100; }
     var per, total, note, capped=false;
     if(d.kgDose){
-      /* 1回量の薬：1回量＝体重×上限 mg/kg。1日量＝1回量×回数（1日総量の上限 mg/kg で頭打ち） */
-      var K=d.kgDose, dayCap=w*K.dayMax;
-      per=w*K.hi; total=per*freq;
+      /* 1回量の薬：1回量＝体重×上限 mg/kg（成人の1回量で頭打ち）。1日量＝1回量×回数（mg/kg 上限と成人の1日量の小さい方で頭打ち） */
+      var K=d.kgDose, kgCap=w*K.dayMax, dayCap=Math.min(kgCap, K.adultDay), dayBy=kgCap<=K.adultDay?'kg':'adult';
+      per=w*K.hi;
+      if(per>K.adultDose){ per=K.adultDose; warns.push('1回量が成人の上限 '+K.adultDose+' mg を超えるため、'+K.adultDose+' mg にしています。'); }
+      total=per*freq;
       if(total>dayCap){ capped=true; total=dayCap; per=total/freq; }
-      note='1回量 '+e(w)+' kg × '+K.lo+'〜'+K.hi+' mg/kg ＝ '+r1(w*K.lo)+'〜'+r1(w*K.hi)+' mg（'+K.hi+' mg/kg で計算）'
-        + '<br>1日総量の上限 '+e(w)+' kg × '+K.dayMax+' mg/kg ＝ '+r1(dayCap)+' mg'+(capped?' → 上限で頭打ち':'');
-      if(capped) warns.push('1日総量 '+K.dayMax+' mg/kg（'+r1(dayCap)+' mg）を超えるため、上限に合わせて1回量を下げています。');
+      note='1回量 '+e(w)+' kg × '+K.lo+'〜'+K.hi+' mg/kg ＝ '+r1(w*K.lo)+'〜'+r1(w*K.hi)+' mg（'+K.hi+' mg/kg で計算、成人の1回 '+K.adultDose+' mg まで）'
+        + '<br>1日総量の上限：'+e(w)+' kg × '+K.dayMax+' mg/kg ＝ '+r1(kgCap)+' mg／成人量 '+K.adultDay+' mg → '+r1(dayCap)+' mg'+(capped?'（頭打ち）':'');
+      if(capped) warns.push(dayBy==='kg'
+        ? '1日総量 '+K.dayMax+' mg/kg（'+r1(kgCap)+' mg）を超えるため、上限に合わせて1回量を下げています。'
+        : '成人の1日量 '+K.adultDay+' mg を超えるため、上限に合わせて1回量を下げています。');
+      if(total>K.liver) warns.push('1日'+K.liver+'mgを超える長期投与では定期的な肝機能検査が必要です。');
     } else {
       var raw=w*d.kg;
       total=d.max?Math.min(raw,d.max):raw; capped=!!(d.max && raw>d.max); per=total/freq;
