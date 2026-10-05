@@ -48,7 +48,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tdel:active{opacity:1;}
 .tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
 
-/* タブナビ：9タブを 3列×3段 で常時全表示（横スクロールにしない） */
+/* タブナビ：11タブを 3列×4段 で常時全表示（横スクロールにしない） */
 .tab-nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--gd);padding:0 8px;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
@@ -658,6 +658,75 @@ body.gs-on .gs-results{display:block;}
 #pg-joge .jg-oral-row .d small{display:block;font-size:10.5px;font-weight:600;color:var(--tx2);}
 #pg-joge .jg-oral-row.base{border:1px solid var(--g2);}
 #pg-joge .jg-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
+/* ===== 年齢・用量 ===== */
+#pg-age{--r-ext:var(--g);--r-ora:#2f4a63;--r-inj:#a87d35;}
+#pg-age .ag-intro{font-size:12px;line-height:1.65;color:var(--tx2);background:var(--card);border:1px solid var(--g2);border-radius:13px;padding:10px 14px;margin-bottom:12px;}
+#pg-age .ag-intro b{color:var(--gd);}
+#pg-age .ag-chnav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+#pg-age .ag-chnav button{min-height:44px;font-family:inherit;font-size:13px;font-weight:700;color:var(--g);background:var(--card);border:1px solid var(--g2);border-radius:10px;cursor:pointer;}
+#pg-age .ag-ch{font-size:16px;font-weight:700;color:var(--gd);margin:20px 2px 10px;padding-bottom:6px;border-bottom:2px solid var(--g);scroll-margin-top:80px;}
+#pg-age .ag-tools{background:var(--card);border:.5px solid var(--bd);border-radius:12px;padding:11px 12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+#pg-age input,#pg-age select{font-family:inherit;font-size:16px;color:var(--tx);background:#fff;border:1px solid var(--bd);border-radius:9px;min-height:44px;padding:0 10px;}
+#pg-age .ag-q{width:100%;margin-bottom:8px;}
+#pg-age .ag-seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;}
+#pg-age .ag-seg button{min-height:44px;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--tx2);background:#faf9f6;border:1px solid var(--bd);border-radius:10px;cursor:pointer;}
+#pg-age .ag-seg button.on{color:#fff;background:var(--g);border-color:var(--g);}
+#pg-age .ag-agerow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+#pg-age .ag-agerow .lbl{font-size:12px;font-weight:600;color:var(--tx2);width:100%;}
+#pg-age .ag-agerow input{width:90px;}
+#pg-age .ag-agerow button{min-height:44px;padding:0 12px;font-family:inherit;font-size:12.5px;color:var(--tx2);background:none;border:1px solid var(--bd);border-radius:9px;cursor:pointer;}
+#pg-age .ag-hint{font-size:11px;line-height:1.6;color:var(--tx3);margin-top:6px;}
+#pg-age .ag-sec{font-size:12px;font-weight:700;margin:16px 2px 8px;display:flex;align-items:center;gap:8px;}
+#pg-age .ag-sec::after{content:"";flex:1;height:1px;background:var(--bd);}
+#pg-age .ag-sec small{font-weight:500;color:var(--tx3);}
+#pg-age .ag-card{background:var(--card);border:.5px solid var(--bd);border-left:4px solid var(--rc,var(--g));border-radius:12px;margin-bottom:9px;box-shadow:0 1px 4px rgba(0,0,0,.05);scroll-margin-top:80px;transition:box-shadow .3s,opacity .2s;}
+#pg-age .ag-card.flash{box-shadow:0 0 0 3px var(--g2);}
+#pg-age .ag-card.ng{opacity:.55;}
+#pg-age .ag-head{display:block;width:100%;text-align:left;font-family:inherit;background:none;border:none;padding:11px 13px;min-height:44px;cursor:pointer;color:var(--tx);}
+#pg-age .ag-name{font-size:15px;font-weight:700;line-height:1.35;}
+#pg-age .ag-gen{font-size:11.5px;color:var(--tx3);margin-top:1px;}
+#pg-age .ag-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+#pg-age .ag-pill{font-size:11px;font-weight:600;border-radius:12px;padding:2px 9px;background:#f0ece4;color:var(--tx2);white-space:nowrap;}
+#pg-age .ag-pill.ok{background:var(--gl);color:var(--tc);}
+#pg-age .ag-pill.lim{background:#fdf0d8;color:var(--wtx);}
+#pg-age .ag-pill.unk{background:#eee;color:var(--tx3);}
+#pg-age .ag-pill.v-ok{background:var(--g);color:#fff;}
+#pg-age .ag-pill.v-ng{background:#b6483a;color:#fff;}
+#pg-age .ag-pill.v-unk{background:#fff;color:var(--tx2);border:1px solid var(--bd);}
+#pg-age .ag-body{display:none;padding:0 13px 13px;border-top:.5px solid var(--bd);}
+#pg-age .ag-card.open .ag-body{display:block;}
+#pg-age .ag-lbl{font-size:11px;font-weight:700;color:var(--g);margin:11px 0 5px;}
+#pg-age .ag-age{background:#f0ece4;border-radius:9px;padding:8px 11px;font-size:13px;line-height:1.6;color:var(--tx);}
+#pg-age .ag-age .ind{display:block;font-size:11px;font-weight:700;color:var(--tx2);}
+#pg-age .ag-age + .ag-age{margin-top:6px;}
+#pg-age .ag-kv{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+#pg-age .ag-kv > div{border:.5px solid var(--bd);border-radius:8px;padding:6px 10px;font-size:13px;line-height:1.45;}
+#pg-age .ag-kv span{display:block;font-size:10.5px;font-weight:600;color:var(--tx3);}
+#pg-age table{width:100%;border-collapse:collapse;font-size:12.5px;}
+#pg-age th,#pg-age td{text-align:left;padding:6px 6px;border-bottom:.5px solid var(--bd);vertical-align:top;line-height:1.45;}
+#pg-age th{font-size:10.5px;color:var(--tx3);font-weight:600;}
+#pg-age .ag-txt{font-size:12.5px;line-height:1.7;color:var(--tx);}
+#pg-age .ag-lines div{font-size:12.5px;line-height:1.65;color:var(--tx);padding-left:1em;text-indent:-1em;margin-bottom:3px;}
+#pg-age .ag-lines div::before{content:"・";}
+#pg-age .ag-preg{font-size:12px;line-height:1.65;color:var(--tx2);background:#f6f8fb;border:.5px solid #d5dde8;border-radius:9px;padding:8px 11px;}
+#pg-age .ag-preg b{display:block;color:var(--r-ora);}
+#pg-age .ag-hold{font-size:12px;line-height:1.65;color:var(--wtx);background:var(--wbg);border:.5px dashed var(--wbd);border-radius:9px;padding:8px 11px;}
+#pg-age .ag-btn{display:block;width:100%;min-height:44px;margin-top:10px;font-family:inherit;font-size:13px;font-weight:600;color:var(--tc);background:var(--gl);border:none;border-radius:10px;cursor:pointer;}
+#pg-age .ag-calc{background:var(--card);border:.5px solid var(--bd);border-radius:12px;padding:12px 13px;box-shadow:0 1px 4px rgba(0,0,0,.05);scroll-margin-top:80px;}
+#pg-age .ag-calc label{display:block;font-size:11.5px;font-weight:600;color:var(--tx2);margin:9px 0 4px;}
+#pg-age .ag-calc select{width:100%;}
+#pg-age .ag-calc .two{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+#pg-age .ag-calc .two input,#pg-age .ag-calc .two select{width:100%;}
+#pg-age .ag-res{margin-top:12px;}
+#pg-age .ag-res .box{border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;line-height:1.6;}
+#pg-age .ag-res .ok{background:#eef6f2;border:.5px solid var(--g2);}
+#pg-age .ag-res .warn{background:var(--wbg);border:.5px solid var(--wbd);color:var(--wtx);}
+#pg-age .ag-res .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;}
+#pg-age .ag-res .grid.g2{grid-template-columns:1fr 1fr;}
+#pg-age .ag-res .grid div{background:#fff;border-radius:8px;padding:6px 4px;text-align:center;font-size:10.5px;color:var(--tx3);}
+#pg-age .ag-res .grid b{display:block;font-size:15px;color:var(--gd);}
+#pg-age .ag-res .f{font-size:11.5px;color:var(--tx2);margin-top:6px;}
+#pg-age .ag-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
 </style>
 </head>
 <body>
@@ -677,6 +746,7 @@ body.gs-on .gs-results{display:block;}
   <button class="tab-btn" data-tab="findings" onclick="switchTab('findings')"><span class="tab-ic">🔍</span>所見別ナビ</button>
   <button class="tab-btn" data-tab="kensa" onclick="switchTab('kensa')"><span class="tab-ic">🧪</span>検査パネル</button>
   <button class="tab-btn" data-tab="joge" onclick="switchTab('joge')"><span class="tab-ic">📏</span>処方上限</button>
+  <button class="tab-btn" data-tab="age" onclick="switchTab('age')"><span class="tab-ic">👶</span>年齢・用量</button>
 </div>
 <div class="gs-bar" id="gs-bar">
   <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -2993,6 +3063,8 @@ window.PTD_DATA={PRODUCTS:PRODUCTS,A:A,GROUPS:GROUPS};
    ・保険外用薬         → 外用薬 › 外用薬一覧
    ・新薬・専門薬剤     → 医師・看護師タブ
    ・内服ビタミン等     → ビタミン剤タブ
+   ・上記にない薬（抗ヒスタミン薬・抗菌薬・ざ瘡/多汗症外用薬など） → 年齢・用量タブ
+     （年齢・規格・体重換算はすべての薬で年齢・用量タブが正本）
    名前の別名（一般名・略称）はここに追加する。
    ══════════════════════════════════════════════ */
 var CANON_RULES=[
@@ -3037,9 +3109,34 @@ var CANON_RULES=[
   {k:['シナール'],                          sec:'vitamin', id:'c'},
   {k:['ユベラ'],                            sec:'vitamin', id:'e'},
   {k:['ピドキサール'],                      sec:'vitamin', id:'b6'},
-  {k:['フラビタン','ハイボン'],             sec:'vitamin', id:'b2'}
+  {k:['フラビタン','ハイボン'],             sec:'vitamin', id:'b2'},
+  /* 年齢・用量タブが正本の薬（他タブに正本がある デュピクセント・ミチーガ・プロトピック・コレクチム・モイゼルト・ブイタマー・マイザー は除く）。
+     一般名が他の薬名の一部になるもの（ロラタジン⊂デスロラタジン、アダパレン・過酸化ベンゾイル・エピナスチン）は製品名だけで引く */
+  {k:['カロナール','アセトアミノフェン'],   sec:'age', id:'calonal'},
+  {k:['ザイザル','レボセチリジン'],         sec:'age', id:'zyzal'},
+  {k:['フロモックス','セフカペン'],         sec:'age', id:'flomox'},
+  {k:['ムコダイン','カルボシステイン'],     sec:'age', id:'mucodyne'},
+  {k:['リンヴォック','ウパダシチニブ'],     sec:'age', id:'rinvoq'},
+  {k:['デザレックス','デスロラタジン'],     sec:'age', id:'desalex'},
+  {k:['ビラノア','ビラスチン'],             sec:'age', id:'bilanoa'},
+  {k:['アレロック','オロパタジン'],         sec:'age', id:'allelock'},
+  {k:['ケフレックス','セファレキシン'],     sec:'age', id:'keflex'},
+  {k:['ビオフェルミン'],                    sec:'age', id:'biofermin_r'},
+  {k:['クラリチン'],                        sec:'age', id:'claritin'},
+  {k:['ポララミン','クロルフェニラミン'],   sec:'age', id:'polaramine'},
+  {k:['アレグラ','フェキソフェナジン'],     sec:'age', id:'allegra'},
+  {k:['イブグリース','レブリキズマブ'],     sec:'age', id:'ebglyss'},
+  {k:['ベピオ'],                            sec:'age', id:'bepio'},
+  {k:['ディフェリン'],                      sec:'age', id:'differin'},
+  {k:['デュアック'],                        sec:'age', id:'duac'},
+  {k:['エピデュオ'],                        sec:'age', id:'epiduo'},
+  {k:['アポハイド','オキシブチニン'],       sec:'age', id:'apohide'},
+  {k:['エクロック','ソフピロニウム'],       sec:'age', id:'ecclock'},
+  {k:['クレナフィン','エフィナコナゾール'], sec:'age', id:'clenafin'},
+  {k:['アレジオン眼瞼クリーム'],            sec:'age', id:'alesion_cream'},
+  {k:['アレジオンLX'],                      sec:'age', id:'alesion_lx'}
 ];
-var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'当院製剤', staff:'医師・看護師', vitamin:'ビタミン剤'};
+var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'当院製剤', staff:'医師・看護師', vitamin:'ビタミン剤', age:'年齢・用量'};
 
 (function(){
   /* 表示名：正本側のデータから引く（データ更新に追従） */
@@ -3050,6 +3147,7 @@ var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'�
       if(r.sec==='vitamin'){ var v=null; VIT_AGENTS.forEach(function(x){ if(x.id===r.id) v=x; }); return v?v.name.split(' ')[0]:r.k[0]; }
       if(r.sec==='topical') return r.name;
       if(r.sec==='mix') return r.k[0]+'（当院製剤）';
+      if(r.sec==='age'){ var a=null; AGE.DRUGS.forEach(function(x){ if(x.id===r.id) a=x; }); return a?a.n:r.k[0]; }
     }catch(e){}
     return r.k[0];
   }
@@ -3088,6 +3186,7 @@ var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'�
       var q=labelOf(r); document.getElementById('vit-search').value=q; vitSearch(q);
     }
     else if(r.sec==='mix'){ switchTab('topical'); __topical.jump('mix'); }
+    else if(r.sec==='age'){ switchTab('age'); ageGo(r.id); }
     else if(r.sec==='topical'){
       switchTab('topical');
       var idx=-1; __topical.data().drugs.forEach(function(d,j){ if(d.name===r.name) idx=j; });
@@ -4135,6 +4234,442 @@ var JOGE = (function(){
 })();
 </script>
 
+<!-- 年齢・用量（使用可能年齢・体重換算） -->
+<div class="page" id="pg-age">
+  <div class="ag-intro">薬剤の<b>使用可能年齢</b>と、体重換算の登録がある薬の<b>用量計算</b>です。<b>閲覧専用</b>で、どの端末でも同じ内容を表示します。入力した年齢・体重は保存しません。最終判断は医師が行います。</div>
+  <div class="ag-chnav" id="ag-chnav"><button type="button" data-g="list">薬剤一覧 ↓</button><button type="button" data-g="calc">体重換算 ↓</button></div>
+  <div class="ag-tools">
+    <input class="ag-q" id="ag-q" type="search" placeholder="薬剤名・一般名・分類で検索" autocomplete="off">
+    <div class="ag-seg" id="ag-route"></div>
+    <div class="ag-agerow">
+      <span class="lbl">患者の年齢で確認（入力すると各薬に可否が出ます）</span>
+      <input id="ag-age" type="number" inputmode="decimal" min="0" step="any" placeholder="年齢">
+      <select id="ag-unit" aria-label="年齢の単位"><option value="y">歳</option><option value="m">か月</option></select>
+      <button type="button" id="ag-clear">クリア</button>
+    </div>
+  </div>
+  <div class="ag-ch" id="ag-list-h">薬剤一覧</div>
+  <div id="ag-list"></div>
+  <div class="ag-ch" id="ag-calc-h">体重換算の計算</div>
+  <div class="ag-calc">
+    <label for="ag-c-drug">薬剤（体重換算の登録がある薬）</label>
+    <select id="ag-c-drug"></select>
+    <div class="two">
+      <div><label for="ag-c-w">体重（kg）</label><input id="ag-c-w" type="number" inputmode="decimal" min="0" step="any" placeholder="例：12.5"></div>
+      <div><label for="ag-c-freq">1日の回数</label><select id="ag-c-freq"><option value="1">1回</option><option value="2">2回</option><option value="3">3回</option><option value="4">4回</option></select></div>
+    </div>
+    <label for="ag-c-spec">規格</label>
+    <select id="ag-c-spec"></select>
+    <div class="ag-res" id="ag-c-out"></div>
+  </div>
+  <div class="ag-foot" id="ag-foot"></div>
+</div>
+
+<script>
+/* ==============================================
+   年齢・用量（使用可能年齢・体重換算）
+   ★ 出典は院内で使っていた単体アプリ drug_age.html の薬剤データ。取り込み時に院内で確認した版に直している。
+     記載を直したら DATA_META.age.updated を今日の日付にする。閲覧専用（localStorage に保存しない。年齢・体重も保存しない）
+   min：使用可能な下限（月齢）。0＝制限なし。ageNone＝添付文書に下限年齢の明記なし。ageUnk＝未登録
+   ind：適応症（製剤）ごとに年齢が違う薬は適応症別に書き分ける（i＝「製剤｜適応症」、min＝下限月齢、maxM＝上限月齢（この月齢未満）、adult＝成人のみ、t＝表示文）
+   正本が医師・看護師タブの薬は、cautions のうち先頭が【重要】の行もここに表示する
+   kg：体重換算（mg/kg/日）。freq：標準の分割回数。max：1日最大量（mg）。hold：体重換算を止めている理由
+   kgDose：kg が「1回量」の薬（lo〜hi mg/kg/回、dayMax＝1日総量の上限 mg/kg）。計算は hi で行い、1日量は dayMax で頭打ち
+   maxM だけあり min がない適応（例：12歳未満）は、上限未満なら「◯（下限年齢の明記なし）」と判定する
+   specs：[規格名, 1単位あたり mg, 単位]
+   link：用法・注意の正本が他タブにある薬（sec:'staff' は医師・看護師の id、sec:'topical' は外用薬一覧のカード名）。
+         この場合、用法・注意は正本から読み込んで表示し、ここには年齢・規格だけを持つ
+   ============================================== */
+var AGE = (function(){
+  var UNK = '未登録（添付文書で確認）';
+  var ROUTES = [
+    {k:'外用', l:'外用薬', c:'var(--r-ext)'},
+    {k:'内服', l:'内服薬', c:'var(--r-ora)'},
+    {k:'注射', l:'注射薬', c:'var(--r-inj)'}
+  ];
+  var DRUGS = [
+    /* ===== 内服 ===== */
+    {id:'calonal', n:'カロナール', gen:'アセトアミノフェン', rt:'内服', cat:'解熱鎮痛薬', form:'錠・散・シロップ', kg:15, kgDose:{lo:10, hi:15, dayMax:60}, freq:3, min:0, age:'全年齢で使用可',
+     notes:'1回10〜15mg/kg、4〜6時間以上あけて、1日総量60mg/kgまで。NSAIDsより安全性高い。肝機能障害患者は慎重に。',
+     specs:[['200mg錠',200,'錠'],['500mg錠',500,'錠'],['細粒20%',200,'g（1g中200mg）'],['シロップ2.4%',24,'mL（1mL中24mg）']]},
+    {id:'zyzal', n:'ザイザル', gen:'レボセチリジン', rt:'内服', cat:'抗アレルギー薬', form:'錠・シロップ', max:5, freq:1, min:6, age:'6か月以上',
+     notes:'1日1回就寝前。眠気に注意。',
+     preg:{lv:'safe', l:'◎ 比較的安全', t:'セチリジンの光学異性体。「妊娠と授乳」で安全評価。使用経験蓄積あり。皮膚科領域の妊婦第一選択の一つ。'},
+     specs:[['2.5mg錠',2.5,'錠'],['5mg錠',5,'錠'],['0.5mg/mLシロップ',0.5,'mL']]},
+    {id:'flomox', n:'フロモックス', gen:'セフカペンピボキシル', rt:'内服', cat:'抗菌薬', form:'細粒・錠', kg:9, max:300, freq:3, min:0, age:'全年齢で使用可',
+     notes:'カルニチン欠乏に注意（長期投与）。',
+     specs:[['細粒小児用10%',100,'g（1g中100mg）'],['75mg錠',75,'錠'],['100mg錠',100,'錠']]},
+    {id:'mucodyne', n:'ムコダイン', gen:'カルボシステイン', rt:'内服', cat:'その他', form:'DS・シロップ', kg:30, max:1500, freq:3, min:0, age:'全年齢で使用可',
+     notes:'去痰薬。',
+     specs:[['DS50%',500,'g（1g中500mg）'],['250mg錠',250,'錠'],['5%シロップ',50,'mL（1mL中50mg）']]},
+    {id:'rinvoq', n:'リンヴォック', gen:'ウパダシチニブ水和物', rt:'内服', cat:'アトピー内服薬（JAK阻害薬）', form:'錠（7.5mg・15mg・30mg）', max:30, freq:1, min:144, age:'12歳以上かつ体重30kg以上（アトピー性皮膚炎）',
+     notes:'内服JAK1阻害薬。アトピー性皮膚炎: 15mgを1日1回（最大30mg）。服用時間の制限なし。感染症リスクあり（帯状疱疹・結核・日和見感染）。生ワクチン接種不可。悪性腫瘍・血栓塞栓症リスクに注意。妊婦禁忌。',
+     specs:[['7.5mg錠',7.5,'錠'],['15mg錠',15,'錠'],['30mg錠',30,'錠']]},
+    {id:'desalex', n:'デザレックス', gen:'デスロラタジン', rt:'内服', cat:'抗アレルギー薬', form:'錠（5mg）', max:5, freq:1, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
+     notes:'第2世代抗ヒスタミン薬。1日1回5mgを経口投与。食事の影響なし。眠気が出にくく自動車運転制限なし。ロラタジンに過敏症の既往がある場合は禁忌。てんかん既往患者に注意。',
+     preg:{lv:'caution', l:'○ 有益性投与（比較的安全）', t:'ロラタジン（クラリチン）の活性代謝物。元薬のデータから安全性は高いと考えられるが、本剤自体の疫学データは限定的。'},
+     specs:[['5mg錠',5,'錠']]},
+    {id:'bilanoa', n:'ビラノア', gen:'ビラスチン', rt:'内服', cat:'抗アレルギー薬', form:'錠・OD錠（20mg）', max:20, freq:1, min:180, age:'15歳以上（15歳未満は臨床試験未実施・適応外）',
+     notes:'第2世代抗ヒスタミン薬。1日1回20mgを空腹時（食前1時間以上または食後2時間以上）に服用。食事で吸収が大幅低下するため空腹時投与厳守。眠気が少なく運転制限なし。エリスロマイシン・ジルチアゼムで血中濃度上昇。',
+     preg:{lv:'caution', l:'△ 有益性投与（要注意）', t:'添付文書は有益性投与。比較的新しく疫学データが限られる。妊娠判明後は他剤への変更を考慮。'},
+     specs:[['20mg錠',20,'錠'],['20mgOD錠',20,'錠']]},
+    {id:'allelock', n:'アレロック', gen:'オロパタジン塩酸塩', rt:'内服', cat:'抗アレルギー薬', form:'錠・OD錠・顆粒', max:10, freq:2, min:24, age:'2歳以上（2〜6歳は顆粒のみ、7歳以上は錠・OD錠も可）',
+     notes:'第2世代抗ヒスタミン薬。1日2回（朝・就寝前）。眠気に注意（自動車運転を避けること）。劇症肝炎・肝機能障害の重大な副作用あり（倦怠感・食欲不振・黄疸に注意）。アレルゲン皮内反応検査の前は投与しないこと。',
+     preg:{lv:'caution', l:'△ 有益性投与', t:'添付文書は有益性投与。動物実験では催奇形性なし。欧米データが少なくアジア中心。有益性が危険性を上回る場合のみ使用。'},
+     specs:[['2.5mg錠',2.5,'錠'],['5mg錠',5,'錠'],['OD錠2.5mg',2.5,'錠'],['OD錠5mg',5,'錠'],['顆粒0.5%（2〜6歳）',2.5,'g（0.5g中2.5mg）'],['顆粒0.5%（7歳以上）',5,'g（1g中5mg）']]},
+    {id:'keflex', n:'ケフレックス', gen:'セファレキシン', rt:'内服', cat:'抗菌薬', form:'カプセル・シロップ用細粒・小児用顆粒', kg:25, max:4000, freq:4, min:0, age:'全年齢で使用可（幼小児は体重換算）',
+     notes:'第1世代セフェム系抗菌薬。皮膚・軟部組織感染症の第一選択。幼小児: 25〜50 mg/kg/日を4〜2回分割（重症は50〜100 mg/kg/日）。成人・体重20kg以上: 1回250mgを6時間ごと（重症は500mg）。最大4000mg/日。セフェム系・ペニシリン系過敏症の既往に注意。ショック・急性腎障害に注意。',
+     specs:[['カプセル250mg（成人・20kg以上）',250,'カプセル'],['シロップ用細粒100（100mg/g）',100,'g（1g中100mg）'],['シロップ用細粒200（200mg/g）',200,'g（1g中200mg）'],['小児用顆粒（200mg/g）',200,'g（1g中200mg）']]},
+    {id:'biofermin_r', n:'ビオフェルミンR', gen:'耐性乳酸菌（ラクトミン）', rt:'内服', cat:'消化器薬', form:'散・錠', freq:3, min:0, age:'全年齢で使用可',
+     notes:'抗生物質投与時の腸内菌叢異常（下痢・軟便）の改善。抗菌薬に耐性を持つ乳酸菌製剤。抗菌薬と同時投与でも効果を発揮する。',
+     specs:[['散剤',null,'g（適量）'],['錠剤',null,'錠']]},
+    {id:'claritin', n:'クラリチン', gen:'ロラタジン', rt:'内服', cat:'抗アレルギー薬', form:'錠・OD錠', max:10, freq:1, min:36, age:'3歳以上（3〜11歳は体重20kg未満は5mg/日、20kg以上は10mg/日）',
+     notes:'第2世代抗ヒスタミン薬。1日1回食後。眠気が少なく自動車運転制限なし。',
+     preg:{lv:'safe', l:'◎ 比較的安全', t:'妊婦への使用経験が蓄積。「妊娠と授乳」改訂3版で妊娠中・授乳中ともに安全と評価。国内外ガイドラインで妊婦第一選択の一つ。'},
+     specs:[['10mg錠',10,'錠'],['10mgOD錠',10,'錠']]},
+    {id:'polaramine', n:'ポララミン', gen:'d-クロルフェニラミンマレイン酸塩', rt:'内服', cat:'抗アレルギー薬', form:'錠・散', freq:3, min:0, age:'全年齢で使用可（小児用量は医師判断）',
+     notes:'第1世代抗ヒスタミン薬。成人：1回2mgを1日1〜4回。年齢・症状により適宜増減。小児用量は添付文書に体重換算（mg/kg）の記載がないため医師が判断する。眠気・口渇・尿閉など抗コリン作用に注意。自動車運転禁止。',
+     preg:{lv:'caution', l:'○ 使用経験あり（要注意）', t:'第1世代では最も使用経験が多い。催奇形性との関連は示されていないが、眠気・抗コリン副作用が強い。分娩前後の使用は新生児への影響に注意。有益性投与。'},
+     specs:[['2mg錠',2,'錠'],['散0.2%',2,'g（1g中2mg）']]},
+    {id:'allegra', n:'アレグラ', gen:'フェキソフェナジン塩酸塩', rt:'内服', cat:'抗アレルギー薬', form:'錠・OD錠・ドライシロップ', max:120, freq:2, min:6, age:'6か月以上（6か月〜1歳: 15mg/回×2回、2〜11歳: 30mg/回×2回、12歳以上: 60mg/回×2回）',
+     notes:'第2世代抗ヒスタミン薬。1日2回。眠気が少なく自動車運転制限なし。食事の影響をほとんど受けない。',
+     preg:{lv:'caution', l:'△ 有益性投与（要注意）', t:'FDA分類: カテゴリーC（ヒトデータ不十分のため）、豪州TGA: カテゴリーB2。デンマーク128万件超の疫学研究では先天異常・流産リスクはセチリジンと差なし。ただしフェキソフェナジン自体の直接的なヒトデータは限定的。有益性投与。'},
+     specs:[['30mg錠',30,'錠'],['60mg錠',60,'錠'],['60mgOD錠',60,'錠'],['DS5%（50mg/g）',50,'g（1g中50mg）']]},
+
+    /* ===== 注射 ===== */
+    {id:'dupixent', n:'デュピクセント', gen:'デュピルマブ', rt:'注射', cat:'生物学的製剤', form:'皮下注（シリンジ・ペン）', freq:1, min:6,
+     ind:[
+       {i:'アトピー性皮膚炎',          min:6,   t:'成人／生後6か月以上の小児（体重5kg以上・体重別の用量）'},
+       {i:'特発性の慢性蕁麻疹',        min:144, t:'成人／12歳以上の小児（体重30kg以上・体重別の用量）'},
+       {i:'結節性痒疹・水疱性類天疱瘡', adult:true, t:'成人のみ'}
+     ],
+     link:{sec:'staff', id:'dupixent'},
+     specs:[['200mgシリンジ',200,'本'],['300mgシリンジ',300,'本'],['300mgペン',300,'本']]},
+    {id:'mitchga', n:'ミチーガ', gen:'ネモリズマブ', rt:'注射', cat:'生物学的製剤', form:'皮下注（シリンジ 30mg・60mg）', freq:1, min:72,
+     ind:[
+       {i:'30mgシリンジ｜アトピー性皮膚炎に伴うそう痒', min:72, maxM:156, t:'6歳以上13歳未満の小児'},
+       {i:'30mgシリンジ｜結節性痒疹',                   min:156, t:'成人及び13歳以上の小児'},
+       {i:'60mgシリンジ｜アトピー性皮膚炎に伴うそう痒', min:156, t:'成人及び13歳以上の小児'}
+     ],
+     link:{sec:'staff', id:'mitchga'},
+     specs:[['60mgシリンジ',60,'本'],['30mgシリンジ',30,'本']]},
+    {id:'ebglyss', n:'イブグリース', gen:'レブリキズマブ', rt:'注射', cat:'アトピー生物学的製剤', form:'皮下注（シリンジ・オートインジェクター）', freq:1, min:144, age:'12歳以上かつ体重40kg以上',
+     notes:'IL-13拮抗薬。初回・2週後に500mg（250mg×2本）、4週以降250mgを2週間隔（状態により4週間隔も可）。投与45分前に室温に戻す。',
+     specs:[['250mgシリンジ',250,'本'],['250mgオートインジェクター',250,'本']]},
+
+    /* ===== 外用 ===== */
+    {id:'corectim', n:'コレクチム', gen:'デルゴシチニブ', rt:'外用', cat:'アトピー外用薬', form:'軟膏（0.5%・0.25%）', freq:2, min:6, age:'生後6か月以上（成人は0.5%、小児は0.25%。症状に応じて小児にも0.5%を使用できる）',
+     link:{sec:'topical', name:'コレクチム軟膏'},
+     specs:[['0.25%軟膏（小児）',2.5,'g（1g中2.5mg）'],['0.5%軟膏（成人・症状に応じて小児）',5,'g（1g中5mg）']]},
+    {id:'moizerto', n:'モイゼルト', gen:'ジファミラスト', rt:'外用', cat:'アトピー外用薬', form:'軟膏（0.3%・1%）', freq:2, ageNone:true,
+     age:'下限年齢の明記なし（生後3か月未満の乳児を対象とした試験は実施していない）',
+     link:{sec:'topical', name:'モイゼルト軟膏'},
+     specs:[['0.3%軟膏（小児）',3,'g（1g中3mg）'],['1%軟膏（成人）',10,'g（1g中10mg）']]},
+    {id:'protopic', n:'プロトピック', gen:'タクロリムス', rt:'外用', cat:'アトピー外用薬', form:'軟膏（0.1%・0.03%小児用）', freq:2, min:24, age:'2歳以上（2〜15歳: 0.03%小児用、16歳以上: 0.1%）',
+     link:{sec:'topical', name:'プロトピック軟膏'},
+     specs:[['0.03%軟膏小児用',0.3,'g（1g中0.3mg）'],['0.1%軟膏成人用',1,'g（1g中1mg）']]},
+    {id:'vtama', n:'ブイタマー', gen:'タピナロフ', rt:'外用', cat:'AhR活性化剤', form:'クリーム（1%・0.5%）', freq:1,
+     ind:[
+       {i:'1%クリーム｜アトピー性皮膚炎',   min:144, t:'成人及び12歳以上の小児'},
+       {i:'1%クリーム｜尋常性乾癬',         adult:true, t:'成人のみ（小児の適応なし）'},
+       {i:'0.5%クリーム｜アトピー性皮膚炎', maxM:144, t:'12歳未満の小児（下限年齢の明記なし）'}
+     ],
+     link:{sec:'topical', name:'ブイタマークリーム'},
+     specs:[['1%クリーム',10,'g（1g中10mg）'],['0.5%クリーム',5,'g（1g中5mg）']]},
+    {id:'myser', n:'マイザー', gen:'ジフルプレドナート', rt:'外用', cat:'ステロイド外用薬', form:'軟膏・クリーム（0.05%）', freq:2, min:0, age:'年齢制限なし（小児：大量・長期・密封法に注意）',
+     notes:'ストロングクラス外用ステロイド。1日1〜数回塗布。小児・高齢者への大量・長期・密封法（ODT）は発育障害・副腎抑制のおそれ。眼科用不可。眼瞼皮膚へは緑内障・眼圧亢進に注意。おむつはODTと同等のため注意。感染症合併時は使用しない。',
+     specs:[['0.05%軟膏',0.5,'g（1g中0.5mg）'],['0.05%クリーム',0.5,'g（1g中0.5mg）']]},
+    {id:'bepio', n:'ベピオ', gen:'過酸化ベンゾイル', rt:'外用', cat:'ニキビ治療薬', form:'ゲル・ローション（2.5%）', freq:1, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
+     notes:'BPO。1日1回洗顔後に患部へ薄く塗布。耐性菌を生じない。漂白作用あり（衣類・髪への付着注意）。紫外線照射禁止。他外用剤との併用で皮膚刺激増強に注意。',
+     specs:[['2.5%ゲル',25,'g（1g中25mg）'],['2.5%ローション',25,'g（1g中25mg）']]},
+    {id:'differin', n:'ディフェリン', gen:'アダパレン', rt:'外用', cat:'ニキビ治療薬', form:'ゲル（0.1%）', freq:1, min:144, age:'12歳以上（12歳未満は安全性未確立）',
+     notes:'レチノイド様作用。尋常性ざ瘡（コメド・炎症性皮疹）。1日1回就寝前に洗顔後患部に塗布。妊婦・妊娠可能女性に禁忌（催奇形性）。塗り始めに赤み・乾燥・皮むけ（初期刺激）あり。紫外線曝露を避ける。',
+     specs:[['0.1%ゲル',1,'g（1g中1mg）']]},
+    {id:'duac', n:'デュアック配合', gen:'クリンダマイシン+過酸化ベンゾイル', rt:'外用', cat:'ニキビ治療薬', form:'配合ゲル（1.2%+2.5%）', freq:1, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
+     notes:'抗菌薬（CLDM）＋BPO配合剤。尋常性ざ瘡。1日1回洗顔後患部に塗布。BPOにより耐性菌発生を抑制。漂白作用あり（衣類・寝具注意）。妊婦は有益性優先。開封後は冷蔵保管（2〜8℃）、3ヶ月以内に使用。眼・口唇・粘膜への付着を避ける。',
+     specs:[['CLDM1.2%+BPO2.5%配合ゲル',12,'g（1g中CLDM12mg+BPO25mg）']]},
+    {id:'epiduo', n:'エピデュオ', gen:'アダパレン+過酸化ベンゾイル', rt:'外用', cat:'ニキビ治療薬', form:'配合ゲル（0.1%+2.5%）', freq:1, min:144, age:'12歳以上（12歳未満は安全性未確立）',
+     notes:'アダパレン＋BPO配合剤（各単剤より先に単剤使用を考慮）。尋常性ざ瘡。1日1回就寝前に洗顔後塗布。妊婦・妊娠可能女性に禁忌。漂白作用あり。初期刺激（赤み・皮むけ）は通常継続で改善。紫外線曝露を避ける。',
+     specs:[['アダパレン0.1%+BPO2.5%配合ゲル',1,'g（アダパレン1mg+BPO25mg/g）']]},
+    {id:'apohide', n:'アポハイド', gen:'オキシブチニン塩酸塩', rt:'外用', cat:'多汗症治療薬', form:'ローション（20%）', freq:1, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
+     notes:'原発性手掌多汗症。1日1回就寝前に両手掌全体へポンプ5押し分を塗布。抗コリン作用あり（口渇・散瞳・尿閉・眠気）。閉塞隅角緑内障・重篤な心疾患・腸閉塞・前立腺肥大による排尿障害に禁忌。高温環境下は熱中症に注意。可燃性（火気厳禁）。',
+     specs:[['20%ローション 4.5mL',864,'本（1本864mg）']]},
+    {id:'ecclock', n:'エクロック', gen:'ソフピロニウム臭化物', rt:'外用', cat:'多汗症治療薬', form:'ゲル（5%）', freq:1, min:144, age:'12歳以上（12歳未満は使用不可）',
+     notes:'原発性腋窩多汗症。1日1回両腋窩に塗布。抗コリン作用あり（口渇・散瞳等）。閉塞隅角緑内障・前立腺肥大による排尿障害に禁忌。創傷・湿疹部位への使用不可。',
+     specs:[['5%ゲル',50,'g（1g中50mg）']]},
+    {id:'clenafin', n:'クレナフィン', gen:'エフィナコナゾール', rt:'外用', cat:'抗真菌薬', form:'爪外用液（10%）', freq:1, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
+     notes:'爪白癬。1日1回罹患爪全体（爪甲・爪甲下・皮膚境界部）に塗布。周囲皮膚に付着した液は拭き取る。開封後12週間で廃棄。可燃性（火気厳禁）。眼・角膜・結膜への使用禁止。',
+     specs:[['10%外用液 4mL',400,'本（1本400mg）']]},
+    {id:'alesion_cream', n:'アレジオン眼瞼クリーム', gen:'エピナスチン塩酸塩', rt:'外用', cat:'眼科用抗アレルギー薬', form:'眼瞼クリーム（0.5%）', freq:1, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
+     notes:'アレルギー性結膜炎（経眼瞼投与）。1日1回、適量（片眼約30mg）を上下眼瞼皮膚に塗布（点眼は不可）。2024年発売。コンタクトレンズ装用中の使用は一時外すこと。投与後は目に入らないよう注意。',
+     preg:{lv:'topical', l:'○ 外用（局所投与・有益性投与）', t:'外用薬のため全身移行量は少ない。有益性投与の記載あり。局所外用であれば比較的安全と考えられる。'},
+     specs:[['0.5%クリーム',5,'g（1g中5mg）']]},
+    {id:'alesion_lx', n:'アレジオンLX点眼液', gen:'エピナスチン塩酸塩', rt:'外用', cat:'眼科用抗アレルギー薬', form:'点眼液（0.1%）', freq:2, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
+     notes:'アレルギー性結膜炎。1日2回点眼。防腐剤（塩化ベンザルコニウム）を含まないためソフトコンタクトレンズ装用中でも使用可。他の点眼薬と同時使用の場合は5分以上間隔をあける。点眼時、容器先端が眼に触れないよう注意。',
+     preg:{lv:'topical', l:'○ 外用（点眼・有益性投与）', t:'点眼薬のため全身移行量は極めて少ない。有益性投与の記載あり。点眼であれば比較的安全と考えられる。'},
+     specs:[['0.1%点眼液',1,'mL（1mL中1mg）']]}
+  ];
+  return {UNK:UNK, ROUTES:ROUTES, DRUGS:DRUGS};
+})();
+
+(function(){
+  function e(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function kana(s){ return String(s||'').toLowerCase().replace(/[ぁ-ゖ]/g,function(h){ return String.fromCharCode(h.charCodeAt(0)+0x60); }); }
+  function byId(id){ for(var i=0;i<AGE.DRUGS.length;i++){ if(AGE.DRUGS[i].id===id) return AGE.DRUGS[i]; } return null; }
+  function routeOf(k){ for(var i=0;i<AGE.ROUTES.length;i++){ if(AGE.ROUTES[i].k===k) return AGE.ROUTES[i]; } return AGE.ROUTES[0]; }
+  function minText(m){ return m<12 ? '生後'+m+'か月以上' : Math.floor(m/12)+'歳以上'; }
+  var st = {q:'', rt:'', open:{}};
+
+  /* 年齢の文言（検索索引・計算の注意にも使う） */
+  AGE.ageText = function(d){
+    if(d.ind) return d.ind.map(function(x){ return '〈'+x.i+'〉'+x.t; }).join('／');
+    return d.age || '';
+  };
+  /* 入力した年齢（月齢）。未入力は null */
+  function ageMonths(){
+    var v=parseFloat(document.getElementById('ag-age').value);
+    if(isNaN(v) || v<0) return null;
+    return document.getElementById('ag-unit').value==='y' ? v*12 : v;
+  }
+  /* 1 つの年齢条件の可否：ok / ng / unk（明記なし・未登録・成人のみは判定しない） */
+  function judge(x, m){
+    if(x.unk || x.ageUnk || x.ageNone || x.adult) return 'unk';
+    if(x.maxM!=null && m>=x.maxM) return 'ng';   // 上限（例：13歳未満）を超えている
+    if(x.min==null) return x.maxM!=null ? 'ok' : 'unk';   // 下限の明記なし：上限未満なら使用可
+    return (x.min===0 || m>=x.min) ? 'ok' : 'ng';
+  }
+  function verdict(d, m){
+    if(m==null) return '';
+    if(!d.ind) return judge(d, m);
+    var r=d.ind.map(function(x){ return judge(x, m); });
+    var ok=r.indexOf('ok')>=0, other=r.some(function(v){ return v!=='ok'; });
+    if(ok && other) return 'part';
+    if(ok) return 'ok';
+    return r.indexOf('unk')>=0 ? 'unk' : 'ng';
+  }
+  var V_PILL = {ok:['v-ok','◯ この年齢で使用可'], ng:['v-ng','× 年齢の対象外'], unk:['v-unk','― 年齢は個別に確認'], part:['v-ok','△ 適応症により可']};
+  function agePill(d){
+    if(d.ind)     return '<span class="ag-pill lim">適応症で異なる</span>';
+    if(d.ageUnk)  return '<span class="ag-pill unk">年齢 未登録</span>';
+    if(d.ageNone) return '<span class="ag-pill unk">下限の明記なし</span>';
+    if(!d.min)    return '<span class="ag-pill ok">年齢制限なし</span>';
+    return '<span class="ag-pill lim">'+e(minText(d.min))+'</span>';
+  }
+  function canCalc(d){ return d.kg && !d.hold; }
+
+  /* 正本（他タブ）から用法・注意を読み込む */
+  function linked(d){
+    var L=d.link, h='';
+    if(L.sec==='staff' && window.DRUGS){
+      var s=null; DRUGS.forEach(function(x){ if(x.id===L.id) s=x; });
+      if(s){
+        var imp=s.cautions.filter(function(t){ return /^【重要】/.test(t); });
+        if(imp.length) h+='<div class="ag-lbl">重要な注意（医師・看護師タブより）</div><div class="ag-hold">'+imp.map(function(t){ return e(t.replace(/^【重要】/,'')); }).join('<br>')+'</div>';
+        h+='<div class="ag-lbl">用法・用量（医師・看護師タブより）</div><div class="ag-lines">'+s.dosage.map(function(t){ return '<div>'+e(t)+'</div>'; }).join('')+'</div>';
+      }
+    }
+    if(L.sec==='topical' && window.__topical){
+      var t=null; __topical.data().drugs.forEach(function(x){ if(x.name===L.name) t=x; });
+      if(t) h+='<div class="ag-lbl">用法・注意（外用薬一覧より）</div><div class="ag-lines">'
+        + [['濃度',t.generic],['用法',t.freq],['塗布量',t.amount],['ポイント',t.point],['注意',t.caution]]
+            .filter(function(p){ return p[1]; }).map(function(p){ return '<div>'+e(p[0])+'：'+e(p[1])+'</div>'; }).join('')+'</div>';
+    }
+    if(h) h+='<button type="button" class="ag-btn" data-canon-open="'+e(d.id)+'">'+e(d.n)+' の正本を開く（'+(L.sec==='staff'?'医師・看護師':'外用薬一覧')+'） ›</button>';
+    return h;
+  }
+  /* 正本（他タブ）の該当カードを開く */
+  function openLinked(d){
+    var L=d.link;
+    if(L.sec==='staff'){ switchTab('staff'); showDrug(L.id); return; }
+    var idx=-1; __topical.data().drugs.forEach(function(x,j){ if(x.name===L.name) idx=j; });
+    switchTab('topical'); __topical.jump('drugs', idx>=0?idx:undefined);
+  }
+  function detail(d){
+    var m=ageMonths(), h='<div class="ag-lbl">使用可能年齢</div>';
+    if(d.ind){
+      d.ind.forEach(function(x){
+        var v=m==null?'':judge(x, m);
+        h+='<div class="ag-age"><span class="ind">〈'+e(x.i)+'〉</span>'+e(x.t)
+          + (v?' <span class="ag-pill '+V_PILL[v][0]+'">'+V_PILL[v][1].split(' ')[0]+(v==='ok' && x.min==null?'（下限年齢の明記なし）':'')+'</span>':'')+'</div>';
+      });
+    } else {
+      h+='<div class="ag-age">'+e(d.age)+'</div>';
+    }
+    h+='<div class="ag-lbl">基本情報</div><div class="ag-kv">'
+      + '<div><span>分類</span>'+e(d.cat)+'</div><div><span>剤形</span>'+e(d.form)+'</div>'
+      + '<div><span>体重換算</span>'+(!d.kg ? '登録なし' : d.hold ? '確認待ち（停止中）'
+          : d.kgDose ? '1回 '+e(d.kgDose.lo)+'〜'+e(d.kgDose.hi)+' mg/kg' : e(d.kg)+' mg/kg/日（'+e(d.freq)+'回分割）')+'</div>'
+      + '<div><span>1日最大量</span>'+(d.kgDose ? e(d.kgDose.dayMax)+' mg/kg/日' : d.kg && d.max ? e(d.max)+' mg/日' : '—')+'</div></div>';
+    if(d.hold) h+='<div class="ag-lbl">体重換算について</div><div class="ag-hold">'+e(d.hold)+'</div>';
+    if(d.specs && d.specs.length){
+      h+='<div class="ag-lbl">規格</div><table><thead><tr><th>規格名</th><th>1単位あたり</th></tr></thead><tbody>'
+        + d.specs.map(function(s){ return '<tr><td>'+e(s[0])+'</td><td>'+(s[1]==null?'—':e(s[1])+' mg／'+e(s[2]))+'</td></tr>'; }).join('')
+        + '</tbody></table>';
+    }
+    if(d.preg) h+='<div class="ag-lbl">妊娠中の使用</div><div class="ag-preg"><b>'+e(d.preg.l)+'</b>'+e(d.preg.t)+'</div>';
+    if(d.link) h+=linked(d);
+    else if(d.notes) h+='<div class="ag-lbl">用法・注意</div><div class="ag-txt">'+e(d.notes)+'</div>';
+    if(canCalc(d)) h+='<button type="button" class="ag-btn" data-calc="'+e(d.id)+'">この薬で体重換算 ›</button>';
+    if(window.canonLinks && !d.link){   // link ありは上の「正本を開く」ボタンで足りる
+      var self='age:'+d.id;
+      var own=window.CANON_RULES && CANON_RULES.some(function(r){ return r.sec==='age' && r.id===d.id; });
+      h+=(own?canonSelfNote():'')+canonLinks(d.n+' '+h, self);   // 薬名も入れる（マイザー → 外用薬一覧のランク別カード）
+    }
+    return h;
+  }
+  function card(d, m){
+    var v=verdict(d, m), r=routeOf(d.rt), open=!!st.open[d.id];
+    return '<div class="ag-card'+(open?' open':'')+(v==='ng'?' ng':'')+'" id="ag-'+e(d.id)+'" style="--rc:'+r.c+'">'
+      + '<button type="button" class="ag-head" data-id="'+e(d.id)+'" aria-expanded="'+open+'">'
+      +   '<div class="ag-name">'+e(d.n)+'</div>'
+      +   '<div class="ag-gen">'+e(d.gen)+'・'+e(d.form)+'</div>'
+      +   '<div class="ag-pills">'+agePill(d)+(v?'<span class="ag-pill '+V_PILL[v][0]+'">'+V_PILL[v][1]+'</span>':'')
+      +     (canCalc(d)?'<span class="ag-pill">体重換算あり</span>':'')+'</div>'
+      + '</button>'
+      + '<div class="ag-body">'+(open?detail(d):'')+'</div></div>';
+  }
+  function render(){
+    var box=document.getElementById('ag-list'); if(!box) return;
+    var q=kana(st.q.trim()), m=ageMonths(), h='';
+    AGE.ROUTES.forEach(function(r){
+      if(st.rt && st.rt!==r.k) return;
+      var list=AGE.DRUGS.filter(function(d){
+        if(d.rt!==r.k) return false;
+        return !q || kana([d.n,d.gen,d.cat,d.form].join(' ')).indexOf(q)>=0;
+      }).sort(function(a,b){ return a.n.localeCompare(b.n,'ja'); });
+      if(!list.length) return;
+      h+='<div class="ag-sec" style="color:'+r.c+'">'+e(r.l)+' <small>'+list.length+'剤</small></div>'
+        + list.map(function(d){ return card(d, m); }).join('');
+    });
+    box.innerHTML = h || '<div class="ag-hint" style="text-align:center;padding:20px 0">該当する薬が見つかりません</div>';
+  }
+  function toggle(id, force){
+    var d=byId(id), el=document.getElementById('ag-'+id); if(!d || !el) return;
+    var open = force!=null ? force : !st.open[id];
+    st.open[id]=open;
+    el.classList.toggle('open', open);
+    el.querySelector('.ag-head').setAttribute('aria-expanded', open);
+    el.querySelector('.ag-body').innerHTML = open ? detail(d) : '';
+    if(open && window.routeSet) routeSet('age/'+id, true);
+  }
+
+  /* ===== 体重換算 ===== */
+  function calcDrugs(){ return AGE.DRUGS.filter(function(d){ return d.kg; }).sort(function(a,b){ return a.n.localeCompare(b.n,'ja'); }); }
+  function fillSpecs(){
+    var d=byId(document.getElementById('ag-c-drug').value), sel=document.getElementById('ag-c-spec');
+    var sp=d && d.specs ? d.specs.filter(function(s){ return s[1]; }) : [];
+    sel.innerHTML = sp.length ? '<option value="">（規格換算しない）</option>'+sp.map(function(s,i){ return '<option value="'+i+'">'+e(s[0])+'（'+e(s[1])+'mg／'+e(s[2].split('（')[0])+'）</option>'; }).join('')
+                              : '<option value="">規格の登録なし</option>';
+    if(d && d.freq) document.getElementById('ag-c-freq').value=String(d.freq);
+  }
+  function calc(){
+    var out=document.getElementById('ag-c-out');
+    var d=byId(document.getElementById('ag-c-drug').value);
+    if(!d || !canCalc(d)){ out.innerHTML=''; return; }
+    var w=parseFloat(document.getElementById('ag-c-w').value);
+    var freq=parseInt(document.getElementById('ag-c-freq').value,10)||1;
+    var m=ageMonths(), warns=[], h='';
+    if(m!=null && verdict(d, m)==='ng') warns.push('入力した年齢は対象外です（'+AGE.ageText(d)+'）。');
+    if(!w || w<=0){
+      out.innerHTML='<div class="ag-hint">体重を入力してください。</div>'+warns.map(function(t){ return '<div class="box warn">'+e(t)+'</div>'; }).join('');
+      return;
+    }
+    function r1(x){ return Math.round(x*10)/10; }
+    function r2(x){ return Math.round(x*100)/100; }
+    var per, total, note, capped=false;
+    if(d.kgDose){
+      /* 1回量の薬：1回量＝体重×上限 mg/kg。1日量＝1回量×回数（1日総量の上限 mg/kg で頭打ち） */
+      var K=d.kgDose, dayCap=w*K.dayMax;
+      per=w*K.hi; total=per*freq;
+      if(total>dayCap){ capped=true; total=dayCap; per=total/freq; }
+      note='1回量 '+e(w)+' kg × '+K.lo+'〜'+K.hi+' mg/kg ＝ '+r1(w*K.lo)+'〜'+r1(w*K.hi)+' mg（'+K.hi+' mg/kg で計算）'
+        + '<br>1日総量の上限 '+e(w)+' kg × '+K.dayMax+' mg/kg ＝ '+r1(dayCap)+' mg'+(capped?' → 上限で頭打ち':'');
+      if(capped) warns.push('1日総量 '+K.dayMax+' mg/kg（'+r1(dayCap)+' mg）を超えるため、上限に合わせて1回量を下げています。');
+    } else {
+      var raw=w*d.kg;
+      total=d.max?Math.min(raw,d.max):raw; capped=!!(d.max && raw>d.max); per=total/freq;
+      note=e(w)+' kg × '+e(d.kg)+' mg/kg/日 ＝ '+r1(raw)+' mg'+(capped?' → 1日最大量で頭打ち':'');
+      if(capped) warns.push('1日最大量 '+d.max+' mg/日 に制限しています。');
+    }
+    h+='<div class="box ok"><b>計算結果</b><div class="grid">'
+      + '<div><b>'+r1(per)+'</b>mg／回</div><div><b>'+freq+'</b>回／日</div><div><b>'+r1(total)+'</b>mg／日</div></div>'
+      + '<div class="f">'+note+'</div></div>';
+    var si=document.getElementById('ag-c-spec').value, sp=d.specs.filter(function(s){ return s[1]; });
+    if(si!=='' && sp[+si]){
+      var s=sp[+si], u=s[2].split('（')[0], n=r2(per/s[1]);
+      h+='<div class="box ok"><b>規格換算（'+e(s[0])+'）</b><div class="grid g2">'
+        + '<div><b>'+n+'</b>'+e(u)+'／回</div><div><b>'+r2(n*freq)+'</b>'+e(u)+'／日</div></div>'
+        + '<div class="f">1'+e(u)+'あたり '+e(s[1])+' mg</div></div>';
+    }
+    warns.forEach(function(t){ h+='<div class="box warn">'+e(t)+'</div>'; });
+    if(d.kgDose) h+='<div class="ag-hint">投与間隔は4〜6時間以上あけてください。</div>';
+    h+='<div class="ag-hint">登録値（mg/kg）からの機械的な計算です。最終判断は医師が行います。</div>';
+    out.innerHTML=h;
+  }
+  function pickCalc(id){
+    var sel=document.getElementById('ag-c-drug'); sel.value=id; fillSpecs(); calc();
+    ageGo('calc');
+  }
+
+  /* #age/<薬剤id> で薬剤カードを開く。#age/list・#age/calc は章の先頭へ */
+  window.ageGo = function(sub){
+    if(!sub) return;
+    var target = sub==='list' ? 'ag-list-h' : sub==='calc' ? 'ag-calc-h' : 'ag-'+sub;
+    if(byId(sub)){
+      if(st.q || (st.rt && st.rt!==byId(sub).rt)){ st.q=''; st.rt=''; document.getElementById('ag-q').value=''; render(); paintSeg(); }
+      toggle(sub, true);
+    }
+    var el=document.getElementById(target); if(!el) return;
+    if(window.routeSet) routeSet('age/'+sub, true);
+    setTimeout(function(){
+      var hdr=document.querySelector('.hdr'); var off=(hdr?hdr.offsetHeight:0)+10;
+      window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off, behavior:'smooth'});
+      if(el.classList.contains('ag-card')){ el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); },1400); }
+    },50);
+  };
+  /* 他タブの薬剤カードから「年齢・用量」へのリンク。sec:'staff' は id、sec:'topical' はカード名で引く */
+  window.ageXref = function(sec, key){
+    var d=null;
+    AGE.DRUGS.forEach(function(x){ if(x.link && x.link.sec===sec && (x.link.id===key || x.link.name===key)) d=x; });
+    if(!d) return '';
+    return '<div class="canon-xref" style="margin-top:12px"><span>使用可能年齢'+(d.ind?'（適応症別）':'')+'と規格は <b>年齢・用量</b> にあります。</span>'
+      + '<button type="button" style="min-height:44px" onclick="event.stopPropagation();switchTab(\'age\');ageGo(\''+d.id+'\')">開く ›</button></div>';
+  };
+
+  function paintSeg(){
+    document.querySelectorAll('#ag-route button').forEach(function(b){ b.classList.toggle('on', b.dataset.rt===st.rt); });
+  }
+  function init(){
+    var seg=document.getElementById('ag-route'); if(!seg) return;
+    seg.innerHTML='<button type="button" data-rt="">すべて</button>'+AGE.ROUTES.map(function(r){ return '<button type="button" data-rt="'+r.k+'">'+r.k+'</button>'; }).join('');
+    seg.onclick=function(ev){ var b=ev.target.closest('button'); if(!b) return; st.rt=b.dataset.rt; paintSeg(); render(); };
+    paintSeg();
+    document.getElementById('ag-q').oninput=function(){ st.q=this.value; render(); };
+    function onAge(){ render(); calc(); }
+    document.getElementById('ag-age').oninput=onAge;
+    document.getElementById('ag-unit').onchange=onAge;
+    document.getElementById('ag-clear').onclick=function(){ document.getElementById('ag-age').value=''; onAge(); };
+    document.getElementById('ag-list').onclick=function(ev){
+      var c=ev.target.closest('[data-calc]'); if(c){ pickCalc(c.dataset.calc); return; }
+      var o=ev.target.closest('[data-canon-open]'); if(o){ openLinked(byId(o.dataset.canonOpen)); return; }
+      var h=ev.target.closest('.ag-head'); if(h) toggle(h.dataset.id);
+    };
+    document.querySelectorAll('#ag-chnav button').forEach(function(b){ b.onclick=function(){ ageGo(b.dataset.g); }; });
+    var sel=document.getElementById('ag-c-drug');
+    sel.innerHTML='<option value="">-- 薬を選択 --</option>'+calcDrugs().map(function(d){
+      return '<option value="'+e(d.id)+'"'+(d.hold?' disabled':'')+'>'+e(d.n)+'（'+e(d.gen)+'）'+(d.hold?'：確認待ち':'')+'</option>';
+    }).join('');
+    sel.onchange=function(){ fillSpecs(); calc(); };
+    ['ag-c-w','ag-c-freq','ag-c-spec'].forEach(function(id){ var el=document.getElementById(id); el.oninput=calc; el.onchange=calc; });
+    fillSpecs();
+    document.getElementById('ag-foot').innerHTML='体重換算は登録値（mg/kg）からの機械的な計算です。カロナールは1回量（mg/kg/回）、ほかは1日量（mg/kg/日）で登録しています。年齢・体重の入力は保存しません。'
+      + '<br>最終判断は医師が行います。';
+    render();
+  }
+  init();
+})();
+</script>
+
 <script>
 /* <script type="text/html"> に素の HTML として置いた埋め込み画面を取り出す（<\/script> は復元） */
 function embeddedHTML(id){ var el=document.getElementById(id); return el ? el.textContent.replace(/<\\\/script>/g,'<\/script>') : ''; }
@@ -4161,7 +4696,7 @@ function kensaGo(id){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.3';
+var APP_VERSION = '2.4';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-10-05', check:'各疾患の最新ガイドライン',
@@ -4175,7 +4710,8 @@ var DATA_META = {
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
   kensa:    {updated:'2026-10-03', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
-  joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'}
+  joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
+  age:      {updated:'2026-10-05', check:'添付文書（使用可能年齢・小児用量・規格）'}
 };
 function metaAgeText(ymd){
   var d=new Date(ymd+'T00:00:00'); if(isNaN(d)) return {txt:'', stale:false};
@@ -5249,7 +5785,7 @@ var PRODUCTS = [
 // ==============================================
 // 画面の状態を URL ハッシュに残す（リロード・Safari 切替・戻るボタン対応）
 //   #<tab>                 例: #topical
-//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39, #kensa/bio, #joge/duac
+//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39, #kensa/bio, #joge/duac, #age/dupixent（#age/calc は体重換算）
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #guidance/diet         生活指導タブ内「抗炎症の食事ガイド」の章
 //   #guidance/walk         生活指導タブ内「インターバル速歩」の章
@@ -5291,6 +5827,7 @@ function routeApply(path){
     if(tab === 'products'){ showProduct(sub); }
     else if(tab === 'staff'){ showDrug(sub); }
     else if(tab === 'joge'){ jogeGo(sub); }
+    else if(tab === 'age'){ ageGo(sub); }
     else if(tab === 'topical' && window.__topical){ __topical.jump(sub); }
     else if(tab === 'vitamin'){ var vb=document.querySelector('#pg-vitamin .vit-seg button:nth-child('+({agents:1,dis:2,table:3}[sub]||1)+')'); if(vb) vitView(sub, vb); }
     else if(tab === 'allergy'){ var ab=document.querySelector('#pg-allergy > .alg-seg button:nth-child('+({avoid:1,view39:2,topics:3}[sub]||1)+')'); if(ab) algView(sub, ab); }
@@ -5315,7 +5852,7 @@ function routeInit(){
 }
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
-  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge'};
+  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age'};
 function switchTab(tab) {
   if(!TAB_PAGES[tab]) return;
   if(window.gsClose) gsClose();
@@ -5446,12 +5983,15 @@ var DRUGS = [
       '結節性痒疹',
     ],
     dosage: [
-      '【アトピー】60mgを4週ごとに皮下注射',
-      '【結節性痒疹】60mgを4週ごとに皮下注射',
+      '〈30mgシリンジ〉アトピー性皮膚炎に伴うそう痒：6歳以上13歳未満の小児に1回30mgを4週間隔',
+      '〈30mgシリンジ〉結節性痒疹：成人及び13歳以上の小児に初回60mg、以降1回30mgを4週間隔',
+      '〈60mgシリンジ〉アトピー性皮膚炎に伴うそう痒：成人及び13歳以上の小児に1回60mgを4週間隔',
       '腹部・大腿・上腕外側への皮下注射。毎回注射部位をローテーションする',
       'ステロイド外用薬・保湿剤との併用が基本',
     ],
     cautions: [
+      '【重要】30mg製剤と60mg製剤の生物学的同等性は示されていないため、互換使用を行わない',
+      '【重要】投与後に浮腫性紅斑・湿疹等の皮膚症状の悪化が報告されており、悪化時は継続の可否を慎重に検討する',
       '注射部位反応（発赤・腫脹・疼痛）に注意',
       '頭痛・関節痛の報告あり',
       '生ワクチン接種は投与中避ける',
@@ -5644,6 +6184,7 @@ function showDrug(id){
   });
   html += '</div>';
 
+  if(window.ageXref) html += ageXref('staff', d.id);                  // 年齢・用量タブへのリンク
   html += '<div id="kensa-xref" data-drug="'+esc(d.id)+'"></div>';   // 検査パネルへのリンク（fillKensaXref が埋める）
   if(window.canonLinks) html += canonSelfNote() + canonLinks(html, 'staff:'+d.id);
   document.getElementById('staff-detail-body').innerHTML = html;
@@ -5752,12 +6293,12 @@ var drugs=[
 
   /* ===== JAK ===== */
   {cat:"JAK阻害剤", pill:"JAK", pclass:"c-jak", name:"コレクチム軟膏",
-   generic:"デルゴシチニブ　0.5%(15歳以上) / 0.25%(生後6か月〜)",
-   freq:"1日2回", amount:"成人0.5%は1回5gまで（添付文書確認）", site:"体幹・四肢・顔いずれも、乾燥肌に好適",
-   point:"局所pan-JAK阻害。刺激感が少なくびらん面にも比較的使いやすい。皮膚萎縮なし。角層水分量を維持しやすい。",
+   generic:"デルゴシチニブ　0.5%(成人) / 0.25%(小児)",
+   freq:"1日2回", amount:"1回あたり5gまで（小児は体格を考慮する）", site:"体幹・四肢・顔いずれも、乾燥肌に好適",
+   point:"成人には0.5%製剤を1日2回。小児には0.25%製剤を1日2回。症状に応じて小児にも0.5%製剤を1日2回塗布できる。局所pan-JAK阻害。刺激感が少なくびらん面にも比較的使いやすい。皮膚萎縮なし。角層水分量を維持しやすい。",
    caution:"塗布量上限を守る／効果不十分例の見極め",
    tags:["萎縮なし","低刺激","乾燥肌向き","長期可"],
-   nurse:["『ステロイドではないお薬。ヒリつきが少なく、長く使える』と説明。","小児にも使えるタイプがある（年齢で濃度が違う）。"]},
+   nurse:["『ステロイドではないお薬。ヒリつきが少なく、長く使える』と説明。","小児にも使えるタイプがある（大人用と子ども用で濃度が違う）。"]},
 
   /* ===== PDE4 ===== */
   {cat:"PDE4阻害剤", pill:"PDE4", pclass:"c-pde4", name:"モイゼルト軟膏",
@@ -5770,9 +6311,9 @@ var drugs=[
 
   /* ===== AhR ===== */
   {cat:"AhR活性化剤", pill:"AhR", pclass:"c-ahr", name:"ブイタマークリーム",
-   generic:"タピナロフ　1%",
+   generic:"タピナロフ　1% / 0.5%(12歳未満の小児)",
    freq:"1日1回", amount:"FTU基準", site:"体幹・四肢（乾癬・ADに適応）",
-   point:"AhR活性化による新規機序。1日1回でよい。",
+   point:"〈1%クリーム〉アトピー性皮膚炎：成人及び12歳以上の小児に1日1回／尋常性乾癬：成人に1日1回。〈0.5%クリーム〉アトピー性皮膚炎：12歳未満の小児に1日1回。尋常性乾癬は成人のみで、小児の適応はない。AhR活性化による新規機序。",
    caution:"毛包炎・接触皮膚炎が比較的多い",
    tags:["1日1回","新機序"],
    nurse:["『1日1回でよいお薬』。毛穴の赤いブツブツ（毛包炎）が出たら受診を。"]},
@@ -5842,6 +6383,7 @@ function renderDrugs(filter){
     +   (d.caution?'<div class="row"><div class="k">注意</div><div class="v">'+rr(d.caution)+'</div></div>':'')
     +   '<div class="tags">'+d.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join("")+'</div>'
     +   '<div class="nursebox"><div class="nh">患者説明ポイント</div><ul>'+d.nurse.map(function(n){return '<li>'+n+'</li>';}).join("")+'</ul></div>'
+    +   (window.ageXref?ageXref('topical', d.name):'')
     + '</div>'
     +'</div>';
   });
@@ -7488,8 +8030,8 @@ if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=8;
-var SEC_ORDER=['topical','joge','staff','kensa','products','vitamin','guidance','findings','allergy','patch'];
-var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師（新薬・専門薬剤）', kensa:'検査パネル', products:'当院製品', vitamin:'ビタミン剤（内服）',
+var SEC_ORDER=['topical','joge','staff','age','kensa','products','vitamin','guidance','findings','allergy','patch'];
+var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師（新薬・専門薬剤）', age:'年齢・用量',kensa:'検査パネル', products:'当院製品', vitamin:'ビタミン剤（内服）',
   guidance:'生活指導', findings:'所見別ナビ', allergy:'食物アレルギー', patch:'パッチテスト'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
@@ -7566,6 +8108,14 @@ function build(){
     JOGE.GROUPS.forEach(function(g){
       add('joge','📏','処方上限 › '+g.n,JOGE.DRUGS.filter(function(d){ return d.g===g.id; }).map(function(d){ return d.n; }).join('・'),[],function(){ switchTab('joge'); jogeGo(g.id); });
     });
+  }
+  /* 年齢・用量（薬剤ごと＋体重換算） */
+  if(window.AGE){
+    AGE.DRUGS.forEach(function(d){
+      add('age','👶',d.n,d.gen+'・'+AGE.ageText(d),[d.cat,d.form,d.rt,d.notes,d.hold,d.specs,'使用可能年齢 年齢制限 小児 何歳から'],function(){ switchTab('age'); ageGo(d.id); });
+    });
+    add('age','⚖️','年齢・用量 › 体重換算の計算',AGE.DRUGS.filter(function(d){ return d.kg; }).map(function(d){ return d.n; }).join('・'),
+      ['体重換算 mg/kg 小児用量 計算 規格換算'],function(){ switchTab('age'); ageGo('calc'); });
   }
   /* 医師・看護師向け薬剤 */
   if(window.DRUGS) DRUGS.forEach(function(d){
