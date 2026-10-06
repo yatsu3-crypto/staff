@@ -13,8 +13,9 @@
 ## 既存アプリ
 
 - 論文ダイジェスト（`papers.html`）と `paper-digest` スキルは別リポジトリ `yatsu3-crypto/papers`（ローカルは `~/papers`）にある。ここには置かない。
-- `index.html` — 「生活指導アシスタント」。11タブ構成（生活指導 / 当院製品 / 医師・看護師 / 外用薬 / ビタミン剤 / パッチ / 食物アレルギー / 所見別ナビ / 検査パネル / 処方上限 / 年齢・用量）。タブバーは 3列×4段。約 8,300 行の単一ファイル。パッチテスト画面・検査パネル・患者用パンフレットは `<script type="text/html" id="patch-src">` / `id="kensa-src"` / `id="pamph-src"` に素の HTML として置き、読み込み時に iframe の `srcdoc` へ流し込んでいる（ブロック内で `</script>` を書くときは `<\/script>`）。
-  - 検査パネル（`kensa-src`）のデータは iframe 内の `var DATA`。親からは `kensaGo(id)` で開き、横断検索は `window.KENSA` を読んで索引を作る。埋め込み iframe の高さは `fitEmbedFrame()`。
+- `index.html` — 「生活指導アシスタント」。12タブ構成（生活指導 / 当院製品 / 医師・看護師 / 外用薬 / ビタミン剤 / パッチ / 食物アレルギー / 所見別ナビ / 検査パネル / 処方上限 / 年齢・用量 / バイオ・JAK）。タブバーは 3列×4段で満杯（13個目を足すと段が増える）。約 8,700 行の単一ファイル。パッチテスト画面・検査パネル・患者用パンフレットは `<script type="text/html" id="patch-src">` / `id="kensa-src"` / `id="pamph-src"` に素の HTML として置き、読み込み時に iframe の `srcdoc` へ流し込んでいる（ブロック内で `</script>` を書くときは `<\/script>`）。
+  - バイオ・JAK タブ（`#biojak/<id>`、比較表は `#biojak/compare`）のデータは `var BIOJAK = (function(){` の `DRUGS`。薬価・副作用・作用機序・効果発現・使い分け比較だけを持ち、**用法・用量・対象年齢は持たない**（元資料 derm_bio_jak.html の用量・年齢は添付文書と食い違っていたため取り込まず、元資料は削除済み）。用量の正本は年齢・用量タブ／医師・看護師タブで、`age`／`staff` で指定する。薬価の時点は `PRICE_AS_OF`、院内採用は `adopt`（yes／no／空＝要確認）。
+  - 検査パネル（`kensa-src`）のデータは iframe 内の `var DATA`。親からは `kensaGo(id)` で開き（`kensaGo(id, 見出し)` で見出しまでスクロール）、横断検索は `window.KENSA` を読んで索引を作る。埋め込み iframe の高さは `fitEmbedFrame()`。
   - 全文を一度に読まない。`grep -n` で場所を特定してから `sed -n` で必要範囲だけ読む。
   - 既存の localStorage キー：`ptd_list`、`vit_fav_v1`、`vit_memo_v1`、`alg_avoid_state_v1`、`app_route_v1`（最後に開いた画面）。
   - 画面の状態は URL ハッシュで表す（`#<tab>`、`#products/<id>`、`#topical/<subtab>`、`#search/<語>` など。`routeApply` を参照）。新しい画面や詳細ページを足すときは `routeSet()` で記録し、`routeApply()` に復元処理を足す。

@@ -48,7 +48,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tdel:active{opacity:1;}
 .tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
 
-/* タブナビ：11タブを 3列×4段 で常時全表示（横スクロールにしない） */
+/* タブナビ：12タブを 3列×4段 で常時全表示（横スクロールにしない） */
 .tab-nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--gd);padding:0 8px;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
@@ -727,6 +727,61 @@ body.gs-on .gs-results{display:block;}
 #pg-age .ag-res .grid b{display:block;font-size:15px;color:var(--gd);}
 #pg-age .ag-res .f{font-size:11.5px;color:var(--tx2);margin-top:6px;}
 #pg-age .ag-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
+/* ===== バイオ・JAK ===== */
+#pg-biojak .bj-alert{font-size:12.5px;line-height:1.65;color:var(--wtx);background:var(--wbg);border:1px solid var(--wbd);border-radius:13px;padding:10px 14px;margin-bottom:10px;}
+#pg-biojak .bj-alert b{display:block;font-size:13.5px;}
+#pg-biojak .bj-alert p{margin-top:5px;}
+#pg-biojak .bj-intro{font-size:12px;line-height:1.65;color:var(--tx2);background:var(--card);border:1px solid var(--g2);border-radius:13px;padding:10px 14px;margin-bottom:12px;}
+#pg-biojak .bj-intro b{color:var(--gd);}
+#pg-biojak .bj-chnav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+#pg-biojak .bj-chnav button{min-height:44px;font-family:inherit;font-size:13px;font-weight:700;color:var(--g);background:var(--card);border:1px solid var(--g2);border-radius:10px;cursor:pointer;}
+#pg-biojak .bj-ch{font-size:16px;font-weight:700;color:var(--gd);margin:20px 2px 10px;padding-bottom:6px;border-bottom:2px solid var(--g);scroll-margin-top:80px;}
+#pg-biojak .bj-tools{background:var(--card);border:.5px solid var(--bd);border-radius:12px;padding:11px 12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+#pg-biojak .bj-q{width:100%;margin-bottom:8px;font-family:inherit;font-size:16px;color:var(--tx);background:#fff;border:1px solid var(--bd);border-radius:9px;min-height:44px;padding:0 10px;}
+#pg-biojak .bj-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+#pg-biojak .bj-seg button{min-height:44px;font-family:inherit;font-size:12px;font-weight:600;color:var(--tx2);background:#faf9f6;border:1px solid var(--bd);border-radius:10px;cursor:pointer;line-height:1.3;padding:2px;}
+#pg-biojak .bj-seg button.on{color:#fff;background:var(--g);border-color:var(--g);}
+#pg-biojak .bj-sec{font-size:12px;font-weight:700;margin:16px 2px 8px;display:flex;align-items:center;gap:8px;}
+#pg-biojak .bj-sec::after{content:"";flex:1;height:1px;background:var(--bd);}
+#pg-biojak .bj-sec small{font-weight:500;color:var(--tx3);}
+#pg-biojak .bj-card{background:var(--card);border:.5px solid var(--bd);border-left:4px solid var(--rc,var(--g));border-radius:12px;margin-bottom:9px;box-shadow:0 1px 4px rgba(0,0,0,.05);scroll-margin-top:80px;transition:box-shadow .3s;}
+#pg-biojak .bj-card.flash{box-shadow:0 0 0 3px var(--g2);}
+#pg-biojak .bj-head{display:block;width:100%;text-align:left;font-family:inherit;background:none;border:none;padding:11px 13px;min-height:44px;cursor:pointer;color:var(--tx);}
+#pg-biojak .bj-name{font-size:15px;font-weight:700;line-height:1.35;}
+#pg-biojak .bj-gen{font-size:11.5px;color:var(--tx3);margin-top:1px;}
+#pg-biojak .bj-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+#pg-biojak .bj-pill{font-size:11px;font-weight:600;border-radius:12px;padding:2px 9px;background:#f0ece4;color:var(--tx2);white-space:nowrap;}
+#pg-biojak .bj-pill.ok{background:var(--gl);color:var(--tc);}
+#pg-biojak .bj-pill.lim{background:#fdf0d8;color:var(--wtx);}
+#pg-biojak .bj-pill.unk{background:#eee;color:var(--tx3);}
+#pg-biojak .bj-body{display:none;padding:0 13px 13px;border-top:.5px solid var(--bd);}
+#pg-biojak .bj-card.open .bj-body{display:block;}
+#pg-biojak .bj-lbl{font-size:11px;font-weight:700;color:var(--g);margin:11px 0 5px;}
+#pg-biojak .bj-kv{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+#pg-biojak .bj-kv > div{border:.5px solid var(--bd);border-radius:8px;padding:6px 10px;font-size:13px;line-height:1.45;}
+#pg-biojak .bj-kv span{display:block;font-size:10.5px;font-weight:600;color:var(--tx3);}
+#pg-biojak .bj-txt{font-size:12.5px;line-height:1.7;color:var(--tx);}
+#pg-biojak .bj-sub{font-size:11px;font-weight:700;color:var(--tx2);margin:8px 0 2px;}
+#pg-biojak table{width:100%;border-collapse:collapse;font-size:12.5px;}
+#pg-biojak th,#pg-biojak td{text-align:left;padding:6px 5px;border-bottom:.5px solid var(--bd);vertical-align:top;line-height:1.45;}
+#pg-biojak th{font-size:10.5px;color:var(--tx3);font-weight:600;}
+#pg-biojak td.n{white-space:nowrap;}
+#pg-biojak .bj-price{background:#faf7ef;border:.5px solid #e6dcc4;border-radius:10px;padding:9px 11px;font-size:12.5px;line-height:1.6;}
+#pg-biojak .bj-price .asof{display:inline-block;font-size:10.5px;font-weight:600;color:var(--wtx);background:var(--wbg);border:.5px solid var(--wbd);border-radius:6px;padding:1px 6px;margin-bottom:4px;}
+#pg-biojak .bj-price .row{display:flex;justify-content:space-between;gap:8px;}
+#pg-biojak .bj-price .row b{white-space:nowrap;color:var(--gd);}
+#pg-biojak .bj-price .mon{margin-top:7px;padding-top:7px;border-top:.5px dashed #e6dcc4;}
+#pg-biojak .bj-price .f{font-size:11px;color:var(--tx3);}
+#pg-biojak .bj-note{font-size:12px;line-height:1.65;color:var(--wtx);background:var(--wbg);border:.5px dashed var(--wbd);border-radius:9px;padding:8px 11px;margin-top:10px;}
+#pg-biojak .bj-btn{display:block;width:100%;min-height:44px;margin-top:10px;font-family:inherit;font-size:13px;font-weight:600;color:var(--tc);background:var(--gl);border:none;border-radius:10px;cursor:pointer;}
+#pg-biojak .bj-none{font-size:12px;color:var(--tx3);margin-top:10px;}
+#pg-biojak .bj-cmp{background:var(--card);border:.5px solid var(--bd);border-radius:12px;padding:4px 8px 8px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+#pg-biojak .bj-cmp td,#pg-biojak .bj-cmp th{font-size:11.5px;padding:6px 4px;}
+#pg-biojak .bj-cmp tr.g td{font-size:11px;font-weight:700;color:#fff;background:var(--rc,var(--g));padding:4px 8px;}
+#pg-biojak .bj-cmp td:first-child{white-space:nowrap;}
+#pg-biojak .bj-cmp td small{font-size:10.5px;color:var(--tx3);}
+#pg-biojak .bj-cmp td a{color:var(--tx);font-weight:700;text-decoration:none;border-bottom:1px dotted var(--tx3);}
+#pg-biojak .bj-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
 </style>
 </head>
 <body>
@@ -747,6 +802,7 @@ body.gs-on .gs-results{display:block;}
   <button class="tab-btn" data-tab="kensa" onclick="switchTab('kensa')"><span class="tab-ic">🧪</span>検査パネル</button>
   <button class="tab-btn" data-tab="joge" onclick="switchTab('joge')"><span class="tab-ic">📏</span>処方上限</button>
   <button class="tab-btn" data-tab="age" onclick="switchTab('age')"><span class="tab-ic">👶</span>年齢・用量</button>
+  <button class="tab-btn" data-tab="biojak" onclick="switchTab('biojak')"><span class="tab-ic">🧬</span>バイオ・JAK</button>
 </div>
 <div class="gs-bar" id="gs-bar">
   <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -4533,6 +4589,7 @@ var AGE = (function(){
       : '<div class="ag-txt">'+e(d.notes)+'</div>');
     if(d.kensa) h+='<div class="canon-xref" style="margin-top:12px"><span>導入前の検査は <b>検査パネル › '+e(d.kensa.l)+'</b> にあります。</span>'
       + '<button type="button" style="min-height:44px" data-kensa="'+e(d.id)+'">開く ›</button></div>';
+    if(window.bjXref) h+=bjXref('age', d.id);   // バイオ・JAK タブへのリンク（薬価・副作用）
     if(canCalc(d)) h+='<button type="button" class="ag-btn" data-calc="'+e(d.id)+'">この薬で体重換算 ›</button>';
     if(window.canonLinks && !d.link){   // link ありは上の「正本を開く」ボタンで足りる
       var self='age:'+d.id;
@@ -4700,6 +4757,336 @@ var AGE = (function(){
 })();
 </script>
 
+<!-- バイオ・JAK（薬価・副作用・作用機序・効果発現・使い分け比較。用法・用量・対象年齢は持たない） -->
+<div class="page" id="pg-biojak">
+  <div class="bj-alert"><b>患者さんに金額を伝える前に、必ず医事で確認してください。</b>
+    <p>薬価は参考値です（<span id="bj-asof"></span>）。3割負担の月額は薬価だけからの単純計算で、診察料・検査料・調剤料などは含みません。</p>
+    <p>1か月の自己負担が上限額を超えた分は、高額療養費制度の対象になります（上限額は年齢・所得で異なります）。</p></div>
+  <div class="bj-intro">生物学的製剤・JAK阻害薬など全身療法の<b>薬価・副作用・作用機序・効果発現</b>と<b>使い分け比較表</b>です。<b>閲覧専用</b>です。
+    このタブには<b>用法・用量・対象年齢を載せていません</b>。用量と年齢は「年齢・用量」タブ（添付文書準拠）か添付文書で確認してください。最終判断は医師が行います。</div>
+  <div class="bj-chnav" id="bj-chnav"><button type="button" data-g="list">薬剤一覧 ↓</button><button type="button" data-g="compare">使い分け比較表 ↓</button></div>
+  <div class="bj-tools">
+    <input class="bj-q" id="bj-q" type="search" placeholder="薬剤名・一般名・標的・副作用で検索" autocomplete="off">
+    <div class="bj-seg" id="bj-cat"></div>
+  </div>
+  <div class="bj-ch" id="bj-list-h">薬剤一覧</div>
+  <div id="bj-list"></div>
+  <div class="bj-ch" id="bj-compare-h">使い分け比較表</div>
+  <div class="bj-cmp" id="bj-compare"></div>
+  <div class="bj-foot" id="bj-foot"></div>
+</div>
+
+<script>
+/* ==============================================
+   バイオ・JAK（薬価・副作用・作用機序・効果発現・使い分け比較）
+   ★ 出典は院内で使っていた参照アプリ derm_bio_jak.html。その資料の用法・用量・対象年齢は添付文書と食い違うため取り込んでいない。
+     用量と年齢の正本は「年齢・用量」タブ（age）と「医師・看護師」タブ（staff）。ここに用量・年齢を書かない。
+     記載を直したら DATA_META.biojak.updated を今日の日付にする。閲覧専用（localStorage に保存しない）
+   PRICE_AS_OF：薬価の時点の表記。2026年4月改定の値に差し替えたら「2026年4月薬価改定時点・参考値」にする
+   adopt：院内採用。'yes'＝採用／'no'＝未採用／''＝要確認
+   price：[規格, 薬価（円）]。month：3割負担の月額概算（正本に用法がある薬だけ）。
+          {l:根拠の文言（正本の用法）, n:30日あたりの数量, p:price の添字}。2週間隔＝月2本、4週間隔＝月1本、1日1回＝30錠で計算
+   onset／ae：適応症で違うときは [{i:適応症, ...}] で書き分ける。ae は [名前, 頻度, 重篤度]（重篤度は参照資料の独自区分）
+   age／staff：用法・用量の正本（年齢・用量タブ／医師・看護師タブの id）。両方なければ「添付文書で確認」と出す
+   ============================================== */
+var BIOJAK = (function(){
+  var PRICE_AS_OF = '参照資料の値・2026年4月薬価改定での確認待ち';
+  var CATS = [
+    {k:'atopy', l:'アトピー（注射）',     c:'var(--g)'},
+    {k:'jak',   l:'JAK阻害薬（内服）',    c:'#2f4a63'},
+    {k:'pso',   l:'乾癬（注射）',         c:'#a87d35'},
+    {k:'other', l:'蕁麻疹（注射）',       c:'#b6483a'},
+    {k:'oral',  l:'その他の内服',         c:'#6b6255'}
+  ];
+  var ADOPT = {yes:['ok','院内採用'], no:['unk','院内未採用'], '':['lim','採用 要確認']};
+  var DRUGS = [
+    /* ===== アトピー（注射） ===== */
+    {id:'dupixent', n:'デュピクセント', gen:'デュピルマブ', en:'dupilumab', cat:'atopy', rt:'皮下注', adopt:'', age:'dupixent', staff:'dupixent',
+     target:'IL-4Rα', mech:'IL-4Rα拮抗（IL-4・IL-13の両方を阻害）',
+     onset:[{i:'アトピー性皮膚炎', t:'2〜4週'},{i:'結節性痒疹', t:'4〜8週'}],
+     ae:[{i:'アトピー性皮膚炎', r:[['結膜炎・眼瞼炎','約10%','中'],['注射部位反応','約10%','軽'],['好酸球増多','約3%','軽'],['蠕虫感染の増悪','稀','要注意']]},
+         {i:'結節性痒疹', r:[['結膜炎','約8%','中'],['注射部位反応','約5%','軽']]}],
+     price:[['300mg 1本',53659]],
+     month:[{l:'アトピー性皮膚炎の成人の維持（300mgを2週間隔）', n:2, p:0}]},
+    {id:'adtralza', n:'アドトラーザ', gen:'トラロキヌマブ', en:'tralokinumab', cat:'atopy', rt:'皮下注', adopt:'',
+     target:'IL-13', mech:'IL-13の直接中和（IL-4は阻害しない）',
+     onset:'2〜4週',
+     ae:[['上気道感染','約26%','軽'],['結膜炎','約7%','軽'],['注射部位反応','約7%','軽']],
+     price:[['150mg 1本',21786]]},
+    {id:'ebglyss', n:'イブグリース', gen:'レブリキズマブ', en:'lebrikizumab', cat:'atopy', rt:'皮下注', adopt:'', age:'ebglyss',
+     target:'IL-13', mech:'IL-13の直接中和（IL-4/IL-13シグナルを遮断）',
+     onset:'2〜4週',
+     ae:[['結膜炎','約8%','軽'],['注射部位反応','約7%','軽'],['頭痛','約4%','軽']],
+     price:[['250mg 1本',50782]],
+     month:[{l:'維持（250mgを2週間隔）', n:2, p:0},{l:'維持（250mgを4週間隔）', n:1, p:0}]},
+    {id:'mitchga', n:'ミチーガ', gen:'ネモリズマブ', en:'nemolizumab', cat:'atopy', rt:'皮下注', adopt:'', age:'mitchga', staff:'mitchga',
+     target:'IL-31RA', mech:'IL-31受容体A（IL-31RA）拮抗。かゆみのシグナルを直接遮断する',
+     onset:'1〜2週（かゆみ）',
+     ae:[['上気道感染','約10%','軽'],['注射部位反応','約6%','軽'],['アトピーの増悪','約5%','中'],['頭痛','約5%','軽']],
+     price:[['60mg 1本',117181]],
+     month:[{l:'アトピー性皮膚炎に伴うそう痒の成人の維持（60mgを4週間隔）', n:1, p:0}],
+     note:'30mgシリンジ（結節性痒疹の維持・小児）の薬価は参照資料になく、未登録です。'},
+
+    /* ===== JAK阻害薬（内服） ===== */
+    {id:'olumiant', n:'オルミエント', gen:'バリシチニブ', en:'baricitinib', cat:'jak', rt:'内服', adopt:'', age:'olumiant',
+     target:'JAK1/JAK2', mech:'JAK1/JAK2の選択的阻害（円形脱毛症では毛包の免疫特権の回復）',
+     onset:[{i:'アトピー性皮膚炎', t:'1〜2週'},{i:'円形脱毛症', t:'12〜24週'}],
+     ae:[{i:'アトピー性皮膚炎', r:[['上気道感染','約15%','軽'],['LDL上昇','約10%','要管理'],['帯状疱疹','約4〜7%','重要'],['血球減少','稀','重要'],['静脈血栓塞栓症（VTE）','1%未満','重篤'],['悪性腫瘍','長期のリスク','重篤']]},
+         {i:'円形脱毛症', r:[['上気道感染','約10%','軽'],['LDL上昇','約8%','要管理'],['帯状疱疹','約4%','重要']]}],
+     price:[['4mg 1錠',4920],['2mg 1錠',2484]],
+     month:[{l:'4mgを1日1回', n:30, p:0},{l:'2mgに減量したとき（1日1回）', n:30, p:1}],
+     note:'1mg錠（当院未採用）の薬価は参照資料になく、未登録です。'},
+    {id:'rinvoq', n:'リンヴォック', gen:'ウパダシチニブ', en:'upadacitinib', cat:'jak', rt:'内服', adopt:'', age:'rinvoq',
+     target:'JAK1', mech:'JAK1の高選択的阻害',
+     onset:'1〜2週',
+     ae:[['上気道感染','約20%','軽'],['CPK上昇','約10%','要確認'],['痤瘡','約8%','軽'],['帯状疱疹','約5〜10%','重要'],['静脈血栓塞栓症（VTE）','1%未満','重篤']],
+     price:[['15mg 1錠',4707]],
+     month:[{l:'アトピー性皮膚炎：15mgを1日1回', n:30, p:0}],
+     note:'7.5mg・30mg錠の薬価は参照資料になく、未登録です。'},
+    {id:'cibinqo', n:'サイバインコ', gen:'アブロシチニブ', en:'abrocitinib', cat:'jak', rt:'内服', adopt:'',
+     target:'JAK1', mech:'JAK1の高選択的阻害',
+     onset:'1〜2週',
+     ae:[['悪心','約10〜15%','中（開始時）'],['頭痛','約6%','軽'],['帯状疱疹','約4〜5%','重要'],['血小板減少','約3%','要モニター']],
+     price:[['100mg 1錠',5221]]},
+    {id:'litfulo', n:'リットフーロ', gen:'リトレシチニブ', en:'ritlecitinib', cat:'jak', rt:'内服', adopt:'', age:'litfulo',
+     target:'JAK3/TEC', mech:'JAK3とTECファミリーキナーゼの共阻害。T細胞・NK細胞の活性化を遮断する',
+     onset:'12〜24週',
+     ae:[['上気道感染','約15%','軽'],['ざ瘡','約7%','軽'],['頭痛','約6%','軽'],['下痢','約5%','軽'],['帯状疱疹','約2〜3%','重要']],
+     price:[['50mg 1カプセル',5584]],
+     month:[{l:'円形脱毛症：50mgを1日1回', n:30, p:0}]},
+
+    /* ===== 乾癬（注射） ===== */
+    {id:'cosentyx', n:'コセンティクス', gen:'セクキヌマブ', en:'secukinumab', cat:'pso', rt:'皮下注', adopt:'',
+     target:'IL-17A', mech:'IL-17Aの直接中和',
+     onset:'2〜4週',
+     ae:[['鼻咽頭炎','約12%','軽'],['口腔内カンジダ','約3%','軽'],['炎症性腸疾患の悪化','稀','重要'],['好中球減少','稀','要確認']],
+     price:[['300mg 1本',95261]]},
+    {id:'taltz', n:'トルツ', gen:'イキセキズマブ', en:'ixekizumab', cat:'pso', rt:'皮下注', adopt:'',
+     target:'IL-17A', mech:'IL-17Aの直接中和（セクキヌマブより高親和性）',
+     onset:'2〜4週',
+     ae:[['注射部位反応','約17%','軽'],['鼻咽頭炎','約14%','軽'],['口腔内カンジダ','約3%','軽']],
+     price:[['80mg 1本',96889]]},
+    {id:'bimzelx', n:'ビンゼレックス', gen:'ビメキズマブ', en:'bimekizumab', cat:'pso', rt:'皮下注', adopt:'',
+     target:'IL-17A/F', mech:'IL-17AとIL-17Fの両方を中和',
+     onset:'1〜2週',
+     ae:[['口腔・外陰カンジダ','約18%','中（IL-17A/F両阻害）'],['鼻咽頭炎','約12%','軽'],['炎症性腸疾患','稀','要注意']],
+     price:[['1回分（320mg＝160mg×2本）',313756]]},
+    {id:'skyrizi', n:'スキリージ', gen:'リサンキズマブ', en:'risankizumab', cat:'pso', rt:'皮下注', adopt:'',
+     target:'IL-23p19', mech:'IL-23p19の選択的阻害',
+     onset:'4〜8週',
+     ae:[['上気道感染','約12%','軽'],['頭痛','約5%','軽'],['疲労感','約3%','軽']],
+     price:[['150mg 1本',217889]]},
+    {id:'tremfya', n:'トレムフィア', gen:'グセルクマブ', en:'guselkumab', cat:'pso', rt:'皮下注', adopt:'',
+     target:'IL-23p19', mech:'IL-23p19の選択的阻害',
+     onset:'4〜8週',
+     ae:[['上気道感染','約14%','軽'],['頭痛','約5%','軽'],['注射部位反応','約3%','軽']],
+     price:[['100mg 1本',182629]]},
+    {id:'ilumya', n:'イルミア', gen:'チルドラキズマブ', en:'tildrakizumab', cat:'pso', rt:'皮下注', adopt:'',
+     target:'IL-23p19', mech:'IL-23p19の選択的阻害',
+     onset:'4〜8週',
+     ae:[['上気道感染','約15%','軽'],['注射部位反応','約3%','軽']],
+     price:[['100mg 1本',200598]]},
+    {id:'stelara', n:'ステラーラ', gen:'ウステキヌマブ', en:'ustekinumab', cat:'pso', rt:'皮下注／点滴', adopt:'',
+     target:'IL-12/23p40', mech:'IL-12とIL-23に共通のp40サブユニットを阻害',
+     onset:'4〜8週',
+     ae:[['鼻咽頭炎','約17%','軽'],['頭痛','約8%','軽'],['上気道感染','約6%','軽']],
+     price:[['45mg 1本',223441]]},
+    {id:'lumicef', n:'ルミセフ', gen:'ブロダルマブ', en:'brodalumab', cat:'pso', rt:'皮下注', adopt:'',
+     target:'IL-17RA', mech:'IL-17受容体A（IL-17RA）阻害。IL-17A/F/Eをすべて遮断する',
+     onset:'2〜4週',
+     ae:[['関節痛','約9%','軽'],['頭痛','約8%','軽'],['疲労感','約4%','軽'],['炎症性腸疾患の悪化','稀','重要'],['自殺念慮','稀（要注意）','重篤']],
+     price:[['210mg 1本',89082]]},
+
+    /* ===== 蕁麻疹（注射） ===== */
+    {id:'xolair', n:'ゾレア', gen:'オマリズマブ', en:'omalizumab', cat:'other', rt:'皮下注', adopt:'',
+     target:'IgE', mech:'IgEの中和（マスト細胞などのFcεRI発現を低下させる）',
+     onset:'2〜4週',
+     ae:[['注射部位反応','約15%','軽'],['頭痛','約7%','軽'],['アナフィラキシー','約0.1%','重篤（投与後30分の観察が必要）']],
+     price:[['300mg 1本',60199]]},
+
+    /* ===== その他の内服 ===== */
+    {id:'sotyktu', n:'ソーティクツ', gen:'デュークラバシチニブ', en:'deucravacitinib', cat:'oral', rt:'内服', adopt:'', staff:'sotyktu',
+     target:'TYK2', mech:'TYK2（チロシンキナーゼ2）のアロステリック阻害。IL-23・IL-12・I型IFNの経路を選択的に遮断する',
+     onset:'2〜4週',
+     ae:[['上気道感染','約17%','軽'],['頭痛','約5%','軽'],['口腔ヘルペス','約4%','軽〜中'],['毛包炎','約4%','軽']],
+     price:[['6mg 1錠',2533]],
+     month:[{l:'6mgを1日1回', n:30, p:0}]},
+    {id:'otezla', n:'オテズラ', gen:'アプレミラスト', en:'apremilast', cat:'oral', rt:'内服', adopt:'', staff:'otezla',
+     target:'PDE4', mech:'PDE4（ホスホジエステラーゼ4）阻害でcAMPを増やし、TNF-α・IL-17・IL-23の産生を抑える',
+     onset:'4〜8週',
+     ae:[['悪心','約17%','中（開始時）'],['下痢','約16%','中（開始時）'],['体重減少','約10%','要確認'],['頭痛','約6%','軽'],['うつ・自殺念慮','稀','要注意']],
+     price:[['30mg 1錠',853]],
+     month:[{l:'6日目以降の維持（30mgを1日2回）', n:60, p:0}]},
+    {id:'neoral', n:'ネオーラル', gen:'シクロスポリン', en:'cyclosporine', cat:'oral', rt:'内服', adopt:'', staff:'neoral',
+     target:'カルシニューリン', mech:'カルシニューリン阻害でIL-2の産生を抑え、T細胞の活性化を遮断する',
+     onset:'2〜4週',
+     ae:[['高血圧','約25%','要管理'],['多毛','約20%','軽'],['歯肉増殖','約10%','軽'],['腎機能障害（Cr上昇）','用量依存','重要'],['感染症の増加','用量依存','重要']],
+     price:[['25mg 1カプセル',104]],
+     monthNote:'用量が体重で変わるため、月額は計算していません。'},
+    {id:'tigason', n:'チガソン', gen:'エトレチナート', en:'etretinate', cat:'oral', rt:'内服', adopt:'',
+     target:'レチノイド', mech:'ビタミンA誘導体（レチノイド）。核内受容体（RAR）を介して角化・増殖を正常化する',
+     onset:'4〜8週',
+     ae:[['口唇炎・皮膚乾燥','ほぼ全例','軽〜中'],['TG/LDL上昇','約50%','要管理'],['脱毛','約20%','中（用量依存）'],['肝機能障害','約10%','要モニター'],['催奇形性','高リスク','重篤']],
+     price:[['10mg 1カプセル',95]],
+     note:'参照資料は一般名を acitretin（アシトレチン）としていましたが、国内のチガソンはエトレチナートです。副作用の頻度は確認が必要です。'},
+    {id:'predonine', n:'プレドニン', gen:'プレドニゾロン', en:'prednisolone', cat:'oral', rt:'内服', adopt:'',
+     target:'糖質コルチコイド受容体', mech:'糖質コルチコイド受容体に結合し、NF-κB抑制などで広く抗炎症・免疫抑制に働く',
+     onset:'数日（急性期）',
+     ae:[['消化性潰瘍','約5〜10%','要予防'],['血糖上昇','用量依存','要管理'],['感染症の増悪','用量依存','重要'],['骨粗鬆症','長期で高頻度','重要'],['リバウンド（乾癬）','中止時','重篤（膿疱化）'],['副腎不全（離脱）','急な中止で','重篤']],
+     price:[['5mg 1錠',9]]}
+  ];
+  return {PRICE_AS_OF:PRICE_AS_OF, CATS:CATS, ADOPT:ADOPT, DRUGS:DRUGS};
+})();
+
+(function(){
+  function e(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function kana(s){ return String(s||'').toLowerCase().replace(/[ぁ-ゖ]/g,function(h){ return String.fromCharCode(h.charCodeAt(0)+0x60); }); }
+  function byId(id){ for(var i=0;i<BIOJAK.DRUGS.length;i++){ if(BIOJAK.DRUGS[i].id===id) return BIOJAK.DRUGS[i]; } return null; }
+  function catOf(k){ for(var i=0;i<BIOJAK.CATS.length;i++){ if(BIOJAK.CATS[i].k===k) return BIOJAK.CATS[i]; } return BIOJAK.CATS[0]; }
+  function yen(n){ return Math.round(n).toLocaleString('ja-JP')+'円'; }
+  function onsetText(d){ return typeof d.onset==='string' ? d.onset : d.onset.map(function(x){ return x.i+' '+x.t; }).join('／'); }
+  var st = {q:'', cat:'', open:{}};
+
+  /* 検索用に1剤ぶんの文字列をまとめる（横断検索でも使う） */
+  BIOJAK.hay = function(d){
+    var ae = d.ae[0] && d.ae[0].r ? d.ae.map(function(g){ return g.r.map(function(r){ return r[0]; }).join(' '); }).join(' ') : d.ae.map(function(r){ return r[0]; }).join(' ');
+    return [d.n,d.gen,d.en,d.target,d.mech,catOf(d.cat).l,ae].join(' ');
+  };
+  function aeTable(rows){
+    return '<table><thead><tr><th>副作用</th><th>頻度</th><th>重篤度</th></tr></thead><tbody>'
+      + rows.map(function(r){ return '<tr><td>'+e(r[0])+'</td><td class="n">'+e(r[1])+'</td><td>'+e(r[2])+'</td></tr>'; }).join('')+'</tbody></table>';
+  }
+  function detail(d){
+    var h='<div class="bj-lbl">基本情報</div><div class="bj-kv">'
+      + '<div><span>分類</span>'+e(catOf(d.cat).l)+'</div><div><span>標的</span>'+e(d.target)+'</div>'
+      + '<div><span>投与経路</span>'+e(d.rt)+'</div><div><span>効果発現の目安</span>'+e(typeof d.onset==='string'?d.onset:'下の表')+'</div></div>';
+    h+='<div class="bj-lbl">作用機序</div><div class="bj-txt">'+e(d.mech)+'</div>';
+    if(typeof d.onset!=='string'){
+      h+='<div class="bj-lbl">効果発現の目安（適応症別）</div><table><tbody>'
+        + d.onset.map(function(x){ return '<tr><td>'+e(x.i)+'</td><td class="n">'+e(x.t)+'</td></tr>'; }).join('')+'</tbody></table>';
+    }
+    h+='<div class="bj-lbl">副作用プロファイル（参考値）</div>';
+    if(d.ae[0] && d.ae[0].r) d.ae.forEach(function(g){ h+='<div class="bj-sub">〈'+e(g.i)+'〉</div>'+aeTable(g.r); });
+    else h+=aeTable(d.ae);
+    h+='<div class="bj-lbl">薬価</div><div class="bj-price"><span class="asof">'+e(BIOJAK.PRICE_AS_OF)+'</span>'
+      + d.price.map(function(p){ return '<div class="row"><span>'+e(p[0])+'</span><b>'+yen(p[1])+'</b></div>'; }).join('');
+    if(d.month && d.month.length){
+      h+='<div class="mon"><div class="f">3割負担の月額概算（30日分・薬価のみ）</div>'
+        + d.month.map(function(m){
+            var p=d.price[m.p], all=p[1]*m.n;
+            return '<div class="row"><span>'+e(m.l)+'<br><span class="f">'+e(p[0])+' × '+m.n+' ＝ 10割 '+yen(all)+'</span></span><b>約'+yen(Math.round(all*0.3/100)*100)+'</b></div>';
+          }).join('')
+        + '<div class="f">用法は '+(d.age?'「年齢・用量」':'「医師・看護師」')+'タブの記載から計算しています。</div></div>';
+    } else {
+      h+='<div class="mon f">'+e(d.monthNote || 'このアプリに用法の登録がないため、月額は計算していません。')+'</div>';
+    }
+    h+='</div>';
+    if(d.note) h+='<div class="bj-note">'+e(d.note)+'</div>';
+    if(d.age)        h+='<button type="button" class="bj-btn" data-go-age="'+e(d.age)+'">用法・用量・使用可能年齢は「年齢・用量」で確認 ›</button>';
+    else if(d.staff) h+='<button type="button" class="bj-btn" data-go-staff="'+e(d.staff)+'">用法・用量は「医師・看護師」で確認 ›</button>';
+    else             h+='<div class="bj-none">このアプリに用法・用量の登録はありません。添付文書で確認してください。</div>';
+    return h;
+  }
+  function card(d){
+    var c=catOf(d.cat), a=BIOJAK.ADOPT[d.adopt||''], open=!!st.open[d.id];
+    return '<div class="bj-card'+(open?' open':'')+'" id="bj-'+e(d.id)+'" style="--rc:'+c.c+'">'
+      + '<button type="button" class="bj-head" data-id="'+e(d.id)+'" aria-expanded="'+open+'">'
+      +   '<div class="bj-name">'+e(d.n)+'</div>'
+      +   '<div class="bj-gen">'+e(d.gen)+'（'+e(d.en)+'）・'+e(d.rt)+'</div>'
+      +   '<div class="bj-pills"><span class="bj-pill '+a[0]+'">'+e(a[1])+'</span><span class="bj-pill">'+e(d.target)+'</span>'
+      +     '<span class="bj-pill">発現 '+e(onsetText(d))+'</span></div>'
+      + '</button>'
+      + '<div class="bj-body">'+(open?detail(d):'')+'</div></div>';
+  }
+  function match(d, q){ return !q || kana(BIOJAK.hay(d)).indexOf(q)>=0; }
+  function render(){
+    var box=document.getElementById('bj-list'); if(!box) return;
+    var q=kana(st.q.trim()), h='';
+    BIOJAK.CATS.forEach(function(c){
+      if(st.cat && st.cat!==c.k) return;
+      var list=BIOJAK.DRUGS.filter(function(d){ return d.cat===c.k && match(d, q); });
+      if(!list.length) return;
+      h+='<div class="bj-sec" style="color:'+c.c+'">'+e(c.l)+' <small>'+list.length+'剤</small></div>'+list.map(card).join('');
+    });
+    box.innerHTML = h || '<div class="bj-none" style="text-align:center;padding:20px 0">該当する薬が見つかりません</div>';
+  }
+  /* 使い分け比較表（用量・年齢の列は持たない） */
+  function renderCompare(){
+    var h='<table><thead><tr><th>薬剤（経路）</th><th>標的</th><th>効果発現</th></tr></thead><tbody>';
+    BIOJAK.CATS.forEach(function(c){
+      h+='<tr class="g" style="--rc:'+c.c+'"><td colspan="3">'+e(c.l)+'</td></tr>';
+      BIOJAK.DRUGS.filter(function(d){ return d.cat===c.k; }).forEach(function(d){
+        h+='<tr><td><a href="#biojak/'+e(d.id)+'" data-open="'+e(d.id)+'">'+e(d.n)+'</a><br><small>'+e(d.rt)+'</small></td><td>'+e(d.target)+'</td><td>'
+          + (typeof d.onset==='string' ? e(d.onset) : d.onset.map(function(x){ return e(x.i)+'：'+e(x.t); }).join('<br>'))
+          + '</td></tr>';
+      });
+    });
+    document.getElementById('bj-compare').innerHTML = h+'</tbody></table>';
+  }
+  function toggle(id, force){
+    var d=byId(id), el=document.getElementById('bj-'+id); if(!d || !el) return;
+    var open = force!=null ? force : !st.open[id];
+    st.open[id]=open;
+    el.classList.toggle('open', open);
+    el.querySelector('.bj-head').setAttribute('aria-expanded', open);
+    el.querySelector('.bj-body').innerHTML = open ? detail(d) : '';
+    if(open && window.routeSet) routeSet('biojak/'+id, true);
+  }
+
+  /* #biojak/<薬剤id> で薬剤カードを開く。#biojak/list・#biojak/compare は章の先頭へ */
+  window.bjGo = function(sub){
+    if(!sub) return;
+    var target = sub==='list' ? 'bj-list-h' : sub==='compare' ? 'bj-compare-h' : 'bj-'+sub;
+    if(byId(sub)){
+      if(st.q || (st.cat && st.cat!==byId(sub).cat)){ st.q=''; st.cat=''; document.getElementById('bj-q').value=''; render(); paintSeg(); }
+      toggle(sub, true);
+    }
+    var el=document.getElementById(target); if(!el) return;
+    if(window.routeSet) routeSet('biojak/'+sub, true);
+    setTimeout(function(){
+      var hdr=document.querySelector('.hdr'); var off=(hdr?hdr.offsetHeight:0)+10;
+      window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off, behavior:'smooth'});
+      if(el.classList.contains('bj-card')){ el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); },1400); }
+    },50);
+  };
+  /* 他タブの薬剤カードから「バイオ・JAK」へのリンク。sec:'age' は年齢・用量の id、sec:'staff' は医師・看護師の id で引く */
+  window.bjXref = function(sec, key){
+    var d=null;
+    BIOJAK.DRUGS.forEach(function(x){ if(x[sec]===key) d=x; });
+    if(!d) return '';
+    return '<div class="canon-xref" style="margin-top:12px"><span>薬価・副作用・作用機序・効果発現は <b>バイオ・JAK</b> にあります。</span>'
+      + '<button type="button" style="min-height:44px" onclick="event.stopPropagation();switchTab(\'biojak\');bjGo(\''+d.id+'\')">開く ›</button></div>';
+  };
+
+  function paintSeg(){
+    document.querySelectorAll('#bj-cat button').forEach(function(b){ b.classList.toggle('on', b.dataset.cat===st.cat); });
+  }
+  function init(){
+    var seg=document.getElementById('bj-cat'); if(!seg) return;
+    seg.innerHTML='<button type="button" data-cat="">すべて</button>'+BIOJAK.CATS.map(function(c){ return '<button type="button" data-cat="'+c.k+'">'+e(c.l)+'</button>'; }).join('');
+    seg.onclick=function(ev){ var b=ev.target.closest('button'); if(!b) return; st.cat=b.dataset.cat; paintSeg(); render(); };
+    paintSeg();
+    document.getElementById('bj-asof').textContent=BIOJAK.PRICE_AS_OF;
+    document.getElementById('bj-q').oninput=function(){ st.q=this.value; render(); };
+    document.getElementById('bj-list').onclick=function(ev){
+      var a=ev.target.closest('[data-go-age]');   if(a){ switchTab('age'); ageGo(a.dataset.goAge); return; }
+      var s=ev.target.closest('[data-go-staff]'); if(s){ switchTab('staff'); showDrug(s.dataset.goStaff); return; }
+      var h=ev.target.closest('.bj-head'); if(h) toggle(h.dataset.id);
+    };
+    document.getElementById('bj-compare').onclick=function(ev){
+      var o=ev.target.closest('[data-open]'); if(!o) return;
+      ev.preventDefault(); bjGo(o.dataset.open);
+    };
+    document.querySelectorAll('#bj-chnav button').forEach(function(b){ b.onclick=function(){ bjGo(b.dataset.g); }; });
+    document.getElementById('bj-foot').innerHTML='副作用の頻度と重篤度の区分（軽・中・重要・重篤など）は、院内で使っていた参照資料の値です。出典は未確認の参考値で、添付文書の分類ではありません。'
+      + '効果発現は目安です。用法・用量・対象年齢は、このタブに載せていません。<br>最終判断は医師が行います。';
+    render();
+    renderCompare();
+  }
+  init();
+})();
+</script>
+
 <script>
 /* <script type="text/html"> に素の HTML として置いた埋め込み画面を取り出す（<\/script> は復元） */
 function embeddedHTML(id){ var el=document.getElementById(id); return el ? el.textContent.replace(/<\\\/script>/g,'<\/script>') : ''; }
@@ -4736,7 +5123,7 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.4';
+var APP_VERSION = '2.5';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-10-05', check:'各疾患の最新ガイドライン',
@@ -4751,7 +5138,8 @@ var DATA_META = {
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
   kensa:    {updated:'2026-10-06', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
-  age:      {updated:'2026-10-06', check:'添付文書（使用可能年齢・小児用量・規格）'}
+  age:      {updated:'2026-10-06', check:'添付文書（使用可能年齢・小児用量・規格）'},
+  biojak:   {updated:'2026-10-06', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'}
 };
 function metaAgeText(ymd){
   var d=new Date(ymd+'T00:00:00'); if(isNaN(d)) return {txt:'', stale:false};
@@ -5868,6 +6256,7 @@ function routeApply(path){
     else if(tab === 'staff'){ showDrug(sub); }
     else if(tab === 'joge'){ jogeGo(sub); }
     else if(tab === 'age'){ ageGo(sub); }
+    else if(tab === 'biojak'){ bjGo(sub); }
     else if(tab === 'topical' && window.__topical){ __topical.jump(sub); }
     else if(tab === 'vitamin'){ var vb=document.querySelector('#pg-vitamin .vit-seg button:nth-child('+({agents:1,dis:2,table:3}[sub]||1)+')'); if(vb) vitView(sub, vb); }
     else if(tab === 'allergy'){ var ab=document.querySelector('#pg-allergy > .alg-seg button:nth-child('+({avoid:1,view39:2,topics:3}[sub]||1)+')'); if(ab) algView(sub, ab); }
@@ -5892,7 +6281,7 @@ function routeInit(){
 }
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
-  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age'};
+  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age', biojak:'pg-biojak'};
 function switchTab(tab) {
   if(!TAB_PAGES[tab]) return;
   if(window.gsClose) gsClose();
@@ -6225,6 +6614,7 @@ function showDrug(id){
   html += '</div>';
 
   if(window.ageXref) html += ageXref('staff', d.id);                  // 年齢・用量タブへのリンク
+  if(window.bjXref) html += bjXref('staff', d.id);                    // バイオ・JAK タブへのリンク（薬価・副作用）
   html += '<div id="kensa-xref" data-drug="'+esc(d.id)+'"></div>';   // 検査パネルへのリンク（fillKensaXref が埋める）
   if(window.canonLinks) html += canonSelfNote() + canonLinks(html, 'staff:'+d.id);
   document.getElementById('staff-detail-body').innerHTML = html;
@@ -8070,8 +8460,8 @@ if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=8;
-var SEC_ORDER=['topical','joge','staff','age','kensa','products','vitamin','guidance','findings','allergy','patch'];
-var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師（新薬・専門薬剤）', age:'年齢・用量',kensa:'検査パネル', products:'当院製品', vitamin:'ビタミン剤（内服）',
+var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch'];
+var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師（新薬・専門薬剤）', age:'年齢・用量', biojak:'バイオ・JAK', kensa:'検査パネル', products:'当院製品', vitamin:'ビタミン剤（内服）',
   guidance:'生活指導', findings:'所見別ナビ', allergy:'食物アレルギー', patch:'パッチテスト'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
@@ -8156,6 +8546,13 @@ function build(){
     });
     add('age','⚖️','年齢・用量 › 体重換算の計算',AGE.DRUGS.filter(function(d){ return d.kg; }).map(function(d){ return d.n; }).join('・'),
       ['体重換算 mg/kg 小児用量 計算 規格換算'],function(){ switchTab('age'); ageGo('calc'); });
+  }
+  /* バイオ・JAK（薬価・副作用・作用機序・効果発現） */
+  if(window.BIOJAK){
+    BIOJAK.DRUGS.forEach(function(d){
+      add('biojak','🧬',d.n,d.gen+'・'+d.target,[BIOJAK.hay(d),'薬価 副作用 作用機序 効果発現 生物学的製剤 バイオ'],function(){ switchTab('biojak'); bjGo(d.id); });
+    });
+    add('biojak','📊','バイオ・JAK › 使い分け比較表',BIOJAK.DRUGS.map(function(d){ return d.n; }).join('・'),['比較 使い分け 標的 効果発現 投与経路'],function(){ switchTab('biojak'); bjGo('compare'); });
   }
   /* 医師・看護師向け薬剤 */
   if(window.DRUGS) DRUGS.forEach(function(d){
