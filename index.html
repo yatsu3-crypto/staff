@@ -773,6 +773,10 @@ body.gs-on .gs-results{display:block;}
 #pg-biojak .bj-price .mon{margin-top:7px;padding-top:7px;border-top:.5px dashed #e6dcc4;}
 #pg-biojak .bj-price .f{font-size:11px;color:var(--tx3);}
 #pg-biojak .bj-note{font-size:12px;line-height:1.65;color:var(--wtx);background:var(--wbg);border:.5px dashed var(--wbd);border-radius:9px;padding:8px 11px;margin-top:10px;}
+#pg-biojak .bj-warn{font-size:12.5px;line-height:1.65;color:#7a2e24;background:#fbeeea;border:1px solid #e4b9b0;border-radius:10px;padding:9px 11px;}
+#pg-biojak .bj-warn b{display:block;font-size:11px;color:#b6483a;margin-top:4px;}
+#pg-biojak .bj-warn b:first-child{margin-top:0;}
+#pg-biojak .bj-warn .todo{margin-top:7px;padding-top:6px;border-top:.5px dashed #e4b9b0;font-size:11.5px;color:var(--wtx);}
 #pg-biojak .bj-btn{display:block;width:100%;min-height:44px;margin-top:10px;font-family:inherit;font-size:13px;font-weight:600;color:var(--tc);background:var(--gl);border:none;border-radius:10px;cursor:pointer;}
 #pg-biojak .bj-none{font-size:12px;color:var(--tx3);margin-top:10px;}
 #pg-biojak .bj-cmp{background:var(--card);border:.5px solid var(--bd);border-radius:12px;padding:4px 8px 8px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
@@ -4787,6 +4791,7 @@ var AGE = (function(){
    price：[規格, 薬価（円）]。month：3割負担の月額概算（正本に用法がある薬だけ）。
           {l:根拠の文言（正本の用法）, n:30日あたりの数量, p:price の添字}。2週間隔＝月2本、4週間隔＝月1本、1日1回＝30錠で計算
    onset／ae：適応症で違うときは [{i:適応症, ...}] で書き分ける。ae は [名前, 頻度, 重篤度]（重篤度は参照資料の独自区分）
+   warn：禁忌や催奇形性など、カードの中で目立たせる注意（h＝見出し、contra＝禁忌、lines＝避妊などの注意、todo＝添付文書で確認待ちの項目）
    age／staff：用法・用量の正本（年齢・用量タブ／医師・看護師タブの id）。両方なければ「添付文書で確認」と出す
    ============================================== */
 var BIOJAK = (function(){
@@ -4927,6 +4932,9 @@ var BIOJAK = (function(){
      target:'レチノイド', mech:'ビタミンA誘導体（レチノイド）。核内受容体（RAR）を介して角化・増殖を正常化する',
      onset:'4〜8週',
      ae:[['口唇炎・皮膚乾燥','ほぼ全例','軽〜中'],['TG/LDL上昇','約50%','要管理'],['脱毛','約20%','中（用量依存）'],['肝機能障害','約10%','要モニター'],['催奇形性','高リスク','重篤']],
+     warn:{h:'催奇形性', contra:['妊婦・妊娠している可能性のある女性','授乳婦'],
+           lines:['妊娠する可能性のある女性は、投与中および投与終了後2年間は避妊が必要'],
+           todo:'男性の避妊期間・献血制限は添付文書で確認'},
      price:[['10mg 1カプセル',95]],
      note:'参照資料は一般名を acitretin（アシトレチン）としていましたが、国内のチガソンはエトレチナートです。副作用の頻度は確認が必要です。'},
     {id:'predonine', n:'プレドニン', gen:'プレドニゾロン', en:'prednisolone', cat:'oral', rt:'内服', adopt:'',
@@ -4950,7 +4958,7 @@ var BIOJAK = (function(){
   /* 検索用に1剤ぶんの文字列をまとめる（横断検索でも使う） */
   BIOJAK.hay = function(d){
     var ae = d.ae[0] && d.ae[0].r ? d.ae.map(function(g){ return g.r.map(function(r){ return r[0]; }).join(' '); }).join(' ') : d.ae.map(function(r){ return r[0]; }).join(' ');
-    return [d.n,d.gen,d.en,d.target,d.mech,catOf(d.cat).l,ae].join(' ');
+    return [d.n,d.gen,d.en,d.target,d.mech,catOf(d.cat).l,ae,d.warn?[d.warn.h,d.warn.contra.join(' '),d.warn.lines.join(' ')].join(' '):''].join(' ');
   };
   function aeTable(rows){
     return '<table><thead><tr><th>副作用</th><th>頻度</th><th>重篤度</th></tr></thead><tbody>'
@@ -4965,6 +4973,10 @@ var BIOJAK = (function(){
       h+='<div class="bj-lbl">効果発現の目安（適応症別）</div><table><tbody>'
         + d.onset.map(function(x){ return '<tr><td>'+e(x.i)+'</td><td class="n">'+e(x.t)+'</td></tr>'; }).join('')+'</tbody></table>';
     }
+    if(d.warn) h+='<div class="bj-lbl">'+e(d.warn.h)+'の注意</div><div class="bj-warn">'
+      + '<b>禁忌</b>'+d.warn.contra.map(function(t){ return '<div>・'+e(t)+'</div>'; }).join('')
+      + '<b>避妊</b>'+d.warn.lines.map(function(t){ return '<div>・'+e(t)+'</div>'; }).join('')
+      + (d.warn.todo?'<div class="todo">'+e(d.warn.todo)+'</div>':'')+'</div>';
     h+='<div class="bj-lbl">副作用プロファイル（参考値）</div>';
     if(d.ae[0] && d.ae[0].r) d.ae.forEach(function(g){ h+='<div class="bj-sub">〈'+e(g.i)+'〉</div>'+aeTable(g.r); });
     else h+=aeTable(d.ae);
@@ -4994,7 +5006,7 @@ var BIOJAK = (function(){
       +   '<div class="bj-name">'+e(d.n)+'</div>'
       +   '<div class="bj-gen">'+e(d.gen)+'（'+e(d.en)+'）・'+e(d.rt)+'</div>'
       +   '<div class="bj-pills"><span class="bj-pill '+a[0]+'">'+e(a[1])+'</span><span class="bj-pill">'+e(d.target)+'</span>'
-      +     '<span class="bj-pill">発現 '+e(onsetText(d))+'</span></div>'
+      +     '<span class="bj-pill">発現 '+e(onsetText(d))+'</span>'+(d.warn?'<span class="bj-pill lim">⚠ '+e(d.warn.h)+'</span>':'')+'</div>'
       + '</button>'
       + '<div class="bj-body">'+(open?detail(d):'')+'</div></div>';
   }
