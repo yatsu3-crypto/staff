@@ -3117,6 +3117,8 @@ var CANON_RULES=[
   {k:['フロモックス','セフカペン'],         sec:'age', id:'flomox'},
   {k:['ムコダイン','カルボシステイン'],     sec:'age', id:'mucodyne'},
   {k:['リンヴォック','ウパダシチニブ'],     sec:'age', id:'rinvoq'},
+  {k:['オルミエント','バリシチニブ'],       sec:'age', id:'olumiant'},
+  {k:['リットフーロ','リトレシチニブ'],     sec:'age', id:'litfulo'},
   {k:['デザレックス','デスロラタジン'],     sec:'age', id:'desalex'},
   {k:['ビラノア','ビラスチン'],             sec:'age', id:'bilanoa'},
   {k:['アレロック','オロパタジン'],         sec:'age', id:'allelock'},
@@ -3749,7 +3751,7 @@ sections:[
       '多数の薬物相互作用あり（CYP3A4阻害薬・誘導薬）。グレープフルーツジュースとの同時摂取は禁忌',
       '生ワクチン接種は禁忌。妊婦・授乳婦への投与は禁忌']},
   {n:'JAK阻害薬（内服）', lv:'lv3', tag:'最も厳格',
-   tl:['ウパダシチニブ','アブロシチニブ','バリシチニブ'],
+   tl:['ウパダシチニブ','アブロシチニブ','バリシチニブ','リトレシチニブ'],
    d:['生物学的製剤ではないが並べて管理する必要あり',
       'CBC（リンパ球・好中球・Hb）、脂質、CK、肝機能を1〜3か月ごと',
       '帯状疱疹、静脈血栓塞栓症、悪性腫瘍、心血管イベントのリスク評価',
@@ -4086,7 +4088,7 @@ qEl.addEventListener('input', function(){
    ============================================================ */
 document.getElementById('ft').innerHTML =
   '院内参照用。添付文書・ガイドラインは改訂があり得るため、検査頻度と算定要件は最新版で確認してください。検査の選択を含め、最終判断は医師が行います。<br>'
-  + '最終更新 2026-09-29／7項目';
+  + '最終更新 2026-10-06／7項目';
 renderHome();
 /* 親ページ（横断検索・URL ハッシュ）から参照する */
 window.KENSA = {
@@ -4306,6 +4308,21 @@ var AGE = (function(){
     {id:'rinvoq', n:'リンヴォック', gen:'ウパダシチニブ水和物', rt:'内服', cat:'アトピー内服薬（JAK阻害薬）', form:'錠（7.5mg・15mg・30mg）', max:30, freq:1, min:144, age:'12歳以上かつ体重30kg以上（アトピー性皮膚炎）',
      notes:'内服JAK1阻害薬。アトピー性皮膚炎: 15mgを1日1回（最大30mg）。服用時間の制限なし。感染症リスクあり（帯状疱疹・結核・日和見感染）。生ワクチン接種不可。悪性腫瘍・血栓塞栓症リスクに注意。妊婦禁忌。',
      specs:[['7.5mg錠',7.5,'錠'],['15mg錠',15,'錠'],['30mg錠',30,'錠']]},
+    {id:'olumiant', n:'オルミエント', gen:'バリシチニブ', rt:'内服', cat:'JAK阻害薬', form:'錠', freq:1, min:24,
+     ind:[
+       {i:'関節リウマチ・アトピー性皮膚炎（成人）', adult:true, t:'成人'},
+       {i:'アトピー性皮膚炎（小児）・多関節に活動性を有する若年性特発性関節炎', min:24, t:'2歳以上（体重別の用量）'},
+       {i:'円形脱毛症',            min:144, t:'成人及び12歳以上かつ体重30kg以上の小児'},
+       {i:'SARS-CoV-2による肺炎',  adult:true, t:'成人'}
+     ],
+     notes:['〈関節リウマチ、アトピー性皮膚炎（成人）〉成人：4mgを1日1回。状態に応じて2mgに減量。',
+            '〈アトピー性皮膚炎（小児）、多関節に活動性を有する若年性特発性関節炎〉2歳以上・体重別：30kg以上は4mg（状態に応じて2mgに減量）、30kg未満は2mg（状態に応じて1mgに減量）。',
+            '〈円形脱毛症〉成人及び12歳以上かつ体重30kg以上の小児：4mgを1日1回。状態に応じて2mgに減量。',
+            '〈SARS-CoV-2による肺炎〉成人：レムデシビルとの併用で4mgを1日1回。総投与期間は14日間まで。'],
+     kensa:{id:'aa', sec:'JAK阻害薬 導入前スクリーニング', l:'円形脱毛症 ＞ JAK阻害薬 導入前スクリーニング'}},
+    {id:'litfulo', n:'リットフーロ', gen:'リトレシチニブ', rt:'内服', cat:'円形脱毛症内服薬（JAK阻害薬）', form:'カプセル', freq:1, min:144, age:'成人及び12歳以上の小児（円形脱毛症）',
+     notes:'円形脱毛症：成人及び12歳以上の小児に50mgを1日1回。',
+     kensa:{id:'aa', sec:'JAK阻害薬 導入前スクリーニング', l:'円形脱毛症 ＞ JAK阻害薬 導入前スクリーニング'}},
     {id:'desalex', n:'デザレックス', gen:'デスロラタジン', rt:'内服', cat:'抗アレルギー薬', form:'錠（5mg）', max:5, freq:1, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
      notes:'第2世代抗ヒスタミン薬。1日1回5mgを経口投与。食事の影響なし。眠気が出にくく自動車運転制限なし。ロラタジンに過敏症の既往がある場合は禁忌。てんかん既往患者に注意。',
      preg:{lv:'caution', l:'○ 有益性投与（比較的安全）', t:'ロラタジン（クラリチン）の活性代謝物。元薬のデータから安全性は高いと考えられるが、本剤自体の疫学データは限定的。'},
@@ -4509,7 +4526,11 @@ var AGE = (function(){
     }
     if(d.preg) h+='<div class="ag-lbl">妊娠中の使用</div><div class="ag-preg"><b>'+e(d.preg.l)+'</b>'+e(d.preg.t)+'</div>';
     if(d.link) h+=linked(d);
-    else if(d.notes) h+='<div class="ag-lbl">用法・注意</div><div class="ag-txt">'+e(d.notes)+'</div>';
+    else if(d.notes) h+='<div class="ag-lbl">用法・注意</div>'+(Array.isArray(d.notes)   // 配列は適応症ごとに1行
+      ? '<div class="ag-lines">'+d.notes.map(function(t){ return '<div>'+e(t)+'</div>'; }).join('')+'</div>'
+      : '<div class="ag-txt">'+e(d.notes)+'</div>');
+    if(d.kensa) h+='<div class="canon-xref" style="margin-top:12px"><span>導入前の検査は <b>検査パネル › '+e(d.kensa.l)+'</b> にあります。</span>'
+      + '<button type="button" style="min-height:44px" data-kensa="'+e(d.id)+'">開く ›</button></div>';
     if(canCalc(d)) h+='<button type="button" class="ag-btn" data-calc="'+e(d.id)+'">この薬で体重換算 ›</button>';
     if(window.canonLinks && !d.link){   // link ありは上の「正本を開く」ボタンで足りる
       var self='age:'+d.id;
@@ -4658,6 +4679,7 @@ var AGE = (function(){
     document.getElementById('ag-list').onclick=function(ev){
       var c=ev.target.closest('[data-calc]'); if(c){ pickCalc(c.dataset.calc); return; }
       var o=ev.target.closest('[data-canon-open]'); if(o){ openLinked(byId(o.dataset.canonOpen)); return; }
+      var k=ev.target.closest('[data-kensa]'); if(k){ var K=byId(k.dataset.kensa).kensa; switchTab('kensa'); kensaGo(K.id, K.sec); return; }
       var h=ev.target.closest('.ag-head'); if(h) toggle(h.dataset.id);
     };
     document.querySelectorAll('#ag-chnav button').forEach(function(b){ b.onclick=function(){ ageGo(b.dataset.g); }; });
@@ -4681,17 +4703,27 @@ var AGE = (function(){
 function embeddedHTML(id){ var el=document.getElementById(id); return el ? el.textContent.replace(/<\\\/script>/g,'<\/script>') : ''; }
 (function(){ var f=document.getElementById('patchFrame'); if(f) f.srcdoc=embeddedHTML('patch-src'); })();
 /* 検査パネル：kensaGo('bio') で詳細、kensaGo('') で一覧。iframe の読み込み前に呼ばれたら読み込み後に反映 */
+/* sec を渡すと、詳細を開いたあと見出し（h3 の文言の先頭一致）までスクロールする */
 var KENSA_PENDING = null;
 function kensaWin(){ try{ var f=document.getElementById('kensaFrame'); var w=f&&f.contentWindow; return (w&&w.KENSA) ? w : null; }catch(e){ return null; } }
-function kensaGo(id){
+function kensaGo(id, sec){
   var w=kensaWin();
-  if(!w){ KENSA_PENDING=id||''; return; }
+  if(!w){ KENSA_PENDING={id:id||'', sec:sec}; return; }
   if(id) w.KENSA.open(id); else w.KENSA.home();
+  if(id && sec) setTimeout(function(){
+    var hs=w.document.querySelectorAll('h3.sh');
+    for(var i=0;i<hs.length;i++){
+      if(hs[i].textContent.indexOf(sec)===0){
+        var hd=w.document.querySelector('header'), off=(hd?hd.offsetHeight:0)+8;   // iframe 内の固定ヘッダーの下に出す
+        w.scrollTo(0, hs[i].getBoundingClientRect().top+w.scrollY-off); return;
+      }
+    }
+  },50);
 }
 (function(){
   var f=document.getElementById('kensaFrame'); if(!f) return;
   f.addEventListener('load', function(){
-    if(KENSA_PENDING!==null){ var id=KENSA_PENDING; KENSA_PENDING=null; kensaGo(id); }
+    if(KENSA_PENDING!==null){ var p=KENSA_PENDING; KENSA_PENDING=null; kensaGo(p.id, p.sec); }
     if(window.fillKensaXref) fillKensaXref();   // 読み込み前に開いた薬剤詳細のリンクを埋める
   });
   f.srcdoc=embeddedHTML('kensa-src');
@@ -4715,9 +4747,9 @@ var DATA_META = {
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
-  kensa:    {updated:'2026-10-03', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
+  kensa:    {updated:'2026-10-06', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
-  age:      {updated:'2026-10-05', check:'添付文書（使用可能年齢・小児用量・規格）'}
+  age:      {updated:'2026-10-06', check:'添付文書（使用可能年齢・小児用量・規格）'}
 };
 function metaAgeText(ymd){
   var d=new Date(ymd+'T00:00:00'); if(isNaN(d)) return {txt:'', stale:false};
