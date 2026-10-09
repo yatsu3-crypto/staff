@@ -3187,6 +3187,7 @@ var CANON_RULES=[
   {k:['ポララミン','クロルフェニラミン'],   sec:'age', id:'polaramine'},
   {k:['アレグラ','フェキソフェナジン'],     sec:'age', id:'allegra'},
   {k:['イブグリース','レブリキズマブ'],     sec:'age', id:'ebglyss'},
+  {k:['スキリージ','リサンキズマブ'],       sec:'age', id:'skyrizi'},
   {k:['ベピオ'],                            sec:'age', id:'bepio'},
   {k:['ディフェリン'],                      sec:'age', id:'differin'},
   {k:['デュアック'],                        sec:'age', id:'duac'},
@@ -4435,6 +4436,14 @@ var AGE = (function(){
     {id:'ebglyss', n:'イブグリース', gen:'レブリキズマブ', rt:'注射', cat:'アトピー生物学的製剤', form:'皮下注（シリンジ・オートインジェクター）', freq:1, min:144, age:'12歳以上かつ体重40kg以上',
      notes:'IL-13拮抗薬。初回・2週後に500mg（250mg×2本）、4週以降250mgを2週間隔（状態により4週間隔も可）。投与45分前に室温に戻す。',
      specs:[['250mgシリンジ',250,'本'],['250mgオートインジェクター',250,'本']]},
+    {id:'skyrizi', n:'スキリージ', gen:'リサンキズマブ', rt:'注射', cat:'乾癬生物学的製剤（IL-23p19阻害薬）', form:'皮下注（シリンジ 150mg・75mg・55mg／ペン 150mg）', freq:1, min:72,
+     age:'成人及び6歳以上の小児（尋常性乾癬・乾癬性関節炎・膿疱性乾癬・乾癬性紅皮症。4製剤とも共通）',
+     alert:{pill:'⚠ 55mg 薬価未収載', h:'55mg製剤は薬価基準未収載', t:'皮下注55mgシリンジは薬価基準未収載のため、体重40kg未満の小児には保険で投与できません。150mg・75mg製剤は薬価基準収載済みです。'},
+     notes:['〈効能・効果〉既存治療で効果不十分な尋常性乾癬・乾癬性関節炎・膿疱性乾癬・乾癬性紅皮症（150mgシリンジ・75mgシリンジ・150mgペン・55mgシリンジのいずれも同じ4疾患）。',
+            '〈成人〉1回150mgを初回、4週後、以降12週間隔で皮下投与。状態に応じて1回75mgを投与することができる。',
+            '〈6歳以上の小児〉体重40kg以上：1回150mg／体重40kg未満：1回55mg。いずれも初回、4週後、以降12週間隔で皮下投与。'],
+     src:'アッヴィ合同会社 小児適応追加承認取得のご案内',
+     specs:[['150mgシリンジ 1mL',150,'本'],['75mgシリンジ 0.83mL',75,'本'],['150mgペン 1mL',150,'本'],['55mgシリンジ 0.37mL（薬価基準未収載）',55,'本']]},
 
     /* ===== 外用 ===== */
     {id:'corectim', n:'コレクチム', gen:'デルゴシチニブ', rt:'外用', cat:'アトピー外用薬', form:'軟膏（0.5%・0.25%）', freq:2, min:6, age:'生後6か月以上（成人は0.5%、小児は0.25%。症状に応じて小児にも0.5%を使用できる）',
@@ -4574,6 +4583,7 @@ var AGE = (function(){
     } else {
       h+='<div class="ag-age">'+e(d.age)+'</div>';
     }
+    if(d.alert) h+='<div class="ag-lbl">⚠ '+e(d.alert.h)+'</div><div class="ag-hold"><b>'+e(d.alert.t)+'</b></div>';
     h+='<div class="ag-lbl">基本情報</div><div class="ag-kv">'
       + '<div><span>分類</span>'+e(d.cat)+'</div><div><span>剤形</span>'+e(d.form)+'</div>'
       + '<div><span>体重換算</span>'+(!d.kg ? '登録なし' : d.hold ? '確認待ち（停止中）'
@@ -4590,6 +4600,7 @@ var AGE = (function(){
     else if(d.notes) h+='<div class="ag-lbl">用法・注意</div>'+(Array.isArray(d.notes)   // 配列は適応症ごとに1行
       ? '<div class="ag-lines">'+d.notes.map(function(t){ return '<div>'+e(t)+'</div>'; }).join('')+'</div>'
       : '<div class="ag-txt">'+e(d.notes)+'</div>');
+    if(d.src) h+='<div class="ag-txt" style="margin-top:6px;color:var(--tx3)">出典：'+e(d.src)+'</div>';
     if(d.kensa) h+='<div class="canon-xref" style="margin-top:12px"><span>導入前の検査は <b>検査パネル › '+e(d.kensa.l)+'</b> にあります。</span>'
       + '<button type="button" style="min-height:44px" data-kensa="'+e(d.id)+'">開く ›</button></div>';
     if(window.bjXref) h+=bjXref('age', d.id);   // バイオ・JAK タブへのリンク（薬価・副作用）
@@ -4608,7 +4619,8 @@ var AGE = (function(){
       +   '<div class="ag-name">'+e(d.n)+'</div>'
       +   '<div class="ag-gen">'+e(d.gen)+'・'+e(d.form)+'</div>'
       +   '<div class="ag-pills">'+agePill(d)+(v?'<span class="ag-pill '+V_PILL[v][0]+'">'+V_PILL[v][1]+'</span>':'')
-      +     (canCalc(d)?'<span class="ag-pill">体重換算あり</span>':'')+'</div>'
+      +     (canCalc(d)?'<span class="ag-pill">体重換算あり</span>':'')
+      +     (d.alert?'<span class="ag-pill v-ng">'+e(d.alert.pill)+'</span>':'')+'</div>'
       + '</button>'
       + '<div class="ag-body">'+(open?detail(d):'')+'</div></div>';
   }
@@ -4875,11 +4887,13 @@ var BIOJAK = (function(){
      onset:'1〜2週',
      ae:[['口腔・外陰カンジダ','約18%','中（IL-17A/F両阻害）'],['鼻咽頭炎','約12%','軽'],['炎症性腸疾患','稀','要注意']],
      price:[['1回分（320mg＝160mg×2本）',313756]]},
-    {id:'skyrizi', n:'スキリージ', gen:'リサンキズマブ', en:'risankizumab', cat:'pso', rt:'皮下注', adopt:'no',
+    {id:'skyrizi', n:'スキリージ', gen:'リサンキズマブ', en:'risankizumab', cat:'pso', rt:'皮下注', adopt:'no', age:'skyrizi',
      target:'IL-23p19', mech:'IL-23p19の選択的阻害',
      onset:'4〜8週',
      ae:[['上気道感染','約12%','軽'],['頭痛','約5%','軽'],['疲労感','約3%','軽']],
-     price:[['150mg 1本',217889]]},
+     price:[['150mg 1本',217889]],
+     monthNote:'12週間隔の投与のため、月額は計算していません。',
+     note:'皮下注55mgシリンジ（体重40kg未満の小児用）は薬価基準未収載のため、保険で投与できません。'},
     {id:'tremfya', n:'トレムフィア', gen:'グセルクマブ', en:'guselkumab', cat:'pso', rt:'皮下注', adopt:'no',
      target:'IL-23p19', mech:'IL-23p19の選択的阻害',
      onset:'4〜8週',
@@ -5152,7 +5166,7 @@ var DATA_META = {
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
   kensa:    {updated:'2026-10-06', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
-  age:      {updated:'2026-10-06', check:'添付文書（使用可能年齢・小児用量・規格）'},
+  age:      {updated:'2026-10-09', check:'添付文書（使用可能年齢・小児用量・規格）'},
   biojak:   {updated:'2026-10-09', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'}
 };
 function metaAgeText(ymd){
