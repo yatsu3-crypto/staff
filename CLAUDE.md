@@ -13,8 +13,8 @@
 ## 既存アプリ
 
 - 論文ダイジェスト（`papers.html`）と `paper-digest` スキルは別リポジトリ `yatsu3-crypto/papers`（ローカルは `~/papers`）にある。ここには置かない。
-- `index.html` — 「生活指導アシスタント」。12タブ構成（生活指導 / 当院製品 / 医師・看護師 / 外用薬 / ビタミン剤 / パッチ / 食物アレルギー / 所見別ナビ / 検査パネル / 処方上限 / 年齢・用量 / バイオ・JAK）。タブバーは 3列×4段で満杯（13個目を足すと段が増える）。約 8,700 行の単一ファイル。パッチテスト画面・検査パネル・患者用パンフレットは `<script type="text/html" id="patch-src">` / `id="kensa-src"` / `id="pamph-src"` に素の HTML として置き、読み込み時に iframe の `srcdoc` へ流し込んでいる（ブロック内で `</script>` を書くときは `<\/script>`）。
-  - バイオ・JAK タブ（`#biojak/<id>`、比較表は `#biojak/compare`）のデータは `var BIOJAK = (function(){` の `DRUGS`。薬価・副作用・作用機序・効果発現・使い分け比較だけを持ち、**用法・用量・対象年齢は持たない**（元資料 derm_bio_jak.html の用量・年齢は添付文書と食い違っていたため取り込まず、元資料は削除済み）。用量の正本は年齢・用量タブ／医師・看護師タブで、`age`／`staff` で指定する。薬価の時点は `PRICE_AS_OF`、院内採用は `adopt`（yes／no／空＝要確認）。
+- `index.html` — 「生活指導アシスタント」。タブバーは9タブ・3列×3段（生活指導 / 当院製品 / 医師・看護師 / 外用薬 / パッチ / 所見別ナビ / 検査パネル / 処方上限 / 年齢・用量）。10個目を足すと段が増える。医師・看護師タブには 2×2 の小タブ（新薬・専門薬剤 / バイオ・JAK / ビタミン剤 / 食物アレルギー）があり、小タブの画面は `TAB_GROUP` で親タブを指定している（`switchTab('biojak')` などはそのまま使える）。パッチは iframe の高さを確保するため上段に残している。小タブのハッシュは `#staff/<小タブ>/<sub>`（例 `#staff/vitamin/table`、`#staff/allergy/view39`）で、旧形式 `#biojak/…` `#vitamin/…` `#allergy/…` は `routeApply` が新形式に置き換える。約 8,700 行の単一ファイル。パッチテスト画面・検査パネル・患者用パンフレットは `<script type="text/html" id="patch-src">` / `id="kensa-src"` / `id="pamph-src"` に素の HTML として置き、読み込み時に iframe の `srcdoc` へ流し込んでいる（ブロック内で `</script>` を書くときは `<\/script>`）。
+  - バイオ・JAK（医師・看護師タブの小タブ。`#staff/biojak/<id>`、比較表は `#staff/biojak/compare`）のデータは `var BIOJAK = (function(){` の `DRUGS`。薬価・副作用・作用機序・効果発現・使い分け比較だけを持ち、**用法・用量・対象年齢は持たない**（元資料 derm_bio_jak.html の用量・年齢は添付文書と食い違っていたため取り込まず、元資料は削除済み）。用量の正本は年齢・用量タブ／医師・看護師タブで、`age`／`staff` で指定する。薬価の時点は `PRICE_AS_OF`、院内採用は `adopt`（yes／no／空＝要確認）。
   - 検査パネル（`kensa-src`）のデータは iframe 内の `var DATA`。親からは `kensaGo(id)` で開き（`kensaGo(id, 見出し)` で見出しまでスクロール）、横断検索は `window.KENSA` を読んで索引を作る。埋め込み iframe の高さは `fitEmbedFrame()`。
   - 全文を一度に読まない。`grep -n` で場所を特定してから `sed -n` で必要範囲だけ読む。
   - 既存の localStorage キー：`ptd_list`、`vit_fav_v1`、`vit_memo_v1`、`alg_avoid_state_v1`、`app_route_v1`（最後に開いた画面）。

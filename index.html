@@ -48,11 +48,18 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tdel:active{opacity:1;}
 .tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
 
-/* タブナビ：12タブを 3列×4段 で常時全表示（横スクロールにしない） */
+/* タブナビ：9タブを 3列×3段 で常時全表示（横スクロールにしない）。
+   バイオ・JAK／ビタミン剤／食物アレルギーは医師・看護師タブの小タブ（.staff-sub, TAB_GROUP） */
 .tab-nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--gd);padding:0 8px;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
 .tab-btn.active{color:#fff;border-bottom-color:#fff;}
+.staff-sub{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:514px;margin:14px auto 0;background:#fff;border:.5px solid var(--bd);border-radius:11px;padding:4px;box-shadow:0 1px 5px rgba(0,0,0,.06);}
+@media (max-width:540px){.staff-sub{margin:14px 13px 0;}}
+.staff-sub[hidden]{display:none;}
+.staff-sub button{min-height:44px;border:none;border-radius:8px;background:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--tx2);cursor:pointer;}
+.staff-sub button.on{background:var(--g);color:#fff;}
+@media print{.staff-sub{display:none!important;}}
 /* データ更新日（各タブ末尾） */
 .meta-line{font-size:10.5px;color:var(--tx3);line-height:1.7;text-align:center;padding:14px 8px 6px;}
 .meta-line b{font-weight:600;color:var(--tx2);}
@@ -798,14 +805,11 @@ body.gs-on .gs-results{display:block;}
   <button class="tab-btn" data-tab="products" onclick="switchTab('products')"><span class="tab-ic">🌿</span>当院製品</button>
   <button class="tab-btn" data-tab="staff" onclick="switchTab('staff')"><span class="tab-ic">👨‍⚕️</span>医師・看護師</button>
   <button class="tab-btn" data-tab="topical" onclick="switchTab('topical')"><span class="tab-ic">💊</span>外用薬</button>
-  <button class="tab-btn" data-tab="vitamin" onclick="switchTab('vitamin')"><span class="tab-ic">🟡</span>ビタミン剤</button>
   <button class="tab-btn" data-tab="patch" onclick="switchTab('patch')"><span class="tab-ic">🩹</span>パッチ</button>
-  <button class="tab-btn" data-tab="allergy" onclick="switchTab('allergy')"><span class="tab-ic">🍽</span>食物アレルギー</button>
   <button class="tab-btn" data-tab="findings" onclick="switchTab('findings')"><span class="tab-ic">🔍</span>所見別ナビ</button>
   <button class="tab-btn" data-tab="kensa" onclick="switchTab('kensa')"><span class="tab-ic">🧪</span>検査パネル</button>
   <button class="tab-btn" data-tab="joge" onclick="switchTab('joge')"><span class="tab-ic">📏</span>処方上限</button>
   <button class="tab-btn" data-tab="age" onclick="switchTab('age')"><span class="tab-ic">👶</span>年齢・用量</button>
-  <button class="tab-btn" data-tab="biojak" onclick="switchTab('biojak')"><span class="tab-ic">🧬</span>バイオ・JAK</button>
 </div>
 <div class="gs-bar" id="gs-bar">
   <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -813,6 +817,13 @@ body.gs-on .gs-results{display:block;}
   <button class="gs-clear" id="gs-clear" type="button" aria-label="検索をクリア">✕</button>
 </div>
 <div class="gs-results" id="gs-results"></div>
+<!-- 医師・看護師タブの小タブ（新薬・専門薬剤／バイオ・JAK／ビタミン剤／食物アレルギー）。表示は staffSubPaint() -->
+<div class="staff-sub" id="staff-sub" hidden>
+  <button type="button" data-sub="staff" onclick="switchTab('staff')">💉 新薬・専門薬剤</button>
+  <button type="button" data-sub="biojak" onclick="switchTab('biojak')">🧬 バイオ・JAK</button>
+  <button type="button" data-sub="vitamin" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
+  <button type="button" data-sub="allergy" onclick="switchTab('allergy')">🍽 食物アレルギー</button>
+</div>
 
 <!-- 入力ページ -->
 <div class="page active" id="pg-input">
@@ -1436,7 +1447,7 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
     <div class="card-hd"><span class="dot"></span>薬剤詳細</div>
     <div class="card-body" id="staff-detail-body"></div>
     <div style="padding:4px 15px 15px;">
-      <button class="back-btn" onclick="goBackStaff()">← 薬剤一覧に戻る</button>
+      <button class="back-btn" onclick="goBackStaff()">← 戻る</button>
     </div>
   </div>
 </div>
@@ -3121,7 +3132,7 @@ window.PTD_DATA={PRODUCTS:PRODUCTS,A:A,GROUPS:GROUPS};
    ・当院製品（自費）   → 当院製品タブ
    ・保険外用薬         → 外用薬 › 外用薬一覧
    ・新薬・専門薬剤     → 医師・看護師タブ
-   ・内服ビタミン等     → ビタミン剤タブ
+   ・内服ビタミン等     → 医師・看護師 › ビタミン剤
    ・上記にない薬（抗ヒスタミン薬・抗菌薬・ざ瘡/多汗症外用薬など） → 年齢・用量タブ
      （年齢・規格・体重換算はすべての薬で年齢・用量タブが正本）
    名前の別名（一般名・略称）はここに追加する。
@@ -3198,7 +3209,7 @@ var CANON_RULES=[
   {k:['アレジオン眼瞼クリーム'],            sec:'age', id:'alesion_cream'},
   {k:['アレジオンLX'],                      sec:'age', id:'alesion_lx'}
 ];
-var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'当院製剤', staff:'医師・看護師', vitamin:'ビタミン剤', age:'年齢・用量'};
+var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'当院製剤', staff:'医師・看護師', vitamin:'医師・看護師 › ビタミン剤', age:'年齢・用量'};
 
 (function(){
   /* 表示名：正本側のデータから引く（データ更新に追従） */
@@ -5044,7 +5055,7 @@ var BIOJAK = (function(){
     BIOJAK.CATS.forEach(function(c){
       h+='<tr class="g" style="--rc:'+c.c+'"><td colspan="3">'+e(c.l)+'</td></tr>';
       BIOJAK.DRUGS.filter(function(d){ return d.cat===c.k; }).forEach(function(d){
-        h+='<tr><td><a href="#biojak/'+e(d.id)+'" data-open="'+e(d.id)+'">'+e(d.n)+'</a><br><small>'+e(d.rt)+'</small></td><td>'+e(d.target)+'</td><td>'
+        h+='<tr><td><a href="#staff/biojak/'+e(d.id)+'" data-open="'+e(d.id)+'">'+e(d.n)+'</a><br><small>'+e(d.rt)+'</small></td><td>'+e(d.target)+'</td><td>'
           + (typeof d.onset==='string' ? e(d.onset) : d.onset.map(function(x){ return e(x.i)+'：'+e(x.t); }).join('<br>'))
           + '</td></tr>';
       });
@@ -5058,10 +5069,10 @@ var BIOJAK = (function(){
     el.classList.toggle('open', open);
     el.querySelector('.bj-head').setAttribute('aria-expanded', open);
     el.querySelector('.bj-body').innerHTML = open ? detail(d) : '';
-    if(open && window.routeSet) routeSet('biojak/'+id, true);
+    if(open && window.routeSet) routeSet('staff/biojak/'+id, true);
   }
 
-  /* #biojak/<薬剤id> で薬剤カードを開く。#biojak/list・#biojak/compare は章の先頭へ */
+  /* bjGo('<薬剤id>') で薬剤カードを開く（ハッシュは #staff/biojak/<薬剤id>）。'list'・'compare' は章の先頭へ */
   window.bjGo = function(sub){
     if(!sub) return;
     var target = sub==='list' ? 'bj-list-h' : sub==='compare' ? 'bj-compare-h' : 'bj-'+sub;
@@ -5070,7 +5081,7 @@ var BIOJAK = (function(){
       toggle(sub, true);
     }
     var el=document.getElementById(target); if(!el) return;
-    if(window.routeSet) routeSet('biojak/'+sub, true);
+    if(window.routeSet) routeSet('staff/biojak/'+sub, true);
     setTimeout(function(){
       var hdr=document.querySelector('.hdr'); var off=(hdr?hdr.offsetHeight:0)+10;
       window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off, behavior:'smooth'});
@@ -5082,7 +5093,7 @@ var BIOJAK = (function(){
     var d=null;
     BIOJAK.DRUGS.forEach(function(x){ if(x[sec]===key) d=x; });
     if(!d) return '';
-    return '<div class="canon-xref" style="margin-top:12px"><span>薬価・副作用・作用機序・効果発現は <b>バイオ・JAK</b> にあります。</span>'
+    return '<div class="canon-xref" style="margin-top:12px"><span>薬価・副作用・作用機序・効果発現は <b>医師・看護師 › バイオ・JAK</b> にあります。</span>'
       + '<button type="button" style="min-height:44px" onclick="event.stopPropagation();switchTab(\'biojak\');bjGo(\''+d.id+'\')">開く ›</button></div>';
   };
 
@@ -5151,7 +5162,7 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.5';
+var APP_VERSION = '2.6';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-10-05', check:'各疾患の最新ガイドライン',
@@ -6241,7 +6252,9 @@ var PRODUCTS = [
 // ==============================================
 // 画面の状態を URL ハッシュに残す（リロード・Safari 切替・戻るボタン対応）
 //   #<tab>                 例: #topical
-//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #vitamin/table, #allergy/view39, #kensa/bio, #joge/duac, #age/dupixent（#age/calc は体重換算）
+//   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #kensa/bio, #joge/duac, #age/dupixent（#age/calc は体重換算）
+//   #staff/<小タブ>/<sub>  医師・看護師タブの小タブ。例: #staff/biojak/dupixent, #staff/vitamin/table, #staff/allergy/view39
+//                          （#staff/<薬剤id> は新薬・専門薬剤の詳細。旧形式 #biojak/… #vitamin/… #allergy/… も受けて新形式に置き換える）
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #guidance/diet         生活指導タブ内「抗炎症の食事ガイド」の章
 //   #guidance/walk         生活指導タブ内「インターバル速歩」の章
@@ -6259,7 +6272,9 @@ function routeSet(path, replace){
   }catch(e){ try{ location.hash = path; }catch(e2){} }
   if(!/^search\//.test(path)){ try{ localStorage.setItem(ROUTE_LS, path); }catch(e){} }   // 検索語は次回起動に持ち越さない
 }
-function routeTab(){ var b=document.querySelector('.tab-btn.active'); return b ? b.dataset.tab : 'guidance'; }
+/* 今開いている画面のハッシュ（小タブは staff/<小タブ>） */
+function routeTab(){ return routeBase(ROUTE.page || 'guidance'); }
+function routeBase(tab){ return TAB_GROUP[tab] ? TAB_GROUP[tab]+'/'+tab : tab; }
 /* 「戻る」ボタン共通：自分で積んだ履歴があればブラウザの戻る、無ければ fallback へ */
 function routeBack(fallback){
   if(ROUTE.depth > 0 && history.length > 1){ history.back(); return; }
@@ -6267,7 +6282,12 @@ function routeBack(fallback){
 }
 function routeApply(path){
   path = String(path||'').replace(/^#/, '');
+  // 旧形式（タブバーにあった頃の #biojak/… など）は小タブの形に読み替え、アドレスも置き換える
+  var legacy = /^(biojak|vitamin|allergy)(\/|$)/.test(path);
+  if(legacy) path = TAB_GROUP[path.split('/')[0]]+'/'+path;
   var seg = path.split('/'), tab = seg[0], sub = seg.slice(1).join('/');
+  if(tab === 'staff' && TAB_GROUP[seg[1]] === 'staff'){ tab = seg[1]; sub = seg.slice(2).join('/'); }
+  if(legacy){ try{ history.replaceState({r:path}, '', '#'+path); localStorage.setItem(ROUTE_LS, path); }catch(e){} }
   ROUTE.applying = true;
   try{
     if(tab === 'search'){
@@ -6310,17 +6330,29 @@ function routeInit(){
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
   vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age', biojak:'pg-biojak'};
+// タブバーに出さず、親タブの小タブとして開く画面（switchTab('biojak') 等はそのまま使える）
+var TAB_GROUP = {biojak:'staff', vitamin:'staff', allergy:'staff'};
 function switchTab(tab) {
   if(!TAB_PAGES[tab]) return;
   if(window.gsClose) gsClose();
-  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === tab); });
+  var top = TAB_GROUP[tab] || tab;
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === top); });
   // 詳細ページ（pg-result / pg-prod-detail / pg-staff-detail）も同時に閉じる
   document.querySelectorAll('.page').forEach(function(p){ p.classList.toggle('active', p.id === TAB_PAGES[tab]); });
+  ROUTE.page = tab;
+  staffSubPaint(tab);
   if(tab === 'patch' || tab === 'kensa') fitEmbedFrame(tab);
   window.scrollTo(0, 0);
   // 検査パネルは iframe 内で開いている詳細も含めて記録する
   var kw = (tab === 'kensa') ? kensaWin() : null;
-  routeSet(kw ? kw.KENSA.path() : tab);
+  routeSet(kw ? kw.KENSA.path() : routeBase(tab));
+}
+/* 医師・看護師タブの小タブ。薬剤詳細（pg-staff-detail）を開いている間も「新薬・専門薬剤」を点灯させたまま出す */
+function staffSubPaint(tab){
+  var bar = document.getElementById('staff-sub'); if(!bar) return;
+  var on = (tab === 'staff' || TAB_GROUP[tab] === 'staff');
+  bar.hidden = !on;
+  bar.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.dataset.sub === tab); });
 }
 // 埋め込み iframe（パッチ・検査パネル）の高さ：ヘッダー＋タブ＋検索欄の実高さから算出し、
 // iframe の下端を画面の下端に合わせる（検査パネルの選択バーが画面下に固定されて見える）
@@ -7150,7 +7182,7 @@ function vitView(v, btn){
   document.getElementById("vit-v-agents").classList.toggle("on", v==="agents");
   document.getElementById("vit-v-dis").classList.toggle("on", v==="dis");
   document.getElementById("vit-v-table").classList.toggle("on", v==="table");
-  routeSet("vitamin/"+v);
+  routeSet("staff/vitamin/"+v);
 }
 function vitFilter(f, btn){
   document.getElementById("vit-filters").querySelectorAll(".vit-chip").forEach(function(c){ c.classList.remove("on"); });
@@ -7635,7 +7667,7 @@ function algView(v, btn){
   document.getElementById("alg-v-view39").classList.toggle("on", v==="view39");
   document.getElementById("alg-v-topics").classList.toggle("on", v==="topics");
   if(v==="view39" && !algView39Rendered){ algRenderView39(); algView39Rendered = true; }
-  routeSet("allergy/"+v);
+  routeSet("staff/allergy/"+v);
 }
 function algMode(m){
   algModeCur = m;
@@ -8489,8 +8521,8 @@ if(!input||!box) return;
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=8;
 var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch'];
-var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師（新薬・専門薬剤）', age:'年齢・用量', biojak:'バイオ・JAK', kensa:'検査パネル', products:'当院製品', vitamin:'ビタミン剤（内服）',
-  guidance:'生活指導', findings:'所見別ナビ', allergy:'食物アレルギー', patch:'パッチテスト'};
+var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師 › 新薬・専門薬剤', age:'年齢・用量', biojak:'医師・看護師 › バイオ・JAK', kensa:'検査パネル', products:'当院製品', vitamin:'医師・看護師 › ビタミン剤（内服）',
+  guidance:'生活指導', findings:'所見別ナビ', allergy:'医師・看護師 › 食物アレルギー', patch:'パッチテスト'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
    1文字→1文字の変換に限定し、元文字列と長さを揃える（ハイライト位置計算のため） */
