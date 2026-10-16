@@ -777,6 +777,8 @@ body.gs-on .gs-results{display:block;}
 #pg-biojak .bj-price .asof{display:inline-block;font-size:10.5px;font-weight:600;color:var(--wtx);background:var(--wbg);border:.5px solid var(--wbd);border-radius:6px;padding:1px 6px;margin-bottom:4px;}
 #pg-biojak .bj-price .row{display:flex;justify-content:space-between;gap:8px;}
 #pg-biojak .bj-price .row b{white-space:nowrap;color:var(--gd);}
+#pg-biojak .bj-price .asof.fix{color:var(--gd);background:var(--gl);border-color:var(--g2);}
+#pg-biojak .bj-price .sub{text-align:right;font-size:11px;color:var(--tx3);margin:-2px 0 3px;}
 #pg-biojak .bj-price .mon{margin-top:7px;padding-top:7px;border-top:.5px dashed #e6dcc4;}
 #pg-biojak .bj-price .f{font-size:11px;color:var(--tx3);}
 #pg-biojak .bj-note{font-size:12px;line-height:1.65;color:var(--wtx);background:var(--wbg);border:.5px dashed var(--wbd);border-radius:9px;padding:8px 11px;margin-top:10px;}
@@ -4808,16 +4810,23 @@ var AGE = (function(){
    ★ 出典は院内で使っていた参照アプリ derm_bio_jak.html。その資料の用法・用量・対象年齢は添付文書と食い違うため取り込んでいない。
      用量と年齢の正本は「年齢・用量」タブ（age）と「医師・看護師」タブ（staff）。ここに用量・年齢を書かない。
      記載を直したら DATA_META.biojak.updated を今日の日付にする。閲覧専用（localStorage に保存しない）
-   PRICE_AS_OF：薬価の時点の表記。2026年4月改定の値に差し替えたら「2026年4月薬価改定時点・参考値」にする
+   PRICE_AS_OF：薬価の時点の表記を剤ごとに持つ。'' は既定（登録のない剤すべて）の文字列。
+          剤の id をキーにすると、その剤だけ別の時点にできる。文字列ならそのまま表示、
+          {src:出典, from:'YYYY-MM-DD', oldL:現行薬価の表記, newL:新薬価の表記} なら改定前後を併記し、
+          端末の日付が from 以降なら新薬価を主表示にする（price の3つ目に新薬価を書く）
    adopt：院内採用。'yes'＝採用／'no'＝未採用／''＝要確認
-   price：[規格, 薬価（円）]。month：3割負担の月額概算（正本に用法がある薬だけ）。
+   price：[規格, 薬価（円）]（改定を併記する剤は [規格, 現行薬価, 新薬価]）。month：3割負担の月額概算（正本に用法がある薬だけ。主表示の薬価で計算）。
           {l:根拠の文言（正本の用法）, n:30日あたりの数量, p:price の添字}。2週間隔＝月2本、4週間隔＝月1本、1日1回＝30錠で計算
    onset／ae：適応症で違うときは [{i:適応症, ...}] で書き分ける。ae は [名前, 頻度, 重篤度]（重篤度は参照資料の独自区分）
    warn：禁忌や催奇形性など、カードの中で目立たせる注意（h＝見出し、g＝[{b:小見出し（重要な基本的注意・禁忌・女性・男性など）, t:[本文]}]。添付文書どおりに書く）
    age／staff：用法・用量の正本（年齢・用量タブ／医師・看護師タブの id）。両方なければ「添付文書で確認」と出す
    ============================================== */
 var BIOJAK = (function(){
-  var PRICE_AS_OF = '参照資料の値・2026年4月薬価改定での確認待ち';
+  var PRICE_AS_OF = {
+    '':'参照資料の値・2026年4月薬価改定での確認待ち',
+    dupixent:{src:'サノフィ株式会社・リジェネロン・ジャパン株式会社「デュピクセント皮下注 薬価改定のご案内」2026年10月',
+              from:'2026-11-01', oldL:'現行薬価（2026年10月31日まで）', newL:'新薬価（2026年11月1日から）'}
+  };
   var CATS = [
     {k:'atopy', l:'アトピー（注射）',     c:'var(--g)'},
     {k:'jak',   l:'JAK阻害薬（内服）',    c:'#2f4a63'},
@@ -4833,8 +4842,10 @@ var BIOJAK = (function(){
      onset:[{i:'アトピー性皮膚炎', t:'2〜4週'},{i:'結節性痒疹', t:'4〜8週'}],
      ae:[{i:'アトピー性皮膚炎', r:[['結膜炎・眼瞼炎','約10%','中'],['注射部位反応','約10%','軽'],['好酸球増多','約3%','軽'],['蠕虫感染の増悪','稀','要注意']]},
          {i:'結節性痒疹', r:[['結膜炎','約8%','中'],['注射部位反応','約5%','軽']]}],
-     price:[['300mg 1本',53659]],
-     month:[{l:'アトピー性皮膚炎の成人の維持（300mgを2週間隔）', n:2, p:0}]},
+     price:[['200mgシリンジ（200mg 1.14mL 1筒）',39549,38087],['200mgペン（200mg 1.14mL 1キット）',39706,38238],
+            ['300mgシリンジ（300mg 2mL 1筒）',53493,51515],['300mgペン（300mg 2mL 1キット）',53659,51675]],
+     month:[{l:'アトピー性皮膚炎の成人の維持（300mgを2週間隔）・シリンジ', n:2, p:2},
+            {l:'アトピー性皮膚炎の成人の維持（300mgを2週間隔）・ペン', n:2, p:3}]},
     {id:'adtralza', n:'アドトラーザ', gen:'トラロキヌマブ', en:'tralokinumab', cat:'atopy', rt:'皮下注', adopt:'no',
      target:'IL-13', mech:'IL-13の直接中和（IL-4は阻害しない）',
      onset:'2〜4週',
@@ -4972,7 +4983,17 @@ var BIOJAK = (function(){
      ae:[['消化性潰瘍','約5〜10%','要予防'],['血糖上昇','用量依存','要管理'],['感染症の増悪','用量依存','重要'],['骨粗鬆症','長期で高頻度','重要'],['リバウンド（乾癬）','中止時','重篤（膿疱化）'],['副腎不全（離脱）','急な中止で','重篤']],
      price:[['5mg 1錠',9]]}
   ];
-  return {PRICE_AS_OF:PRICE_AS_OF, CATS:CATS, ADOPT:ADOPT, DRUGS:DRUGS};
+  /* その剤の薬価の時点（剤ごとの登録がなければ既定） */
+  function asOf(d){ return PRICE_AS_OF.hasOwnProperty(d.id) ? PRICE_AS_OF[d.id] : PRICE_AS_OF['']; }
+  /* 端末の日付が改定日以降なら true（新薬価を主表示） */
+  function useNew(d){
+    var a=asOf(d); if(typeof a!=='object') return false;
+    var t=new Date(), ymd=t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+('0'+t.getDate()).slice(-2);
+    return ymd>=a.from;
+  }
+  /* 主表示にする薬価（円） */
+  function mainPrice(d, p){ return p.length>2 && useNew(d) ? p[2] : p[1]; }
+  return {PRICE_AS_OF:PRICE_AS_OF, CATS:CATS, ADOPT:ADOPT, DRUGS:DRUGS, asOf:asOf, useNew:useNew, mainPrice:mainPrice};
 })();
 
 (function(){
@@ -5007,12 +5028,19 @@ var BIOJAK = (function(){
     h+='<div class="bj-lbl">副作用プロファイル（参考値）</div>';
     if(d.ae[0] && d.ae[0].r) d.ae.forEach(function(g){ h+='<div class="bj-sub">〈'+e(g.i)+'〉</div>'+aeTable(g.r); });
     else h+=aeTable(d.ae);
-    h+='<div class="bj-lbl">薬価</div><div class="bj-price"><span class="asof">'+e(BIOJAK.PRICE_AS_OF)+'</span>'
-      + d.price.map(function(p){ return '<div class="row"><span>'+e(p[0])+'</span><b>'+yen(p[1])+'</b></div>'; }).join('');
+    var pa=BIOJAK.asOf(d), rev=typeof pa==='object', nw=BIOJAK.useNew(d);
+    h+='<div class="bj-lbl">薬価</div><div class="bj-price">'
+      + (rev ? '<span class="asof fix">'+e(nw?pa.newL:pa.oldL)+'を表示中</span><div class="f">出典：'+e(pa.src)+'</div>'
+             : '<span class="asof">'+e(pa)+'</span>')
+      + d.price.map(function(p){
+          var r='<div class="row"><span>'+e(p[0])+'</span><b>'+yen(BIOJAK.mainPrice(d, p))+'</b></div>';
+          if(rev && p.length>2) r+='<div class="sub">'+e(nw?pa.oldL:pa.newL)+' '+yen(nw?p[1]:p[2])+'</div>';
+          return r;
+        }).join('');
     if(d.month && d.month.length){
-      h+='<div class="mon"><div class="f">3割負担の月額概算（30日分・薬価のみ）</div>'
+      h+='<div class="mon"><div class="f">3割負担の月額概算（30日分・薬価のみ'+(rev?'・'+e(nw?pa.newL:pa.oldL)+'で計算':'')+'）</div>'
         + d.month.map(function(m){
-            var p=d.price[m.p], all=p[1]*m.n;
+            var p=d.price[m.p], all=BIOJAK.mainPrice(d, p)*m.n;
             return '<div class="row"><span>'+e(m.l)+'<br><span class="f">'+e(p[0])+' × '+m.n+' ＝ 10割 '+yen(all)+'</span></span><b>約'+yen(Math.round(all*0.3/100)*100)+'</b></div>';
           }).join('')
         + '<div class="f">用法は '+(d.age?'「年齢・用量」':'「医師・看護師」')+'タブの記載から計算しています。</div></div>';
@@ -5105,7 +5133,8 @@ var BIOJAK = (function(){
     seg.innerHTML='<button type="button" data-cat="">すべて</button>'+BIOJAK.CATS.map(function(c){ return '<button type="button" data-cat="'+c.k+'">'+e(c.l)+'</button>'; }).join('');
     seg.onclick=function(ev){ var b=ev.target.closest('button'); if(!b) return; st.cat=b.dataset.cat; paintSeg(); render(); };
     paintSeg();
-    document.getElementById('bj-asof').textContent=BIOJAK.PRICE_AS_OF;
+    var fixed=BIOJAK.DRUGS.filter(function(d){ return typeof BIOJAK.asOf(d)==='object'; }).map(function(d){ return d.n; });
+    document.getElementById('bj-asof').textContent=BIOJAK.PRICE_AS_OF['']+(fixed.length?'。'+fixed.join('・')+'は改定案内の確定値（各薬剤の薬価欄に出典を表示）':'');
     document.getElementById('bj-q').oninput=function(){ st.q=this.value; render(); };
     document.getElementById('bj-list').onclick=function(ev){
       var a=ev.target.closest('[data-go-age]');   if(a){ switchTab('age'); ageGo(a.dataset.goAge); return; }
@@ -5178,7 +5207,7 @@ var DATA_META = {
   kensa:    {updated:'2026-10-06', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
   age:      {updated:'2026-10-09', check:'添付文書（使用可能年齢・小児用量・規格）'},
-  biojak:   {updated:'2026-10-09', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'}
+  biojak:   {updated:'2026-10-17', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'}
 };
 function metaAgeText(ymd){
   var d=new Date(ymd+'T00:00:00'); if(isNaN(d)) return {txt:'', stale:false};
