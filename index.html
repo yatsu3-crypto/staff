@@ -49,7 +49,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
 
 /* タブナビ：9タブを 3列×3段 で常時全表示（横スクロールにしない）。
-   バイオ・JAK／ビタミン剤／食物アレルギーは医師・看護師タブの小タブ（.staff-sub, TAB_GROUP） */
+   バイオ・JAK／ビタミン剤／食物アレルギー／パッチ／PDCA帳は医師・看護師タブの小タブ（.staff-sub, TAB_GROUP） */
 .tab-nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--gd);padding:0 8px;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
@@ -514,12 +514,17 @@ body.gs-on .gs-results{display:block;}
 .fn-disc{font-size:10.5px;color:var(--tx3);line-height:1.7;text-align:center;padding:14px 6px 4px;}
 </style>
 <style id="patch-embed-css">
-/* パッチテスト・検査パネルの埋め込み(iframe完全分離)。高さは fitEmbedFrame() が実測で設定。
+/* パッチテスト・検査パネル・PDCA帳の埋め込み(iframe完全分離)。高さは fitEmbedFrame() が実測で設定。
    下の calc は JS が動く前の初期値（ヘッダー＋タブ3段＋横断検索欄の高さ） */
-#pg-patch,#pg-kensa{padding:0;max-width:none;margin:0;}
-#pg-patch iframe,#pg-kensa iframe{display:block;width:100%;height:calc(100dvh - 272px);min-height:480px;border:0;background:#f3ecdd;}
+#pg-patch,#pg-kensa,#pg-reception,#pg-pdca{padding:0;max-width:none;margin:0;}
+#pg-patch iframe,#pg-kensa iframe,#pg-reception iframe,#pg-pdca iframe{display:block;width:100%;height:calc(100dvh - 272px);min-height:480px;border:0;background:#f3ecdd;}
 #pg-kensa iframe{background:#f6f1e6;min-height:240px;}
-@supports not (height:100dvh){#pg-patch iframe,#pg-kensa iframe{height:calc(100vh - 272px);}}
+#pg-reception iframe,#pg-pdca iframe{background:#f6f1e7;}
+@supports not (height:100dvh){#pg-patch iframe,#pg-kensa iframe,#pg-reception iframe,#pg-pdca iframe{height:calc(100vh - 272px);}}
+/* PDCA帳の先頭の注意（記録は端末ごと） */
+.pdca-note{max-width:514px;margin:12px auto 0;background:var(--wbg);border:.5px solid var(--wbd);border-radius:10px;padding:9px 12px;font-size:12px;line-height:1.65;color:var(--wtx);font-weight:600;}
+@media (max-width:540px){.pdca-note{margin:12px 13px 0;}}
+#pg-pdca .pdca-note{margin-top:10px;}
 </style>
 <style id="allergy-css">
 /* ===== 食物アレルギータブ ===== */
@@ -807,7 +812,7 @@ body.gs-on .gs-results{display:block;}
   <button class="tab-btn" data-tab="products" onclick="switchTab('products')"><span class="tab-ic">🌿</span>当院製品</button>
   <button class="tab-btn" data-tab="staff" onclick="switchTab('staff')"><span class="tab-ic">👨‍⚕️</span>医師・看護師</button>
   <button class="tab-btn" data-tab="topical" onclick="switchTab('topical')"><span class="tab-ic">💊</span>外用薬</button>
-  <button class="tab-btn" data-tab="patch" onclick="switchTab('patch')"><span class="tab-ic">🩹</span>パッチ</button>
+  <button class="tab-btn" data-tab="reception" onclick="switchTab('reception')"><span class="tab-ic">🛎</span>受付</button>
   <button class="tab-btn" data-tab="findings" onclick="switchTab('findings')"><span class="tab-ic">🔍</span>所見別ナビ</button>
   <button class="tab-btn" data-tab="kensa" onclick="switchTab('kensa')"><span class="tab-ic">🧪</span>検査パネル</button>
   <button class="tab-btn" data-tab="joge" onclick="switchTab('joge')"><span class="tab-ic">📏</span>処方上限</button>
@@ -819,12 +824,14 @@ body.gs-on .gs-results{display:block;}
   <button class="gs-clear" id="gs-clear" type="button" aria-label="検索をクリア">✕</button>
 </div>
 <div class="gs-results" id="gs-results"></div>
-<!-- 医師・看護師タブの小タブ（新薬・専門薬剤／バイオ・JAK／ビタミン剤／食物アレルギー）。表示は staffSubPaint() -->
+<!-- 医師・看護師タブの小タブ（新薬・専門薬剤／バイオ・JAK／ビタミン剤／食物アレルギー／パッチ／PDCA帳）。表示は staffSubPaint() -->
 <div class="staff-sub" id="staff-sub" hidden>
   <button type="button" data-sub="staff" onclick="switchTab('staff')">💉 新薬・専門薬剤</button>
   <button type="button" data-sub="biojak" onclick="switchTab('biojak')">🧬 バイオ・JAK</button>
   <button type="button" data-sub="vitamin" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
   <button type="button" data-sub="allergy" onclick="switchTab('allergy')">🍽 食物アレルギー</button>
+  <button type="button" data-sub="patch" onclick="switchTab('patch')">🩹 パッチ</button>
+  <button type="button" data-sub="pdca" onclick="switchTab('pdca')">📒 PDCA帳</button>
 </div>
 
 <!-- 入力ページ -->
@@ -3126,6 +3133,304 @@ window.PTD_DATA={PRODUCTS:PRODUCTS,A:A,GROUPS:GROUPS};
   </script>
 </div>
 
+<!-- PDCA帳（受付タブ と 医師・看護師 › PDCA帳 の2か所から開く）。
+     記録は localStorage の pdca-cho-v1 の1つだけで、2つの iframe は同じ台帳を開く入口。
+     ★ 保存キーとデータ構造は変更しない（変える場合は古いデータを新しい形に変換する処理を同時に入れる） -->
+<div class="page" id="pg-reception">
+  <div class="pdca-note">この記録はこの端末にのみ保存されます。他の端末と共有する場合やバックアップには、画面下の『書き出し』からテキストを保存してください。</div>
+  <iframe title="PDCA帳" id="receptionPdcaFrame"></iframe>
+</div>
+<div class="page" id="pg-pdca">
+  <div class="pdca-note">この記録はこの端末にのみ保存されます。他の端末と共有する場合やバックアップには、画面下の『書き出し』からテキストを保存してください。</div>
+  <iframe title="PDCA帳" id="staffPdcaFrame"></iframe>
+  <!-- PDCA帳の本体（元は単体アプリ pdca.html）。読み込み時に上の2つの iframe の srcdoc へ流し込む。
+       普通の HTML として編集してよい。ただし本体内の </script> は <\/script> と書く。 -->
+  <script type="text/html" id="pdca-src">
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>PDCA帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* 和紙の帳面：上に一覧、カードを開くと P→D→C→A の四段が縦に並ぶ。iPhone片手操作前提 */
+:root{
+  --washi:#f6f1e7; --paper:#fffdf8; --ink:#2b2622; --sub:#6d635a; --line:#e2d8c6;
+  --shu:#c8452f; --kincha:#b07a2a; --matsuba:#3f6b45; --ai:#2c4a6e;
+  --shu-soft:#f6e1da; --kincha-soft:#f3e7d0; --matsuba-soft:#e0ebdf; --ai-soft:#dde5ef;
+  --mincho:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --washi:#1d1a17; --paper:#26221e; --ink:#eee6da; --sub:#a99d8f; --line:#3a342d;
+  --shu:#e46a52; --kincha:#d9a24f; --matsuba:#7fae84; --ai:#86a7d0;
+  --shu-soft:#3b2620; --kincha-soft:#382c1a; --matsuba-soft:#22301f; --ai-soft:#1f2a38; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --washi:#1d1a17; --paper:#26221e; --ink:#eee6da; --sub:#a99d8f; --line:#3a342d;
+  --shu:#e46a52; --kincha:#d9a24f; --matsuba:#7fae84; --ai:#86a7d0;
+  --shu-soft:#3b2620; --kincha-soft:#382c1a; --matsuba-soft:#22301f; --ai-soft:#1f2a38; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--washi);color:var(--ink);font-family:var(--gothic);font-size:15px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 48px}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{font-family:var(--mincho);font-weight:700;text-wrap:balance;margin:0}
+h1{font-size:1.6rem;letter-spacing:.06em}
+.lead{color:var(--sub);font-size:.88rem;margin:2px 0 0}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:500}
+.btn.main{background:var(--shu);border-color:var(--shu);color:#fff}
+.btn.ghost{background:transparent}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,.card:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+.note{background:var(--kincha-soft);border-radius:10px;padding:10px 12px;font-size:.86rem}
+.note.warn{background:var(--shu-soft)}
+.list{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.card h3{font-size:1.05rem;min-width:0}
+.meta{font-size:.8rem;color:var(--sub);display:flex;gap:10px;flex-wrap:wrap}
+.pill{font-size:.75rem;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap;letter-spacing:.04em}
+.st-P{background:var(--ai-soft);color:var(--ai)} .st-D{background:var(--matsuba-soft);color:var(--matsuba)}
+.st-C{background:var(--kincha-soft);color:var(--kincha)} .st-A{background:var(--shu-soft);color:var(--shu)}
+.st-done{background:var(--line);color:var(--sub)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.steps i{height:5px;border-radius:3px;background:var(--line)}
+.steps i.on{background:var(--kincha)}
+.sample{font-size:.7rem;color:var(--sub);border:1px dashed var(--line);border-radius:6px;padding:0 6px}
+.due{color:var(--shu);font-weight:700}
+/* detail */
+.back{align-self:flex-start}
+.stage{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;border-left:6px solid var(--line)}
+.stage.cur{border-left-color:var(--kincha)}
+.stage h2{font-size:1.1rem;display:flex;gap:10px;align-items:baseline}
+.stage h2 b{font-family:var(--mincho);font-size:1.5rem;width:1.3em}
+.sP h2 b{color:var(--ai)} .sD h2 b{color:var(--matsuba)} .sC h2 b{color:var(--kincha)} .sA h2 b{color:var(--shu)}
+.hint{font-size:.8rem;color:var(--sub);margin:0}
+label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--sub);font-weight:500;min-width:0}
+input,textarea,select{background:var(--washi);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--ink);width:100%;min-width:0;font-size:16px}
+textarea{min-height:64px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media (max-width:420px){.row3{grid-template-columns:1fr 1fr}}
+.hyp{font-family:var(--mincho);background:var(--ai-soft);border-radius:8px;padding:10px 12px;font-size:.95rem}
+table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+td,th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--sub);font-weight:500;font-size:.75rem}
+td.num{text-align:right;white-space:nowrap}
+.x{border:none;background:none;color:var(--sub);cursor:pointer;padding:0 4px}
+.logadd{display:grid;grid-template-columns:auto 5.5em 1fr auto;gap:6px;align-items:end}
+@media (max-width:420px){.logadd{grid-template-columns:1fr 1fr}.logadd .memo{grid-column:1/-1}}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--sub);font-size:10px;font-family:var(--gothic)}
+.verdict{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.big{font-family:var(--mincho);font-size:1.6rem;font-weight:700}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--washi);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.chain{font-size:.8rem;color:var(--sub)}
+.chain a{color:var(--ai);cursor:pointer;text-decoration:underline}
+details{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+summary{cursor:pointer;font-weight:500}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.85rem}
+@media (prefers-reduced-motion:no-preference){.stage,.card{transition:border-color .2s}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const KEY='pdca-cho-v1';
+const STAGES=['P','D','C','A'];
+const SNAME={P:'計画',D:'実行',C:'評価',A:'改善',done:'完了'};
+const today=()=>new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
+const addDays=(d,n)=>{const t=new Date(d);t.setDate(t.getDate()+n);return t.toISOString().slice(0,10)};
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function sample(){
+  const s=addDays(today(),-12);
+  return [{id:'ex1',sample:true,title:'土曜の待ち時間短縮',round:1,parent:null,stage:'D',
+    action:'問診票をLINE事前入力にする',metric:'土曜の平均待ち時間',unit:'分',dir:'down',baseline:45,target:35,
+    start:s,check:addDays(s,14),
+    logs:[{d:addDays(s,0),v:46,m:'開始。事前入力率20%'},{d:addDays(s,7),v:41,m:'受付で案内カード配布'}],
+    judge:'',learn:'',act:'',actNote:''},
+   {id:'ex2',sample:true,title:'レセプト返戻の削減',round:1,parent:null,stage:'P',
+    action:'算定前チェックリストを受付に導入する',metric:'月間返戻件数',unit:'件',dir:'down',baseline:18,target:10,
+    start:today(),check:addDays(today(),30),logs:[],judge:'',learn:'',act:'',actNote:''}];
+}
+let db;
+try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!Array.isArray(db))db=sample();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
+let view={id:null,confirmDel:false,io:false};
+const find=id=>db.find(c=>c.id===id);
+
+function hyp(c){
+  if(!c.action&&!c.metric)return '（仮説を入力してください）';
+  const t=c.target!==''&&c.target!=null?`${c.target}${c.unit||''}`:'？';
+  const b=c.baseline!==''&&c.baseline!=null?`${c.baseline}${c.unit||''}から`:'';
+  return `「${c.action||'…'}」をすれば、${c.metric||'指標'}が${b}${t}${c.dir==='down'?'以下':'以上'}になるはず`;
+}
+function latest(c){return c.logs.length?c.logs[c.logs.length-1].v:null}
+function auto(c){
+  const v=latest(c);if(v==null||c.target===''||c.baseline==='')return null;
+  const hit=c.dir==='down'?v<=c.target:v>=c.target;
+  const better=c.dir==='down'?v<c.baseline:v>c.baseline;
+  return hit?'達成':better?'一部改善':'未達';
+}
+
+function render(){
+  const app=document.getElementById('app');
+  app.innerHTML=view.id?detail(find(view.id)):home();
+  bind();
+}
+function home(){
+  const act=db.filter(c=>c.stage!=='done');
+  const done=db.filter(c=>c.stage==='done');
+  const overdue=act.filter(c=>c.check&&c.check<=today()&&(c.stage==='D'||c.stage==='P'));
+  const card=c=>{
+    const i=c.stage==='done'?4:STAGES.indexOf(c.stage)+1;
+    const due=c.stage!=='done'&&c.check&&c.check<=today();
+    return `<button class="card" data-open="${c.id}">
+      <div class="top"><h3>${esc(c.title||'無題')}${c.round>1?` <small style="color:var(--sub)">第${c.round}周</small>`:''}</h3>
+      <span class="pill st-${c.stage}">${c.stage==='done'?'完了':c.stage+' '+SNAME[c.stage]}</span></div>
+      <div class="steps">${[1,2,3,4].map(n=>`<i class="${n<=i?'on':''}"></i>`).join('')}</div>
+      <div class="meta"><span>${esc(c.metric)} ${c.baseline!==''?esc(c.baseline):'?'}→${c.target!==''?esc(c.target):'?'}${esc(c.unit)}</span>
+      <span class="${due?'due':''}">評価日 ${esc(c.check||'未設定')}${due?'（到来）':''}</span>
+      ${c.sample?'<span class="sample">例</span>':''}</div></button>`;
+  };
+  return `<header><div><h1>PDCA帳</h1><p class="lead">仮説を数値で立て、評価日に必ず振り返る</p></div>
+    <button class="btn main" id="new">＋ 新しいサイクル</button></header>
+    ${act.length>3?`<div class="note warn">進行中が${act.length}件あります。同時に回すのは2〜3件までにすると評価が甘くなりません。</div>`:''}
+    ${overdue.length?`<div class="note">評価日を迎えたサイクルが${overdue.length}件あります。Checkに進みましょう。</div>`:''}
+    <div class="list">${act.map(card).join('')||'<p class="hint">進行中のサイクルはありません。</p>'}</div>
+    ${done.length?`<details><summary>完了したサイクル（${done.length}）</summary><div class="list" style="margin-top:10px">${done.map(card).join('')}</div></details>`:''}
+    <details ${view.io?'open':''} id="iod"><summary>データの書き出し・読み込み</summary>
+      <p class="hint" style="margin-top:8px">この端末のブラウザに保存しています。機種変更やバックアップ時は書き出したテキストを保管してください。</p>
+      <textarea id="io" style="min-height:90px;margin-top:6px" placeholder="ここに書き出し／貼り付け"></textarea>
+      <div class="actions" style="margin-top:8px"><button class="btn" id="exp">書き出してコピー</button><button class="btn" id="imp">貼り付けた内容を読み込む</button></div>
+      <p class="hint" id="iomsg"></p></details>`;
+}
+function chart(c){
+  const pts=c.logs.filter(l=>l.v!==''&&l.v!=null);
+  if(!pts.length)return '';
+  const vals=pts.map(p=>+p.v).concat([+c.baseline,+c.target].filter(v=>!isNaN(v)));
+  let lo=Math.min(...vals),hi=Math.max(...vals);if(lo===hi){lo-=1;hi+=1}
+  const pad=(hi-lo)*.15;lo-=pad;hi+=pad;
+  const W=320,H=120,L=30,R=8,T=8,B=18;
+  const x=i=>pts.length===1?(L+W-R)/2:L+i*(W-L-R)/(pts.length-1);
+  const y=v=>T+(hi-v)*(H-T-B)/(hi-lo);
+  const hl=(v,col,lab)=>isNaN(+v)||v===''?'':`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="${col}" stroke-dasharray="4 3" stroke-width="1"/><text x="${L-4}" y="${y(v)+3}" text-anchor="end">${v}</text><text x="${W-R}" y="${y(v)-3}" text-anchor="end">${lab}</text>`;
+  const path=pts.map((p,i)=>`${i?'L':'M'}${x(i)},${y(+p.v)}`).join('');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="記録の推移">
+    ${hl(c.baseline,'var(--sub)','開始時')}${hl(c.target,'var(--matsuba)','目標')}
+    <path d="${path}" fill="none" stroke="var(--kincha)" stroke-width="2"/>
+    ${pts.map((p,i)=>`<circle cx="${x(i)}" cy="${y(+p.v)}" r="${i===pts.length-1?4:2.5}" fill="var(--kincha)"/>`).join('')}
+    <text x="${L}" y="${H-4}">${esc(pts[0].d.slice(5))}</text>${pts.length>1?`<text x="${W-R}" y="${H-4}" text-anchor="end">${esc(pts[pts.length-1].d.slice(5))}</text>`:''}
+  </svg>`;
+}
+function detail(c){
+  const si=c.stage==='done'?4:STAGES.indexOf(c.stage);
+  const cls=s=>`stage s${s}${c.stage===s?' cur':''}`;
+  const parent=c.parent&&find(c.parent),child=db.find(x=>x.parent===c.id);
+  const a=auto(c);
+  const f=(k,lab,type='text',ph='')=>`<label>${lab}<input id="f-${k}" data-k="${k}" type="${type}" value="${esc(c[k])}" placeholder="${ph}" ${type==='number'?'inputmode="decimal"':''}></label>`;
+  return `<button class="btn ghost back" id="back">← 一覧へ</button>
+  <div><label>テーマ<input id="f-title" data-k="title" value="${esc(c.title)}" style="font-family:var(--mincho);font-size:1.15rem;font-weight:700"></label>
+  <p class="chain">${c.round>1?`第${c.round}周`:'第1周'}${parent?` ／ 前の周：<a data-open="${parent.id}">${esc(parent.title)}</a>`:''}${child?` ／ 次の周：<a data-open="${child.id}">開く</a>`:''}${c.sample?' ／ <span class="sample">例</span>':''}</p></div>
+
+  <section class="${cls('P')}"><h2><b>P</b>計画 — 仮説と数値</h2>
+    <p class="hint">「何をすれば、何が、いくつになるか」。測れない目標は評価できません。</p>
+    ${f('action','やること（施策）','text','例：問診票をLINE事前入力にする')}
+    <div class="row">${f('metric','測る指標','text','例：平均待ち時間')}${f('unit','単位','text','分・件・%')}</div>
+    <div class="row3">${f('baseline','開始時の値','number')}${f('target','目標値','number')}
+      <label>目指す向き<select id="f-dir" data-k="dir"><option value="down" ${c.dir==='down'?'selected':''}>下げたい</option><option value="up" ${c.dir==='up'?'selected':''}>上げたい</option></select></label></div>
+    <div class="row">${f('start','開始日','date')}${f('check','評価日（振り返る日）','date')}</div>
+    <div class="hyp">${esc(hyp(c))}</div>
+    ${c.stage==='P'?`<div class="actions"><button class="btn main" data-go="D">実行を始める</button></div>`:''}
+  </section>
+
+  <section class="${cls('D')}"><h2><b>D</b>実行 — 記録する</h2>
+    <p class="hint">決めた指標を同じ測り方で記録します。気づいたことはメモに。</p>
+    ${chart(c)}
+    ${c.logs.length?`<div style="overflow-x:auto"><table><tr><th>日付</th><th style="text-align:right">値</th><th>メモ</th><th></th></tr>
+      ${c.logs.map((l,i)=>`<tr><td>${esc(l.d)}</td><td class="num">${esc(l.v)}${esc(c.unit)}</td><td>${esc(l.m)}</td><td><button class="x" data-dellog="${i}" aria-label="削除">×</button></td></tr>`).join('')}</table></div>`:'<p class="hint">まだ記録がありません。</p>'}
+    ${si<=1?`<div class="logadd"><label>日付<input id="ld" type="date" value="${today()}"></label><label>値<input id="lv" type="number" inputmode="decimal"></label><label class="memo">メモ<input id="lm" placeholder="任意"></label><button class="btn" id="addlog">記録</button></div>`:''}
+    ${c.stage==='D'?`<div class="actions"><button class="btn main" data-go="C">評価に進む</button></div>`:''}
+  </section>
+
+  <section class="${cls('C')}"><h2><b>C</b>評価 — 仮説は正しかったか</h2>
+    ${si>=2?`<div class="verdict"><span class="big">${latest(c)??'—'}${esc(c.unit)}</span><span class="hint">最新値 ／ 開始時 ${esc(c.baseline)}・目標 ${esc(c.target)}${esc(c.unit)}</span>${a?`<span class="pill st-${a==='達成'?'D':a==='未達'?'A':'C'}">自動判定：${a}</span>`:''}</div>
+    <label>判定</label><div class="chips">${['達成','一部改善','未達'].map(j=>`<button class="chip ${c.judge===j?'on':''}" data-judge="${j}">${j}</button>`).join('')}</div>
+    <label>わかったこと（なぜその結果になったか）<textarea id="f-learn" data-k="learn" placeholder="例：事前入力率が30%止まり。案内が受付の口頭のみだった">${esc(c.learn)}</textarea></label>
+    ${c.stage==='C'?`<div class="actions"><button class="btn main" data-go="A">改善に進む</button></div>`:''}`:'<p class="hint">評価日になったら、ここで結果と理由を振り返ります。</p>'}
+  </section>
+
+  <section class="${cls('A')}"><h2><b>A</b>改善 — 次の一手</h2>
+    ${si>=3?`<div class="chips">${[['standard','標準化する'],['next','次の仮説へ'],['stop','中止する']].map(([v,l])=>`<button class="chip ${c.act===v?'on':''}" data-act="${v}">${l}</button>`).join('')}</div>
+    <p class="hint">${c.act==='standard'?'うまくいった方法をマニュアル・掲示・ルールにして定着させます。':c.act==='next'?'原因を一つに絞って、次の周の仮説にします。':c.act==='stop'?'効果がない・コストに見合わない施策は止めるのも成果です。':'結果に応じて一つ選びます。'}</p>
+    <label>${c.act==='standard'?'何をどう標準化するか':c.act==='next'?'次の仮説のたね':'メモ'}<textarea id="f-actNote" data-k="actNote">${esc(c.actNote)}</textarea></label>
+    ${c.stage==='A'?`<div class="actions">${c.act==='next'?'<button class="btn main" id="nextround">次の周をつくる</button>':''}<button class="btn ${c.act==='next'?'':'main'}" data-go="done">このサイクルを完了</button></div>`:''}`:'<p class="hint">評価のあと、標準化・次の仮説・中止のどれかを決めます。</p>'}
+  </section>
+
+  <div class="actions">
+    ${si>0?`<button class="btn ghost" data-go="${si===4?'A':STAGES[si-1]}">一段階戻す</button>`:''}
+    ${view.confirmDel?`<span class="confirm">本当に削除しますか？<button class="btn" id="delyes" style="color:var(--shu)">削除する</button><button class="btn ghost" id="delno">やめる</button></span>`:`<button class="btn ghost" id="del" style="color:var(--shu)">削除</button>`}
+  </div>`;
+}
+function bind(){
+  const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+  $$('[data-open]').forEach(e=>e.onclick=()=>{view={id:e.dataset.open};render();scrollTo(0,0)});
+  const nb=$('#new');if(nb)nb.onclick=()=>{const c={id:uid(),title:'新しいテーマ',round:1,parent:null,stage:'P',action:'',metric:'',unit:'',dir:'down',baseline:'',target:'',start:today(),check:addDays(today(),14),logs:[],judge:'',learn:'',act:'',actNote:''};db.unshift(c);save();view={id:c.id};render();scrollTo(0,0)};
+  const exp=$('#exp');if(exp){
+    exp.onclick=()=>{const t=JSON.stringify(db);const io=$('#io');io.value=t;
+      const ok=()=>$('#iomsg').textContent='コピーしました。メモアプリなどに保管してください。';
+      try{navigator.clipboard.writeText(t).then(ok,()=>{io.select();$('#iomsg').textContent='選択しました。コピーしてください。'})}catch(e){io.select()}};
+    $('#imp').onclick=()=>{try{const d=JSON.parse($('#io').value);if(!Array.isArray(d))throw 0;db=d;save();view={io:true};render();document.getElementById('iomsg').textContent=`${d.length}件を読み込みました。`}catch(e){$('#iomsg').textContent='読み込めませんでした。書き出したテキストをそのまま貼り付けてください。'}};
+  }
+  if(!view.id)return;
+  const c=find(view.id);
+  $('#back').onclick=()=>{view={};render()};
+  $$('[data-k]').forEach(e=>{
+    const k=e.dataset.k;
+    e.oninput=e.onchange=()=>{let v=e.value;if(e.type==='number')v=v===''?'':+v;c[k]=v;delete c.sample;save();
+      const h=document.querySelector('.hyp');if(h)h.textContent=hyp(c);
+      if(e.tagName==='SELECT'||e.type==='date')render()};
+  });
+  $$('[data-go]').forEach(e=>e.onclick=()=>{c.stage=e.dataset.go;if(c.stage==='C'&&!c.judge)c.judge=auto(c)||'';save();render();
+    const cur=document.querySelector('.stage.cur');if(cur)cur.scrollIntoView({block:'start',behavior:'smooth'})});
+  const al=$('#addlog');if(al)al.onclick=()=>{const v=$('#lv').value;if(v===''){$('#lv').focus();return}
+    c.logs.push({d:$('#ld').value||today(),v:+v,m:$('#lm').value});c.logs.sort((a,b)=>a.d<b.d?-1:1);save();render()};
+  $$('[data-dellog]').forEach(e=>e.onclick=()=>{c.logs.splice(+e.dataset.dellog,1);save();render()});
+  $$('[data-judge]').forEach(e=>e.onclick=()=>{c.judge=e.dataset.judge;save();render()});
+  $$('[data-act]').forEach(e=>e.onclick=()=>{c.act=e.dataset.act;save();render()});
+  const nr=$('#nextround');if(nr)nr.onclick=()=>{
+    const n={id:uid(),title:c.title,round:(c.round||1)+1,parent:c.id,stage:'P',action:c.actNote||'',metric:c.metric,unit:c.unit,dir:c.dir,
+      baseline:latest(c)??c.baseline,target:c.target,start:today(),check:addDays(today(),14),logs:[],judge:'',learn:'',act:'',actNote:''};
+    c.stage='done';db.unshift(n);save();view={id:n.id};render();scrollTo(0,0)};
+  const d=$('#del');if(d)d.onclick=()=>{view.confirmDel=true;render()};
+  const dy=$('#delyes');if(dy){dy.onclick=()=>{db=db.filter(x=>x.id!==c.id);save();view={};render()};$('#delno').onclick=()=>{view.confirmDel=false;render()}}
+}
+/* 同じ台帳を受付タブと医師・看護師タブの2か所で開いているので、もう一方で保存された内容を読み直す。
+   storage イベント（もう一方の iframe が保存したとき）と、親がタブを開いたときの pdcaReload() の両方で行う */
+function reload(){
+  let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  if(!Array.isArray(d))return;
+  db=d;if(view.id&&!find(view.id))view={};render();
+}
+window.pdcaReload=reload;
+addEventListener('storage',e=>{if(e.key===KEY)reload()});
+render();
+<\/script>
+</body>
+</html>
+  </script>
+</div>
+
 <script>
 /* ══════════════════════════════════════════════
    薬剤の「正本」レジストリ
@@ -5159,6 +5464,16 @@ var BIOJAK = (function(){
 /* <script type="text/html"> に素の HTML として置いた埋め込み画面を取り出す（<\/script> は復元） */
 function embeddedHTML(id){ var el=document.getElementById(id); return el ? el.textContent.replace(/<\\\/script>/g,'<\/script>') : ''; }
 (function(){ var f=document.getElementById('patchFrame'); if(f) f.srcdoc=embeddedHTML('patch-src'); })();
+/* PDCA帳：受付タブと医師・看護師 › PDCA帳 の2つの iframe に同じ本体を流し込む（記録は localStorage の pdca-cho-v1 を共有） */
+(function(){
+  var h=embeddedHTML('pdca-src');
+  ['receptionPdcaFrame','staffPdcaFrame'].forEach(function(id){ var f=document.getElementById(id); if(f) f.srcdoc=h; });
+})();
+/* PDCA帳のタブを開いたとき、もう一方の入口で保存された内容を読み直す */
+function pdcaReload(tab){
+  var f=document.querySelector('#'+TAB_PAGES[tab]+' iframe');
+  try{ if(f && f.contentWindow && f.contentWindow.pdcaReload) f.contentWindow.pdcaReload(); }catch(e){}
+}
 /* 検査パネル：kensaGo('bio') で詳細、kensaGo('') で一覧。iframe の読み込み前に呼ばれたら読み込み後に反映 */
 /* sec を渡すと、詳細を開いたあと見出し（h3 の文言の先頭一致）までスクロールする */
 var KENSA_PENDING = null;
@@ -5191,7 +5506,7 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.6';
+var APP_VERSION = '2.7';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-10-05', check:'各疾患の最新ガイドライン',
@@ -5207,7 +5522,9 @@ var DATA_META = {
   kensa:    {updated:'2026-10-06', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
   age:      {updated:'2026-10-09', check:'添付文書（使用可能年齢・小児用量・規格）'},
-  biojak:   {updated:'2026-10-17', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'}
+  biojak:   {updated:'2026-10-17', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
+  reception:{updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。医師・看護師 › PDCA帳と同じ台帳）'},
+  pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'}
 };
 function metaAgeText(ymd){
   var d=new Date(ymd+'T00:00:00'); if(isNaN(d)) return {txt:'', stale:false};
@@ -6282,8 +6599,9 @@ var PRODUCTS = [
 // 画面の状態を URL ハッシュに残す（リロード・Safari 切替・戻るボタン対応）
 //   #<tab>                 例: #topical
 //   #<tab>/<sub>           例: #products/hydroquinone, #topical/mix, #kensa/bio, #joge/duac, #age/dupixent（#age/calc は体重換算）
-//   #staff/<小タブ>/<sub>  医師・看護師タブの小タブ。例: #staff/biojak/dupixent, #staff/vitamin/table, #staff/allergy/view39
-//                          （#staff/<薬剤id> は新薬・専門薬剤の詳細。旧形式 #biojak/… #vitamin/… #allergy/… も受けて新形式に置き換える）
+//   #staff/<小タブ>/<sub>  医師・看護師タブの小タブ。例: #staff/biojak/dupixent, #staff/vitamin/table, #staff/allergy/view39, #staff/patch, #staff/pdca
+//                          （#staff/<薬剤id> は新薬・専門薬剤の詳細。旧形式 #biojak/… #vitamin/… #allergy/… #patch も受けて新形式に置き換える）
+//   #reception             受付タブ（PDCA帳。#staff/pdca と同じ台帳）
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #guidance/diet         生活指導タブ内「抗炎症の食事ガイド」の章
 //   #guidance/walk         生活指導タブ内「インターバル速歩」の章
@@ -6312,7 +6630,7 @@ function routeBack(fallback){
 function routeApply(path){
   path = String(path||'').replace(/^#/, '');
   // 旧形式（タブバーにあった頃の #biojak/… など）は小タブの形に読み替え、アドレスも置き換える
-  var legacy = /^(biojak|vitamin|allergy)(\/|$)/.test(path);
+  var legacy = /^(biojak|vitamin|allergy|patch)(\/|$)/.test(path);
   if(legacy) path = TAB_GROUP[path.split('/')[0]]+'/'+path;
   var seg = path.split('/'), tab = seg[0], sub = seg.slice(1).join('/');
   if(tab === 'staff' && TAB_GROUP[seg[1]] === 'staff'){ tab = seg[1]; sub = seg.slice(2).join('/'); }
@@ -6358,9 +6676,12 @@ function routeInit(){
 }
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
-  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age', biojak:'pg-biojak'};
+  vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age', biojak:'pg-biojak',
+  reception:'pg-reception', pdca:'pg-pdca'};
 // タブバーに出さず、親タブの小タブとして開く画面（switchTab('biojak') 等はそのまま使える）
-var TAB_GROUP = {biojak:'staff', vitamin:'staff', allergy:'staff'};
+var TAB_GROUP = {biojak:'staff', vitamin:'staff', allergy:'staff', patch:'staff', pdca:'staff'};
+// iframe で埋め込んだ画面（高さは fitEmbedFrame で画面下端に合わせる）
+var EMBED_TABS = ['patch','kensa','reception','pdca'];
 function switchTab(tab) {
   if(!TAB_PAGES[tab]) return;
   if(window.gsClose) gsClose();
@@ -6370,7 +6691,8 @@ function switchTab(tab) {
   document.querySelectorAll('.page').forEach(function(p){ p.classList.toggle('active', p.id === TAB_PAGES[tab]); });
   ROUTE.page = tab;
   staffSubPaint(tab);
-  if(tab === 'patch' || tab === 'kensa') fitEmbedFrame(tab);
+  if(EMBED_TABS.indexOf(tab) >= 0) fitEmbedFrame(tab);
+  if(tab === 'reception' || tab === 'pdca') pdcaReload(tab);
   window.scrollTo(0, 0);
   // 検査パネルは iframe 内で開いている詳細も含めて記録する
   var kw = (tab === 'kensa') ? kensaWin() : null;
@@ -6383,7 +6705,7 @@ function staffSubPaint(tab){
   bar.hidden = !on;
   bar.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.dataset.sub === tab); });
 }
-// 埋め込み iframe（パッチ・検査パネル）の高さ：ヘッダー＋タブ＋検索欄の実高さから算出し、
+// 埋め込み iframe（パッチ・検査パネル・PDCA帳）の高さ：ヘッダー＋タブ＋検索欄の実高さから算出し、
 // iframe の下端を画面の下端に合わせる（検査パネルの選択バーが画面下に固定されて見える）
 function fitEmbedFrame(tab){
   var f = document.querySelector('#'+TAB_PAGES[tab]+' iframe'); if(!f) return;
@@ -6392,7 +6714,7 @@ function fitEmbedFrame(tab){
   f.style.height = Math.max(tab === 'kensa' ? 240 : 480, window.innerHeight - top) + 'px';
 }
 window.addEventListener('resize', function(){
-  ['patch','kensa'].forEach(function(t){ if(document.getElementById(TAB_PAGES[t]).classList.contains('active')) fitEmbedFrame(t); });
+  EMBED_TABS.forEach(function(t){ if(document.getElementById(TAB_PAGES[t]).classList.contains('active')) fitEmbedFrame(t); });
 });
 
 // ==============================================
@@ -8549,9 +8871,10 @@ if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=8;
-var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch'];
+var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch','reception','pdca'];
 var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師 › 新薬・専門薬剤', age:'年齢・用量', biojak:'医師・看護師 › バイオ・JAK', kensa:'検査パネル', products:'当院製品', vitamin:'医師・看護師 › ビタミン剤（内服）',
-  guidance:'生活指導', findings:'所見別ナビ', allergy:'医師・看護師 › 食物アレルギー', patch:'パッチテスト'};
+  guidance:'生活指導', findings:'所見別ナビ', allergy:'医師・看護師 › 食物アレルギー', patch:'医師・看護師 › パッチテスト',
+  reception:'受付', pdca:'医師・看護師 › PDCA帳'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
    1文字→1文字の変換に限定し、元文字列と長さを揃える（ハイライト位置計算のため） */
@@ -8717,6 +9040,10 @@ function build(){
       var inp=document.getElementById('v39-search'); if(inp){ inp.value=e.name; algFilterView39(e.name); }
     });
   });
+  /* PDCA帳（受付タブと医師・看護師 › PDCA帳 は同じ台帳。記録の中身は索引に入れない） */
+  var pdcaHay=['PDCA PDCA帳 業務改善 改善 計画 実行 評価 振り返り 仮説 サイクル 待ち時間 受付 書き出し バックアップ'];
+  add('reception','📒','PDCA帳（受付）','業務改善の計画・実行・評価・改善を記録',pdcaHay,function(){ switchTab('reception'); });
+  add('pdca','📒','PDCA帳（医師・看護師）','受付タブと同じ台帳',pdcaHay,function(){ switchTab('pdca'); });
   /* パッチテスト（iframe 内の辞書） */
   var pf=document.querySelector('#pg-patch iframe');
   var cw=null; try{ cw=pf&&pf.contentWindow; if(cw&&!cw.PTD_DATA) cw=null; }catch(e){ cw=null; }
