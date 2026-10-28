@@ -49,7 +49,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
 
 /* タブナビ：9タブを 3列×3段 で常時全表示（横スクロールにしない）。
-   バイオ・JAK／ビタミン剤／食物アレルギー／パッチ／PDCA帳は医師・看護師タブの小タブ（.staff-sub, TAB_GROUP） */
+   バイオ・JAK／ビタミン剤／食物アレルギー／パッチ／PDCA帳／エアマットレスは医師・看護師タブの小タブ（.staff-sub, TAB_GROUP。2列×4段） */
 .tab-nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--gd);padding:0 8px;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
@@ -739,6 +739,47 @@ body.gs-on .gs-results{display:block;}
 #pg-age .ag-res .grid b{display:block;font-size:15px;color:var(--gd);}
 #pg-age .ag-res .f{font-size:11.5px;color:var(--tx2);margin-top:6px;}
 #pg-age .ag-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
+/* ===== エアマットレス ===== */
+#pg-airmat .am-intro{font-size:12px;line-height:1.65;color:var(--tx2);background:var(--card);border:1px solid var(--g2);border-radius:13px;padding:10px 14px;margin-bottom:10px;}
+#pg-airmat .am-intro b{color:var(--gd);}
+#pg-airmat .am-danger{background:#fbeeea;border:2px solid #b6483a;border-radius:13px;padding:10px 14px;margin-bottom:10px;color:#7a2e24;font-size:13px;line-height:1.65;scroll-margin-top:80px;}
+#pg-airmat .am-dh{font-size:15px;font-weight:700;color:#b6483a;margin-bottom:3px;}
+#pg-airmat .am-ng{font-size:17px;margin:2px 0;}
+#pg-airmat .am-ch{font-size:16px;font-weight:700;color:var(--gd);margin:20px 2px 10px;padding-bottom:6px;border-bottom:2px solid var(--g);scroll-margin-top:80px;}
+#pg-airmat .am-txt{font-size:12.5px;line-height:1.7;color:var(--tx2);margin:0 2px 10px;}
+#pg-airmat .am-sm{font-size:11px;color:var(--tx3);margin-top:6px;}
+#pg-airmat .am-card,#pg-airmat .am-tbl,#pg-airmat .am-check{background:var(--card);border:.5px solid var(--bd);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:10px;}
+#pg-airmat .am-card{padding:10px 13px;}
+#pg-airmat .am-lbl{font-size:12px;font-weight:700;color:var(--g);margin-bottom:6px;}
+#pg-airmat .am-dl dt{font-size:14px;font-weight:700;margin-top:9px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+#pg-airmat .am-dl dt:first-child{margin-top:0;}
+#pg-airmat .am-dl dd{font-size:12.5px;line-height:1.65;color:var(--tx);padding-bottom:8px;border-bottom:.5px solid var(--bd);}
+#pg-airmat .am-dl dd:last-child{border-bottom:none;padding-bottom:0;}
+#pg-airmat .am-dl small,#pg-airmat td small{display:block;font-size:11.5px;color:var(--tx2);line-height:1.55;margin-top:2px;}
+#pg-airmat .am-pill{font-size:10.5px;font-weight:600;border-radius:10px;padding:1px 8px;background:var(--gl);color:var(--tc);}
+#pg-airmat .am-lv{font-size:11px;font-weight:600;color:var(--tx3);}
+#pg-airmat .am-start{font-size:13px;line-height:1.6;color:var(--tc);background:var(--gl);border-radius:10px;padding:9px 12px;margin-bottom:10px;}
+#pg-airmat .am-tbl{padding:2px 10px;}
+#pg-airmat table{width:100%;border-collapse:collapse;font-size:12.5px;}
+#pg-airmat th,#pg-airmat td{text-align:left;padding:8px 4px;border-bottom:.5px solid var(--bd);vertical-align:top;line-height:1.5;}
+#pg-airmat tr:last-child td{border-bottom:none;}
+#pg-airmat th{font-size:10.5px;color:var(--tx3);font-weight:600;}
+#pg-airmat td:first-child{width:46%;color:var(--tx2);}
+#pg-airmat td b{color:var(--gd);}
+#pg-airmat td small.am-red{color:#b6483a;font-weight:700;}
+#pg-airmat .am-ol{list-style:none;counter-reset:am;background:var(--card);border:.5px solid var(--bd);border-radius:12px;padding:4px 12px;margin-bottom:10px;}
+#pg-airmat .am-ol li{counter-increment:am;position:relative;padding:8px 0 8px 30px;font-size:12.5px;line-height:1.65;border-bottom:.5px solid var(--bd);}
+#pg-airmat .am-ol li:last-child{border-bottom:none;}
+#pg-airmat .am-ol li::before{content:counter(am);position:absolute;left:0;top:8px;width:21px;height:21px;border-radius:50%;background:var(--g);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+#pg-airmat .am-check{padding:4px 12px 10px;}
+#pg-airmat .am-check label{display:flex;gap:10px;align-items:flex-start;min-height:44px;padding:9px 0;font-size:13px;line-height:1.6;border-bottom:.5px solid var(--bd);cursor:pointer;}
+#pg-airmat .am-check input{flex-shrink:0;width:22px;height:22px;margin-top:1px;accent-color:var(--g);}
+#pg-airmat .am-check input:checked + span{color:var(--tx3);}
+#pg-airmat .am-reset{display:block;width:100%;min-height:44px;margin-top:10px;font-family:inherit;font-size:13px;font-weight:600;color:var(--tx2);background:#faf9f6;border:1px solid var(--bd);border-radius:10px;cursor:pointer;}
+#pg-airmat .am-note{font-size:12.5px;line-height:1.65;color:var(--wtx);background:var(--wbg);border:1px solid var(--wbd);border-radius:12px;padding:9px 13px;}
+#pg-airmat .am-note p + p{margin-top:5px;}
+#pg-airmat .am-tel{display:flex;flex-direction:column;gap:2px;min-height:44px;background:var(--card);border:1px solid var(--g2);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--tx2);font-size:12px;}
+#pg-airmat .am-tel b{font-size:18px;color:var(--g);}
 /* ===== バイオ・JAK ===== */
 #pg-biojak .bj-alert{font-size:12.5px;line-height:1.65;color:var(--wtx);background:var(--wbg);border:1px solid var(--wbd);border-radius:13px;padding:10px 14px;margin-bottom:10px;}
 #pg-biojak .bj-alert b{display:block;font-size:13.5px;}
@@ -824,7 +865,7 @@ body.gs-on .gs-results{display:block;}
   <button class="gs-clear" id="gs-clear" type="button" aria-label="検索をクリア">✕</button>
 </div>
 <div class="gs-results" id="gs-results"></div>
-<!-- 医師・看護師タブの小タブ（新薬・専門薬剤／バイオ・JAK／ビタミン剤／食物アレルギー／パッチ／PDCA帳）。表示は staffSubPaint() -->
+<!-- 医師・看護師タブの小タブ（新薬・専門薬剤／バイオ・JAK／ビタミン剤／食物アレルギー／パッチ／PDCA帳／エアマットレス）。表示は staffSubPaint() -->
 <div class="staff-sub" id="staff-sub" hidden>
   <button type="button" data-sub="staff" onclick="switchTab('staff')">💉 新薬・専門薬剤</button>
   <button type="button" data-sub="biojak" onclick="switchTab('biojak')">🧬 バイオ・JAK</button>
@@ -832,6 +873,7 @@ body.gs-on .gs-results{display:block;}
   <button type="button" data-sub="allergy" onclick="switchTab('allergy')">🍽 食物アレルギー</button>
   <button type="button" data-sub="patch" onclick="switchTab('patch')">🩹 パッチ</button>
   <button type="button" data-sub="pdca" onclick="switchTab('pdca')">📒 PDCA帳</button>
+  <button type="button" data-sub="airmat" onclick="switchTab('airmat')">🛏 エアマットレス</button>
 </div>
 
 <!-- 入力ページ -->
@@ -3431,6 +3473,118 @@ render();
   </script>
 </div>
 
+<!-- エアマットレス（往診先で設定を確認する参照。モルテンの資料の内容のみ。チェック欄は保存しない） -->
+<div class="page" id="pg-airmat">
+  <div class="am-intro">往診先で<b>エアマットレスの設定を確認する</b>ための参照です。設定は<b>「動作切替」</b>（マットの動き方）と<b>「身体保持モード」</b>（圧の強さ）の組み合わせで決めます。体重による圧の調整は不要です。最終判断は医師が行います。</div>
+
+  <div class="am-danger" id="am-cpr">
+    <div class="am-dh">🚨 緊急時（心肺蘇生）</div>
+    <p><b>CPRユニットのつなぎ目をつまんで外す</b>と、約25秒でマットの空気が抜けます。</p>
+  </div>
+  <div class="am-danger" id="am-ng">
+    <div class="am-dh">⛔ 禁止の組み合わせ</div>
+    <p class="am-ng"><b>薄手 静止型 ＋ 超低圧</b></p>
+    <p>底着きの原因になります。</p>
+  </div>
+
+  <div class="am-ch" id="am-mode">2つの設定の意味</div>
+  <p class="am-txt">どのモードでも最下層は一定圧に保たれ、ギャッジアップ時の底着きを防ぎます。</p>
+  <div class="am-card">
+    <div class="am-lbl">動作切替（マットの動き方）</div>
+    <dl class="am-dl">
+      <dt>厚手 圧切替型 <span class="am-pill">標準</span></dt>
+      <dd>約10分周期で空気の部屋がふくらんだりしぼんだりして、同じ所に圧がかかり続けるのを防ぐ<small>向く方：褥瘡がある方、できやすい方</small></dd>
+      <dt>厚手 静止型</dt>
+      <dd>3層とも一定圧で動かない<small>向く方：マットの動きが気になる方、脊椎損傷・圧迫骨折などで動くと痛む方</small></dd>
+      <dt>薄手 静止型</dt>
+      <dd>上の層に空気を入れず薄く、動かない<small>向く方：ADLが上がった方、リハビリ期の方</small></dd>
+    </dl>
+  </div>
+  <div class="am-card">
+    <div class="am-lbl">身体保持モード（圧の強さ）</div>
+    <dl class="am-dl">
+      <dt>超低圧（ソフト）<span class="am-lv">最も低い</span></dt>
+      <dd><small>向く方：体位変換やギャッジアップができない方、治りにくい褥瘡のある方、絶対安静の方</small></dd>
+      <dt>低圧（標準）<span class="am-lv">低い</span></dt>
+      <dd><small>通常はこれ</small></dd>
+      <dt>安定（ハード）<span class="am-lv">やや高い</span></dt>
+      <dd><small>向く方：離床・リハビリで安定感が必要な方、柔らかいマットが合わない方、拘縮が強くクッションで体位を保つ必要がある方</small></dd>
+    </dl>
+  </div>
+
+  <div class="am-ch" id="am-rec">状態別のおすすめ設定</div>
+  <div class="am-start">迷ったら <b>厚手 圧切替型 ＋ 低圧（標準）</b> から始める</div>
+  <div class="am-tbl">
+    <table>
+      <thead><tr><th>状態</th><th>おすすめ設定</th></tr></thead>
+      <tbody>
+        <tr><td>褥瘡がある、ほとんど動けない・体位変換が難しい</td><td><b>厚手 圧切替型</b><br><b>超低圧</b><small>褥瘡治療の基本。底着きがないか毎日確認</small></td></tr>
+        <tr><td>寝たきりで褥瘡ができやすい（予防）</td><td><b>厚手 圧切替型</b><br><b>低圧</b><small>通常の設定</small></td></tr>
+        <tr><td>マットの動きを気にして眠れない、落ち着かない</td><td><b>厚手 静止型</b><br><b>低圧</b>（褥瘡があれば超低圧）<small>意識がはっきりしている方向け</small></td></tr>
+        <tr><td>脊椎損傷・圧迫骨折などで動くと痛む</td><td><b>厚手 静止型</b><br><b>低圧</b>（褥瘡があれば超低圧）<small>痛みが優先のとき</small></td></tr>
+        <tr><td>拘縮が強く、クッションで体位を保っている</td><td><b>厚手 圧切替型</b><br><b>安定</b><small>柔らかすぎると姿勢が崩れる方向け。褥瘡があれば医師に相談</small></td></tr>
+        <tr><td>離床・リハビリ期、自分で起き上がれる</td><td><b>薄手 静止型</b><br><b>安定</b> または <b>低圧</b><small class="am-red">超低圧は不可（底着きする）</small></td></tr>
+        <tr><td>柔らかいマットが合わない</td><td><b>厚手 圧切替型</b><br><b>安定</b></td></tr>
+        <tr><td>汗や失禁で蒸れる</td><td>除湿を<b>「入」</b><small>寒がる場合は「切」</small></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="am-ch" id="am-setup">設置するとき</div>
+  <ol class="am-ol">
+    <li>マットはベッドの上に直接敷く。布団や別のマットレスの上に重ねない</li>
+    <li>頭側・足元側と表裏を確認する</li>
+    <li>ポンプは付属のフックでフットボードに掛ける。エアホースはマットの下に巻き込んだり折ったりしない</li>
+    <li>ポンプとマットのCPRユニット（つなぎ目）を、黄色の印を合わせてカチッと音がするまで差し込む</li>
+    <li>電源を入れて設定を選ぶ。完全にふくらむまで約40分かかるので、ふくらんでから寝てもらう</li>
+    <li>シーツはゆったりかける。厚手で使うときは大きめのシーツを使う</li>
+  </ol>
+
+  <div class="am-ch" id="am-daily">毎日の確認</div>
+  <div class="am-check" id="am-checklist">
+    <label><input type="checkbox"><span>パネルの設定が、決められた設定のままになっている</span></label>
+    <label><input type="checkbox"><span>赤い注意ランプが点滅していない</span></label>
+    <label><input type="checkbox"><span>底着きがない：お尻の下のマットに手のひらを差し込み、底に触れないか確かめる。ギャッジアップした状態でも確認する</span></label>
+    <label><input type="checkbox"><span>シーツが張りすぎていない。防水シーツやタオルを何枚も重ねていない</span></label>
+    <label><input type="checkbox"><span>エアホースが折れたり挟まったりしていない</span></label>
+    <button type="button" class="am-reset" onclick="document.querySelectorAll('#am-checklist input').forEach(function(c){ c.checked=false; })">チェックをすべて外す</button>
+  </div>
+  <p class="am-txt am-sm">チェックは保存されません（画面を開き直すと外れます）。</p>
+  <div class="am-note">
+    <p>電源を入れ直しても、停電しても、<b>前回の設定に戻ります</b>。設定を変えたときは記録してスタッフ間で共有してください。</p>
+    <p>エアマットを使っていても、<b>体位変換とギャッジアップ30度以内は続けます</b>。</p>
+  </div>
+
+  <div class="am-ch" id="am-review">設定を見直すとき</div>
+  <div class="am-tbl">
+    <table>
+      <tbody>
+        <tr><td>新しく褥瘡ができた、または悪化した</td><td>→ <b>超低圧 ＋ 厚手 圧切替型</b>へ</td></tr>
+        <tr><td>底着きする</td><td>→ 身体保持モードを<b>一段上げる</b><small>超低圧→低圧、低圧→安定</small></td></tr>
+        <tr><td>褥瘡が治り、離床・リハビリが始まった</td><td>→ <b>薄手 静止型</b>や<b>安定</b>へ</td></tr>
+        <tr><td>寝たきりに近くなった、体位変換が難しくなった</td><td>→ <b>超低圧</b>へ</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="am-ch" id="am-trouble">困ったとき</div>
+  <div class="am-tbl">
+    <table>
+      <thead><tr><th>こんなとき</th><th>確認すること</th></tr></thead>
+      <tbody>
+        <tr><td>赤い注意ランプが<b>交互に</b>点滅</td><td>ホース・CPRユニットの外れ、エアもれ、フィルターの詰まり</td></tr>
+        <tr><td>赤い注意ランプが<b>2つ同時に</b>点滅</td><td>電源ボタンを押し直す。直らなければ販売店へ</td></tr>
+        <tr><td>マットが動かない（圧切替しない）</td><td>動作切替が「厚手 圧切替型」になっているか</td></tr>
+        <tr><td>マットがふくらまない</td><td>電源プラグ、ホースの外れや折れ、フィルター</td></tr>
+        <tr><td>ポンプの音がうるさい</td><td>ポンプが水平に置かれているか、フィルターが詰まっていないか</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="am-ch" id="am-contact">問い合わせ</div>
+  <a class="am-tel" href="tel:0828429975"><span>モルテン 健康用品事業本部 お客様窓口</span><b>📞 082-842-9975</b></a>
+</div>
+
 <script>
 /* ══════════════════════════════════════════════
    薬剤の「正本」レジストリ
@@ -5524,7 +5678,8 @@ var DATA_META = {
   age:      {updated:'2026-10-09', check:'添付文書（使用可能年齢・小児用量・規格）'},
   biojak:   {updated:'2026-10-17', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
   reception:{updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。医師・看護師 › PDCA帳と同じ台帳）'},
-  pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'}
+  pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
+  airmat:   {updated:'2026-10-28', check:'モルテン エアマットレスの取扱説明（設定・設置・困ったとき）'}
 };
 function metaAgeText(ymd){
   var d=new Date(ymd+'T00:00:00'); if(isNaN(d)) return {txt:'', stale:false};
@@ -6677,9 +6832,9 @@ function routeInit(){
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
   vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age', biojak:'pg-biojak',
-  reception:'pg-reception', pdca:'pg-pdca'};
+  reception:'pg-reception', pdca:'pg-pdca', airmat:'pg-airmat'};
 // タブバーに出さず、親タブの小タブとして開く画面（switchTab('biojak') 等はそのまま使える）
-var TAB_GROUP = {biojak:'staff', vitamin:'staff', allergy:'staff', patch:'staff', pdca:'staff'};
+var TAB_GROUP = {biojak:'staff', vitamin:'staff', allergy:'staff', patch:'staff', pdca:'staff', airmat:'staff'};
 // iframe で埋め込んだ画面（高さは fitEmbedFrame で画面下端に合わせる）
 var EMBED_TABS = ['patch','kensa','reception','pdca'];
 function switchTab(tab) {
@@ -8871,10 +9026,10 @@ if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=8;
-var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch','reception','pdca'];
+var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch','reception','pdca','airmat'];
 var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師 › 新薬・専門薬剤', age:'年齢・用量', biojak:'医師・看護師 › バイオ・JAK', kensa:'検査パネル', products:'当院製品', vitamin:'医師・看護師 › ビタミン剤（内服）',
   guidance:'生活指導', findings:'所見別ナビ', allergy:'医師・看護師 › 食物アレルギー', patch:'医師・看護師 › パッチテスト',
-  reception:'受付', pdca:'医師・看護師 › PDCA帳'};
+  reception:'受付', pdca:'医師・看護師 › PDCA帳', airmat:'医師・看護師 › エアマットレス'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
    1文字→1文字の変換に限定し、元文字列と長さを揃える（ハイライト位置計算のため） */
@@ -9044,6 +9199,24 @@ function build(){
   var pdcaHay=['PDCA PDCA帳 業務改善 改善 計画 実行 評価 振り返り 仮説 サイクル 待ち時間 受付 書き出し バックアップ'];
   add('reception','📒','PDCA帳（受付）','業務改善の計画・実行・評価・改善を記録',pdcaHay,function(){ switchTab('reception'); });
   add('pdca','📒','PDCA帳（医師・看護師）','受付タブと同じ台帳',pdcaHay,function(){ switchTab('pdca'); });
+  /* エアマットレス（静的ページ。概要1件＋見出しごとに引けるようにする。本文はページの文字から読む） */
+  add('airmat','🛏','エアマットレス 設定ガイド','往診先で設定を確認（動作切替×身体保持モード）',
+    ['エアマット エアマットレス アドバン モルテン 褥瘡 底着き 体位変換 ギャッジアップ 往診'],function(){ switchTab('airmat'); });
+  [['am-cpr','緊急時（心肺蘇生）','CPRユニットを外すと約25秒で空気が抜ける'],
+   ['am-ng','禁止の組み合わせ','薄手 静止型＋超低圧は底着きの原因'],
+   ['am-mode','2つの設定の意味','動作切替と身体保持モード'],
+   ['am-rec','状態別のおすすめ設定','迷ったら厚手 圧切替型＋低圧（標準）'],
+   ['am-setup','設置するとき','CPRユニット・ポンプ・シーツ'],
+   ['am-daily','毎日の確認','設定・注意ランプ・底着き・シーツ・エアホース'],
+   ['am-review','設定を見直すとき','褥瘡の悪化・底着き・離床'],
+   ['am-trouble','困ったとき','注意ランプの点滅・ふくらまない・音がうるさい'],
+   ['am-contact','問い合わせ','モルテン お客様窓口']
+  ].forEach(function(s){
+    var el=document.getElementById(s[0]), body='';
+    if(el && el.classList.contains('am-ch')){ for(var n=el.nextElementSibling; n && !n.classList.contains('am-ch'); n=n.nextElementSibling) body+=' '+n.textContent; }
+    else if(el) body=el.textContent;
+    add('airmat','🛏',s[1],s[2],['エアマット',body],function(){ switchTab('airmat'); scrollToEl(s[0]); });
+  });
   /* パッチテスト（iframe 内の辞書） */
   var pf=document.querySelector('#pg-patch iframe');
   var cw=null; try{ cw=pf&&pf.contentWindow; if(cw&&!cw.PTD_DATA) cw=null; }catch(e){ cw=null; }
