@@ -10,8 +10,8 @@ tools: Read, Write, Edit, Bash, Grep, Glob
 ## 最初に必ず読むもの
 
 1. `CLAUDE.md`（技術ルール・禁止事項）
-2. `.claude/skills/washi-design/SKILL.md`（配色・フォント・部品の仕様）
-3. `.claude/skills/washi-design/templates/starter.html`（ここを複製して作り始める）
+2. `~/.claude/skills/washi-design/SKILL.md`（配色・フォント・部品の仕様。共通版）
+3. `~/.claude/skills/washi-design/templates/starter.html`（ここを複製して作り始める）
 
 この3つを読まずにコードを書き始めてはいけません。
 
@@ -45,7 +45,7 @@ tools: Read, Write, Edit, Bash, Grep, Glob
 以下を実行してスクリーンショットを Read で開き、目視で確認する。
 
 ```bash
-S=.claude/skills/washi-design/scripts/iphone-shot.sh
+S=~/.claude/skills/washi-design/scripts/iphone-shot.sh
 $S <file>.html 390 1200   # iPhone 14/15 基準
 $S <file>.html 375 1200   # iPhone SE
 $S <file>.html 430 1200   # iPhone Pro Max

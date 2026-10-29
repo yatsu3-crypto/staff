@@ -35,7 +35,7 @@
 3. **保存は localStorage** のみ。キー名は `<app>_<item>_v1` の形式（例：`patch_list_v1`）。`try/catch` で囲み、失効・無効時も動作させる。
 4. **iPhone 表示優先**。390px 幅（iPhone 14/15）を基準に 375px（SE）〜430px（Pro Max）で崩れないこと。1カラム、タップ領域 44px 以上、入力欄フォント 16px 以上、`env(safe-area-inset-*)` 対応。
 5. **GitHub Pages に直接置く**。ファイルはこのフォルダ直下に `<英小文字名>.html` として保存し、`https://…/<名前>.html` で開ける状態で納品する。サブフォルダやアセット分割はしない。
-6. **見た目は `.claude/skills/washi-design/SKILL.md` に従う**。新規アプリは `.claude/agents/app-builder.md` の担当者に任せる。
+6. **見た目は共通版の `~/.claude/skills/washi-design/SKILL.md` に従う**（このリポジトリにはコピーを置かない。デザインの変更は共通版だけを直す）。新規アプリは `.claude/agents/app-builder.md` の担当者に任せる。
 
 ## 患者個人情報の取り扱い（絶対禁止）
 
@@ -55,4 +55,4 @@
 
 - 新規アプリ：要件（名前・用途・使う人・保存するもの）を確認 → `app-builder` エージェントで作成 → iPhone 幅スクリーンショットで自己チェック → 単一 HTML を納品。
 - 修正：該当ファイルを部分的に読んで最小限の差分で直す。デザイン変更は washi-design のトークンを守る。
-- 表示確認は `.claude/skills/washi-design/scripts/iphone-shot.sh <html> 390 1200` を使う（Google Chrome ヘッドレス）。
+- 表示確認は `~/.claude/skills/washi-design/scripts/iphone-shot.sh <html> 390 1200` を使う（Google Chrome ヘッドレス）。
