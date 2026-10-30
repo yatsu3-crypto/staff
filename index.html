@@ -813,6 +813,8 @@ body.gs-on .gs-results{display:block;}
 #pg-biojak .bj-kv{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 #pg-biojak .bj-kv > div{border:.5px solid var(--bd);border-radius:8px;padding:6px 10px;font-size:13px;line-height:1.45;}
 #pg-biojak .bj-kv span{display:block;font-size:10.5px;font-weight:600;color:var(--tx3);}
+#pg-biojak .bj-kv > div.w{grid-column:1/-1;}
+#pg-biojak .bj-kv > div.unk{color:var(--tx3);}
 #pg-biojak .bj-txt{font-size:12.5px;line-height:1.7;color:var(--tx);}
 #pg-biojak .bj-sub{font-size:11px;font-weight:700;color:var(--tx2);margin:8px 0 2px;}
 #pg-biojak table{width:100%;border-collapse:collapse;font-size:12.5px;}
@@ -4848,7 +4850,7 @@ var AGE = (function(){
        {i:'SARS-CoV-2による肺炎',  adult:true, t:'成人'}
      ],
      notes:['〈関節リウマチ、アトピー性皮膚炎（成人）〉成人：4mgを1日1回。状態に応じて2mgに減量。',
-            '〈アトピー性皮膚炎（小児）、多関節に活動性を有する若年性特発性関節炎〉2歳以上・体重別：30kg以上は4mg（状態に応じて2mgに減量）、30kg未満は2mg（状態に応じて1mgに減量）。',
+            '〈アトピー性皮膚炎（小児）、多関節に活動性を有する若年性特発性関節炎〉2歳以上・体重別：体重に応じて以下の量を1日1回。30kg以上は4mg（状態に応じて2mgに減量）、30kg未満は2mg（状態に応じて1mgに減量）。',
             '〈円形脱毛症〉成人及び12歳以上かつ体重30kg以上の小児：4mgを1日1回。状態に応じて2mgに減量。',
             '〈SARS-CoV-2による肺炎〉成人：レムデシビルとの併用で4mgを1日1回。総投与期間は14日間まで。'],
      kensa:{id:'aa', sec:'JAK阻害薬 導入前スクリーニング', l:'円形脱毛症 ＞ JAK阻害薬 導入前スクリーニング'},
@@ -5278,7 +5280,8 @@ var AGE = (function(){
           {l:根拠の文言（正本の用法）, n:30日あたりの数量, p:price の添字}。2週間隔＝月2本、4週間隔＝月1本、1日1回＝30錠で計算
    onset／ae：適応症で違うときは [{i:適応症, ...}] で書き分ける。ae は [名前, 頻度, 重篤度]（重篤度は参照資料の独自区分）
    warn：禁忌や催奇形性など、カードの中で目立たせる注意（h＝見出し、g＝[{b:小見出し（重要な基本的注意・禁忌・女性・男性など）, t:[本文]}]。添付文書どおりに書く）
-   age／staff：用法・用量の正本（年齢・用量タブ／医師・看護師タブの id）。両方なければ「添付文書で確認」と出す
+   age／staff：用法・用量の正本（年齢・用量タブ／医師・看護師タブの id）。両方なければ「添付文書で確認」と出す。
+          投与間隔はこの正本の文章から読み取って表示する（interval()。ここには書かない。読み取れなければ「未登録（添付文書で確認）」）
    ============================================== */
 var BIOJAK = (function(){
   var PRICE_AS_OF = {
@@ -5462,6 +5465,54 @@ var BIOJAK = (function(){
   function catOf(k){ for(var i=0;i<BIOJAK.CATS.length;i++){ if(BIOJAK.CATS[i].k===k) return BIOJAK.CATS[i]; } return BIOJAK.CATS[0]; }
   function yen(n){ return Math.round(n).toLocaleString('ja-JP')+'円'; }
   function onsetText(d){ return typeof d.onset==='string' ? d.onset : d.onset.map(function(x){ return x.i+' '+x.t; }).join('／'); }
+
+  /* 投与間隔：正本の文章から読み取る（バイオ・JAKには間隔を書かない）。
+     正本は年齢・用量タブの notes。その剤が link:{sec:'staff'} を持つときと、age がなく staff だけのときは医師・看護師タブの dosage。
+     「〈適応症〉」「【適応症】」で始まる行を適応症別の行とし、「○週間隔（…）」「1日○回」「1日量を○回に分けて」を拾う。
+     読み取れなければ推測せず IV_UNK を出す */
+  var IV_UNK = '未登録（添付文書で確認）';
+  function ivSource(d){
+    var a=null, sid=d.staff, s=null;
+    if(d.age) AGE.DRUGS.forEach(function(x){ if(x.id===d.age) a=x; });
+    if(a && a.link && a.link.sec==='staff') sid=a.link.id;
+    else if(a) return {src:'年齢・用量', lines:[].concat(a.notes||[])};
+    if(sid && window.DRUGS) window.DRUGS.forEach(function(x){ if(x.id===sid) s=x; });
+    return s ? {src:'医師・看護師', lines:s.dosage||[]} : {src:'', lines:[]};
+  }
+  function ivTokens(s){
+    var out=[], re=/(\d+)週間隔(?:（[^）]*）)?|1日(\d+)回(?!に)|1日量[^。]*?(\d+)回に分けて/g, m;
+    while((m=re.exec(s))) out.push(m[3] ? '1日量を'+m[3]+'回に分けて' : m[0]);
+    return out;
+  }
+  /* 重複を除いてつなぐ。「2週間隔」「4週間隔」だけなら「2週・4週間隔」にまとめる */
+  function ivJoin(t){
+    var u=[]; t.forEach(function(x){ if(u.indexOf(x)<0) u.push(x); });
+    if(u.length>1 && u.every(function(x){ return /^\d+週間隔$/.test(x); }))
+      return u.map(function(x){ return parseInt(x,10); }).sort(function(a,b){ return a-b; }).join('週・')+'週間隔';
+    return u.join('／');
+  }
+  function interval(d){
+    var S=ivSource(d), rows=[];
+    S.lines.forEach(function(s){
+      var m=/^((?:[〈【][^〉】]+[〉】])+)/.exec(s), lb='', rest=s, w;
+      if(m){
+        lb=m[1].replace(/^[〈【]|[〉】]$/g,'').split(/[〉】][〈【]/).join('・');
+        if(/効能|効果/.test(lb)) return;
+        rest=s.slice(m[1].length);
+        w=rest.split('：'); if(w.length===2) lb+='｜'+w[0];
+      }
+      var t=ivTokens(rest);
+      if(t.length || lb) rows.push({i:lb, t:t});
+    });
+    var all=[], unk=false;
+    rows.forEach(function(r){ if(r.t.length) all=all.concat(r.t); else unk=true; });
+    if(!all.length) return {s:IV_UNK, unk:true, src:S.src, rows:[]};
+    if(rows.filter(function(r){ return r.i; }).length<2) return {s:ivJoin(all), src:S.src, rows:[]};
+    var one=ivJoin(rows[0].t);
+    if(!unk && rows.every(function(r){ return ivJoin(r.t)===one; })) return {s:one+'（全適応症・年齢で共通）', src:S.src, rows:[]};
+    return {s:ivJoin(all)+(unk?'（一部は未登録・下の表）':'（適応症などで異なる・下の表）'), src:S.src,
+            rows:rows.map(function(r){ return {i:r.i, t:r.t.length?ivJoin(r.t):IV_UNK}; })};
+  }
   var st = {q:'', cat:'', open:{}};
 
   /* 検索用に1剤ぶんの文字列をまとめる（横断検索でも使う） */
@@ -5476,7 +5527,13 @@ var BIOJAK = (function(){
   function detail(d){
     var h='<div class="bj-lbl">基本情報</div><div class="bj-kv">'
       + '<div><span>分類</span>'+e(catOf(d.cat).l)+'</div><div><span>標的</span>'+e(d.target)+'</div>'
-      + '<div><span>投与経路</span>'+e(d.rt)+'</div><div><span>効果発現の目安</span>'+e(typeof d.onset==='string'?d.onset:'下の表')+'</div></div>';
+      + '<div><span>投与経路</span>'+e(d.rt)+'</div><div><span>効果発現の目安</span>'+e(typeof d.onset==='string'?d.onset:'下の表')+'</div>';
+    var iv=interval(d);
+    h+='<div class="w'+(iv.unk?' unk':'')+'"><span>投与間隔'+(iv.src?'（「'+e(iv.src)+'」の記載から）':'')+'</span>'+e(iv.s)+'</div></div>';
+    if(iv.rows.length){
+      h+='<div class="bj-lbl">投与間隔（適応症別）</div><table><tbody>'
+        + iv.rows.map(function(r){ return '<tr><td>'+e(r.i)+'</td><td class="n">'+e(r.t)+'</td></tr>'; }).join('')+'</tbody></table>';
+    }
     h+='<div class="bj-lbl">作用機序</div><div class="bj-txt">'+e(d.mech)+'</div>';
     if(typeof d.onset!=='string'){
       h+='<div class="bj-lbl">効果発現の目安（適応症別）</div><table><tbody>'
@@ -5675,8 +5732,8 @@ var DATA_META = {
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
   kensa:    {updated:'2026-10-06', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
-  age:      {updated:'2026-10-09', check:'添付文書（使用可能年齢・小児用量・規格）'},
-  biojak:   {updated:'2026-10-17', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
+  age:      {updated:'2026-10-30', check:'添付文書（使用可能年齢・小児用量・規格）'},
+  biojak:   {updated:'2026-10-30', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
   reception:{updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。医師・看護師 › PDCA帳と同じ台帳）'},
   pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
   airmat:   {updated:'2026-10-28', check:'モルテン エアマットレスの取扱説明（設定・設置・困ったとき）'}
