@@ -5277,7 +5277,9 @@ var AGE = (function(){
           端末の日付が from 以降なら新薬価を主表示にする（price の3つ目に新薬価を書く）
    adopt：院内採用。'yes'＝採用／'no'＝未採用／''＝要確認
    price：[規格, 薬価（円）]（改定を併記する剤は [規格, 現行薬価, 新薬価]）。month：3割負担の月額概算（正本に用法がある薬だけ。主表示の薬価で計算）。
-          {l:根拠の文言（正本の用法）, n:30日あたりの数量, p:price の添字}。2週間隔＝月2本、4週間隔＝月1本、1日1回＝30錠で計算
+          {i:正本の行の適応症見出し（省略時は用法のある最初の行）, k:その行の何番目の用法か（省略時0）, p:price の添字}。
+          用量・間隔はここに書かず、正本の文章から monthRows() が読み取る（2週間隔＝月2本、4週間隔＝月1本、1日○回＝30×○）。
+          読み取れない行や、price の規格の mg と合わない行は計算しない
    onset／ae：適応症で違うときは [{i:適応症, ...}] で書き分ける。ae は [名前, 頻度, 重篤度]（重篤度は参照資料の独自区分）
    warn：禁忌や催奇形性など、カードの中で目立たせる注意（h＝見出し、g＝[{b:小見出し（重要な基本的注意・禁忌・女性・男性など）, t:[本文]}]。添付文書どおりに書く）
    age／staff：用法・用量の正本（年齢・用量タブ／医師・看護師タブの id）。両方なければ「添付文書で確認」と出す。
@@ -5306,8 +5308,7 @@ var BIOJAK = (function(){
          {i:'結節性痒疹', r:[['結膜炎','約8%','中'],['注射部位反応','約5%','軽']]}],
      price:[['200mgシリンジ（200mg 1.14mL 1筒）',39549,38087],['200mgペン（200mg 1.14mL 1キット）',39706,38238],
             ['300mgシリンジ（300mg 2mL 1筒）',53493,51515],['300mgペン（300mg 2mL 1キット）',53659,51675]],
-     month:[{l:'アトピー性皮膚炎の成人の維持（300mgを2週間隔）・シリンジ', n:2, p:2},
-            {l:'アトピー性皮膚炎の成人の維持（300mgを2週間隔）・ペン', n:2, p:3}]},
+     month:[{i:'アトピー性皮膚炎｜成人', p:2},{i:'アトピー性皮膚炎｜成人', p:3}]},
     {id:'adtralza', n:'アドトラーザ', gen:'トラロキヌマブ', en:'tralokinumab', cat:'atopy', rt:'皮下注', adopt:'no',
      target:'IL-13', mech:'IL-13の直接中和（IL-4は阻害しない）',
      onset:'2〜4週',
@@ -5318,13 +5319,13 @@ var BIOJAK = (function(){
      onset:'2〜4週',
      ae:[['結膜炎','約8%','軽'],['注射部位反応','約7%','軽'],['頭痛','約4%','軽']],
      price:[['250mg 1本',50782]],
-     month:[{l:'維持（250mgを2週間隔）', n:2, p:0},{l:'維持（250mgを4週間隔）', n:1, p:0}]},
+     month:[{k:0, p:0},{k:1, p:0}]},
     {id:'mitchga', n:'ミチーガ', gen:'ネモリズマブ', en:'nemolizumab', cat:'atopy', rt:'皮下注', adopt:'yes', age:'mitchga', staff:'mitchga',
      target:'IL-31RA', mech:'IL-31受容体A（IL-31RA）拮抗。かゆみのシグナルを直接遮断する',
      onset:'1〜2週（かゆみ）',
      ae:[['上気道感染','約10%','軽'],['注射部位反応','約6%','軽'],['アトピーの増悪','約5%','中'],['頭痛','約5%','軽']],
      price:[['60mg 1本',117181]],
-     month:[{l:'アトピー性皮膚炎に伴うそう痒の成人の維持（60mgを4週間隔）', n:1, p:0}],
+     month:[{i:'60mgシリンジ｜アトピー性皮膚炎に伴うそう痒', p:0}],
      note:'30mgシリンジ（結節性痒疹の維持・小児）の薬価は参照資料になく、未登録です。'},
 
     /* ===== JAK阻害薬（内服） ===== */
@@ -5334,14 +5335,14 @@ var BIOJAK = (function(){
      ae:[{i:'アトピー性皮膚炎', r:[['上気道感染','約15%','軽'],['LDL上昇','約10%','要管理'],['帯状疱疹','約4〜7%','重要'],['血球減少','稀','重要'],['静脈血栓塞栓症（VTE）','1%未満','重篤'],['悪性腫瘍','長期のリスク','重篤']]},
          {i:'円形脱毛症', r:[['上気道感染','約10%','軽'],['LDL上昇','約8%','要管理'],['帯状疱疹','約4%','重要']]}],
      price:[['4mg 1錠',4920],['2mg 1錠',2484]],
-     month:[{l:'4mgを1日1回', n:30, p:0},{l:'2mgに減量したとき（1日1回）', n:30, p:1}],
+     month:[{i:'関節リウマチ、アトピー性皮膚炎（成人）｜成人', k:0, p:0},{i:'関節リウマチ、アトピー性皮膚炎（成人）｜成人', k:1, p:1}],
      note:'1mg錠（当院未採用）の薬価は参照資料になく、未登録です。'},
     {id:'rinvoq', n:'リンヴォック', gen:'ウパダシチニブ', en:'upadacitinib', cat:'jak', rt:'内服', adopt:'yes', age:'rinvoq',
      target:'JAK1', mech:'JAK1の高選択的阻害',
      onset:'1〜2週',
      ae:[['上気道感染','約20%','軽'],['CPK上昇','約10%','要確認'],['痤瘡','約8%','軽'],['帯状疱疹','約5〜10%','重要'],['静脈血栓塞栓症（VTE）','1%未満','重篤']],
      price:[['15mg 1錠',4707]],
-     month:[{l:'アトピー性皮膚炎：15mgを1日1回', n:30, p:0}],
+     month:[{p:0}],
      note:'7.5mg・30mg錠の薬価は参照資料になく、未登録です。'},
     {id:'cibinqo', n:'サイバインコ', gen:'アブロシチニブ', en:'abrocitinib', cat:'jak', rt:'内服', adopt:'yes',
      target:'JAK1', mech:'JAK1の高選択的阻害',
@@ -5353,7 +5354,7 @@ var BIOJAK = (function(){
      onset:'12〜24週',
      ae:[['上気道感染','約15%','軽'],['ざ瘡','約7%','軽'],['頭痛','約6%','軽'],['下痢','約5%','軽'],['帯状疱疹','約2〜3%','重要']],
      price:[['50mg 1カプセル',5584]],
-     month:[{l:'円形脱毛症：50mgを1日1回', n:30, p:0}]},
+     month:[{p:0}]},
 
     /* ===== 乾癬（注射） ===== */
     {id:'cosentyx', n:'コセンティクス', gen:'セクキヌマブ', en:'secukinumab', cat:'pso', rt:'皮下注', adopt:'no',
@@ -5412,13 +5413,13 @@ var BIOJAK = (function(){
      onset:'2〜4週',
      ae:[['上気道感染','約17%','軽'],['頭痛','約5%','軽'],['口腔ヘルペス','約4%','軽〜中'],['毛包炎','約4%','軽']],
      price:[['6mg 1錠',2533]],
-     month:[{l:'6mgを1日1回', n:30, p:0}]},
+     month:[{p:0}]},
     {id:'otezla', n:'オテズラ', gen:'アプレミラスト', en:'apremilast', cat:'oral', rt:'内服', adopt:'yes', staff:'otezla',
      target:'PDE4', mech:'PDE4（ホスホジエステラーゼ4）阻害でcAMPを増やし、TNF-α・IL-17・IL-23の産生を抑える',
      onset:'4〜8週',
      ae:[['悪心','約17%','中（開始時）'],['下痢','約16%','中（開始時）'],['体重減少','約10%','要確認'],['頭痛','約6%','軽'],['うつ・自殺念慮','稀','要注意']],
      price:[['30mg 1錠',853]],
-     month:[{l:'6日目以降の維持（30mgを1日2回）', n:60, p:0}]},
+     month:[{p:0}]},
     {id:'neoral', n:'ネオーラル', gen:'シクロスポリン', en:'cyclosporine', cat:'oral', rt:'内服', adopt:'yes', staff:'neoral',
      target:'カルシニューリン', mech:'カルシニューリン阻害でIL-2の産生を抑え、T細胞の活性化を遮断する',
      onset:'2〜4週',
@@ -5491,18 +5492,26 @@ var BIOJAK = (function(){
       return u.map(function(x){ return parseInt(x,10); }).sort(function(a,b){ return a-b; }).join('週・')+'週間隔';
     return u.join('／');
   }
-  function interval(d){
-    var S=ivSource(d), rows=[];
+  /* 正本の行を {i:適応症の見出し, pre:見出しのない行の「○○：」, rest:見出しを除いた本文} にする */
+  function ivLines(d){
+    var S=ivSource(d), lines=[];
     S.lines.forEach(function(s){
-      var m=/^((?:[〈【][^〉】]+[〉】])+)/.exec(s), lb='', rest=s, w;
+      var m=/^((?:[〈【][^〉】]+[〉】])+)/.exec(s), lb='', pre='', rest=s, w;
       if(m){
         lb=m[1].replace(/^[〈【]|[〉】]$/g,'').split(/[〉】][〈【]/).join('・');
         if(/効能|効果/.test(lb)) return;
         rest=s.slice(m[1].length);
         w=rest.split('：'); if(w.length===2) lb+='｜'+w[0];
-      }
-      var t=ivTokens(rest);
-      if(t.length || lb) rows.push({i:lb, t:t});
+      } else { w=/^([^：:\d]{1,12})\s*[：:]/.exec(s); if(w) pre=w[1]; }
+      lines.push({i:lb, pre:pre, rest:rest});
+    });
+    return {src:S.src, lines:lines};
+  }
+  function interval(d){
+    var S=ivLines(d), rows=[];
+    S.lines.forEach(function(x){
+      var t=ivTokens(x.rest);
+      if(t.length || x.i) rows.push({i:x.i, t:t});
     });
     var all=[], unk=false;
     rows.forEach(function(r){ if(r.t.length) all=all.concat(r.t); else unk=true; });
@@ -5512,6 +5521,33 @@ var BIOJAK = (function(){
     if(!unk && rows.every(function(r){ return ivJoin(r.t)===one; })) return {s:one+'（全適応症・年齢で共通）', src:S.src, rows:[]};
     return {s:ivJoin(all)+(unk?'（一部は未登録・下の表）':'（適応症などで異なる・下の表）'), src:S.src,
             rows:rows.map(function(r){ return {i:r.i, t:r.t.length?ivJoin(r.t):IV_UNK}; })};
+  }
+  /* 月額概算の用法：正本の1行から「（○日目以降）○mgを○週間隔／1日○回」と、それに続く「○週間隔も可」「○mgに減量」を順に拾う */
+  function regimens(s){
+    var out=[], last=null, m,
+        re=/(\d+日目以降)?(\d+(?:\.\d+)?)mgを(?:(\d+)週間隔|1日(\d+)回)|(\d+)週間隔も可|(\d+(?:\.\d+)?)mgに減量/g;
+    while((m=re.exec(s))){
+      if(m[2]) last={mg:+m[2], w:m[3]?+m[3]:0, t:m[4]?+m[4]:0, l:m[0]};
+      else if(!last) continue;
+      else if(m[5]) last={mg:last.mg, w:+m[5], t:0, l:last.mg+'mgを'+m[5]+'週間隔（状態により）'};
+      else last={mg:+m[6], w:last.w, t:last.t, l:m[6]+'mgに減量したとき（'+(last.w?last.w+'週間隔':'1日'+last.t+'回')+'）'};
+      out.push(last);
+    }
+    return out;
+  }
+  /* month の各行を {l:表示, n:30日あたりの数量, p:price の添字} にする。読み取れない行・規格の mg と合わない行は null */
+  function monthRows(d){
+    var L=ivLines(d), out=(d.month||[]).map(function(m){
+      var ln=null;
+      L.lines.forEach(function(x){ if(!ln && (m.i ? x.i===m.i : regimens(x.rest).length)) ln=x; });
+      var r=ln && regimens(ln.rest)[m.k||0], p=d.price[m.p];
+      if(!r || !p) return null;
+      var n=r.w ? (4%r.w===0 ? 4/r.w : 0) : 30*r.t, pm=/(\d+(?:\.\d+)?)mg/.exec(p[0]), lb=ln.i||ln.pre;
+      if(!n || !pm || +pm[1]!==r.mg) return null;
+      return {l:(lb?lb+'：':'')+r.l, n:n, p:m.p};
+    });
+    out.src=L.src;
+    return out;
   }
   var st = {q:'', cat:'', open:{}};
 
@@ -5553,15 +5589,17 @@ var BIOJAK = (function(){
           if(rev && p.length>2) r+='<div class="sub">'+e(nw?pa.oldL:pa.newL)+' '+yen(nw?p[1]:p[2])+'</div>';
           return r;
         }).join('');
-    if(d.month && d.month.length){
+    var mon=monthRows(d), ok=mon.filter(function(r){ return r; });
+    if(ok.length){
       h+='<div class="mon"><div class="f">3割負担の月額概算（30日分・薬価のみ'+(rev?'・'+e(nw?pa.newL:pa.oldL)+'で計算':'')+'）</div>'
-        + d.month.map(function(m){
+        + ok.map(function(m){
             var p=d.price[m.p], all=BIOJAK.mainPrice(d, p)*m.n;
             return '<div class="row"><span>'+e(m.l)+'<br><span class="f">'+e(p[0])+' × '+m.n+' ＝ 10割 '+yen(all)+'</span></span><b>約'+yen(Math.round(all*0.3/100)*100)+'</b></div>';
           }).join('')
-        + '<div class="f">用法は '+(d.age?'「年齢・用量」':'「医師・看護師」')+'タブの記載から計算しています。</div></div>';
+        + (ok.length<mon.length ? '<div class="f">一部の用法は正本から読み取れないため、その月額は計算していません。</div>' : '')
+        + '<div class="f">用法は「'+e(mon.src)+'」タブの記載から読み取って計算しています。</div></div>';
     } else {
-      h+='<div class="mon f">'+e(d.monthNote || 'このアプリに用法の登録がないため、月額は計算していません。')+'</div>';
+      h+='<div class="mon f">'+e(d.monthNote || (mon.length ? '正本から用法を読み取れないため、月額は計算していません。' : 'このアプリに用法の登録がないため、月額は計算していません。'))+'</div>';
     }
     h+='</div>';
     if(d.note) h+='<div class="bj-note">'+e(d.note)+'</div>';
