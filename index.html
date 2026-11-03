@@ -1587,7 +1587,7 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
   <section class="panel" id="flow">
     <div class="sectitle">当院流 アトピー外用フロー</div>
     <div class="lead">基本は<strong>1日2回（入浴後・起床時）</strong>。「痒みを鎮める → 周囲のくすぶりを覆う → 乾けば保湿」の三層構造で考えます。</div>
-    <button class="flow-print no-print" onclick="printFlowHandout()">🖨　患者用プリントを作成（A4）</button>
+    <button class="flow-print no-print" onclick="printNuriHandout()">🖨　患者用プリント（外用薬の塗り方・A4両面）</button>
 
     <div class="flow-step"><div class="flow-num zen">禅</div><div class="flow-main">
       <h4>坐禅で整える（一呼吸）</h4>
@@ -1599,7 +1599,7 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
       <h4>痒点にステロイド外用</h4>
       <p>痒いところに<strong>ステロイドをスポット</strong>で塗り、痒みを鎮める。</p>
       <div class="flow-caution"><strong>収まらない／すぐ再燃するとき</strong>は無理に続けず、ステロイドのランクアップ・抗アレルギー薬や漢方内服を考慮するので<strong>早めに受診</strong>を。</div>
-      <div class="flow-tip"><strong>根拠・注意：</strong>ステロイドは病変ピンポイントが原則。次のHPCrを真上から厚く重ねると“スポット”が周囲へ延び、狙った部位の実効濃度が下がる。<strong>重ね塗りは避けるか数分あける</strong>。</div>
+      <div class="flow-tip"><strong>根拠・注意：</strong>ステロイドは病変ピンポイントが原則。次のHPCr等は<strong>ステロイドの上に重ねてもかまいません</strong>。</div>
     </div></div>
 
     <div class="flow-step"><div class="flow-num">2</div><div class="flow-main">
@@ -1616,7 +1616,7 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
 
     <div class="flow-phase">
       <h4>▶ 寛解後（引き算フェーズ）</h4>
-      <p style="margin:0;font-size:13.5px;">ツルツルになったら<strong>ステロイドを外し</strong>、HPCr／TCIを<strong>週2〜3回のプロアクティブ</strong>＋<strong>保湿は毎日</strong>へ移行。導入から維持まで一気通貫に。</p>
+      <p style="margin:0;font-size:13.5px;">ツルツルになったら<strong>ステロイドを外し</strong>、HPCr／TCIを<strong>週2〜3回（例：土日）のプロアクティブ</strong>＋<strong>保湿は毎日</strong>へ移行。導入から維持まで一気通貫に。</p>
     </div>
 
     <div class="nursebox"><div class="nh">患者説明ポイント（やさしい言葉で）</div>
@@ -1634,49 +1634,400 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
   </section>
 
   <!-- ===== BASICS ===== -->
+  <style id="nuri-css">
+  /* 見た目は生活指導タブの diet-css（.gd-ch / .ch-* / .pamph-wrap）を共用。#topguide .block の指定だけ打ち消す */
+  #nuri-ch{margin-top:0;}
+  #topguide #nuri-ch .ch-pts{margin:0;padding:0;font-size:13px;}
+  #topguide #nuri-ch .ch-pts li{margin:0;}
+  #topguide #nuri-ch .ch-hint{margin:8px 0 0;font-size:12px;}
+  #topguide #nuri-ch .ch-note{margin:10px 0 0;font-size:11.5px;}
+  </style>
   <section class="panel" id="basics">
     <div class="sectitle">塗り方の基本</div>
 
-    <div class="block">
-      <h3>FTU（フィンガー・チップ・ユニット）</h3>
-      <p class="big">大人の人差し指の先から第1関節まで、チューブ（口径5mm）から出した量＝<strong>1 FTU ≒ 0.5g</strong>。</p>
-      <p>1 FTU で<strong>手のひら2枚分</strong>の面積に塗れます。これが「適量」の世界標準のものさしです。</p>
-      <ul>
-        <li>ローション・フォーム剤は<strong>1円玉大 ≒ 1 FTU相当</strong></li>
-        <li>5gチューブ＝約10 FTU、10gチューブ＝約20 FTU</li>
-      </ul>
+    <div class="gd-ch" id="nuri-ch">
+      <div class="block">
+        <h3>指導のポイント（スタッフ用）</h3>
+        <ul class="ch-pts" id="nuri-pts"></ul>
+      </div>
+
+      <div class="block">
+        <h3>患者配布用パンフレット（A4両面）</h3>
+        <button class="print-btn" id="nuriPrint">🖨 外用薬の塗り方を印刷（A4・2ページ）</button>
+        <div class="pamph-wrap" id="nuriWrap"><iframe id="nuriFrame" title="外用薬の塗り方（患者用パンフレット）"></iframe></div>
+        <p class="ch-hint">プレビューは縮小表示です。印刷ダイアログで<strong>「背景のグラフィック」をON</strong>、<strong>余白は「なし」</strong>に設定してください。両面印刷推奨。</p>
+        <p class="ch-note">最終判断は医師が行います。</p>
+      </div>
+    </div>
+    <!-- 患者パンフレット（A4・2ページ）の本体。読み込み時に上の iframe の srcdoc へ流し込む。
+         上の「指導のポイント」はここの data-pt の語句から組み立てるので、文言を直すときはここだけ直せばよい（data-pt は消さない）。
+         本体内に </script> を書く場合は <\/script> とする。 -->
+    <script type="text/html" id="nuri-src">
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外用薬の塗り方｜やまもと皮膚科・漢方クリニック</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --shu:#C0453B; --shu-usu:#F4DFDB; --shu-koi:#9E332B;
+  --kincha:#C08A2E; --kincha-usu:#F5EAD2;
+  --matsuba:#4A6B4B; --matsuba-usu:#DFE8DC;
+  --ai:#26415E; --ai-usu:#DCE3EB;
+  --washi:#FAF6EC; --washi-fuka:#F2EBDA;
+  --sumi:#2B2723; --sumi-usu:#6B635A;
+  --keisen:#D9CFB8; --hada:#F6E3D5;
+  --mincho:'Shippori Mincho', serif;
+  --gothic:'Zen Kaku Gothic New', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+body{font-family:var(--gothic);background:#6d6459;color:var(--sumi);
+  line-height:1.72;padding:0;-webkit-font-smoothing:antialiased;}
+.page{width:210mm;min-height:297mm;margin:0 auto 16px;background:var(--washi);
+  background-image:
+    radial-gradient(circle at 12% 22%, rgba(192,138,46,.05) 0 2px, transparent 2px),
+    radial-gradient(circle at 78% 64%, rgba(74,107,75,.05) 0 2px, transparent 2px),
+    radial-gradient(circle at 43% 88%, rgba(38,65,94,.04) 0 2px, transparent 2px);
+  box-shadow:0 2px 20px rgba(43,39,35,.12);padding:15mm 15mm 13mm;
+  display:flex;flex-direction:column;}
+
+.head{display:flex;align-items:flex-end;justify-content:space-between;
+  border-bottom:2px solid var(--sumi);padding-bottom:8px;}
+.eyebrow{font-family:var(--mincho);font-size:11px;letter-spacing:.34em;color:var(--sumi-usu);}
+.clinic{font-family:var(--mincho);font-size:12px;font-weight:600;color:var(--ai);
+  letter-spacing:.06em;text-align:right;line-height:1.5;}
+h1{font-family:var(--mincho);font-weight:800;font-size:36px;letter-spacing:.09em;
+  line-height:1.25;margin:12px 0 4px;}
+h1 .ruby{font-size:12.5px;font-weight:500;color:var(--shu);letter-spacing:.3em;
+  display:block;margin-bottom:5px;}
+.lead{font-size:12.5px;color:var(--sumi-usu);max-width:64ch;margin-bottom:13px;}
+.lead b{color:var(--sumi);font-weight:700;}
+
+/* ── シグネチャ：塗る範囲の図 ── */
+.zu{border:1px solid var(--keisen);background:#fff;padding:14px 18px 15px;
+  margin-bottom:14px;position:relative;display:grid;grid-template-columns:auto 1fr;
+  gap:20px;align-items:center;}
+.zu-cap{font-family:var(--mincho);font-size:12px;letter-spacing:.18em;color:var(--sumi-usu);
+  position:absolute;top:-9px;left:14px;background:#fff;padding:0 8px;}
+.zu > svg{display:block;width:285px;}
+.zu-hanrei{display:flex;flex-direction:column;gap:11px;}
+.zu-item{display:flex;gap:10px;align-items:flex-start;}
+.sw{flex:0 0 30px;height:20px;border-radius:4px;margin-top:2px;}
+.sw.s{background:var(--shu-usu);border:2px solid var(--shu);}
+.sw.n{background:var(--matsuba-usu);border:2px dashed var(--matsuba);}
+.zu-item b{display:block;font-size:13px;font-family:var(--mincho);letter-spacing:.04em;}
+.zu-item.s b{color:var(--shu);} .zu-item.n b{color:var(--matsuba);}
+.zu-item p{font-size:11px;color:var(--sumi-usu);line-height:1.65;}
+.zu-item p em{font-style:normal;font-weight:700;color:var(--sumi);}
+.zu-foot{font-size:10.5px;color:var(--sumi-usu);border-top:1px dashed var(--keisen);
+  padding-top:8px;line-height:1.6;}
+
+/* ── 4ステップ ── */
+.steps{display:flex;flex-direction:column;gap:9px;margin-bottom:13px;}
+.step{display:grid;grid-template-columns:38px 1fr;border:1px solid var(--keisen);background:#fff;}
+.step-no{display:flex;align-items:center;justify-content:center;font-family:var(--mincho);
+  font-size:20px;font-weight:800;color:#fff;background:var(--ai);}
+.step-body{padding:11px 15px 12px;}
+.step h3{font-size:14px;font-weight:700;line-height:1.55;}
+.step h3 .hl{color:var(--shu);}
+.step h3 .hl2{color:var(--matsuba);}
+.step p{font-size:11px;color:var(--sumi-usu);line-height:1.65;margin-top:4px;}
+.step p b{color:var(--sumi);}
+.step.s1 .step-no{background:var(--shu);}
+.step.s2{border:2px solid var(--shu);background:var(--shu-usu);}
+.step.s2 .step-no{background:var(--shu);}
+.step.s2 h3,.step.s2 p,.step.s2 p b{color:var(--shu-koi);}
+.step.s3 .step-no,.step.s4 .step-no{background:var(--matsuba);}
+
+/* 保湿帯 */
+.hoshitsu{display:grid;grid-template-columns:38px 1fr;border:1px solid rgba(38,65,94,.35);
+  background:var(--ai-usu);margin-bottom:13px;}
+.hoshitsu .lbl{display:flex;align-items:center;justify-content:center;background:var(--ai);
+  color:#fff;font-family:var(--mincho);font-size:13px;font-weight:800;
+  writing-mode:vertical-rl;letter-spacing:.14em;padding:9px 0;}
+.hoshitsu .bd{padding:10px 15px 11px;}
+.hoshitsu h3{font-size:13.5px;font-weight:700;color:var(--ai);}
+.hoshitsu p{font-size:11px;color:var(--sumi-usu);line-height:1.65;margin-top:3px;}
+.hoshitsu p b{color:var(--sumi);}
+
+.hitokoto{display:flex;gap:14px;align-items:center;background:var(--kincha-usu);
+  border-left:4px solid var(--kincha);padding:12px 16px;}
+.hitokoto p{font-family:var(--mincho);font-size:13px;font-weight:600;line-height:1.85;}
+.hitokoto p .s{color:var(--shu);} .hitokoto p .n{color:var(--matsuba);}
+.mascot{flex:0 0 54px;}
+
+/* ── 2ページ目 ── */
+h2{font-family:var(--mincho);font-size:19px;font-weight:800;letter-spacing:.09em;
+  padding-left:11px;border-left:5px solid var(--shu);margin:0 0 4px;line-height:1.4;}
+.sub{font-size:11.5px;color:var(--sumi-usu);margin:0 0 12px;padding-left:16px;}
+.sec{margin-bottom:13px;}
+
+.ryou{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.ryou-box{border:1px solid var(--keisen);background:#fff;padding:13px 13px 14px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;}
+.ryou-box svg{height:96px;margin-bottom:8px;}
+.ryou-box h4{font-family:var(--mincho);font-size:13.5px;font-weight:700;color:var(--kincha);
+  margin-bottom:4px;letter-spacing:.04em;}
+.ryou-box p{font-size:11.5px;color:var(--sumi-usu);line-height:1.7;}
+.ryou-box p b{color:var(--sumi);}
+
+
+.qa-item{border-bottom:1px solid var(--keisen);padding:7px 2px;}
+.qa-item:first-of-type{border-top:1px solid var(--keisen);}
+.q{font-family:var(--mincho);font-size:13.5px;font-weight:700;color:var(--ai);margin-bottom:3px;}
+.q::before{content:"Q";font-size:10.5px;color:var(--shu);margin-right:8px;letter-spacing:.1em;}
+.qa-item .a{font-size:12px;color:var(--sumi-usu);line-height:1.72;padding-left:21px;}
+.qa-item .a::before{content:"A";font-family:var(--mincho);font-size:10.5px;color:var(--kincha);
+  margin-left:-21px;margin-right:9px;font-weight:700;}
+.qa-item .a b{color:var(--sumi);}
+
+.namebar{font-size:12.5px;font-weight:500;margin:0 0 8px;}
+.memo{border:1px solid var(--keisen);background:#fff;padding:8px 16px 10px;}
+.memo h4{font-family:var(--mincho);font-size:13px;font-weight:700;letter-spacing:.1em;
+  color:var(--sumi-usu);margin-bottom:11px;}
+.memo-line{border-bottom:1px dotted var(--keisen);height:26px;}
+.foot{margin-top:auto;padding-top:9px;border-top:2px solid var(--sumi);display:flex;
+  justify-content:space-between;align-items:flex-end;font-size:10px;color:var(--sumi-usu);}
+.foot .name{font-family:var(--mincho);font-size:12.5px;font-weight:700;color:var(--ai);
+  letter-spacing:.05em;}
+
+@page{size:A4;margin:0;}
+@media print{
+  body{background:#fff;padding:0;}
+  .page{margin:0;box-shadow:none;width:210mm;height:296.8mm;min-height:0;
+        overflow:hidden;break-after:page;page-break-after:always;}
+  .page:last-child{break-after:auto;page-break-after:auto;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 1ページ目 ══════════ -->
+<div class="page">
+  <div class="head">
+    <div class="eyebrow">ぬりぐすり の てびき</div>
+    <div class="clinic">やまもと皮膚科・漢方クリニック</div>
+  </div>
+
+  <h1>外用薬の塗り方</h1>
+  <p class="lead">かゆいところに<b>ステロイド</b>。その外側まで広めに<b>ステロイド以外</b>。この2つを重ねて、下に<b>保湿</b>を敷きます。まずは塗る範囲をご覧ください。</p>
+
+  <div class="zu">
+    <div class="zu-cap">塗る範囲</div>
+    <svg viewBox="0 0 300 195" aria-label="かゆいところにステロイド、その指1本分外側までステロイド以外を塗る範囲の図">
+      <rect x="3" y="3" width="294" height="189" rx="10" fill="#F6E3D5" opacity=".4"/>
+      <path d="M44 106 C44 54 100 34 156 44 C212 54 266 48 276 92 C286 136 234 180 166 176 C98 172 44 152 44 106 Z"
+            fill="#DFE8DC" stroke="#4A6B4B" stroke-width="2.4" stroke-dasharray="8 5"/>
+      <path d="M80 106 C80 74 118 60 158 68 C198 76 240 72 246 100 C252 130 216 152 168 149 C120 146 80 136 80 106 Z"
+            fill="#F4DFDB" stroke="#C0453B" stroke-width="2.6"/>
+      <text x="163" y="114" font-size="14" font-weight="700" fill="#C0453B"
+            text-anchor="middle" font-family="sans-serif">ステロイド</text>
+      <g stroke="#C08A2E" stroke-width="1.8" stroke-linecap="round" fill="none">
+        <path d="M47 120 L77 120"/>
+        <path d="M52 115 L47 120 L52 125"/>
+        <path d="M72 115 L77 120 L72 125"/>
+      </g>
+      <path d="M62 126 L62 156" stroke="#C08A2E" stroke-width="1.2" fill="none"/>
+      <text x="62" y="172" font-size="11.5" font-weight="700" fill="#C08A2E"
+            text-anchor="middle" font-family="sans-serif">指1本分</text>
+      <path d="M150 40 L150 22 L190 22" fill="none" stroke="#4A6B4B" stroke-width="1.4"/>
+      <text x="195" y="26" font-size="11.5" font-weight="700" fill="#4A6B4B" font-family="sans-serif">ステロイド以外</text>
+    </svg>
+    <div class="zu-hanrei">
+      <div class="zu-item s">
+        <div class="sw s"></div>
+        <div><b>ステロイド</b><p>いま <em>かゆいところ</em> だけに。</p></div>
+      </div>
+      <div class="zu-item n">
+        <div class="sw n"></div>
+        <div><b>ステロイド以外</b><p>ステロイドを塗ったところと、<em>その指1本分まわりまで</em>。ステロイドの上に重ねてもかまいません。</p></div>
+      </div>
+      <p class="zu-foot">見た目がきれいな「まわり」にも、皮ふの下に炎症がかくれています。そこまで塗っておくと、広がりにくくなります。</p>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step s1">
+      <div class="step-no">1</div>
+      <div class="step-body">
+        <h3><span data-pt="spot">かゆいところに <span class="hl">ステロイド</span></span> を<span data-pt="freq">1日2回</span>。<span data-pt="until">かゆみがおさまるまで</span>。</h3>
+        <p>赤いところ・ゴワゴワしたところも同じです。<b data-pt="enough">量をケチらない</b>のがいちばんのコツ。足りないと治りが遅くなり、かえって長く使うことになります。</p>
+      </div>
     </div>
 
-    <div class="block">
-      <h3>塗布量の目安（成人・1回）</h3>
-      <table>
-        <thead><tr><th>部位</th><th style="text-align:right">FTU</th><th style="text-align:right">≒g</th></tr></thead>
-        <tbody>
-          <tr><td>顔＋頸部</td><td class="num">2.5</td><td class="num">1.25</td></tr>
-          <tr><td>片手（手掌＋手背）</td><td class="num">1</td><td class="num">0.5</td></tr>
-          <tr><td>片腕（手を除く）</td><td class="num">3</td><td class="num">1.5</td></tr>
-          <tr><td>体幹（前面）</td><td class="num">7</td><td class="num">3.5</td></tr>
-          <tr><td>体幹（後面）</td><td class="num">7</td><td class="num">3.5</td></tr>
-          <tr><td>片脚（足を除く）</td><td class="num">6</td><td class="num">3</td></tr>
-          <tr><td>片足</td><td class="num">2</td><td class="num">1</td></tr>
-        </tbody>
-      </table>
-      <p class="note">全身1回 ≒ 約20 FTU ≒ 約10g。小児は体格に応じて減量（おおむね年齢別チャートを使用）。「塗布量 計算」タブで部位を選ぶと自動計算できます。</p>
+    <div class="step s2">
+      <div class="step-no">2</div>
+      <div class="step-body">
+        <h3>塗ってもかゆみがおさまらないときは、クリニックへ。</h3>
+        <p>お薬のランクを上げるか、<b>かゆみ止めの飲み薬</b>を足します。自己判断で回数を増やしたり、やめてしまったりせず、一度ご相談ください。</p>
+      </div>
     </div>
 
-    <div class="block">
-      <h3>塗り方のコツ</h3>
-      <ul>
-        <li>すり込まず、<strong>のせて広げる</strong>。表面にうっすら光り、ティッシュが軽く貼り付く程度が適量。</li>
-        <li>毛の流れに沿って、やさしく。こすると刺激・悪化の原因に。</li>
-        <li><strong>入浴後できるだけ早く</strong>（5〜15分以内）。皮膚が清潔で水分のあるうちに。</li>
-      </ul>
+    <div class="step s3">
+      <div class="step-no">3</div>
+      <div class="step-body">
+        <h3>ステロイドを塗ったところと、<span class="hl2" data-pt="around">その指1本分まわりまで</span>、<span data-pt="nonsteroid">ステロイド以外</span>を広めに。</h3>
+        <p>プロトピック・コレクチム・モイゼルトなど。<b>ステロイドの上に重ねてもかまいません</b>。プロトピックはヒリヒリすることがあるので、そのときは重ねずに、まわりだけに塗ってください。</p>
+      </div>
     </div>
 
-    <div class="block">
-      <h3>保湿剤と薬剤の塗る順番</h3>
-      <p>原則は <strong>① 全体に保湿剤 → ② 病変部に抗炎症薬</strong>。逆順でも効果差を示す明確なエビデンスは乏しく、<strong>間隔を空ける必要は基本的にありません</strong>。塗り分けが難しい患者には、保湿剤を全身→気になる部位に薬剤を重ねる方式が指導しやすいです。</p>
+    <div class="step s4">
+      <div class="step-no">4</div>
+      <div class="step-body">
+        <h3>ステロイドをやめたあとも、<span class="hl2">同じ場所に週2〜3回（例：土日）</span> つづけます。</h3>
+        <p><b>見た目がきれいでも塗るのが大切</b>です。その場所は皮ふの下に炎症が残っていて、やめると再発しやすい場所だからです。</p>
+      </div>
     </div>
+  </div>
+
+  <div class="hoshitsu">
+    <div class="lbl">保湿</div>
+    <div class="bd">
+      <h3>保湿剤は、この<span data-pt="apart">1〜4とは別に</span>、<span data-pt="daily">毎日</span>ずっと。</h3>
+      <p>症状のあるなしに関係なく、<span data-pt="whole">からだ全体に</span>。かさつくところは<b>重ねて塗ってください</b>。お薬との順番は<span data-pt="order-any">どちらが先でも</span>かまいません。迷ったら<span data-pt="order-first">お薬が先</span>です。</p>
+    </div>
+  </div>
+
+  <div class="hitokoto">
+    <svg class="mascot" viewBox="0 0 60 60" aria-hidden="true">
+      <g stroke="#4A6B4B" stroke-width="2.2" fill="none" stroke-linecap="round">
+        <path d="M30 56 V33"/><path d="M30 44 C24 44 21 40 20 36 C26 35 29 39 30 44Z" fill="#DFE8DC"/>
+      </g>
+      <circle cx="30" cy="23" r="12.5" fill="#F5EAD2" stroke="#C08A2E" stroke-width="1.6"/>
+      <g stroke="#C08A2E" stroke-width="1.3" stroke-linecap="round">
+        <path d="M30 10.5V5"/><path d="M41 15l4.6-2.8"/><path d="M19 15l-4.6-2.8"/>
+        <path d="M43 26l5.3 1.4"/><path d="M17 26l-5.3 1.4"/>
+      </g>
+      <circle cx="25.6" cy="23" r="1.7" fill="#2B2723"/><circle cx="34.4" cy="23" r="1.7" fill="#2B2723"/>
+      <path d="M27.4 27.5c1.6 1.5 3.6 1.5 5.2 0" stroke="#2B2723" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <circle cx="21.5" cy="26.6" r="2.1" fill="#C0453B" opacity=".28"/>
+      <circle cx="38.5" cy="26.6" r="2.1" fill="#C0453B" opacity=".28"/>
+    </svg>
+    <p>かゆいところに <span class="s">ステロイド</span>。そのまわりまで <span class="n">ステロイド以外</span>。<br><span data-pt="after">おさまったあとも</span>、<span data-pt="same">同じ場所に</span> <span class="n" data-pt="weekly">週2〜3回（例：土日）</span>。</p>
+  </div>
+</div>
+
+<!-- ══════════ 2ページ目 ══════════ -->
+<div class="page">
+  <div class="head">
+    <div class="eyebrow">ぬりぐすり の てびき</div>
+    <div class="clinic">やまもと皮膚科・漢方クリニック</div>
+  </div>
+
+  <h1 style="font-size:28px;margin:10px 0 10px;">どのくらい塗る？</h1>
+
+  <div class="sec">
+    <h2>塗る量のめやす</h2>
+    <p class="sub">量が足りないことが、治りにくいいちばんの原因です。</p>
+    <div class="ryou">
+      <div class="ryou-box">
+        <svg viewBox="0 0 130 130" aria-label="人さし指の先から第一関節までお薬を出した図">
+          <g transform="rotate(-22 100 26)">
+            <rect x="78" y="10" width="42" height="20" rx="4" fill="#fff" stroke="#26415E" stroke-width="2"/>
+            <rect x="112" y="8" width="7" height="24" rx="2" fill="#DCE3EB" stroke="#26415E" stroke-width="2"/>
+            <path d="M78 15h-10a5 5 0 0 0 0 10h10" fill="#fff" stroke="#26415E" stroke-width="2"/>
+            <line x1="88" y1="15" x2="88" y2="25" stroke="#DCE3EB" stroke-width="2"/>
+            <line x1="96" y1="15" x2="96" y2="25" stroke="#DCE3EB" stroke-width="2"/>
+          </g>
+          <path d="M42 122V60a16 16 0 0 1 32 0v62z" fill="#F6E3D5" stroke="#26415E" stroke-width="2.4" stroke-linejoin="round"/>
+          <path d="M42 90h32" stroke="#26415E" stroke-width="1.8" stroke-dasharray="5 3.5"/>
+          <path d="M49 58c0-8 18-8 18 0v29H49z" fill="#C0453B" opacity=".8"/>
+          <g stroke="#C08A2E" stroke-width="1.8" stroke-linecap="round">
+            <path d="M31 52v36"/><path d="M26 52h10"/><path d="M26 88h10"/>
+          </g>
+          <text x="86" y="112" font-size="11.5" fill="#26415E" font-weight="700" font-family="sans-serif">第一関節</text>
+          <path d="M83 108 L76 92" stroke="#26415E" stroke-width="1.4" fill="none"/>
+        </svg>
+        <h4>チューブなら</h4>
+        <p><span data-pt="amount">人さし指の<b>先から第一関節まで</b>（約0.5g）</span></p>
+      </div>
+
+      <div class="ryou-box">
+        <svg viewBox="0 0 130 130" aria-label="大人の手のひら2枚分の広さ">
+          <g fill="#F6E3D5" stroke="#26415E" stroke-width="2.4" stroke-linejoin="round">
+            <path d="M8 118V72c0-6 6-7 9-3V40c0-5 7-5 7 0v26h3V31c0-5 7-5 7 0v35h3V34c0-5 7-5 7 0v32h3V46c0-5 7-5 7 0v38c0 21-9 34-19 34z"/>
+            <path d="M122 118V72c0-6-6-7-9-3V40c0-5-7-5-7 0v26h-3V31c0-5-7-5-7 0v35h-3V34c0-5-7-5-7 0v32h-3V46c0-5-7-5-7 0v38c0 21 9 34 19 34z"/>
+          </g>
+          <text x="65" y="96" font-size="25" fill="#C08A2E" font-weight="700" text-anchor="middle" font-family="sans-serif">2</text>
+          <text x="65" y="116" font-size="10.5" fill="#C08A2E" font-weight="700" text-anchor="middle" font-family="sans-serif">まい分</text>
+        </svg>
+        <h4>塗れる広さ</h4>
+        <p>その量で<b>大人の<span data-pt="area">手のひら2枚分</span></b>が目安です</p>
+      </div>
+
+      <div class="ryou-box">
+        <svg viewBox="0 0 130 130" aria-label="塗ったあと皮ふがテカり、ティッシュが軽くくっつく">
+          <rect x="8" y="88" width="114" height="34" rx="8" fill="#F6E3D5" stroke="#26415E" stroke-width="2.4"/>
+          <g stroke="#C08A2E" stroke-width="2.2" stroke-linecap="round">
+            <path d="M24 60v-9"/><path d="M106 60v-9"/>
+            <path d="M40 58l-5-8"/><path d="M90 58l5-8"/>
+          </g>
+          <g transform="rotate(-7 65 74)">
+            <path d="M30 50h58a4 4 0 0 1 4 4v34a4 4 0 0 1-4 4H30a4 4 0 0 1-4-4V54a4 4 0 0 1 4-4z"
+                  fill="#fff" stroke="#26415E" stroke-width="2.2"/>
+            <path d="M88 50l-9 9h9z" fill="#DCE3EB" stroke="#26415E" stroke-width="1.6" stroke-linejoin="round"/>
+            <g stroke="#DCE3EB" stroke-width="2" stroke-linecap="round">
+              <path d="M34 68h34"/><path d="M34 78h44"/>
+            </g>
+          </g>
+          <text x="65" y="112" font-size="12.5" fill="#26415E" font-weight="700" text-anchor="middle" font-family="sans-serif">くっつく</text>
+        </svg>
+        <h4>塗れたサイン</h4>
+        <p>皮ふが<b>テカッと光り</b>、ティッシュが軽くつく</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>よくあるご質問</h2>
+    <div class="qa-item">
+      <p class="q">きれいになったのに、まだ塗るのですか。</p>
+      <p class="a">見た目が治っても、皮ふの下には炎症が残っています。ここでやめると再発しやすいため、<b>ステロイド以外のお薬を週2〜3回（例：土日）つづけて</b>、そのまま落ち着かせていきます。</p>
+    </div>
+    <div class="qa-item">
+      <p class="q">ステロイドは、こわい薬ではないですか。</p>
+      <p class="a"><b>正しい場所に、正しい量を、必要な期間だけ</b>使えば心配はいりません。かえって量が少ないと炎症が長引き、使う期間が延びてしまいます。やめる時期はご相談しながら決めます。</p>
+    </div>
+    <div class="qa-item">
+      <p class="q">2つのお薬を重ねると、効きめが弱まりませんか。</p>
+      <p class="a">弱まりません。<b>塗る順番もどちらが先でもかまいません。迷ったらお薬が先です</b>。ただしプロトピックは炎症が強いところに重ねるとヒリヒリすることがあるので、そのときは重ねずに、まわりだけに塗ってください。</p>
+    </div>
+    <div class="qa-item">
+      <p class="q">軽いところにも、まずステロイドですか。</p>
+      <p class="a"><b><span data-pt="mild">軽いところは</span>、<span data-pt="mild-drugs">コレクチム・モイゼルト・プロトピック</span>を<span data-pt="first">最初から</span>お使いいただいて結構です</b>。コレクチムとモイゼルトはしみにくいお薬です。プロトピックははじめのうちヒリヒリ・ほてることがありますが、1週間ほどで軽くなることが多く、つらいときはご相談ください。ステロイドは、かゆみや赤みが強いところにお使いください。</p>
+    </div>
+  </div>
+
+  <p class="namebar">お名前　　　　　　　　　日付　　　月　　　日</p>
+
+  <div class="sec">
+    <h2>メモ</h2>
+    <div class="memo" style="margin-top:10px;">
+      <div class="memo-line"></div><div class="memo-line"></div>
+      <div class="memo-line"></div>
+      <div class="memo-line"></div>
+    </div>
+  </div>
+
+
+  <div class="foot">
+    <div>
+      <div class="name">やまもと皮膚科・漢方クリニック</div>
+      塗り方でお困りのときは、遠慮なくスタッフにお声かけください。
+    </div>
+    <div style="text-align:right;">外用薬の塗り方／患者さま用<br>最終判断は医師が行います。</div>
+  </div>
+</div>
+
+</body>
+</html>
+    </script>
+
   </section>
 
   <!-- ===== CALC ===== -->
@@ -1719,6 +2070,18 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
       <button class="reset" id="calcReset">部位をリセット</button>
       <p class="note">1 FTU = 0.5g で換算。処方量 ＝ 1回分(g) × 1日の回数 × 日数。チューブ本数は切り上げ。実際の処方は病変範囲・剤形・残薬を加味して調整してください。</p>
     </div>
+
+    <div class="block">
+      <h3>FTU（フィンガー・チップ・ユニット）</h3>
+      <p class="big">大人の人差し指の先から第1関節まで、チューブ（口径5mm）から出した量＝<strong>1 FTU ≒ 0.5g</strong>。</p>
+      <p>1 FTU で<strong>手のひら2枚分</strong>の面積に塗れます。これが「適量」の世界標準のものさしです。</p>
+      <ul>
+        <li>ローション・フォーム剤は<strong>1円玉大 ≒ 1 FTU</strong></li>
+        <li>5gチューブ ≒ 10 FTU、10gチューブ ≒ 20 FTU</li>
+        <li>全身1回 ≒ 20 FTU ≒ 10g</li>
+        <li>小児は体格に応じて減量（おおむね年齢別チャートを使用）</li>
+      </ul>
+    </div>
   </section>
 
   <!-- ===== PROACTIVE ===== -->
@@ -1732,7 +2095,7 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
       <h3>進め方</h3>
       <ul>
         <li><strong>① 寛解導入</strong>：炎症が強い間は適切なランクの薬剤を毎日しっかり塗り、皮膚をツルツルの状態まで戻す。</li>
-        <li><strong>② 維持（プロアクティブ）</strong>：ツルツルになった後も、再燃しやすい部位へ<strong>週2〜3回</strong>抗炎症外用。間の日は保湿のみ。</li>
+        <li><strong>② 維持（プロアクティブ）</strong>：ツルツルになった後も、再燃しやすい部位へ<strong>週2〜3回（例：土日）</strong>抗炎症外用。間の日は保湿のみ。</li>
         <li><strong>③ 漸減</strong>：安定すれば週1回→保湿のみへ。</li>
       </ul>
     </div>
@@ -1747,9 +2110,9 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
       <div class="nursebox">
         <div class="nh">患者説明ポイント</div>
         <ul>
-          <li>「治ったら全部やめる」ではなく「<strong>良くなっても週2回は続ける</strong>」のが再発を防ぐコツと伝える。</li>
+          <li>「治ったら全部やめる」ではなく「<strong>良くなっても週2〜3回（例：土日）は続ける</strong>」のが再発を防ぐコツと伝える。</li>
           <li>保湿は毎日。薬を塗らない日も必ず保湿。</li>
-          <li>カレンダーや曜日を決めて習慣化（例：月・木に塗る）。</li>
+          <li>カレンダーや曜日を決めて習慣化（例：土日に塗る）。</li>
         </ul>
       </div>
     </div>
@@ -1800,7 +2163,7 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
         <ul>
           <li>「見た目がきれい＝治った」ではなく、皮膚の中に<strong>火種</strong>が残っていると説明する。</li>
           <li>ぶり返したら、ひとつ前のステップに戻ればよい。行ったり来たりして構わない。</li>
-          <li>塗り始めのヒリヒリは多くが1週間ほどで軽快する（当院製剤HCCrではほぼ出ない）。</li>
+          <li>塗り始めのヒリヒリは1週間ほどで軽くなることが多い（当院製剤HCCrではほぼ出ない）。</li>
         </ul>
       </div>
     </div>
@@ -1998,7 +2361,7 @@ footer .r{margin-left:auto;letter-spacing:.06em}
       <div class="tab"><div class="lbl">STEP</div><div class="num">3</div></div>
       <div class="body">
         <div class="cond">ザラザラのない状態が <em>続いている</em> なら</div>
-        <div class="dose">週2回（土曜・日曜だけ 1回ずつ）</div>
+        <div class="dose">週2〜3回（例：土日）</div>
         <div class="note">ここが「火種を出さないための塗り方」。<b>症状がなくても、土日は塗ります。</b>曜日を決めておくと習慣にしやすく、続けるほど再発しにくくなります。</div>
       </div>
     </div>
@@ -2086,7 +2449,7 @@ footer .r{margin-left:auto;letter-spacing:.06em}
       <li><b>自己判断で急にやめない。</b>見た目がきれいになった時点では、まだ皮ふの中は治りきっていません。</li>
       <li><b>保湿は毎日つづける。</b>ステップが進んでも、保湿ケアは休まず続けてください。土台になります。</li>
       <li><b>お風呂あがり5分以内</b>がいちばん効きます。水分が逃げる前に塗るのがコツです。</li>
-      <li>塗りはじめの数日、<b>ヒリヒリ・ほてり</b>を感じることがあります。多くは1週間ほどでおさまりますので、続けてみてください。がまんできないときはご相談を。</li>
+      <li>塗りはじめに<b>ヒリヒリ・ほてり</b>を感じることがあります。1週間ほどで軽くなることが多いので、続けてみてください。がまんできないときはご相談を。</li>
       <li>赤みやかゆみが強い・ジュクジュクする・いつもと様子が違うときは、<b>予定を待たずに受診</b>してください。</li>
     </ul>
   </div>
@@ -5763,8 +6126,8 @@ var DATA_META = {
              parts:[{n:'疾患別の生活指導', updated:'2026-03-29'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'}]},
   products: {updated:'2026-10-01', check:'各製品の添付資料・メーカー情報'},
   staff:    {updated:'2026-10-05', check:'添付文書・最適使用推進ガイドライン'},
-  topical:  {updated:'2026-10-05', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
-             parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-10-05'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-09-04'}]},
+  topical:  {updated:'2026-11-04', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
+             parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-10-05'},{n:'塗り方・塗布量計算・フロー・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-04'}]},
   vitamin:  {updated:'2026-06-24', check:'添付文書・日本人の食事摂取基準'},
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
@@ -8404,7 +8767,7 @@ function dietGo(){ guideChGo('diet'); }
   }).join('');
   guidePamph('diet', DIET_HTML, 1123);
 })();
-/* 生活指導タブの章の A4 パンフ：iframe の srcdoc に流し込んで縮小プレビューし、印刷ボタンで iframe の中身だけを印刷する。
+/* 章の A4 パンフ（生活指導タブ・外用薬タブ）：iframe の srcdoc に流し込んで縮小プレビューし、印刷ボタンで iframe の中身だけを印刷する。
    key は id の接頭辞（<key>Frame / <key>Wrap / <key>Print）、naturalH は原寸（794px 幅）での全ページの高さ */
 function guidePamph(key, html, naturalH){
   var frame=document.getElementById(key+"Frame");
@@ -8443,6 +8806,42 @@ function guideChGo(sub){
 var WALK_HTML = embeddedHTML('walk-src');
 function walkGo(){ guideChGo('walk'); }
 guidePamph('walk', WALK_HTML, 2*(1123+16));
+/* ---------- 外用薬の塗り方（外用薬タブ › 塗り方の基本） ---------- */
+var NURI_HTML = embeddedHTML('nuri-src');
+var NURI_TEXT = '';   // パンフ本文（横断検索用）
+/* 指導のポイントはパンフ本体から組み立てる。'#語' はパンフの data-pt の語句、それ以外はつなぎの言葉。
+   薬剤名・回数・量は必ず data-pt から読み、ここに書かない（パンフと二重管理にしないため） */
+(function(){
+  var POINTS=[
+    ['#spot','、','#around','#nonsteroid'],
+    ['ステロイドは','#freq','、','#until','。','#enough'],
+    ['#after','#same','#nonsteroid','を','#weekly'],
+    ['保湿は','#apart','、','#daily','#whole'],
+    ['#mild','#mild-drugs','を','#first','使ってよい'],
+    ['塗る量は','#amount','＝','#area'],
+    ['毛の流れに沿って、こすらない'],
+    ['塗り分けが難しい患者には、保湿剤を全身→気になる部位に薬剤を重ねる方式が指導しやすい'],
+    ['入浴後はできるだけ早く（5分以内）。皮膚が清潔で水分のあるうちに'],
+    ['塗る順番は','#order-any','よい。迷ったら','#order-first','。間隔を空ける必要は基本的にない'],
+    ['プロアクティブのエビデンスはステロイドとプロトピック。コレクチム・モイゼルトの週2〜3回継続は当院の方針で、添付文書は改善後の漫然とした長期使用を戒めている。']
+  ];
+  var d=null;
+  try{ d=new DOMParser().parseFromString(NURI_HTML,'text/html'); NURI_TEXT=d.body.textContent.replace(/\s+/g,' '); }catch(e){}
+  function part(x){
+    if(x.charAt(0)!=='#') return x;
+    var el=d&&d.querySelector('[data-pt="'+x.slice(1)+'"]');
+    return el ? el.textContent.replace(/\s+/g,'') : null;
+  }
+  var box=document.getElementById("nuri-pts");
+  if(box) box.innerHTML=POINTS.map(function(p,i){
+    var t=p.map(part);
+    var txt=t.indexOf(null)>=0 ? '⚠ パンフ本体から読み取れません（data-pt を確認してください）' : t.join('');
+    return '<li><span class="n">'+(i+1)+'</span><span><b>'+esc(txt)+'</b></span></li>';
+  }).join('');
+})();
+guidePamph('nuri', NURI_HTML, 2*(1123+16));
+/* 当院流フローの「患者用プリント」も同じパンフを印刷する（非表示の iframe は印刷できないので、先に塗り方の基本を開く） */
+function printNuriHandout(){ __topical.jump('basics'); document.getElementById('nuriPrint').click(); }
 
 algInit();
 
@@ -8648,58 +9047,6 @@ algInit();
 
   if(document.getElementById("aza-stage")) render();
 })();
-</script>
-<script>
-window.printFlowHandout = function(){
-  var css = ""
-    + "@page{size:A4;margin:15mm;}"
-    + "*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}"
-    + "body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic','Meiryo',sans-serif;color:#222;line-height:1.85;margin:0;}"
-    + ".serif{font-family:'Hiragino Mincho ProN','Yu Mincho',serif;}"
-    + ".top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #2f7d6f;padding-bottom:8px;margin-bottom:6px;}"
-    + ".clinic{font-size:12px;color:#2f7d6f;font-weight:700;letter-spacing:.04em;}"
-    + ".meta{font-size:11px;color:#555;text-align:right;}"
-    + "h1{font-size:22px;margin:14px 0 2px;letter-spacing:.02em;}"
-    + ".badge{display:inline-block;background:#e4efe9;color:#1f5a4f;font-weight:700;font-size:13px;border-radius:20px;padding:4px 14px;margin:6px 0 16px;}"
-    + ".step{display:flex;gap:14px;border:1.5px solid #d9e4df;border-radius:12px;padding:12px 14px;margin-bottom:10px;page-break-inside:avoid;}"
-    + ".num{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#2f7d6f;color:#fff;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;}"
-    + ".num.zen{background:#1f5a4f;font-family:'Hiragino Mincho ProN','Yu Mincho',serif;font-size:15px;}"
-    + ".st{flex:1;}"
-    + ".st h3{margin:2px 0 3px;font-size:16px;}"
-    + ".st p{margin:2px 0;font-size:14px;}"
-    + ".warn{background:#fae9e6;border-left:4px solid #b23b3b;border-radius:8px;padding:9px 12px;font-size:13.5px;margin:12px 0;font-weight:600;}"
-    + ".after{background:#1f5a4f;color:#fff;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:6px;}"
-    + ".rx{border:1.5px dashed #bbb;border-radius:10px;padding:12px 14px;margin-top:14px;}"
-    + ".rx div{font-size:13.5px;margin:7px 0;}"
-    + ".rx .line{display:inline-block;border-bottom:1px solid #888;min-width:60%;}"
-    + ".foot{margin-top:14px;font-size:11px;color:#666;text-align:center;}";
-  var html = "<!DOCTYPE html><html lang='ja'><head><meta charset='utf-8'>"
-    + "<title>アトピーのお薬の塗り方</title><style>" + css + "</style></head><body>"
-    + "<div class='top'><div class='clinic'>やまもと皮膚科・漢方クリニック</div>"
-    + "<div class='meta'>お名前：____________　様<br>日付：　　年　　月　　日</div></div>"
-    + "<h1 class='serif'>アトピーのお薬の塗り方</h1>"
-    + "<div class='badge'>1日2回　お風呂あがり ・ 朝</div>"
-    + "<div class='step'><div class='num zen'>禅</div><div class='st'><h3>まず、ひと呼吸</h3>"
-    + "<p>心を落ち着けて、今かゆい場所を確かめましょう。かく前に、ひと呼吸おくのがコツです。</p></div></div>"
-    + "<div class='step'><div class='num'>1</div><div class='st'><h3>かゆみ止め（ステロイド）を塗る</h3>"
-    + "<p>かゆいところに、ちょんと塗って、かゆみをしずめます。</p></div></div>"
-    + "<div class='step'><div class='num'>2</div><div class='st'><h3>白いお薬（HPCr）を広めに塗る</h3>"
-    + "<p>かゆみ止めを塗ったところと、その<b>まわりまで広く</b>塗って、見えない炎症をおおいます。</p></div></div>"
-    + "<div class='step'><div class='num'>3</div><div class='st'><h3>カサカサしたら、保湿</h3>"
-    + "<p>乾いたと感じたら、そのつど保湿しましょう。回数は多くてかまいません。</p></div></div>"
-    + "<div class='warn'>⚠ かゆみが止まらない・赤みやジュクジュクが強い時は、がまんせず受診してください。</div>"
-    + "<div class='after'><b>よくなってきたら：</b>かゆみ止めは少しずつ減らし、白いお薬と保湿を続けましょう。</div>"
-    + "<div class='rx'><b>あなたのお薬</b>"
-    + "<div>かゆみ止め：<span class='line'>&nbsp;</span></div>"
-    + "<div>白いお薬：<span class='line'>&nbsp;</span></div>"
-    + "<div>保&nbsp;&nbsp;湿：<span class='line'>&nbsp;</span></div></div>"
-    + "<div class='foot'>やまもと皮膚科・漢方クリニック　／　ご不明な点はスタッフにおたずねください</div>"
-    + "</body></html>";
-  var w = window.open('', '_blank');
-  if(!w){ alert('ポップアップがブロックされました。ブラウザの設定で許可してください。'); return; }
-  w.document.open(); w.document.write(html); w.document.close(); w.focus();
-  setTimeout(function(){ try{ w.print(); }catch(e){} }, 350);
-};
 </script>
 <script>
 /* ══════════════════════════════════════════════
@@ -9178,9 +9525,9 @@ function build(){
     });
     [['rank','痒み抑制効果ランキング','ステロイド TCI JAK PDE4 Tier 強さ ランク 順位'],
      ['flow','当院流 アトピー外用フロー','アトピー 三層 坐禅 HPCr 保湿 ステロイド プリント 患者用'],
-     ['basics','塗り方の基本','FTU 塗布量 指先 入浴後 回数 すり込まない'],
-     ['calc','塗布量 計算','FTU 処方量 g 本数 日数 部位 計算'],
-     ['proactive','プロアクティブ療法','週2回 維持 再燃 寛解 プロアクティブ リアクティブ'],
+     ['basics','塗り方の基本（FTU・指1本分・プロアクティブ・保湿／A4パンフ）','塗り方 FTU 塗布量 指先 指1本分 入浴後 回数 毛の流れ 塗り分け 順番 プロアクティブ 保湿 パンフレット 印刷 A4 患者説明 '+(window.NURI_TEXT||'')],
+     ['calc','塗布量 計算','FTU フィンガーチップユニット 口径 1円玉 ローション フォーム チューブ 全身 小児 処方量 g 本数 日数 部位 計算'],
+     ['proactive','プロアクティブ療法','週2回 週2〜3回 土日 維持 再燃 寛解 プロアクティブ リアクティブ'],
      ['pamph','患者パンフ（プロアクティブ）','ザラザラ 印刷 A4 パンフレット 患者説明'],
      ['azelaic','アゼライン酸 判定フロー','AZAクリア セラム ざ瘡 にきび 酒皶 マラセチア 色素沈着 妊娠']
     ].forEach(function(r){
