@@ -4199,6 +4199,19 @@ ul.bl li{margin-bottom:3px}
 .c-note{background:var(--matsuba-bg);border:1px solid #cfdccb;color:#385034}
 .c-note .ct{color:var(--matsuba)}
 
+/* ---------- 関連パネルへのリンク ---------- */
+.xlinks{display:grid;gap:8px}
+.xlink{
+  display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:9px 11px;
+  background:var(--washi2);border:1px solid var(--line);border-radius:9px;
+  font-family:inherit;color:var(--sumi);text-align:left;cursor:pointer;
+}
+.xlink:active{background:var(--ai-bg)}
+.xlink .xt{flex:1;min-width:0}
+.xlink .xn{display:block;font-size:14px;font-weight:700;color:var(--ai);line-height:1.5}
+.xlink .xd{display:block;font-size:12.5px;color:var(--sumi-l);line-height:1.6}
+.xlink .xa{flex:none;font-size:18px;color:var(--ai)}
+
 /* timeline */
 .tl{position:relative;padding-left:22px;margin:0}
 .tl::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--line)}
@@ -4410,11 +4423,11 @@ sections:[
 
 /* ---------------- 4. 光線過敏 ---------------- */
 {
-id:'photo', name:'光線過敏', type:'cause',
+id:'photo', name:'光線過敏', type:'cause', kw:'抗Ro SSA SSB 抗La',
 summary:'問診で光線過敏らしさを確定し、薬剤を切り分ける段階が決定的。ポルフィリンは検体の遮光・冷蔵を外すと偽陰性になる。',
 sections:[
  {h:'第1段階', note:'院内で一括', kind:'tests', items:[
-  {n:'抗核抗体（ANA）、抗Ro/SSA、抗La/SSB抗体', d:'薬剤誘発性ループス、SLEの除外'},
+  {n:'抗核抗体（ANA）、抗SS-A/Ro抗体、抗SS-B/La抗体', d:'薬剤誘発性ループス、SLEの除外'},
   {n:'抗ヒストン抗体、抗dsDNA抗体、補体（C3/C4）', d:'抗ヒストン抗体は薬剤性で高率陽性'},
   {n:'CK、アルドラーゼ、抗ARS抗体／抗MDA5抗体', d:'皮膚筋炎のV領域・項背部紅斑は光線過敏と紛らわしい。反復例で価値が高い'},
   {n:'CBC、生化学（肝機能重視）、フェリチン、血清鉄', d:'PCTの背景検索'},
@@ -4447,6 +4460,9 @@ sections:[
  {kind:'warn', t:'算定・運用', items:[
   '抗ヒストン抗体・抗MDA5抗体は病名要件が厳しい',
   '光パッチテストはUVA照射装置が必要。院内／紹介の分岐を明記しておく'
+ ]},
+ {h:'関連パネル', kind:'links', items:[
+  {id:'dle', n:'DLE（円板状エリテマトーデス）', d:'確定診断の手順と、SLE合併・移行のスクリーニング'}
  ]}
 ]},
 
@@ -4693,6 +4709,55 @@ sections:[
   '薬剤歴 — テトラサイクリン系、キノロン系、タキサン系、サイアザイド、ソラレン（光線過敏性爪甲剥離症）',
   '水仕事、ジェルネイル、爪いじりの有無'
  ]}
+]},
+
+/* ---------------- 9. DLE ---------------- */
+{
+id:'dle', name:'DLE（円板状エリテマトーデス）', type:'cause', kw:'ループス discoid lupus erythematosus 抗Ro SSA SSB 抗La',
+summary:'確定診断は皮膚生検による組織病理診断。HE用とDIF用で提出容器が違うので採取前に確認する。血液と尿でSLE合併・移行をスクリーニングする。',
+sections:[
+ {kind:'note', t:'最初に行うこと', items:[
+  '確定診断は皮膚生検による組織病理診断',
+  '臨床所見（紅斑、毛包角栓、色素異常、萎縮、瘢痕）でほぼ確実な場合もあるが、不確実なら生検'
+ ]},
+ {kind:'stop', t:'生検の注意', items:[
+  'HE用はホルマリン',
+  '蛍光抗体直接法（DIF）用はホルマリン不可。Michel液または凍結で提出する',
+  '顔面病変が多く採り直しが効きにくいので、提出容器を採取前に確認する',
+  'DIFは皮疹部から採取（真皮表皮接合部の顆粒状沈着が50〜90%で陽性）'
+ ]},
+ {h:'血液検査', note:'SLE合併・移行のスクリーニング', kind:'tests', items:[
+  {n:'抗核抗体（ANA）'},
+  {n:'血算'},
+  {n:'赤沈、CRP'},
+  {n:'血清クレアチニン'},
+  {n:'C3、C4、CH50'}
+ ]},
+ {h:'抗核抗体（ANA）が陽性なら追加', kind:'tests', items:[
+  {n:'抗dsDNA抗体'},
+  {n:'抗Sm抗体'},
+  {n:'抗SS-A/Ro抗体'},
+  {n:'抗SS-B/La抗体'},
+  {n:'抗RNP抗体'}
+ ]},
+ {kind:'warn', t:'SCLEを疑うとき', items:[
+  'ただしSCLEを疑うときは、抗核抗体（ANA）の結果を待たずに抗SS-A/Ro抗体を出す。抗SS-A/Ro抗体は抗核抗体（ANA）が陰性でも陽性のことがある',
+  '光線過敏パネルで一括オーダーにしているのは、SCLEを拾うため。DLE単独では段階式でよい。意図的な違い'
+ ]},
+ {h:'血液以外で併せて行うこと', kind:'bullets', items:[
+  '尿検査（定性＋沈渣。蛋白尿・血尿）',
+  '問診 — 2週間以上続く口腔潰瘍、関節症状、光線過敏'
+ ]},
+ {kind:'warn', t:'ヒドロキシクロロキンを開始する場合', items:[
+  '開始前に眼科でベースライン評価（網膜毒性スクリーニング：眼底、OCT、視野）'
+ ]},
+ {kind:'note', t:'解釈の注意', items:[
+  'DLE単独（全身症状なし）では抗核抗体（ANA）が低力価または陰性で、補体は正常のことが多い。これがSLEとの鑑別点のひとつ',
+  'DLEの最大約28%がSLEへ進行しうる'
+ ]},
+ {h:'関連パネル', kind:'links', items:[
+  {id:'photo', n:'光線過敏', d:'光線過敏の原因検索と、検査の段階分け'}
+ ]}
 ]}
 ];
 
@@ -4729,8 +4794,8 @@ function esc(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 /* 親ページ（index.html）に埋め込まれているときは、画面の状態を親の URL ハッシュに記録する */
-function route(path){
-  try{ if(window.parent!==window && window.parent.routeSet) window.parent.routeSet(path); }catch(e){}
+function route(path, replace){
+  try{ if(window.parent!==window && window.parent.routeSet) window.parent.routeSet(path, replace); }catch(e){}
 }
 function hl(s,q){
   s = esc(s);
@@ -4794,14 +4859,14 @@ function findHits(it,q){
 /* ============================================================
    詳細
    ============================================================ */
-function open(id){
+function open(id, replace){
   current = DATA.filter(function(d){ return d.id===id; })[0];
   if(!current){ goHome(); return; }
   view = 'detail'; picked = [];
   updateBar();
   renderDetail();
   window.scrollTo(0,0);
-  route('kensa/'+id);
+  route('kensa/'+id, replace);
 }
 function goHome(){
   view='home'; current=null; picked=[]; updateBar(); renderHome(); window.scrollTo(0,0);
@@ -4827,6 +4892,10 @@ function renderDetail(){
     /* 埋め込み時は親の履歴を戻る（戻った先の #kensa で一覧に戻る） */
     try{ if(window.parent!==window && window.parent.routeBack){ window.parent.routeBack('kensa'); return; } }catch(e){}
     goHome();
+  });
+  /* 関連パネルへの移動は履歴を積まない（「← 一覧へ」が前のパネルに戻らないように） */
+  Array.prototype.forEach.call(app.querySelectorAll('.xlink'), function(b){
+    b.addEventListener('click', function(){ open(b.getAttribute('data-go'), true); });
   });
   Array.prototype.forEach.call(app.querySelectorAll('ul.tests li'), function(li){
     li.addEventListener('click', function(){
@@ -4891,6 +4960,15 @@ function renderSection(sec, si){
       h += '</ul></div>';
     });
     return h;
+  }
+
+  if(k==='links'){   /* 関連パネルへのリンク。items は {id:開くパネルの id, n:表示名, d:説明} */
+    var h = '<div class="xlinks">';
+    (sec.items||[]).forEach(function(x){
+      h += '<button type="button" class="xlink" data-go="'+esc(x.id)+'"><span class="xt"><span class="xn">'+esc(x.n)+'</span>'
+        + (x.d?'<span class="xd">'+esc(x.d)+'</span>':'') + '</span><span class="xa">›</span></button>';
+    });
+    return h + '</div>';
   }
 
   if(k==='stop' || k==='warn' || k==='note'){
@@ -4959,7 +5037,7 @@ qEl.addEventListener('input', function(){
    ============================================================ */
 document.getElementById('ft').innerHTML =
   '院内参照用。添付文書・ガイドラインは改訂があり得るため、検査頻度と算定要件は最新版で確認してください。検査の選択を含め、最終判断は医師が行います。<br>'
-  + '最終更新 2026-11-05／8項目';
+  + '最終更新 2026-11-05／9項目';
 renderHome();
 /* 親ページ（横断検索・URL ハッシュ）から参照する */
 window.KENSA = {
@@ -9443,7 +9521,7 @@ var clearBtn=document.getElementById('gs-clear');
 if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
-var MAX_PER_SEC=8;
+var MAX_PER_SEC=15;
 var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch','reception','pdca','airmat'];
 var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師・看護師 › 新薬・専門薬剤', age:'年齢・用量', biojak:'医師・看護師 › バイオ・JAK', kensa:'検査パネル', products:'当院製品', vitamin:'医師・看護師 › ビタミン剤（内服）',
   guidance:'生活指導', findings:'所見別ナビ', allergy:'医師・看護師 › 食物アレルギー', patch:'医師・看護師 › パッチテスト',

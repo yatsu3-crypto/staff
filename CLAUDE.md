@@ -19,6 +19,7 @@
   - バイオ・JAK（医師・看護師タブの小タブ。`#staff/biojak/<id>`、比較表は `#staff/biojak/compare`）のデータは `var BIOJAK = (function(){` の `DRUGS`。薬価・副作用・作用機序・効果発現・使い分け比較だけを持ち、**用法・用量・対象年齢は持たない**（元資料 derm_bio_jak.html の用量・年齢は添付文書と食い違っていたため取り込まず、元資料は削除済み）。用量の正本は年齢・用量タブ／医師・看護師タブで、`age`／`staff` で指定する。カードの「投与間隔」は、その正本の文章（年齢・用量タブの `notes`、`link:{sec:'staff'}` の剤と `staff` だけの剤は医師・看護師タブの `dosage`）から `interval()` が読み取って表示する（バイオ・JAKに間隔を書かない。読み取れなければ「未登録（添付文書で確認）」）。間隔を足す・直すときは正本の文章を直す。月額概算（`month`）も同じで、`{i:正本の行の適応症見出し, k:何番目の用法か, p:薬価の添字}` だけを持ち、用量・数量は `monthRows()` が正本から読み取る。薬価の時点は `PRICE_AS_OF`、院内採用は `adopt`（yes／no／空＝要確認）。
   - 検査パネル（`kensa-src`）のデータは iframe 内の `var DATA`。親からは `kensaGo(id)` で開き（`kensaGo(id, 見出し)` で見出しまでスクロール）、横断検索は `window.KENSA` を読んで索引を作る。埋め込み iframe の高さは `fitEmbedFrame()`。
   - 検査パネルの血算の表記は CBC と 血算 が混在している。統一するなら全パネルをまとめて直すこと。2026-11-05 時点で未着手。
+  - 抗SS-A/SS-B の表記は「抗SS-A/Ro抗体」「抗SS-B/La抗体」に統一。検査の実施条件がパネルで違うのは意図的（光線過敏は一括、DLEは段階式）。揃えないこと。
   - 全文を一度に読まない。`grep -n` で場所を特定してから `sed -n` で必要範囲だけ読む。
   - 既存の localStorage キー：`ptd_list`、`vit_fav_v1`、`vit_memo_v1`、`alg_avoid_state_v1`、`app_route_v1`（最後に開いた画面）、`pdca-cho-v1`（PDCA帳。命名規則 `<app>_<item>_v1` に合わないが、既存の記録を守るため変えない）。
   - 画面の状態は URL ハッシュで表す（`#<tab>`、`#products/<id>`、`#topical/<subtab>`、`#search/<語>` など。`routeApply` を参照）。新しい画面や詳細ページを足すときは `routeSet()` で記録し、`routeApply()` に復元処理を足す。
