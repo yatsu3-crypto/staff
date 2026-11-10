@@ -3957,6 +3957,7 @@ var CANON_RULES=[
   /* 新薬・専門薬剤 */
   {k:['デュピクセント','デュピルマブ'],     sec:'staff', id:'dupixent'},
   {k:['ミチーガ','ネモリズマブ'],           sec:'staff', id:'mitchga'},
+  {k:['イブグリース','レブリキズマブ'],     sec:'staff', id:'ebglyss'},
   {k:['ネオーラル','シクロスポリン'],       sec:'staff', id:'neoral'},
   {k:['オテズラ','アプレミラスト'],         sec:'staff', id:'otezla'},
   {k:['ソーティクツ','デュークラバシチニブ'],sec:'staff', id:'sotyktu'},
@@ -3969,7 +3970,7 @@ var CANON_RULES=[
   {k:['ユベラ'],                            sec:'vitamin', id:'e'},
   {k:['ピドキサール'],                      sec:'vitamin', id:'b6'},
   {k:['フラビタン','ハイボン'],             sec:'vitamin', id:'b2'},
-  /* 年齢・用量タブが正本の薬（他タブに正本がある デュピクセント・ミチーガ・プロトピック・コレクチム・モイゼルト・ブイタマー・マイザー は除く）。
+  /* 年齢・用量タブが正本の薬（他タブに正本がある デュピクセント・ミチーガ・イブグリース・プロトピック・コレクチム・モイゼルト・ブイタマー・マイザー は除く）。
      一般名が他の薬名の一部になるもの（ロラタジン⊂デスロラタジン、アダパレン・過酸化ベンゾイル・エピナスチン）は製品名だけで引く */
   {k:['カロナール','アセトアミノフェン'],   sec:'age', id:'calonal'},
   {k:['ザイザル','レボセチリジン'],         sec:'age', id:'zyzal'},
@@ -3986,7 +3987,6 @@ var CANON_RULES=[
   {k:['クラリチン'],                        sec:'age', id:'claritin'},
   {k:['ポララミン','クロルフェニラミン'],   sec:'age', id:'polaramine'},
   {k:['アレグラ','フェキソフェナジン'],     sec:'age', id:'allegra'},
-  {k:['イブグリース','レブリキズマブ'],     sec:'age', id:'ebglyss'},
   {k:['スキリージ','リサンキズマブ'],       sec:'age', id:'skyrizi'},
   {k:['ベピオ'],                            sec:'age', id:'bepio'},
   {k:['ディフェリン'],                      sec:'age', id:'differin'},
@@ -4255,6 +4255,7 @@ ul.bl li{margin-bottom:3px}
 .lv3{background:var(--shu-bg);color:var(--shu)}
 .lv2{background:var(--kincha-bg);color:var(--kincha)}
 .lv1{background:var(--matsuba-bg);color:var(--matsuba)}
+.lv0{background:var(--washi2);color:var(--sumi-l);border:1px solid var(--line)}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0 6px}
 .chip{font-size:11.5px;background:var(--washi3);border:1px solid var(--line);border-radius:99px;padding:2px 9px;white-space:nowrap}
 .chip.sep{border:none;background:none;padding:2px 0;color:var(--sumi-l)}
@@ -4565,6 +4566,10 @@ sections:[
    d:['免疫抑制作用が弱く、結核スクリーニングもルーチン採血も必須ではない',
       '結膜炎と好酸球増多の確認が中心',
       'ADで最も使用頻度が高い薬剤。他クラスと同じ重い枠組みに入れないことがクリニック運用上は重要']},
+  {n:'IL-13阻害薬（IL-13単独）', lv:'lv0', tag:'モニタリング 未登録',
+   tl:['レブリキズマブ（イブグリース）'],
+   d:['IL-13だけを阻害する（IL-4は阻害しない）。IL-4/13阻害薬（デュピルマブ）とは別のクラス',
+      'クラスとしての検査・モニタリングの要点は未登録（添付文書・最適使用推進ガイドラインで確認）']},
   {n:'IL-31阻害薬', lv:'lv1', tag:'負荷 軽', tl:['ネモリズマブ'], d:['モニタリング負荷は軽い']},
   {n:'PDE4阻害薬（内服）', lv:'lv2', tag:'投与前・投与中の肝機能検査が必要',
    tl:['アプレミラスト（オテズラ）'],
@@ -5299,7 +5304,7 @@ var AGE = (function(){
      link:{sec:'staff', id:'mitchga'},
      specs:[['60mgシリンジ',60,'本'],['30mgシリンジ',30,'本']]},
     {id:'ebglyss', n:'イブグリース', gen:'レブリキズマブ', rt:'注射', cat:'アトピー生物学的製剤', form:'皮下注（シリンジ・オートインジェクター）', freq:1, min:144, age:'12歳以上かつ体重40kg以上',
-     notes:'IL-13拮抗薬。初回・2週後に500mg（250mg×2本）、4週以降250mgを2週間隔（状態により4週間隔も可）。投与45分前に室温に戻す。',
+     link:{sec:'staff', id:'ebglyss'},
      specs:[['250mgシリンジ',250,'本'],['250mgオートインジェクター',250,'本']]},
     {id:'skyrizi', n:'スキリージ', gen:'リサンキズマブ', rt:'注射', cat:'乾癬生物学的製剤（IL-23p19阻害薬）', form:'皮下注（シリンジ 150mg・75mg・55mg／ペン 150mg）', freq:1, min:72,
      age:'成人及び6歳以上の小児（尋常性乾癬・乾癬性関節炎・膿疱性乾癬・乾癬性紅皮症。4製剤とも共通）',
@@ -5419,6 +5424,7 @@ var AGE = (function(){
         var imp=s.cautions.filter(function(t){ return /^【重要】/.test(t); });
         if(imp.length) h+='<div class="ag-lbl">重要な注意（医師タブより）</div><div class="ag-hold">'+imp.map(function(t){ return e(t.replace(/^【重要】/,'')); }).join('<br>')+'</div>';
         h+='<div class="ag-lbl">用法・用量（医師タブより）</div><div class="ag-lines">'+s.dosage.map(function(t){ return '<div>'+e(t)+'</div>'; }).join('')+'</div>';
+        if(window.staffSrc && staffSrc(L.id)) h+='<div class="ag-txt" style="margin-top:6px;color:var(--tx3)">出典：'+e(staffSrc(L.id))+'</div>';
       }
     }
     if(L.sec==='topical' && window.__topical){
@@ -5665,7 +5671,8 @@ var AGE = (function(){
    PRICE_AS_OF：薬価の時点の表記を剤ごとに持つ。'' は既定（登録のない剤すべて）の文字列。
           剤の id をキーにすると、その剤だけ別の時点にできる。文字列ならそのまま表示、
           {src:出典, from:'YYYY-MM-DD', oldL:現行薬価の表記, newL:新薬価の表記} なら改定前後を併記し、
-          端末の日付が from 以降なら新薬価を主表示にする（price の3つ目に新薬価を書く）
+          端末の日付が from 以降なら新薬価を主表示にする（price の3つ目に新薬価を書く）。
+          {chk:表記} なら確認済みの確定値として表示する（どの改定の値か確認していないときは、改定年度ではなく確認日で書く）
    adopt：院内採用。'yes'＝採用／'no'＝未採用／''＝要確認
    price：[規格, 薬価（円）]（改定を併記する剤は [規格, 現行薬価, 新薬価]）。month：3割負担の月額概算（正本に用法がある薬だけ。主表示の薬価で計算）。
           {i:正本の行の適応症見出し（省略時は用法のある最初の行）, k:その行の何番目の用法か（省略時0）, p:price の添字}。
@@ -5680,7 +5687,8 @@ var BIOJAK = (function(){
   var PRICE_AS_OF = {
     '':'参照資料の値・2026年4月薬価改定での確認待ち',
     dupixent:{src:'サノフィ株式会社・リジェネロン・ジャパン株式会社「デュピクセント皮下注 薬価改定のご案内」2026年10月',
-              from:'2026-11-01', oldL:'現行薬価（2026年10月31日まで）', newL:'新薬価（2026年11月1日から）'}
+              from:'2026-11-01', oldL:'現行薬価（2026年10月31日まで）', newL:'新薬価（2026年11月1日から）'},
+    ebglyss:{chk:'2026年11月11日 確認'}
   };
   var CATS = [
     {k:'atopy', l:'アトピー（注射）',     c:'var(--g)'},
@@ -5705,7 +5713,7 @@ var BIOJAK = (function(){
      onset:'2〜4週',
      ae:[['上気道感染','約26%','軽'],['結膜炎','約7%','軽'],['注射部位反応','約7%','軽']],
      price:[['150mg 1本',21786]]},
-    {id:'ebglyss', n:'イブグリース', gen:'レブリキズマブ', en:'lebrikizumab', cat:'atopy', rt:'皮下注', adopt:'yes', age:'ebglyss',
+    {id:'ebglyss', n:'イブグリース', gen:'レブリキズマブ', en:'lebrikizumab', cat:'atopy', rt:'皮下注', adopt:'yes', age:'ebglyss', staff:'ebglyss',
      target:'IL-13', mech:'IL-13の直接中和（IL-4/IL-13シグナルを遮断）',
      onset:'2〜4週',
      ae:[['結膜炎','約8%','軽'],['注射部位反応','約7%','軽'],['頭痛','約4%','軽']],
@@ -5841,7 +5849,7 @@ var BIOJAK = (function(){
   function asOf(d){ return PRICE_AS_OF.hasOwnProperty(d.id) ? PRICE_AS_OF[d.id] : PRICE_AS_OF['']; }
   /* 端末の日付が改定日以降なら true（新薬価を主表示） */
   function useNew(d){
-    var a=asOf(d); if(typeof a!=='object') return false;
+    var a=asOf(d); if(typeof a!=='object' || !a.from) return false;
     var t=new Date(), ymd=t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+('0'+t.getDate()).slice(-2);
     return ymd>=a.from;
   }
@@ -5872,16 +5880,17 @@ var BIOJAK = (function(){
     return s ? {src:'医師', lines:s.dosage||[]} : {src:'', lines:[]};
   }
   function ivTokens(s){
-    var out=[], re=/(\d+)週間隔(?:（[^）]*）)?|1日(\d+)回(?!に)|1日量[^。]*?(\d+)回に分けて/g, m;
-    while((m=re.exec(s))) out.push(m[3] ? '1日量を'+m[3]+'回に分けて' : m[0]);
+    /* 「状態に応じて、…○週間隔」（添付文書の書き方）は、直前の間隔に付く「（状態により○週間隔）」として拾う */
+    var out=[], re=/状態に応じて[^。]*?(\d+)週間隔|(\d+)週間隔(?:（[^）]*）)?|1日(\d+)回(?!に)|1日量[^。]*?(\d+)回に分けて/g, m;
+    while((m=re.exec(s))) out.push(m[1] ? '（状態により'+m[1]+'週間隔）' : m[4] ? '1日量を'+m[4]+'回に分けて' : m[0]);
     return out;
   }
-  /* 重複を除いてつなぐ。「2週間隔」「4週間隔」だけなら「2週・4週間隔」にまとめる */
+  /* 重複を除いてつなぐ。「2週間隔」「4週間隔」だけなら「2週・4週間隔」にまとめる。「（状態により…）」は直前の語に続けて書く */
   function ivJoin(t){
     var u=[]; t.forEach(function(x){ if(u.indexOf(x)<0) u.push(x); });
     if(u.length>1 && u.every(function(x){ return /^\d+週間隔$/.test(x); }))
       return u.map(function(x){ return parseInt(x,10); }).sort(function(a,b){ return a-b; }).join('週・')+'週間隔';
-    return u.join('／');
+    return u.join('／').replace(/／（/g,'（');
   }
   /* 正本の行を {i:適応症の見出し, pre:見出しのない行の「○○：」, rest:見出しを除いた本文} にする */
   function ivLines(d){
@@ -5971,9 +5980,10 @@ var BIOJAK = (function(){
     h+='<div class="bj-lbl">副作用プロファイル（参考値）</div>';
     if(d.ae[0] && d.ae[0].r) d.ae.forEach(function(g){ h+='<div class="bj-sub">〈'+e(g.i)+'〉</div>'+aeTable(g.r); });
     else h+=aeTable(d.ae);
-    var pa=BIOJAK.asOf(d), rev=typeof pa==='object', nw=BIOJAK.useNew(d);
+    var pa=BIOJAK.asOf(d), rev=typeof pa==='object' && !!pa.from, chk=typeof pa==='object' && pa.chk, nw=BIOJAK.useNew(d);
     h+='<div class="bj-lbl">薬価</div><div class="bj-price">'
       + (rev ? '<span class="asof fix">'+e(nw?pa.newL:pa.oldL)+'を表示中</span><div class="f">出典：'+e(pa.src)+'</div>'
+             : chk ? '<span class="asof fix">'+e(pa.chk)+'</span>'
              : '<span class="asof">'+e(pa)+'</span>')
       + d.price.map(function(p){
           var r='<div class="row"><span>'+e(p[0])+'</span><b>'+yen(BIOJAK.mainPrice(d, p))+'</b></div>';
@@ -6078,8 +6088,10 @@ var BIOJAK = (function(){
     seg.innerHTML='<button type="button" data-cat="">すべて</button>'+BIOJAK.CATS.map(function(c){ return '<button type="button" data-cat="'+c.k+'">'+e(c.l)+'</button>'; }).join('');
     seg.onclick=function(ev){ var b=ev.target.closest('button'); if(!b) return; st.cat=b.dataset.cat; paintSeg(); render(); };
     paintSeg();
-    var fixed=BIOJAK.DRUGS.filter(function(d){ return typeof BIOJAK.asOf(d)==='object'; }).map(function(d){ return d.n; });
-    document.getElementById('bj-asof').textContent=BIOJAK.PRICE_AS_OF['']+(fixed.length?'。'+fixed.join('・')+'は改定案内の確定値（各薬剤の薬価欄に出典を表示）':'');
+    var fixed=BIOJAK.DRUGS.filter(function(d){ var a=BIOJAK.asOf(d); return typeof a==='object' && a.from; }).map(function(d){ return d.n; });
+    var chked=BIOJAK.DRUGS.filter(function(d){ var a=BIOJAK.asOf(d); return typeof a==='object' && a.chk; }).map(function(d){ return d.n; });
+    document.getElementById('bj-asof').textContent=BIOJAK.PRICE_AS_OF['']+(fixed.length?'。'+fixed.join('・')+'は改定案内の確定値（各薬剤の薬価欄に出典を表示）':'')
+      +(chked.length?'。'+chked.join('・')+'は確認済みの確定値（各薬剤の薬価欄に確認日を表示）':'');
     document.getElementById('bj-q').oninput=function(){ st.q=this.value; render(); };
     document.getElementById('bj-list').onclick=function(ev){
       var a=ev.target.closest('[data-go-age]');   if(a){ switchTab('age'); ageGo(a.dataset.goAge); return; }
@@ -6201,17 +6213,17 @@ var DATA_META = {
   guidance: {updated:'2026-11-04', check:'各疾患の最新ガイドライン',
              parts:[{n:'疾患別の生活指導', updated:'2026-11-04'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'}]},
   products: {updated:'2026-10-01', check:'各製品の添付資料・メーカー情報'},
-  staff:    {updated:'2026-10-05', check:'添付文書・最適使用推進ガイドライン'},
+  staff:    {updated:'2026-11-11', check:'添付文書・最適使用推進ガイドライン'},
   topical:  {updated:'2026-11-04', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
              parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-11-04'},{n:'塗り方・塗布量計算・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-04'}]},
   vitamin:  {updated:'2026-06-24', check:'添付文書・日本人の食事摂取基準'},
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
-  kensa:    {updated:'2026-11-05', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
+  kensa:    {updated:'2026-11-11', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
-  age:      {updated:'2026-10-30', check:'添付文書（使用可能年齢・小児用量・規格）'},
-  biojak:   {updated:'2026-10-30', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
+  age:      {updated:'2026-11-11', check:'添付文書（使用可能年齢・小児用量・規格）'},
+  biojak:   {updated:'2026-11-11', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
   reception:{updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。看護師 › PDCA帳と同じ台帳）'},
   pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
   airmat:   {updated:'2026-10-28', check:'モルテン エアマットレスの取扱説明（設定・設置・困ったとき）'}
@@ -7487,6 +7499,13 @@ function goBackProd() { routeBack('products'); }
 // ==============================================
 // 薬剤データベース（医師・看護師向け）
 // ==============================================
+/* STAFF_SRC：記載の根拠（出典と版）を剤ごとに持つ。剤の id をキーにする（バイオ・JAKの PRICE_AS_OF と同じ持ち方）。
+   '' は既定（登録のない剤すべて）で、空文字なら何も表示しない。カードの名前の下と、年齢・用量タブの「医師タブより」の欄に出す */
+var STAFF_SRC = {
+  '':'',
+  ebglyss:'添付文書 2025年5月改訂・第3版'
+};
+function staffSrc(id){ return STAFF_SRC.hasOwnProperty(id) ? STAFF_SRC[id] : STAFF_SRC['']; }
 var DRUGS = [
   {
     id: 'dupixent',
@@ -7554,6 +7573,42 @@ var DRUGS = [
       'VAS・NRS等の痒みスコアで効果を評価する',
       '効果判定は投与開始16週を目安に行う',
       'デュピクセントと作用機序が異なるため、効果不十分例での切り替えも検討可',
+    ],
+  },
+  {
+    id: 'ebglyss',
+    icon: '💉',
+    name: 'イブグリース',
+    sub: 'レブリキズマブ（lebrikizumab）\n抗IL-13抗体',
+    tags: ['アトピー','生物学的製剤'],
+    indications: [
+      '既存治療で効果不十分なアトピー性皮膚炎（ステロイド外用剤やタクロリムス外用剤等による適切な治療を一定期間施行しても十分な効果が得られず、強い炎症を伴う皮疹が広範囲に及ぶ患者。投与時は原則として抗炎症外用剤を併用し、保湿外用剤も継続する）',
+    ],
+    dosage: [
+      '〈アトピー性皮膚炎〉成人及び12歳以上かつ体重40kg以上の小児。初回及び2週後に1回500mg（250mgを2本）、4週以降は1回250mgを2週間隔で皮下投与。患者の状態に応じて、4週以降1回250mgを4週間隔で皮下投与することもできる。',
+      '投与45分前に冷蔵庫から出し、直射日光を避けて室温に戻す。',
+      '注射部位は腹部・大腿部・上腕部。腹部はへその周りを外す。同一箇所への反復注射、皮膚が敏感な部位・傷・発赤・硬結のある部位、アトピー性皮膚炎の強い炎症を伴う部位は避ける。',
+    ],
+    cautions: [
+      '【重要】投与前に寄生虫感染があれば治療すること。本剤はIL-13を阻害して2型免疫応答を減弱させ、寄生虫感染に対する生体防御機能を減弱させる可能性がある',
+      '【重要】本剤投与中の生ワクチン接種は避けること',
+      '【重要】長期ステロイド内服療法を受けている患者では、本剤開始後に経口ステロイドを急に中止しないこと。減量が必要な場合は医師の管理下で徐々に行う',
+      '禁忌：本剤の成分に対し過敏症の既往歴のある患者',
+      '重大な副作用：重篤な過敏症（0.2%）。アナフィラキシー等',
+      '眼：アレルギー性結膜炎、結膜炎、角膜炎、春季カタル。眼症状があれば眼科へ',
+      'その他：注射部位反応（紅斑・疼痛・そう痒感・腫脹等）、帯状疱疹、好酸球増加症',
+      '妊婦：有益性が危険性を上回る場合のみ。胎盤を通過して胎児に移行することが確認されている（サルでは毒性・催奇形性は認められず）',
+      '授乳婦：有益性を考慮して継続又は中止を検討',
+      '自己投与：開始時は必ず医療施設で、医師によるか医師の直接の監督のもとで行う',
+      '最適使用推進ガイドラインの対象品目',
+    ],
+    points: [
+      'IL-13を選択的に阻害する。IL-4とIL-13の両方を阻害するデュピクセントとは機序が異なる',
+      'IL-4Rα/IL-13Rα1の複合体形成を阻害してシグナルを遮断するが、デコイ受容体IL-13Rα2への結合は妨げないため、IL-13の自然なクリアランスは保たれる',
+      '結膜炎はIL-13/IL-4を標的とする薬剤に共通してみられる。デュピクセントより頻度が低い可能性が指摘されているが、機序は未解明で、直接比較した試験はない',
+      '16週までに治療反応が得られない場合は投与中止を考慮する',
+      '抗薬物抗体は3.9%に認められるが、有効性・安全性への影響は示唆されていない',
+      'ほかの生物学的製剤との効果の比較は間接比較にとどまり、直接比較した試験はない',
     ],
   },
   {
@@ -7715,6 +7770,7 @@ function showDrug(id){
   html += '<div class="prod-name">'+d.icon+' '+esc(d.name)+'</div>';
   html += '<div class="prod-sub">'+esc(d.sub).replace(/\n/g,'<br>')+'</div>';
   d.tags.forEach(function(t){ html += '<span class="prod-tag">'+esc(t)+'</span>'; });
+  if(staffSrc(d.id)) html += '<div style="margin-top:8px;font-size:12px;color:var(--tx3)">出典：'+esc(staffSrc(d.id))+'</div>';
   html += '<div style="margin-bottom:14px;"></div>';
 
   html += '<div class="prod-section"><div class="prod-section-ttl">📋 適応</div>';
