@@ -118,6 +118,11 @@ body.gs-on .gs-results{display:block;}
 .prod-section-ttl{font-size:12px;font-weight:600;color:var(--g);margin-bottom:6px;padding-bottom:4px;border-bottom:.5px solid var(--bd);}
 .prod-item{display:flex;gap:7px;font-size:12.5px;line-height:1.65;color:var(--tx);margin-bottom:5px;}
 .prod-item::before{content:"✓";color:var(--g2);flex-shrink:0;font-weight:600;}
+.staff-policy{background:#f7f3ea;border:1px dashed var(--bd);border-radius:10px;padding:10px 12px 6px;}
+.staff-policy .sp-note{font-size:11.5px;line-height:1.6;color:var(--tx2);margin-bottom:6px;}
+.staff-policy .sp-h{font-size:12px;font-weight:700;color:var(--tx);margin:8px 0 4px;}
+.staff-policy .sp-steps{margin:0 0 6px;padding:0 0 0 1.5em;font-size:12.5px;line-height:1.65;color:var(--tx);}
+.staff-policy .sp-steps li{margin-bottom:3px;}
 .prod-name{font-size:16px;font-weight:700;color:var(--g);margin-bottom:4px;}
 .prod-sub{font-size:11.5px;color:var(--tx2);margin-bottom:12px;line-height:1.5;}
 
@@ -660,7 +665,7 @@ body.kbar-on{padding-bottom:76px;}
 #pg-joge .jg-kv .v{display:block;font-size:13px;color:var(--tx);line-height:1.45;margin-top:1px;}
 #pg-joge .jg-note{font-size:12.5px;line-height:1.65;color:var(--tx2);}
 #pg-joge .jg-note .jg-lbl{display:inline-block;margin-right:6px;}
-#pg-joge .jg-chnav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;}
+#pg-joge .jg-chnav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:6px;}
 #pg-joge .jg-chnav button{min-height:44px;font-family:inherit;font-size:13px;font-weight:700;color:var(--g);background:var(--card);border:1px solid var(--g2);border-radius:10px;cursor:pointer;}
 #pg-joge .jg-ch{font-size:16px;font-weight:700;color:var(--gd);margin:20px 2px 10px;padding-bottom:6px;border-bottom:2px solid var(--g);scroll-margin-top:80px;}
 #pg-joge .jg-rules.jg-sub{border-color:var(--bd);}
@@ -4158,6 +4163,7 @@ var CANON_RULES=[
   {k:['ネオーラル','シクロスポリン'],       sec:'staff', id:'neoral'},
   {k:['オテズラ','アプレミラスト'],         sec:'staff', id:'otezla'},
   {k:['ソーティクツ','デュークラバシチニブ'],sec:'staff', id:'sotyktu'},
+  {k:['イコタイド','イコトロキンラ'],       sec:'staff', id:'icotide'},
   {k:['ワイキャンス','カンタリジン'],       sec:'staff', id:'wyikyans'},
   /* 内服ビタミン等 */
   {k:['トラネキサム酸','トランサミン'],     sec:'vitamin', id:'txa'},
@@ -4214,7 +4220,7 @@ var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'�
   function esc(x){ return String(x==null?'':x).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
   /* text に出てくる薬剤名から正本チップの HTML を作る。
-     self: 自分自身の正本キー（'products:hydroquinone' など）。exclude: 除外する製品 id 配列 */
+     self: 自分自身の正本キー（'products:hydroquinone' など）。exclude: 除外する製品 id または正本キー（'staff:sotyktu' など）の配列 */
   window.canonLinks=function(text, self, exclude){
     var t=String(text==null?'':text).replace(/<[^>]+>/g,' ').toLowerCase();
     if(!t) return '';
@@ -4224,6 +4230,7 @@ var CANON_SEC_LABEL={products:'当院製品', topical:'外用薬一覧', mix:'�
       var key=keyOf(r);
       if(key===self) return;
       if(r.sec==='products' && exclude.indexOf(r.id)>=0) return;
+      if(exclude.indexOf(key)>=0) return;   // 正本キー（'staff:sotyktu' など）での除外。相互リンクに出ている薬を2回出さない
       var hit=r.k.some(function(k){ return t.indexOf(k.toLowerCase())>=0; });
       if(!hit) return;
       out+='<button type="button" class="canon-chip" data-canon="'+i+'">'+esc(labelOf(r))+'<span class="cs">'+esc(CANON_SEC_LABEL[r.sec])+' ›</span></button>';
@@ -4797,6 +4804,16 @@ sections:[
       'JAK阻害薬より選択性が高く、血栓症・脂質異常等のJAKクラスエフェクトが少ないとされる',
       '上気道炎・口腔咽頭炎・毛包炎、口唇ヘルペスの再活性化に注意',
       '妊婦・授乳婦への投与は禁忌。生ワクチンは投与中避ける']},
+  {n:'IL-23受容体拮抗薬（経口）', lv:'lv2', tag:'結核スクリーニング必須',
+   tl:['イコトロキンラ（イコタイド）'],
+   d:['当院採用。【経口薬】注射ではなく内服（1日1回の錠剤）。生物学的製剤ではないが並べて管理する',
+      '注射の IL-23阻害薬（抗IL-23p19抗体：グセルクマブ等）とは別の薬。受容体側を遮断する',
+      '開始前に結核スクリーニング（問診・胸部X線、IGRAまたはツベルクリン反応、必要に応じ胸部CT）。投与中も胸部X線等で定期的に確認',
+      '結核の既往・潜在性結核の疑いがあれば結核に詳しい医師に相談し、必要に応じ抗結核薬を先行',
+      '禁忌：重篤な感染症、活動性結核。生ワクチン接種は行わない。他の分子標的薬との併用は避ける',
+      '中等度以上の腎機能障害（eGFR<60）で血中濃度上昇のおそれ。導入前に eGFR を確認',
+      'HBV等は学会ガイダンスに準じる（添付文書の明記事項ではない）',
+      '出典：添付文書 2026年11月作成・第1版／ヤンセンファーマ製品資料 2026年11月作成']},
   {n:'カルシニューリン阻害薬（内服）', lv:'lv3', tag:'2〜4週ごとに監視',
    tl:['シクロスポリン（ネオーラル）'],
    d:['生物学的製剤ではないが並べて管理する',
@@ -5247,6 +5264,9 @@ window.KENSA = {
 
   <div class="jg-ch" id="jg-naifuku">💊 内服薬</div>
   <div id="jg-oral"></div>
+
+  <div class="jg-ch" id="jg-shinki">⏱ 新薬の投薬期間制限（14日）</div>
+  <div id="jg-new"></div>
   <div class="jg-foot" id="jg-foot"></div>
 </div>
 
@@ -5303,8 +5323,18 @@ var JOGE = (function(){
     {id:'clenafin',  g:'tinea', n:'クレナフィン爪外用液', size:'3.56g', per:'母趾1〜2本で約1か月', lim:'1か月1〜2本・最大4本', note:'確定診断の記録と、治療する爪の数の記載が必須', chk:'test'}
   ];
   var LEGEND = '例外扱い（デュアック：期間制限／ルリコン・クレナフィン：検査記録必須／フロジン・アポハイド・エクロック：病名確認）';
+  /* NEW：新有効成分の投薬期間制限（薬価収載から1年間は1回14日分まで）がかかっている薬。
+     start＝販売開始、end＝制限が続く見込みの最終月（'YYYY-MM'）。端末の日付が end の翌月以降になると「期限の目安を過ぎた」と表示する。
+     正確な終了日は薬価収載日で決まる。収載日を確認したら end と endL を直し、制限が解けたら行を消す。
+     staff＝医師タブの id（カードへのリンク） */
+  var NEW_RULE = '新有効成分（新医薬品）は、薬価基準収載の日の属する月の翌月初日から1年間、投薬期間が1回14日分までに制限される。上の内服薬の日数（1〜3か月分）より優先する';
+  var NEW = [
+    {id:'icotide', n:'イコタイド', gen:'イコトロキンラ塩酸塩', staff:'icotide', start:'2026年11月', end:'2027-11',
+     endL:'2027年11月末ごろ（暫定）',
+     note:'薬価基準収載の日の属する月の翌月初日から1年間。販売開始は2026年11月だが、薬価収載日が未確認のため期限は暫定（2027年11月末ごろ）。収載日を確認して確定させること。'}
+  ];
   var FOOT = ['容量は一般的な規格。採用規格と異なる場合は修正してください。半年ごとに査定事例をもとに見直し。'];
-  return {CHK:CHK, RULES:RULES, TRULES:TRULES, ORAL:ORAL, GROUPS:GROUPS, DRUGS:DRUGS, LEGEND:LEGEND, FOOT:FOOT};
+  return {CHK:CHK, RULES:RULES, TRULES:TRULES, ORAL:ORAL, GROUPS:GROUPS, DRUGS:DRUGS, LEGEND:LEGEND, NEW_RULE:NEW_RULE, NEW:NEW, FOOT:FOOT};
 })();
 
 (function(){
@@ -5325,7 +5355,22 @@ var JOGE = (function(){
     function li(r){ return '<li>'+e(r)+'</li>'; }
     rl.innerHTML = JOGE.RULES.map(li).join('');
     document.getElementById('jg-trules').innerHTML = JOGE.TRULES.map(li).join('');
-    document.getElementById('jg-chnav').innerHTML = '<button type="button" data-g="gaiyo">外用薬 ↓</button><button type="button" data-g="naifuku">内服薬 ↓</button>';
+    document.getElementById('jg-chnav').innerHTML = '<button type="button" data-g="gaiyo">外用薬 ↓</button><button type="button" data-g="naifuku">内服薬 ↓</button><button type="button" data-g="shinki">新薬14日 ↓</button>';
+    var t=new Date(), ym=t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2);
+    document.getElementById('jg-new').innerHTML =
+      '<div class="jg-oral-lead">'+e(JOGE.NEW_RULE)+'。</div>'
+      + JOGE.NEW.map(function(d){
+          var past = ym>d.end;
+          return '<div class="jg-card jg-chk" id="jg-'+e(d.id)+'">'
+            + '<div class="jg-hd"><div class="jg-name">'+e(d.n)+'<br><small style="font-size:11.5px;font-weight:500;color:var(--tx3)">'+e(d.gen)+'</small></div><span class="jg-badge">⚠ 14日制限</span></div>'
+            + '<div class="jg-lim"><span class="jg-lbl">上限</span><span class="v">1回14日分まで</span></div>'
+            + '<div class="jg-kv"><div><span class="jg-lbl">販売開始</span><span class="v">'+e(d.start)+'</span></div>'
+            + '<div><span class="jg-lbl">制限の期限</span><span class="v">'+e(d.endL)+'</span></div></div>'
+            + (past ? '<div class="jg-need">期限の目安を過ぎています。制限が解除されたか確認してください</div>' : '')
+            + '<div class="jg-note"><span class="jg-lbl">注意点</span>'+e(d.note)+'</div>'
+            + (d.staff ? '<div class="canon-xref" style="margin:8px 0 0"><span>用法・注意は <b>医師 › 新薬・専門薬剤</b></span><button type="button" style="min-height:44px" onclick="switchTab(\'staff\');showDrug(\''+e(d.staff)+'\')">開く ›</button></div>' : '')
+            + '</div>';
+        }).join('');
     document.getElementById('jg-oral').innerHTML =
       '<div class="jg-oral-lead">共通ルール（<b>次回受診までの日数分・最大3か月分まで</b>）の範囲内で、内服薬は次の日数で運用します。</div>'
       + JOGE.ORAL.map(function(o){
@@ -5482,6 +5527,13 @@ var AGE = (function(){
      notes:'第2世代抗ヒスタミン薬。1日2回。眠気が少なく自動車運転制限なし。食事の影響をほとんど受けない。',
      preg:{lv:'caution', l:'△ 有益性投与（要注意）', t:'FDA分類: カテゴリーC（ヒトデータ不十分のため）、豪州TGA: カテゴリーB2。デンマーク128万件超の疫学研究では先天異常・流産リスクはセチリジンと差なし。ただしフェキソフェナジン自体の直接的なヒトデータは限定的。有益性投与。'},
      specs:[['30mg錠',30,'錠'],['60mg錠',60,'錠'],['60mgOD錠',60,'錠'],['DS5%（50mg/g）',50,'g（1g中50mg）']]},
+    /* イコタイド：国内添付文書が年齢で適応を切っているかは資料に記載がないため ageUnk。「12歳以上」と書かない。
+       規格は販売名「イコタイド錠200mg」による。用法・注意の正本は医師タブ（イブグリースと同じ形） */
+    {id:'icotide', n:'イコタイド', gen:'イコトロキンラ塩酸塩', rt:'内服', cat:'乾癬内服薬（経口IL-23受容体拮抗薬）', form:'錠（200mg・長径約19mm）', freq:1, ageUnk:true,
+     specs:[['200mg錠',200,'錠']],
+     age:'未登録（国内添付文書が年齢で適応を区切っているかは資料に記載なし）。12歳未満、12歳以上でも体重40kg未満の小児は臨床試験なし',
+     link:{sec:'staff', id:'icotide'},
+     kensa:{id:'bio', sec:'クラス別の強弱', l:'生物学的製剤 ＞ クラス別の強弱'}},
 
     /* ===== 注射 ===== */
     {id:'dupixent', n:'デュピクセント', gen:'デュピルマブ', rt:'注射', cat:'生物学的製剤', form:'皮下注（シリンジ・ペン）', freq:1, min:6,
@@ -5885,7 +5937,8 @@ var BIOJAK = (function(){
     '':'参照資料の値・2026年4月薬価改定での確認待ち',
     dupixent:{src:'サノフィ株式会社・リジェネロン・ジャパン株式会社「デュピクセント皮下注 薬価改定のご案内」2026年10月',
               from:'2026-11-01', oldL:'現行薬価（2026年10月31日まで）', newL:'新薬価（2026年11月1日から）'},
-    ebglyss:{chk:'2026年11月11日 確認'}
+    ebglyss:{chk:'2026年11月11日 確認'},
+    icotide:'薬価 未登録（資料に記載なし）'
   };
   var CATS = [
     {k:'atopy', l:'アトピー（注射）',     c:'var(--g)'},
@@ -6010,6 +6063,13 @@ var BIOJAK = (function(){
      ae:[['上気道感染','約17%','軽'],['頭痛','約5%','軽'],['口腔ヘルペス','約4%','軽〜中'],['毛包炎','約4%','軽']],
      price:[['6mg 1錠',2533]],
      month:[{p:0}]},
+    {id:'icotide', n:'イコタイド', gen:'イコトロキンラ塩酸塩', en:'icotrokinra', cat:'oral', rt:'内服', adopt:'yes', age:'icotide', staff:'icotide',
+     target:'IL-23受容体', mech:'IL-23受容体を遮断し、IL-17A/F・IL-22の産生を抑制する（経口IL-23受容体拮抗薬）',
+     onset:[{i:'かゆみ', t:'4週'},{i:'皮疹', t:'16週で判定'}],
+     ae:[['上気道感染','3%未満','―'],['上咽頭炎','3%未満','―'],['重篤な感染症','頻度不明','重大な副作用']],
+     price:[],
+     monthNote:'薬価が未登録のため、月額は計算していません。',
+     note:'出典：添付文書 2026年11月作成・第1版／ヤンセンファーマ製品資料 2026年11月作成。副作用の重篤度欄は資料に区分がないため「―」（重篤な感染症は添付文書の重大な副作用）。'},
     {id:'otezla', n:'オテズラ', gen:'アプレミラスト', en:'apremilast', cat:'oral', rt:'内服', adopt:'yes', staff:'otezla',
      target:'PDE4', mech:'PDE4（ホスホジエステラーゼ4）阻害でcAMPを増やし、TNF-α・IL-17・IL-23の産生を抑える',
      onset:'4〜8週',
@@ -6404,23 +6464,23 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.8';
+var APP_VERSION = '2.9';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-11-04', check:'各疾患の最新ガイドライン',
              parts:[{n:'疾患別の生活指導', updated:'2026-11-04'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'}]},
   products: {updated:'2026-10-01', check:'各製品の添付資料・メーカー情報'},
-  staff:    {updated:'2026-11-11', check:'添付文書・最適使用推進ガイドライン'},
+  staff:    {updated:'2026-11-16', check:'添付文書・最適使用推進ガイドライン'},
   topical:  {updated:'2026-11-16', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
              parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-11-04'},{n:'塗り方・塗布量計算・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-16'}]},
   vitamin:  {updated:'2026-06-24', check:'添付文書・日本人の食事摂取基準'},
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
-  kensa:    {updated:'2026-11-11', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
-  joge:     {updated:'2026-10-05', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）'},
-  age:      {updated:'2026-11-11', check:'添付文書（使用可能年齢・小児用量・規格）'},
-  biojak:   {updated:'2026-11-11', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
+  kensa:    {updated:'2026-11-16', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
+  joge:     {updated:'2026-11-16', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）・新薬の投薬期間制限（薬価収載日）'},
+  age:      {updated:'2026-11-16', check:'添付文書（使用可能年齢・小児用量・規格）'},
+  biojak:   {updated:'2026-11-16', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
   reception:{updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。看護師 › PDCA帳と同じ台帳）'},
   kasan:    {updated:'2026-11-16', check:'令和8年度診療報酬点数表・院内の比較表（2026-11-16 作成）・医事／レセコンの扱い'},
   pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
@@ -7713,8 +7773,11 @@ function goBackProd() { routeBack('products'); }
    '' は既定（登録のない剤すべて）で、空文字なら何も表示しない。カードの名前の下と、年齢・用量タブの「医師タブより」の欄に出す */
 var STAFF_SRC = {
   '':'',
-  ebglyss:'添付文書 2025年5月改訂・第3版'
+  ebglyss:'添付文書 2025年5月改訂・第3版',
+  icotide:'添付文書 2026年11月作成・第1版／ヤンセンファーマ製品資料 2026年11月作成'
 };
+/* policy：当院の方針（エビデンス＝適応・用法・注意事項・ポイントとは分けて表示する）。{fit:向いている患者, care:注意したい患者, pre:導入前チェックの手順}
+   rel：あわせて見たい薬剤（医師タブの id と、なぜ見るかの一言）。相互リンクにするときは相手側にも書く */
 function staffSrc(id){ return STAFF_SRC.hasOwnProperty(id) ? STAFF_SRC[id] : STAFF_SRC['']; }
 var DRUGS = [
   {
@@ -7918,6 +7981,77 @@ var DRUGS = [
       '投与前：感染症・結核のスクリーニングが必要',
       '効果判定は投与開始16週を目安に行う',
     ],
+    rel: [
+      {id:'icotide', t:'同じ乾癬の内服薬（経口IL-23受容体拮抗薬）。第3相試験でソーティクツと直接比較されている'},
+    ],
+  },
+  {
+    id: 'icotide',
+    icon: '💊',
+    name: 'イコタイド',
+    sub: 'イコトロキンラ塩酸塩（icotrokinra）\n経口IL-23受容体拮抗薬',
+    tags: ['乾癬','内服','分子標的薬'],
+    indications: [
+      '既存治療で効果不十分な尋常性乾癬、膿疱性乾癬、乾癬性紅皮症',
+      '次のいずれかに該当する患者に使用：光線療法を含む既存の全身療法（分子標的薬を除く）等で十分な効果が得られず皮疹が体表面積の10%以上／難治性の皮疹または膿疱を有する',
+      '関節症性乾癬の適応はない',
+    ],
+    dosage: [
+      '〈尋常性乾癬・膿疱性乾癬・乾癬性紅皮症〉1日1回200mgを起床時に空腹で水で服用。服用後30分は食事を避ける（食事で吸収が低下する）',
+      '服用後30分の間も、水・茶などカロリーのない飲料は可',
+      '嚥下困難時は120mL以上の水に1錠入れて分散させ、混濁液をすべて飲んだあと、コップに120mL以上の水を足して残りも飲む。分散後15分以内に服用',
+      'PTPシートから出して服用するよう指導する',
+    ],
+    cautions: [
+      '【重要】警告：結核等の感染症を含む緊急時に十分対応できる医療施設で、本剤について十分な知識と適応疾患の治療経験をもつ医師が使用すること',
+      '【重要】開始前に結核スクリーニング（問診・胸部X線、IGRAまたはツベルクリン反応、必要に応じ胸部CT）。投与中も胸部X線等で定期的に確認',
+      '【重要】生ワクチン接種は行わない',
+      '【重要】他の分子標的薬との併用は避ける（安全性・有効性が未確立）',
+      '禁忌：重篤な感染症、活動性結核、本剤成分への過敏症の既往',
+      '重大な副作用：重篤な感染症（頻度不明）',
+      'その他の副作用：上気道感染、上咽頭炎（3%未満）',
+      '結核の既往・潜在性結核の疑いがあれば結核に詳しい医師に相談し、必要に応じ抗結核薬を先行',
+      '中等度以上の腎機能障害（eGFR<60）：血中濃度上昇のおそれ',
+      '妊婦：有益性が上回る場合のみ（動物実験で大量曝露時に胚・胎児への影響）',
+      '授乳：継続の可否を検討（乳汁移行データなし）',
+      '12歳未満、12歳以上でも体重40kg未満の小児は臨床試験なし',
+      '新有効成分のため、薬価収載から1年間は投薬期間14日の制限（いつまでかは処方上限タブ）',
+    ],
+    points: [
+      'IL-23受容体に結合して受容体側を遮断する。既存の注射剤（グセルクマブ等の抗IL-23p19抗体、ウステキヌマブ）はリガンド側を中和するので、作用点が異なる',
+      'ソーティクツ（TYK2阻害）はIL-23・IL-12・Ⅰ型IFNの細胞内シグナルを広く抑えるが、本剤はIL-23経路に限定的',
+      '第3相ICONIC-ADVANCE 1でソーティクツに直接比較で優越（16週 IGA 0/1 68.5% vs 50.2%、PASI 90 55.0% vs 29.6%、いずれもp<0.001）',
+      'かゆみの改善が早い（4週時点で差が出ている）',
+      '16週以内に治療反応が得られない場合は継続を慎重に再考する',
+      '注射のIL-23p19抗体との直接比較はまだない',
+      '主要試験は生物学的製剤で効果不十分だった例を除外しており、生物学的製剤からの切替データは乏しい',
+      '抗薬物抗体は52週までに9.6%に発現、中和抗体なし',
+    ],
+    policy: {
+      fit: [
+        '注射を避けたい',
+        '通院間隔や自己注射の負担を減らしたい',
+        'BSA10%以上で、外用・光線・既存の内服で不十分',
+        'かゆみが強い',
+        'アプレミラスト（オテズラ）やソーティクツで効果不十分',
+      ],
+      care: [
+        '起床時空腹＋30分絶食を毎日守れない',
+        '高齢で腎機能低下・多剤併用・嚥下機能低下がある（錠剤が大きい。長径約19mm）',
+        '関節症性乾癬が主体',
+        '結核の既往・反復する感染症',
+      ],
+      pre: [
+        '適応確認',
+        '問診（結核の既往・接触歴、感染症、妊娠・授乳、ワクチン予定）',
+        '検査（胸部X線、IGRA、eGFR。HBV等は学会ガイダンスに準じる。添付文書の明記事項ではない）',
+        '服薬指導',
+        '16週で効果判定',
+      ],
+    },
+    rel: [
+      {id:'sotyktu', t:'同じ乾癬の内服薬（TYK2阻害）。ICONIC-ADVANCE 1 の直接比較の相手'},
+    ],
   },
   {
     id: 'wyikyans',
@@ -8001,10 +8135,34 @@ function showDrug(id){
   });
   html += '</div>';
 
+  if(d.policy){   // 当院の方針（エビデンスとは分けて表示）
+    var P=d.policy;
+    html += '<div class="prod-section staff-policy"><div class="prod-section-ttl">🏥 当院の方針</div>'
+      + '<div class="sp-note">上の適応・注意事項・ポイント（添付文書・製品資料）とは別の、当院での使い方の目安です。最終判断は医師が行います。</div>';
+    [['向いている患者',P.fit],['注意したい患者',P.care]].forEach(function(g){
+      if(!g[1] || !g[1].length) return;
+      html += '<div class="sp-h">'+g[0]+'</div>';
+      g[1].forEach(function(t){ html += '<div class="prod-item">'+esc(t)+'</div>'; });
+    });
+    if(P.pre && P.pre.length){
+      html += '<div class="sp-h">導入前チェック</div><ol class="sp-steps">'
+        + P.pre.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ol>';
+    }
+    html += '</div>';
+  }
+
   if(window.ageXref) html += ageXref('staff', d.id);                  // 年齢・用量タブへのリンク
   if(window.bjXref) html += bjXref('staff', d.id);                    // バイオ・JAK タブへのリンク（薬価・副作用）
   html += '<div id="kensa-xref" data-drug="'+esc(d.id)+'"></div>';   // 検査パネルへのリンク（fillKensaXref が埋める）
-  if(window.canonLinks) html += canonSelfNote() + canonLinks(html, 'staff:'+d.id);
+  var relKeys = (d.rel||[]).map(function(r){ return 'staff:'+r.id; });   // 相互リンクに出す薬は自動リンクから除く
+  var canon = window.canonLinks ? canonSelfNote() + canonLinks(html, 'staff:'+d.id, relKeys) : '';
+  (d.rel||[]).forEach(function(r){   // あわせて見たい薬剤（相互リンク）
+    var x=null; DRUGS.forEach(function(y){ if(y.id===r.id) x=y; });
+    if(!x) return;
+    html += '<div class="canon-xref" style="margin-top:12px"><span><b>'+esc(x.name)+'</b> とあわせて見る：'+esc(r.t)+'</span>'
+      + '<button type="button" style="min-height:44px" onclick="showDrug(\''+x.id+'\')">開く ›</button></div>';
+  });
+  html += canon;
   document.getElementById('staff-detail-body').innerHTML = html;
   fillKensaXref();
   document.getElementById('pg-staff').classList.remove('active');
@@ -9907,6 +10065,10 @@ function build(){
     JOGE.DRUGS.forEach(function(d){
       var c=d.chk?JOGE.CHK[d.chk]:null;
       add('joge','📏',d.n,jgName[d.g]+'・上限 '+d.lim+(c?'（要確認：'+c.l+'）':''),[d.size,d.per,d.note,'処方上限'],function(){ switchTab('joge'); jogeGo(d.id); });
+    });
+    add('joge','⏱','処方上限 › 新薬の投薬期間制限（14日）',JOGE.NEW_RULE,[JOGE.NEW.map(function(d){ return d.n+' '+d.gen; }),'新有効成分 新医薬品 14日 投薬期間 処方日数 薬価収載 1年'],function(){ switchTab('joge'); jogeGo('shinki'); });
+    JOGE.NEW.forEach(function(d){
+      add('joge','⏱',d.n+'（14日制限）','1回14日分まで・'+d.endL,[d.gen,d.note,'新有効成分 投薬期間 処方日数 処方上限'],function(){ switchTab('joge'); jogeGo(d.id); });
     });
     JOGE.GROUPS.forEach(function(g){
       add('joge','📏','処方上限 › '+g.n,JOGE.DRUGS.filter(function(d){ return d.g===g.id; }).map(function(d){ return d.n; }).join('・'),[],function(){ switchTab('joge'); jogeGo(g.id); });
