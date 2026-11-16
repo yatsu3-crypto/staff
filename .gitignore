@@ -1,2 +1,4 @@
 .DS_Store
 hisshin.html
+# 院内の Excel（加算の比較表 kasan.xlsx ＝「外来管理加算と処置・検査の実質点数比較（令和8年度）.xlsx」など）は公開リポジトリに入れない。正本は院長の端末の ~/Documents
+*.xlsx

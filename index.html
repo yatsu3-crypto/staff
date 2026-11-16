@@ -49,15 +49,15 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 .tinp{border:none;outline:none;background:transparent;font-size:13px;color:var(--tx);min-width:70px;flex:1;font-family:inherit;}
 
 /* タブナビ：9タブを 3列×3段 で常時全表示（横スクロールにしない）。
-   医師タブ（検査パネル／パッチ／食物アレルギー／バイオ・JAK／新薬・専門薬剤／ビタミン剤。3列×2段）と
-   看護師タブ（PDCA帳／エアマットレス。2列×1段）は小タブで切り替える（.staff-sub, TAB_GROUP） */
+   医師タブ（検査パネル／パッチ／食物アレルギー／バイオ・JAK／新薬・専門薬剤／ビタミン剤。3列×2段）、
+   受付タブ（PDCA帳／加算。2列×1段）、看護師タブ（PDCA帳／エアマットレス。2列×1段）は小タブで切り替える（.staff-sub, TAB_GROUP） */
 .tab-nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--gd);padding:0 8px;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
 .tab-btn.active{color:#fff;border-bottom-color:#fff;}
 .staff-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:514px;margin:14px auto 0;background:#fff;border:.5px solid var(--bd);border-radius:11px;padding:4px;box-shadow:0 1px 5px rgba(0,0,0,.06);}
 @media (max-width:540px){.staff-sub{margin:14px 13px 0;}}
-.staff-sub.nurse{grid-template-columns:1fr 1fr;}
+.staff-sub.nurse,.staff-sub.two{grid-template-columns:1fr 1fr;}
 .staff-sub[hidden]{display:none;}
 .staff-sub button{min-height:44px;padding:0 2px;border:none;border-radius:8px;background:none;font-family:inherit;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;}
 .staff-sub button.on{background:var(--g);color:#fff;}
@@ -350,6 +350,7 @@ body.gs-on .gs-results{display:block;}
 #topguide .rung .lv{font-size:11px;font-weight:700;color:#fff;border-radius:6px;padding:3px 7px;flex:0 0 auto;min-width:54px;text-align:center;}
 #topguide .rung .meds{font-size:13px;}
 #topguide .note{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.6;}
+#topguide .note a{color:var(--accent-deep);font-weight:600;}
 #topguide .disclaimer{font-size:11.5px;color:var(--ink-soft);background:#efe9dc;border-radius:12px;padding:12px 14px;margin-top:24px;line-height:1.65;}
 #topguide .empty{text-align:center;color:var(--ink-soft);padding:40px 0;font-size:14px;}
 #topguide /* ranking */
@@ -672,6 +673,37 @@ body.kbar-on{padding-bottom:76px;}
 #pg-joge .jg-oral-row .d small{display:block;font-size:10.5px;font-weight:600;color:var(--tx2);}
 #pg-joge .jg-oral-row.base{border:1px solid var(--g2);}
 #pg-joge .jg-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
+/* ===== 受付 › 加算（外来管理加算と処置・検査の点数） ===== */
+#pg-kasan .ks-danger{background:#fbeeea;border:2px solid #b6483a;border-radius:13px;padding:11px 14px;margin-bottom:12px;color:#7a2e24;font-size:13.5px;line-height:1.7;}
+#pg-kasan .ks-dh{font-size:15px;font-weight:700;color:#b6483a;margin-bottom:4px;}
+#pg-kasan .ks-danger p{margin:0;}
+#pg-kasan .ks-danger p + p{margin-top:6px;}
+#pg-kasan .ks-box{background:var(--card);border:1px solid var(--g2);border-radius:13px;padding:11px 14px;margin-bottom:12px;box-shadow:0 1px 5px rgba(0,0,0,.06);font-size:13px;line-height:1.65;color:var(--tx);}
+#pg-kasan .ks-box b{color:var(--gd);}
+#pg-kasan .ks-h{font-size:12px;font-weight:700;color:var(--g);margin-bottom:5px;}
+#pg-kasan .ks-asof{font-size:11.5px;color:var(--tx2);margin-top:6px;}
+#pg-kasan .ks-warn{background:var(--wbg);border:1px solid var(--wbd);border-left:5px solid #d9a426;border-radius:12px;padding:10px 13px;margin-bottom:9px;font-size:13px;line-height:1.65;color:var(--wtx);}
+#pg-kasan .ks-warn b{font-weight:700;}
+#pg-kasan .ks-sec{font-size:12px;font-weight:700;color:var(--g);margin:18px 2px 8px;display:flex;align-items:center;gap:8px;scroll-margin-top:80px;}
+#pg-kasan .ks-sec::after{content:"";flex:1;height:1px;background:var(--bd);}
+#pg-kasan .ks-legend{font-size:11.5px;line-height:1.6;color:var(--tx2);margin:0 2px 9px;}
+#pg-kasan .ks-row{background:var(--card);border:.5px solid var(--bd);border-radius:12px;padding:10px 13px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.05);scroll-margin-top:80px;transition:box-shadow .3s;}
+#pg-kasan .ks-row.ks-chk{border:1px solid var(--wbd);border-left:5px solid #d9a426;background:#fffdf6;}
+#pg-kasan .ks-row.flash{box-shadow:0 0 0 3px var(--g2);}
+#pg-kasan .ks-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+#pg-kasan .ks-name{font-size:14.5px;font-weight:700;color:var(--tx);line-height:1.4;}
+#pg-kasan .ks-name small{display:block;font-size:11px;font-weight:500;color:var(--tx3);margin-top:1px;}
+#pg-kasan .ks-pt{flex-shrink:0;font-size:15px;font-weight:700;color:var(--gd);white-space:nowrap;font-variant-numeric:tabular-nums;}
+#pg-kasan .ks-nums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:7px;}
+#pg-kasan .ks-nums > div{background:#f0ece4;border-radius:8px;padding:5px 8px;}
+#pg-kasan .ks-lbl{display:block;font-size:10px;font-weight:600;color:var(--tx3);white-space:nowrap;}
+#pg-kasan .ks-v{display:block;font-size:13.5px;font-weight:700;color:var(--tx);white-space:nowrap;font-variant-numeric:tabular-nums;}
+#pg-kasan .ks-badge{flex-shrink:0;display:inline-flex;align-items:center;font-size:11px;font-weight:700;color:var(--wtx);background:#fdf0d8;border:1px solid var(--wbd);border-radius:7px;padding:2px 7px;white-space:nowrap;margin-top:6px;}
+#pg-kasan .ks-why{font-size:12px;line-height:1.6;color:var(--wtx);background:var(--wbg);border:.5px dashed var(--wbd);border-radius:8px;padding:6px 10px;margin-top:6px;}
+#pg-kasan .ks-note{font-size:12px;line-height:1.6;color:var(--tx2);margin-top:6px;}
+#pg-kasan ul{margin:0;padding:0 0 0 1.3em;}
+#pg-kasan li{padding:2px 0;}
+#pg-kasan .ks-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
 /* ===== 年齢・用量 ===== */
 #pg-age{--r-ext:var(--g);--r-ora:#2f4a63;--r-inj:#a87d35;}
 #pg-age .ag-intro{font-size:12px;line-height:1.65;color:var(--tx2);background:var(--card);border:1px solid var(--g2);border-radius:13px;padding:10px 14px;margin-bottom:12px;}
@@ -869,7 +901,7 @@ body.kbar-on{padding-bottom:76px;}
   <button class="gs-clear" id="gs-clear" type="button" aria-label="検索をクリア">✕</button>
 </div>
 <div class="gs-results" id="gs-results"></div>
-<!-- 医師タブ・看護師タブの小タブ。表示は staffSubPaint() -->
+<!-- 医師タブ・受付タブ・看護師タブの小タブ。表示は staffSubPaint() -->
 <div class="staff-sub" id="staff-sub" hidden>
   <button type="button" data-sub="kensa" onclick="switchTab('kensa')">🧪 検査パネル</button>
   <button type="button" data-sub="patch" onclick="switchTab('patch')">🩹 パッチ</button>
@@ -877,6 +909,10 @@ body.kbar-on{padding-bottom:76px;}
   <button type="button" data-sub="biojak" onclick="switchTab('biojak')">🧬 バイオ・JAK</button>
   <button type="button" data-sub="staff" onclick="switchTab('staff')">💉 新薬・専門薬剤</button>
   <button type="button" data-sub="vitamin" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
+</div>
+<div class="staff-sub two" id="reception-sub" hidden>
+  <button type="button" data-sub="reception" onclick="switchTab('reception')">📒 PDCA帳</button>
+  <button type="button" data-sub="kasan" onclick="switchTab('kasan')">🧾 加算</button>
 </div>
 <div class="staff-sub nurse" id="nurse-sub" hidden>
   <button type="button" data-sub="pdca" onclick="switchTab('pdca')">📒 PDCA帳</button>
@@ -2088,11 +2124,12 @@ h2{font-family:var(--mincho);font-size:19px;font-weight:800;letter-spacing:.09em
       <table>
         <thead><tr><th>部位</th><th>面積区分</th><th class="num">使用量</th><th class="num">処置</th></tr></thead>
         <tbody>
-          <tr><td>顔・手・肘窩・膝窩 など</td><td>100〜500cm&sup2;</td><td class="num">2g</td><td class="num">55点</td></tr>
-          <tr><td>背中全体・体幹</td><td>500〜3,000cm&sup2;</td><td class="num">5g</td><td class="num">85点</td></tr>
+          <!-- 処置の点数は受付 › 加算（KASAN）が正本。data-kasan の欄に読み込んで表示する（ここに点数を書かない） -->
+          <tr><td>顔・手・肘窩・膝窩 など</td><td>100〜500cm&sup2;</td><td class="num">2g</td><td class="num" data-kasan="nanko1"></td></tr>
+          <tr><td>背中全体・体幹</td><td>500〜3,000cm&sup2;</td><td class="num">5g</td><td class="num" data-kasan="nanko2"></td></tr>
         </tbody>
       </table>
-      <p class="note">100cm&sup2;未満は基本診療料に含まれ算定不可。カルテには<strong>部位名を必ず記載</strong>すること（面積の記載は不要）。前腕・下腿など中間の部位は処置85点・使用量2gで運用。</p>
+      <p class="note">100cm&sup2;未満は基本診療料に含まれ算定不可。カルテには<strong>部位名を必ず記載</strong>すること（面積の記載は不要）。前腕・下腿など中間の部位は処置<span data-kasan="nanko2"></span>・使用量2gで運用。処置の点数は<a href="#reception/kasan/nanko1" onclick="switchTab('kasan');kasanGo('nanko1');return false;">受付 › 加算</a>の表から読み込んでいます。</p>
     </div>
 
     <div class="block">
@@ -2457,7 +2494,7 @@ footer .r{margin-left:auto;letter-spacing:.06em}
     <p class="pamph-hint">プレビューは縮小表示です。印刷ダイアログで<strong>「背景のグラフィック」をON</strong>、<strong>余白は「なし」</strong>に設定してください。両面印刷推奨。</p>
 
     <div class="disclaimer">
-      ※ 点数・算定区分は令和6年度改定に基づく院内運用の目安です。実際の算定は最新の点数表と医事担当の確認を優先してください。
+      ※ 点数・算定区分は令和8年度改定に基づく院内運用の目安です。実際の算定は最新の点数表と医事担当の確認を優先してください。
     </div>
   </section>
 
@@ -3510,6 +3547,166 @@ window.PTD_DATA={PRODUCTS:PRODUCTS,A:A,GROUPS:GROUPS};
   <div class="pdca-note">この記録はこの端末にのみ保存されます。他の端末と共有する場合やバックアップには、画面下の『書き出し』からテキストを保存してください。</div>
   <iframe title="PDCA帳" id="receptionPdcaFrame"></iframe>
 </div>
+
+<!-- 受付 › 加算（外来管理加算と処置・検査の点数。データは下の KASAN。#reception/kasan、項目は #reception/kasan/<id>） -->
+<div class="page" id="pg-kasan">
+  <div class="ks-danger" id="ks-top">
+    <div class="ks-dh">⚠ 必ず守ること</div>
+    <p><b>処置・検査を行った日に、処置料を請求せず外来管理加算を請求することはできない。</b>個別指導で返還対象になる。</p>
+    <p>この表は会計の説明と確認のためのもので、処置を行うかどうかの判断に使うものではない。</p>
+  </div>
+  <div class="ks-box" id="ks-base"></div>
+  <div id="ks-warn"></div>
+  <div class="ks-sec" id="ks-list-h">処置・検査ごとの点数と増減（点数の低い順）</div>
+  <div class="ks-legend" id="ks-legend"></div>
+  <div id="ks-list"></div>
+  <div class="ks-sec" id="ks-memo-h">メモ</div>
+  <div id="ks-memo"></div>
+  <div class="ks-foot" id="ks-foot"></div>
+</div>
+
+<script>
+/* ==============================================
+   受付 › 加算（外来管理加算と処置・検査の実質点数）
+   ★ 出典は院内の比較表「外来管理加算と処置・検査の実質点数比較（令和8年度）」（Excel。院長の端末の ~/Documents。公開リポジトリには入れない）。
+   ★ 皮膚科軟膏処置の点数の正本はここ。外用薬 › 患者パンフの「軟膏処置の区分」は data-kasan="<id>" の欄に、ここから読み込んで表示する。
+   ★ Excel の「判定」列の言葉は公開URLに載るため、画面にもソースにも書かない。増減の数値だけを出す。
+     記載を直したら DATA_META.kasan.updated を今日の日付にする。閲覧専用（localStorage に保存しない）
+   BASE：外来管理加算の点数。YEN：1点あたりの円。COPAY：概算に使う負担割合（3割）。
+   PTS_AS_OF：点数の時点（バイオ・JAKの PRICE_AS_OF と同じ持ち方）。'' は既定（登録のない項目すべて）。
+          項目の id をキーにすると、その項目だけ別の時点にできる（文字列ならそのまま、{src:出典, made:作成日} なら「出典（作成日 作成）」）
+   ITEMS：{id, n:項目, pt:点数, code:区分番号, kind:種別, note:備考, chk:CHK のキー（要確認）}。
+          増減（pt−BASE）、10割（増減×YEN）、3割（概算）は表示時に計算する（ここに書かない）
+   ============================================== */
+var KASAN = (function(){
+  var BASE = 52, YEN = 10, COPAY = 0.3;
+  var PTS_AS_OF = {
+    '':{src:'令和8年度診療報酬点数表', made:'2026-11-16'}
+  };
+  var CHK = {
+    d291:'D291が、外来管理加算を不可にする「負荷試験等」に入るか未確認（区分の並びから判断したもの）。医事・レセコンの扱いと要確認'
+  };
+  var ITEMS = [
+    {id:'patch1',   n:'パッチテスト・皮内反応 1箇所',     pt:16,  code:'D291 の1',   kind:'検査（負荷試験等）', note:'1箇所16点。負荷試験等の生体検査は外来管理加算不可', chk:'d291'},
+    {id:'patch2',   n:'パッチテスト・皮内反応 2箇所',     pt:32,  code:'D291 の1',   kind:'検査（負荷試験等）', chk:'d291'},
+    {id:'uv1',      n:'赤外線又は紫外線療法',             pt:45,  code:'J054 の1',   kind:'処置', note:'5分以上。波長選択できない機器はこちら'},
+    {id:'senshi',   n:'穿刺排膿後薬液注入',               pt:45,  code:'J001-8',     kind:'処置', note:'入院外のみ'},
+    {id:'patch3',   n:'パッチテスト・皮内反応 3箇所',     pt:48,  code:'D291 の1',   kind:'検査（負荷試験等）', chk:'d291'},
+    {id:'menpo',    n:'面皰圧出法',                       pt:49,  code:'J057-2',     kind:'処置', note:'顔面・前胸部・上背部等に多発した面皰が対象'},
+    {id:'sou1',     n:'創傷処置 100㎠未満',               pt:52,  code:'J000 の1',   kind:'処置'},
+    {id:'nanko1',   n:'皮膚科軟膏処置 100〜500㎠',        pt:55,  code:'J053 の1',   kind:'処置', note:'同一疾病の処置面積は合算して区分'},
+    {id:'sou2',     n:'創傷処置 100〜500㎠',              pt:60,  code:'J000 の2',   kind:'処置'},
+    {id:'patch4',   n:'パッチテスト・皮内反応 4箇所',     pt:64,  code:'D291 の1',   kind:'検査（負荷試験等）', chk:'d291'},
+    {id:'hairyu1',  n:'稗粒腫摘除 10箇所未満',            pt:74,  code:'J057-4 の1', kind:'処置', note:'箇所数をカルテに記録'},
+    {id:'sokou',    n:'爪甲除去（麻酔を要しないもの）',   pt:80,  code:'J001-7',     kind:'処置', note:'入院外のみ'},
+    {id:'nanko2',   n:'皮膚科軟膏処置 500〜3,000㎠',      pt:85,  code:'J053 の2',   kind:'処置'},
+    {id:'sou3',     n:'創傷処置 500〜3,000㎠',            pt:90,  code:'J000 の3',   kind:'処置'},
+    {id:'nanzoku1', n:'軟属腫摘除 10箇所未満',            pt:120, code:'J057 の1',   kind:'処置'},
+    {id:'hairyu2',  n:'稗粒腫摘除 10箇所以上',            pt:148, code:'J057-4 の2', kind:'処置'},
+    {id:'uv2',      n:'長波・中波紫外線療法',             pt:150, code:'J054 の2',   kind:'処置', note:'波長選択できる機器・適応疾患限定'},
+    {id:'nanko3',   n:'皮膚科軟膏処置 3,000〜6,000㎠',    pt:155, code:'J053 の3',   kind:'処置'},
+    {id:'sou4',     n:'創傷処置 3,000〜6,000㎠',          pt:160, code:'J000 の4',   kind:'処置'},
+    {id:'keigan',   n:'鶏眼・胼胝処置',                   pt:170, code:'J057-3',     kind:'処置', note:'月2回まで'},
+    {id:'iboyaki1', n:'いぼ焼灼法 3箇所以下',             pt:210, code:'J055 の1',   kind:'処置'},
+    {id:'ibotou1',  n:'いぼ等冷凍凝固法 3箇所以下',       pt:210, code:'J056 の1',   kind:'処置'},
+    {id:'nanzoku2', n:'軟属腫摘除 10〜30箇所未満',        pt:220, code:'J057 の2',   kind:'処置'},
+    {id:'iboyaki2', n:'いぼ焼灼法 4箇所以上',             pt:260, code:'J055 の2',   kind:'処置'},
+    {id:'ibotou2',  n:'いぼ等冷凍凝固法 4箇所以上',       pt:270, code:'J056 の2',   kind:'処置'},
+    {id:'nanko4',   n:'皮膚科軟膏処置 6,000㎠以上',       pt:270, code:'J053 の4',   kind:'処置'},
+    {id:'sou5',     n:'創傷処置 6,000㎠以上',             pt:275, code:'J000 の5',   kind:'処置'},
+    {id:'nbuvb',    n:'ナローバンドUVB（308〜313nm）',    pt:340, code:'J054 の3',   kind:'処置', note:'適応疾患限定'},
+    {id:'nanzoku3', n:'軟属腫摘除 30箇所以上',            pt:350, code:'J057 の3',   kind:'処置'}
+  ];
+  /* Excel のメモシート。warn は画面で目立たせる注意（{t:本文, ex:[例に使う項目の id]}）。
+     「処置料を請求せず外来管理加算を請求するのは不可」は画面の先頭の注意（#ks-top）に出している */
+  var MEMO = {
+    none:['皮膚科軟膏処置 100㎠未満（基本診療料に含まれ処置料が立たない）',
+          'ダーモスコピー（D282-4、皮膚科学的検査）',
+          'KOH直接鏡検、血液検査などの検体検査'],
+    warn:[{t:'初診はもともと外来管理加算がないため、処置・検査の点数がそのまま上乗せになる'},
+          {t:'1日に複数の処置を算定しても、差し引く外来管理加算は52点1回分', ex:['menpo','hairyu1']}],
+    notes:['同一部位への創傷処置・皮膚科軟膏処置・面皰圧出法・湿布処置は、いずれか1つのみ算定'],
+    src:['令和8年度診療報酬点数表（ナレティ knowlety.jp）','外来管理加算52点据え置き（Medicom Park）']
+  };
+  function byId(id){ for(var i=0;i<ITEMS.length;i++) if(ITEMS[i].id===id) return ITEMS[i]; return null; }
+  function asOf(it){ return it && PTS_AS_OF.hasOwnProperty(it.id) ? PTS_AS_OF[it.id] : PTS_AS_OF['']; }
+  function asOfText(a){
+    if(typeof a==='string') return a;
+    var d=/^(\d{4})-(\d{2})-(\d{2})$/.exec(a.made||'');
+    return a.src+(d?'（'+(+d[1])+'年'+(+d[2])+'月'+(+d[3])+'日 作成）':'');
+  }
+  return {BASE:BASE, YEN:YEN, COPAY:COPAY, PTS_AS_OF:PTS_AS_OF, CHK:CHK, ITEMS:ITEMS, MEMO:MEMO, byId:byId, asOf:asOf, asOfText:asOfText};
+})();
+
+(function(){
+  function e(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function num(n){ return Math.abs(n).toLocaleString('ja-JP'); }
+  /* 増減の表記：−36点／±0／+98点（判定の言葉は使わない） */
+  function sgn(n, unit){ return n<0 ? '−'+num(n)+unit : n>0 ? '+'+num(n)+unit : '±0'+(unit==='円'?'円':''); }
+  function diff(it){ return it.pt - KASAN.BASE; }
+  function yen10(d){ return d*KASAN.YEN; }
+  function yen3(d){ return Math.round(d*KASAN.YEN*KASAN.COPAY/10)*10; }   // 10円単位に丸めた概算
+  function row(it){
+    var d=diff(it), c=it.chk ? KASAN.CHK[it.chk] : null, a=KASAN.asOf(it), own=a!==KASAN.PTS_AS_OF[''];
+    var h='<div class="ks-row'+(c?' ks-chk':'')+'" id="ks-'+it.id+'">';
+    h+='<div class="ks-hd"><div class="ks-name">'+e(it.n)+'<small>'+e(it.code)+'・'+e(it.kind)+'</small></div><div class="ks-pt">'+num(it.pt)+'点</div></div>';
+    h+='<div class="ks-nums"><div><span class="ks-lbl">増減</span><span class="ks-v">'+sgn(d,'点')+'</span></div>'
+      +'<div><span class="ks-lbl">10割</span><span class="ks-v">'+sgn(yen10(d),'円')+'</span></div>'
+      +'<div><span class="ks-lbl">3割（概算）</span><span class="ks-v">'+(yen3(d)?'約':'')+sgn(yen3(d),'円')+'</span></div></div>';
+    if(c) h+='<span class="ks-badge">⚠ 要確認</span><div class="ks-why">'+e(c)+'</div>';
+    if(it.note) h+='<div class="ks-note">'+e(it.note)+'</div>';
+    if(own) h+='<div class="ks-note">点数の時点：'+e(KASAN.asOfText(a))+'</div>';
+    return h+'</div>';
+  }
+  function render(){
+    var box=document.getElementById('ks-base'); if(!box) return;
+    var M=KASAN.MEMO, asof=KASAN.asOfText(KASAN.PTS_AS_OF['']);
+    box.innerHTML='<div class="ks-h">この表の見方</div>'
+      +'再診時に<b>外来管理加算（'+KASAN.BASE+'点）</b>が外れる場合の、処置・検査の点数との差です。'
+      +'「増減」は各項目の点数から'+KASAN.BASE+'点を差し引いた値、金額は1点＝'+KASAN.YEN+'円で計算しています。'
+      +'<div class="ks-asof">点数の時点：'+e(asof)+'</div>';
+    document.getElementById('ks-warn').innerHTML=M.warn.map(function(w){
+      var ex='';
+      if(w.ex){
+        var its=w.ex.map(KASAN.byId).filter(Boolean), sum=its.reduce(function(s,it){ return s+it.pt; },0);
+        ex='<br>例：'+its.map(function(it){ return e(it.n)+' '+num(it.pt)+'点'; }).join('＋')
+          +'＝'+num(sum)+'点 → 増減 '+sgn(sum-KASAN.BASE,'点');
+      }
+      return '<div class="ks-warn">⚠ <b>'+e(w.t)+'</b>'+ex+'</div>';
+    }).join('');
+    document.getElementById('ks-legend').innerHTML='金額は<b>10割</b>（医療費の増減）と<b>3割</b>（窓口負担の増減）。'
+      +'<b>3割は概算</b>です（増減×'+KASAN.YEN+'円×'+Math.round(KASAN.COPAY*10)+'割を10円単位に丸めた値。実際の窓口負担は会計全体で計算するため、一致しないことがあります）。';
+    document.getElementById('ks-list').innerHTML=KASAN.ITEMS.map(row).join('');
+    function ul(a){ return '<ul>'+a.map(function(t){ return '<li>'+e(t)+'</li>'; }).join('')+'</ul>'; }
+    document.getElementById('ks-memo').innerHTML=
+        '<div class="ks-box"><div class="ks-h">外来管理加算に影響しないもの（加算'+KASAN.BASE+'点はそのまま）</div>'+ul(M.none)+'</div>'
+      + '<div class="ks-box"><div class="ks-h">注意点</div>'+ul(
+          ['処置・検査を行った日に、処置料を請求せず外来管理加算を請求するのは不可（個別指導で返還対象。画面の先頭を参照）']
+          .concat(M.warn.map(function(w){ return w.t; }), M.notes,
+                  ['パッチテスト・皮内反応（D291）：'+KASAN.CHK.d291]))+'</div>'
+      + '<div class="ks-box"><div class="ks-h">出典</div>'+ul(M.src)+'<div class="ks-asof">作成日：'+e(KASAN.PTS_AS_OF[''].made)+'</div></div>';
+    document.getElementById('ks-foot').innerHTML='院内の比較表を元にした会計の説明・確認用の表です（点数の時点：'+e(asof)+'）。'
+      +'実際の算定は最新の点数表と医事担当の確認を優先してください。最終判断は医師が行います。';
+    /* 外用薬 › 患者パンフ「軟膏処置の区分」など、点数を読み込んで出す欄 */
+    document.querySelectorAll('[data-kasan]').forEach(function(el){
+      var it=KASAN.byId(el.getAttribute('data-kasan'));
+      el.textContent = it ? num(it.pt)+'点' : '未登録';
+    });
+  }
+  /* #reception/kasan/<項目id> へ移動。sub なしはタブ先頭 */
+  window.kasanGo = function(sub){
+    var el = sub && document.getElementById('ks-'+sub);
+    if(!el) return;
+    if(window.routeSet) routeSet('reception/kasan/'+sub);
+    setTimeout(function(){
+      var hdr=document.querySelector('.hdr'); var off=(hdr?hdr.offsetHeight:0)+10;
+      window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off, behavior:'smooth'});
+      if(el.classList.contains('ks-row')){ el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); },1400); }
+    },50);
+  };
+  render();
+})();
+</script>
 <div class="page" id="pg-pdca">
   <div class="pdca-note">この記録はこの端末にのみ保存されます。他の端末と共有する場合やバックアップには、画面下の『書き出し』からテキストを保存してください。</div>
   <iframe title="PDCA帳" id="staffPdcaFrame"></iframe>
@@ -6207,15 +6404,15 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.7';
+var APP_VERSION = '2.8';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-11-04', check:'各疾患の最新ガイドライン',
              parts:[{n:'疾患別の生活指導', updated:'2026-11-04'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'}]},
   products: {updated:'2026-10-01', check:'各製品の添付資料・メーカー情報'},
   staff:    {updated:'2026-11-11', check:'添付文書・最適使用推進ガイドライン'},
-  topical:  {updated:'2026-11-04', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
-             parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-11-04'},{n:'塗り方・塗布量計算・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-04'}]},
+  topical:  {updated:'2026-11-16', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
+             parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-11-04'},{n:'塗り方・塗布量計算・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-16'}]},
   vitamin:  {updated:'2026-06-24', check:'添付文書・日本人の食事摂取基準'},
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
@@ -6225,6 +6422,7 @@ var DATA_META = {
   age:      {updated:'2026-11-11', check:'添付文書（使用可能年齢・小児用量・規格）'},
   biojak:   {updated:'2026-11-11', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
   reception:{updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。看護師 › PDCA帳と同じ台帳）'},
+  kasan:    {updated:'2026-11-16', check:'令和8年度診療報酬点数表・院内の比較表（2026-11-16 作成）・医事／レセコンの扱い'},
   pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
   airmat:   {updated:'2026-10-28', check:'モルテン エアマットレスの取扱説明（設定・設置・困ったとき）'}
 };
@@ -7305,7 +7503,8 @@ var PRODUCTS = [
 //                          （#doctor/staff/<薬剤id> は新薬・専門薬剤の詳細）
 //   #nurse/<小タブ>        看護師タブの小タブ。#nurse/pdca, #nurse/airmat
 //                          旧形式（#kensa/… #staff/… #biojak/… #vitamin/… #allergy/… #patch #pdca #airmat）は routeNorm() が新形式に置き換える
-//   #reception             受付タブ（PDCA帳。#nurse/pdca と同じ台帳）
+//   #reception/<小タブ>    受付タブの小タブ。#reception/pdca（PDCA帳。#nurse/pdca と同じ台帳）、#reception/kasan（加算）、#reception/kasan/<項目id>
+//                          PDCA帳（受付）の画面の名前は 'reception' のまま（ハッシュ上の小タブ名だけ SUB_NAME で 'pdca' にする）。旧形式 #reception は #reception/pdca に置き換える
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #guidance/diet         生活指導タブ内「抗炎症の食事ガイド」の章
 //   #guidance/walk         生活指導タブ内「インターバル速歩」の章
@@ -7323,9 +7522,14 @@ function routeSet(path, replace){
   }catch(e){ try{ location.hash = path; }catch(e2){} }
   if(!/^search\//.test(path)){ try{ localStorage.setItem(ROUTE_LS, path); }catch(e){} }   // 検索語は次回起動に持ち越さない
 }
-/* 今開いている画面のハッシュ（小タブは doctor/<小タブ>、nurse/<小タブ>） */
+/* 今開いている画面のハッシュ（小タブは doctor/<小タブ>、reception/<小タブ>、nurse/<小タブ>） */
 function routeTab(){ return routeBase(ROUTE.page || 'guidance'); }
-function routeBase(tab){ return TAB_GROUP[tab] ? TAB_GROUP[tab]+'/'+tab : tab; }
+function routeBase(tab){ return TAB_GROUP[tab] ? TAB_GROUP[tab]+'/'+(SUB_NAME[tab]||tab) : tab; }
+/* 親タブ group の小タブ名 name（ハッシュ上の名前）に当たる画面。なければ null */
+function groupSub(group, name){
+  for(var k in TAB_GROUP){ if(TAB_GROUP[k] === group && (SUB_NAME[k]||k) === name) return k; }
+  return null;
+}
 /* 「戻る」ボタン共通：自分で積んだ履歴があればブラウザの戻る、無ければ fallback へ */
 function routeBack(fallback){
   if(ROUTE.depth > 0 && history.length > 1){ history.back(); return; }
@@ -7334,15 +7538,17 @@ function routeBack(fallback){
 /* 旧形式のハッシュを今の形に読み替える（ブックマークや app_route_v1 に残っている値もここを通る）
      #kensa/bio → #doctor/kensa/bio、#patch → #doctor/patch、#pdca → #nurse/pdca
      #staff/patch → #doctor/patch、#staff/pdca → #nurse/pdca、#staff → #doctor/staff、#staff/<薬剤id> → #doctor/staff/<薬剤id>
-     小タブ名のない #doctor は検査パネル、#nurse は PDCA帳を開く */
+     #kasan → #reception/kasan、#reception → #reception/pdca
+     小タブ名のない #doctor は検査パネル、#reception と #nurse は PDCA帳を開く */
 function routeNorm(path){
   var seg = path.split('/'), h = seg[0], s = seg[1];
   if(h === 'staff'){
     if(s && s !== 'staff' && TAB_GROUP[s]) return TAB_GROUP[s]+'/'+seg.slice(1).join('/');
     return 'doctor/'+path;
   }
-  if(TAB_GROUP[h]) return TAB_GROUP[h]+'/'+path;
+  if(TAB_GROUP[h] && TAB_GROUP[h] !== h) return TAB_GROUP[h]+'/'+path;
   if(h === 'doctor' && !s) return 'doctor/kensa';
+  if(h === 'reception' && !s) return 'reception/pdca';
   if(h === 'nurse' && !s) return 'nurse/pdca';
   return path;
 }
@@ -7352,7 +7558,8 @@ function routeApply(path){
   var legacy = moved !== path;
   path = moved;
   var seg = path.split('/'), tab = seg[0], sub = seg.slice(1).join('/');
-  if((tab === 'doctor' || tab === 'nurse') && TAB_GROUP[seg[1]] === tab){ tab = seg[1]; sub = seg.slice(2).join('/'); }
+  var gs = (tab === 'doctor' || tab === 'reception' || tab === 'nurse') ? groupSub(tab, seg[1]) : null;
+  if(gs){ tab = gs; sub = seg.slice(2).join('/'); }
   if(legacy){ try{ history.replaceState({r:path}, '', '#'+path); localStorage.setItem(ROUTE_LS, path); }catch(e){} }
   ROUTE.applying = true;
   try{
@@ -7369,6 +7576,7 @@ function routeApply(path){
     if(tab === 'products'){ showProduct(sub); }
     else if(tab === 'staff'){ showDrug(sub); }
     else if(tab === 'joge'){ jogeGo(sub); }
+    else if(tab === 'kasan'){ kasanGo(sub); }
     else if(tab === 'age'){ ageGo(sub); }
     else if(tab === 'biojak'){ bjGo(sub); }
     else if(tab === 'topical' && window.__topical){ __topical.jump(sub); }
@@ -7396,11 +7604,13 @@ function routeInit(){
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
   vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age', biojak:'pg-biojak',
-  reception:'pg-reception', pdca:'pg-pdca', airmat:'pg-airmat'};
-// タブバーに出さず、親タブ（医師＝doctor、看護師＝nurse）の小タブとして開く画面（switchTab('biojak') 等はそのまま使える）
-// 'staff' は医師タブの小タブ「新薬・専門薬剤」の画面
+  reception:'pg-reception', kasan:'pg-kasan', pdca:'pg-pdca', airmat:'pg-airmat'};
+// タブバーに出さず、親タブ（医師＝doctor、受付＝reception、看護師＝nurse）の小タブとして開く画面（switchTab('biojak') 等はそのまま使える）
+// 'staff' は医師タブの小タブ「新薬・専門薬剤」の画面。'reception' は受付タブの小タブ「PDCA帳」の画面
 var TAB_GROUP = {kensa:'doctor', patch:'doctor', allergy:'doctor', biojak:'doctor', staff:'doctor', vitamin:'doctor',
-  pdca:'nurse', airmat:'nurse'};
+  reception:'reception', kasan:'reception', pdca:'nurse', airmat:'nurse'};
+// ハッシュ上の小タブ名が画面の名前と違うもの（#reception/pdca → 画面 'reception'。看護師の 'pdca' と同じ台帳）
+var SUB_NAME = {reception:'pdca'};
 // iframe で埋め込んだ画面（高さは fitEmbedFrame で画面下端に合わせる）
 var EMBED_TABS = ['patch','kensa','reception','pdca'];
 function switchTab(tab) {
@@ -7422,7 +7632,7 @@ function switchTab(tab) {
 }
 /* 医師タブ・看護師タブの小タブ。薬剤詳細（pg-staff-detail）を開いている間も「新薬・専門薬剤」を点灯させたまま出す */
 function staffSubPaint(tab){
-  [['doctor','staff-sub'],['nurse','nurse-sub']].forEach(function(p){
+  [['doctor','staff-sub'],['reception','reception-sub'],['nurse','nurse-sub']].forEach(function(p){
     var bar = document.getElementById(p[1]); if(!bar) return;
     bar.hidden = TAB_GROUP[tab] !== p[0];
     bar.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.dataset.sub === tab); });
@@ -9623,10 +9833,10 @@ if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=15;
-var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch','reception','pdca','airmat'];
+var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch','kasan','reception','pdca','airmat'];
 var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師 › 新薬・専門薬剤', age:'年齢・用量', biojak:'医師 › バイオ・JAK', kensa:'医師 › 検査パネル', products:'当院製品', vitamin:'医師 › ビタミン剤（内服）',
   guidance:'生活指導', findings:'所見別ナビ', allergy:'医師 › 食物アレルギー', patch:'医師 › パッチテスト',
-  reception:'受付', pdca:'看護師 › PDCA帳', airmat:'看護師 › エアマットレス'};
+  kasan:'受付 › 加算', reception:'受付 › PDCA帳', pdca:'看護師 › PDCA帳', airmat:'看護師 › エアマットレス'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
    1文字→1文字の変換に限定し、元文字列と長さを揃える（ハイライト位置計算のため） */
@@ -9794,6 +10004,19 @@ function build(){
   /* PDCA帳（受付タブと看護師 › PDCA帳 は同じ台帳。記録の中身は索引に入れない） */
   var pdcaHay=['PDCA PDCA帳 業務改善 改善 計画 実行 評価 振り返り 仮説 サイクル 待ち時間 受付 書き出し バックアップ'];
   add('reception','📒','PDCA帳（受付）','業務改善の計画・実行・評価・改善を記録',pdcaHay,function(){ switchTab('reception'); });
+  /* 受付 › 加算（画面全体と、処置・検査の各項目） */
+  if(window.KASAN){
+    var ksHay=['加算 外来管理加算 点数 処置 検査 算定 再診 初診 会計 窓口負担 10割 3割 返還 個別指導 実質点数'];
+    add('kasan','🧾','外来管理加算と処置・検査の点数','受付 › 加算。算定の増減（'+KASAN.ITEMS.length+'項目）・影響しないもの・注意点',
+        ksHay.concat([KASAN.MEMO.none, KASAN.MEMO.notes, KASAN.MEMO.warn.map(function(w){ return w.t; })]),
+        function(){ switchTab('kasan'); });
+    KASAN.ITEMS.forEach(function(it){
+      var d=it.pt-KASAN.BASE;
+      add('kasan','🧾',it.n,it.pt+'点・外来管理加算との増減 '+(d<0?'−'+(-d)+'点':d>0?'+'+d+'点':'±0')+(it.chk?'（要確認）':''),
+          [it.code, it.kind, it.note||'', '加算 外来管理加算 点数 算定'],
+          function(){ switchTab('kasan'); kasanGo(it.id); });
+    });
+  }
   add('pdca','📒','PDCA帳（看護師）','受付タブと同じ台帳',pdcaHay,function(){ switchTab('pdca'); });
   /* エアマットレス（静的ページ。概要1件＋見出しごとに引けるようにする。本文はページの文字から読む） */
   add('airmat','🛏','エアマットレス 設定ガイド','往診先で設定を確認（動作切替×身体保持モード）',
