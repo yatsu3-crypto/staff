@@ -4608,7 +4608,7 @@ sections:[
   {c:'消化器症状、体重減少', a:'抗TTG抗体等（セリアック病。日本では稀だが除外の意義はある）'},
   {c:'急速進行、全頭型／汎発型', a:'JAK阻害薬導入を見据えた前スクリーニングへ移行'}
  ]},
- {h:'JAK阻害薬 導入前スクリーニング', note:'バリシチニブ・リトレシチニブ', kind:'tests', items:[
+ {h:'JAK阻害薬 導入前スクリーニング', note:'バリシチニブ・ウパダシチニブ・リトレシチニブ', kind:'tests', items:[
   {n:'血算（好中球・リンパ球・Hb）、生化学、脂質、CK'},
   {n:'IGRA（QFT／T-SPOT）＋ 胸部X線', must:1, d:'潜在性結核の除外は必須'},
   {n:'HBs抗原、HBs抗体、HBc抗体、HCV抗体', must:1, d:'HBs抗原陰性でHBc／HBs抗体陽性ならHBV-DNAのフォロー体制が必要'},
@@ -4618,6 +4618,11 @@ sections:[
  {kind:'warn', t:'算定・運用', items:[
   '甲状腺抗体は「甲状腺機能低下症疑い」等、亜鉛は「低亜鉛血症疑い」の病名が必要',
   '反復例では「いつ・どの範囲・どの治療で・どう反応したか」の時系列が治療選択を決める。SALTスコアの経時記録を併用する'
+ ]},
+ {h:'内服JAK阻害薬の用法・年齢', kind:'agelinks', items:[
+  {age:'rinvoq',   n:'リンヴォック（ウパダシチニブ）', d:'円形脱毛症の年齢・用法・効能又は効果に関連する注意（年齢・用量）'},
+  {age:'olumiant', n:'オルミエント（バリシチニブ）',   d:'円形脱毛症の年齢・用法（年齢・用量）'},
+  {age:'litfulo',  n:'リットフーロ（リトレシチニブ）', d:'円形脱毛症の年齢・用法（年齢・用量）'}
  ]}
 ]},
 
@@ -5115,7 +5120,11 @@ function renderDetail(){
   });
   /* 関連パネルへの移動は履歴を積まない（「← 一覧へ」が前のパネルに戻らないように） */
   Array.prototype.forEach.call(app.querySelectorAll('.xlink'), function(b){
-    b.addEventListener('click', function(){ open(b.getAttribute('data-go'), true); });
+    b.addEventListener('click', function(){
+      var a=b.getAttribute('data-age');
+      if(a){ try{ window.parent.switchTab('age'); window.parent.ageGo(a); }catch(e){} return; }   // 年齢・用量タブの薬カードへ
+      open(b.getAttribute('data-go'), true);
+    });
   });
   Array.prototype.forEach.call(app.querySelectorAll('ul.tests li'), function(li){
     li.addEventListener('click', function(){
@@ -5192,6 +5201,15 @@ function renderSection(sec, si){
     return h + '</div>';
   }
 
+  if(k==='agelinks'){   /* 親ページの年齢・用量タブの薬カードへのリンク。items は {age:年齢・用量の id, n:表示名, d:説明} */
+    var h = '<div class="xlinks">';
+    (sec.items||[]).forEach(function(x){
+      h += '<button type="button" class="xlink" data-age="'+esc(x.age)+'"><span class="xt"><span class="xn">'+esc(x.n)+'</span>'
+        + (x.d?'<span class="xd">'+esc(x.d)+'</span>':'') + '</span><span class="xa">›</span></button>';
+    });
+    return h + '</div>';
+  }
+
   if(k==='stop' || k==='warn' || k==='note'){
     var cls = k==='stop' ? 'c-stop' : (k==='warn' ? 'c-warn' : 'c-note');
     var mark = k==='stop' ? '■' : (k==='warn' ? '▲' : '●');
@@ -5230,7 +5248,7 @@ qEl.addEventListener('input', function(){
    ============================================================ */
 document.getElementById('ft').innerHTML =
   '院内参照用。添付文書・ガイドラインは改訂があり得るため、検査頻度と算定要件は最新版で確認してください。検査の選択を含め、最終判断は医師が行います。<br>'
-  + '最終更新 2026-11-05／9項目';
+  + '最終更新 2026-11-18／9項目';
 renderHome();
 /* 親ページ（横断検索・URL ハッシュ）から参照する */
 window.KENSA = {
@@ -5451,6 +5469,9 @@ var JOGE = (function(){
            liver＝これを超える1日量で肝機能検査の注意を出す mg）。計算は hi で行い、1回量は adultDose、1日量は dayMax と adultDay の小さい方で頭打ち
    maxM だけあり min がない適応（例：12歳未満）は、上限未満なら「◯（下限年齢の明記なし）」と判定する
    specs：[規格名, 1単位あたり mg, 単位]
+   imp：効能又は効果に関連する注意など、用法の前に目立たせる行（link のない薬だけ。投与間隔・月額の読み取りには使わない）
+   rel：あわせて見たい薬（相互リンク。[{id, t:理由}]。相手側にも書く。例：リンヴォック ⇔ オルミエント）
+   notes の「〈効能又は効果…〉」で始まる行は、バイオ・JAK の投与間隔・月額の読み取りから外れる
    link：用法・注意の正本が他タブにある薬（sec:'staff' は医師タブの id、sec:'topical' は外用薬一覧のカード名）。
          この場合、用法・注意は正本から読み込んで表示し、ここには年齢・規格だけを持つ
    ============================================== */
@@ -5476,9 +5497,20 @@ var AGE = (function(){
     {id:'mucodyne', n:'ムコダイン', gen:'カルボシステイン', rt:'内服', cat:'その他', form:'DS・シロップ', kg:30, max:1500, freq:3, min:0, age:'全年齢で使用可',
      notes:'去痰薬。',
      specs:[['DS50%',500,'g（1g中500mg）'],['250mg錠',250,'錠'],['5%シロップ',50,'mL（1mL中50mg）']]},
-    {id:'rinvoq', n:'リンヴォック', gen:'ウパダシチニブ水和物', rt:'内服', cat:'アトピー内服薬（JAK阻害薬）', form:'錠（7.5mg・15mg・30mg）', max:30, freq:1, min:144, age:'12歳以上かつ体重30kg以上（アトピー性皮膚炎）',
+    {id:'rinvoq', n:'リンヴォック', gen:'ウパダシチニブ水和物', rt:'内服', cat:'JAK阻害薬（アトピー性皮膚炎・円形脱毛症）', form:'錠（7.5mg・15mg・30mg）', max:30, freq:1, min:144,
+     ind:[
+       {i:'アトピー性皮膚炎', min:144, t:'12歳以上かつ体重30kg以上'},
+       {i:'円形脱毛症',       min:144, t:'成人及び12歳以上かつ体重30kg以上の小児'}
+     ],
+     imp:['〈円形脱毛症〉本剤投与開始時に、頭部全体の概ね50%以上に脱毛が認められ、過去6か月程度毛髪に自然再生が認められない患者に投与すること。',
+          '〈円形脱毛症〉円形脱毛症以外の脱毛症に対する適応はない。'],
      notes:['〈アトピー性皮膚炎〉15mgを1日1回（最大30mg）。',
+            '〈円形脱毛症〉成人及び12歳以上かつ体重30kg以上の小児：15mgを1日1回。患者の状態に応じて30mgを1日1回投与することができる。',
+            '〈効能又は効果（円形脱毛症）〉円形脱毛症（ただし、脱毛部位が広範囲に及ぶ難治の場合に限る）。',
             '内服JAK1阻害薬。服用時間の制限なし。感染症リスクあり（帯状疱疹・結核・日和見感染）。生ワクチン接種不可。悪性腫瘍・血栓塞栓症リスクに注意。妊婦禁忌。'],
+     src:'円形脱毛症の効能又は効果・効能又は効果に関連する注意・用法及び用量は、アッヴィ合同会社「適応追加のご案内」（2026年11月）の抜粋による（添付文書そのものではない。添付文書の改訂版で確認すること）',
+     rel:[{id:'olumiant', t:'円形脱毛症に使える内服JAK阻害薬（バリシチニブ）'},{id:'litfulo', t:'円形脱毛症に使える内服JAK阻害薬（リトレシチニブ）'}],
+     kensa:{id:'aa', sec:'JAK阻害薬 導入前スクリーニング', l:'円形脱毛症 ＞ JAK阻害薬 導入前スクリーニング'},
      specs:[['7.5mg錠',7.5,'錠'],['15mg錠',15,'錠'],['30mg錠',30,'錠']]},
     {id:'olumiant', n:'オルミエント', gen:'バリシチニブ', rt:'内服', cat:'JAK阻害薬', form:'錠（1mg・2mg・4mg）', freq:1, min:24,
      ind:[
@@ -5491,10 +5523,14 @@ var AGE = (function(){
             '〈アトピー性皮膚炎（小児）、多関節に活動性を有する若年性特発性関節炎〉2歳以上・体重別：体重に応じて以下の量を1日1回。30kg以上は4mg（状態に応じて2mgに減量）、30kg未満は2mg（状態に応じて1mgに減量）。',
             '〈円形脱毛症〉成人及び12歳以上かつ体重30kg以上の小児：4mgを1日1回。状態に応じて2mgに減量。',
             '〈SARS-CoV-2による肺炎〉成人：レムデシビルとの併用で4mgを1日1回。総投与期間は14日間まで。'],
+     alert:{h:'円形脱毛症：投与対象の条件は未確認', pill:'円形脱毛症 要確認', t:'効能に関連する注意（投与対象の条件）は未確認。添付文書で確認すること。リンヴォックには「頭部全体の概ね50%以上の脱毛、過去6か月程度自然再生なし」の条件がある。'},
+     rel:[{id:'rinvoq', t:'円形脱毛症に使える内服JAK阻害薬（ウパダシチニブ）'},{id:'litfulo', t:'円形脱毛症に使える内服JAK阻害薬（リトレシチニブ）'}],
      kensa:{id:'aa', sec:'JAK阻害薬 導入前スクリーニング', l:'円形脱毛症 ＞ JAK阻害薬 導入前スクリーニング'},
      specs:[['1mg錠（当院未採用。30kg未満の小児で2mg→1mgに減量するときに必要）',1,'錠'],['2mg錠',2,'錠'],['4mg錠',4,'錠']]},
     {id:'litfulo', n:'リットフーロ', gen:'リトレシチニブ', rt:'内服', cat:'円形脱毛症内服薬（JAK阻害薬）', form:'カプセル（50mg）', freq:1, min:144, age:'成人及び12歳以上の小児（円形脱毛症）',
      notes:'円形脱毛症：成人及び12歳以上の小児に50mgを1日1回。',
+     alert:{h:'円形脱毛症：投与対象の条件は未確認', pill:'円形脱毛症 要確認', t:'効能に関連する注意（投与対象の条件）は未確認。添付文書で確認すること。リンヴォックには「頭部全体の概ね50%以上の脱毛、過去6か月程度自然再生なし」の条件がある。'},
+     rel:[{id:'rinvoq', t:'円形脱毛症に使える内服JAK阻害薬（ウパダシチニブ）'},{id:'olumiant', t:'円形脱毛症に使える内服JAK阻害薬（バリシチニブ）'}],
      kensa:{id:'aa', sec:'JAK阻害薬 導入前スクリーニング', l:'円形脱毛症 ＞ JAK阻害薬 導入前スクリーニング'},
      specs:[['50mgカプセル',50,'カプセル']]},
     {id:'desalex', n:'デザレックス', gen:'デスロラタジン', rt:'内服', cat:'抗アレルギー薬', form:'錠（5mg）', max:5, freq:1, min:144, age:'12歳以上（12歳未満は臨床試験未実施）',
@@ -5716,6 +5752,7 @@ var AGE = (function(){
         + '</tbody></table>';
     }
     if(d.preg) h+='<div class="ag-lbl">妊娠中の使用</div><div class="ag-preg"><b>'+e(d.preg.l)+'</b>'+e(d.preg.t)+'</div>';
+    if(d.imp && !d.link) h+='<div class="ag-lbl">重要な注意（効能又は効果に関連する注意）</div><div class="ag-hold">'+d.imp.map(e).join('<br>')+'</div>';
     if(d.link) h+=linked(d);
     else if(d.notes) h+='<div class="ag-lbl">用法・注意</div>'+(Array.isArray(d.notes)   // 配列は適応症ごとに1行
       ? '<div class="ag-lines">'+d.notes.map(function(t){ return '<div>'+e(t)+'</div>'; }).join('')+'</div>'
@@ -5725,11 +5762,18 @@ var AGE = (function(){
       + '<button type="button" style="min-height:44px" data-kensa="'+e(d.id)+'">開く ›</button></div>';
     if(window.bjXref) h+=bjXref('age', d.id);   // バイオ・JAK タブへのリンク（薬価・副作用）
     if(canCalc(d)) h+='<button type="button" class="ag-btn" data-calc="'+e(d.id)+'">この薬で体重換算 ›</button>';
+    var rel='';
+    (d.rel||[]).forEach(function(r){   // あわせて見たい薬（相互リンク。相手側にも rel を書く）
+      var x=byId(r.id); if(!x) return;
+      rel+='<div class="canon-xref" style="margin-top:12px"><span><b>'+e(x.n)+'</b> とあわせて見る：'+e(r.t)+'</span>'
+        + '<button type="button" style="min-height:44px" data-rel="'+e(x.id)+'">開く ›</button></div>';
+    });
     if(window.canonLinks && !d.link){   // link ありは上の「正本を開く」ボタンで足りる
       var self='age:'+d.id;
       var own=window.CANON_RULES && CANON_RULES.some(function(r){ return r.sec==='age' && r.id===d.id; });
-      h+=(own?canonSelfNote():'')+canonLinks(d.n+' '+h, self);   // 薬名も入れる（マイザー → 外用薬一覧のランク別カード）
-    }
+      var relKeys=(d.rel||[]).map(function(r){ return 'age:'+r.id; });   // 相互リンクに出す薬は自動リンクから除く
+      h+=rel+(own?canonSelfNote():'')+canonLinks(d.n+' '+h, self, relKeys);   // 薬名も入れる（マイザー → 外用薬一覧のランク別カード）
+    } else h+=rel;
     return h;
   }
   function card(d, m){
@@ -5874,6 +5918,7 @@ var AGE = (function(){
       var c=ev.target.closest('[data-calc]'); if(c){ pickCalc(c.dataset.calc); return; }
       var o=ev.target.closest('[data-canon-open]'); if(o){ openLinked(byId(o.dataset.canonOpen)); return; }
       var k=ev.target.closest('[data-kensa]'); if(k){ var K=byId(k.dataset.kensa).kensa; switchTab('kensa'); kensaGo(K.id, K.sec); return; }
+      var rl=ev.target.closest('[data-rel]'); if(rl){ ageGo(rl.dataset.rel); return; }
       var h=ev.target.closest('.ag-head'); if(h) toggle(h.dataset.id);
     };
     document.querySelectorAll('#ag-chnav button').forEach(function(b){ b.onclick=function(){ ageGo(b.dataset.g); }; });
@@ -5988,11 +6033,11 @@ var BIOJAK = (function(){
      note:'1mg錠（当院未採用）の薬価は参照資料になく、未登録です。'},
     {id:'rinvoq', n:'リンヴォック', gen:'ウパダシチニブ', en:'upadacitinib', cat:'jak', rt:'内服', adopt:'yes', age:'rinvoq',
      target:'JAK1', mech:'JAK1の高選択的阻害',
-     onset:'1〜2週',
+     onset:[{i:'アトピー性皮膚炎', t:'1〜2週'},{i:'円形脱毛症', t:'未登録'}],
      ae:[['上気道感染','約20%','軽'],['CPK上昇','約10%','要確認'],['痤瘡','約8%','軽'],['帯状疱疹','約5〜10%','重要'],['静脈血栓塞栓症（VTE）','1%未満','重篤']],
      price:[['15mg 1錠',4707]],
-     month:[{p:0}],
-     note:'7.5mg・30mg錠の薬価は参照資料になく、未登録です。'},
+     month:[{i:'アトピー性皮膚炎', p:0},{i:'円形脱毛症｜成人及び12歳以上かつ体重30kg以上の小児', k:0, p:0}],
+     note:'7.5mg・30mg錠の薬価は参照資料になく、未登録です（30mgの月額は計算していません）。円形脱毛症は2026年11月の適応追加（アッヴィ合同会社の案内の抜粋による）。円形脱毛症での効果発現と副作用の頻度は未登録で、上の副作用の表は円形脱毛症の追加前からの参照値です。'},
     {id:'cibinqo', n:'サイバインコ', gen:'アブロシチニブ', en:'abrocitinib', cat:'jak', rt:'内服', adopt:'yes',
      target:'JAK1', mech:'JAK1の高選択的阻害',
      onset:'1〜2週',
@@ -6211,7 +6256,7 @@ var BIOJAK = (function(){
   /* 検索用に1剤ぶんの文字列をまとめる（横断検索でも使う） */
   BIOJAK.hay = function(d){
     var ae = d.ae[0] && d.ae[0].r ? d.ae.map(function(g){ return g.r.map(function(r){ return r[0]; }).join(' '); }).join(' ') : d.ae.map(function(r){ return r[0]; }).join(' ');
-    return [d.n,d.gen,d.en,d.target,d.mech,catOf(d.cat).l,ae,d.warn?d.warn.h+' '+d.warn.g.map(function(x){ return x.b+' '+x.t.join(' '); }).join(' '):''].join(' ');
+    return [d.n,d.gen,d.en,d.target,d.mech,catOf(d.cat).l,ae,onsetText(d),d.warn?d.warn.h+' '+d.warn.g.map(function(x){ return x.b+' '+x.t.join(' '); }).join(' '):''].join(' ');
   };
   function aeTable(rows){
     return '<table><thead><tr><th>副作用</th><th>頻度</th><th>重篤度</th></tr></thead><tbody>'
@@ -6464,11 +6509,11 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '2.9';
+var APP_VERSION = '3.0';
 var STALE_MONTHS = 12;
 var DATA_META = {
-  guidance: {updated:'2026-11-04', check:'各疾患の最新ガイドライン',
-             parts:[{n:'疾患別の生活指導', updated:'2026-11-04'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'}]},
+  guidance: {updated:'2026-11-18', check:'各疾患の最新ガイドライン',
+             parts:[{n:'疾患別の生活指導', updated:'2026-11-18'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'}]},
   products: {updated:'2026-10-01', check:'各製品の添付資料・メーカー情報'},
   staff:    {updated:'2026-11-16', check:'添付文書・最適使用推進ガイドライン'},
   topical:  {updated:'2026-11-16', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
@@ -6477,10 +6522,10 @@ var DATA_META = {
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
-  kensa:    {updated:'2026-11-16', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
+  kensa:    {updated:'2026-11-18', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-11-16', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）・新薬の投薬期間制限（薬価収載日）'},
-  age:      {updated:'2026-11-16', check:'添付文書（使用可能年齢・小児用量・規格）'},
-  biojak:   {updated:'2026-11-16', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
+  age:      {updated:'2026-11-18', check:'添付文書（使用可能年齢・小児用量・規格）'},
+  biojak:   {updated:'2026-11-18', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
   reception:{updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。看護師 › PDCA帳と同じ台帳）'},
   kasan:    {updated:'2026-11-16', check:'令和8年度診療報酬点数表・院内の比較表（2026-11-16 作成）・医事／レセコンの扱い'},
   pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
@@ -6765,7 +6810,7 @@ var DB = {
     life:['ストレスは自己免疫反応を亢進させ悪化・再発につながる。ストレス管理が重要','鉄・亜鉛・ビタミンD・タンパク質を積極的に摂取する（毛髪の栄養素）'],
     night:['就寝前に外用薬を塗布し、頭皮に成分が浸透しやすい状態で就寝する'],
     env:['帽子・ウィッグを活用してQOLを維持する'],
-    add:[{b:'外用',t:'ステロイド外用（局面）を使用'},{b:'注射',t:'ステロイド局所注射（トリアムシノロン）：単発型に有効'},{b:'内服',t:'バリシチニブ（オルミエント）等のJAK阻害薬の適応を検討（重症例）'},{b:'治療',t:'SADBE局所免疫療法の適応を検討'},{b:'漢方',t:'柴胡加竜骨牡蛎湯：ストレスで悪化する場合に考慮'},{b:'漢方',t:'桂枝加竜骨牡蛎湯・柴胡桂枝乾姜湯：ストレス・自律神経の乱れが関与する場合に考慮'}]
+    add:[{b:'外用',t:'ステロイド外用（局面）を使用'},{b:'注射',t:'ステロイド局所注射（トリアムシノロン）：単発型に有効'},{b:'内服',t:'内服のJAK阻害薬（オルミエント・リンヴォック・リットフーロ）の適応を検討（重症例）'},{b:'治療',t:'SADBE局所免疫療法の適応を検討'},{b:'漢方',t:'柴胡加竜骨牡蛎湯：ストレスで悪化する場合に考慮'},{b:'漢方',t:'桂枝加竜骨牡蛎湯・柴胡桂枝乾姜湯：ストレス・自律神経の乱れが関与する場合に考慮'}]
   },
   '口唇ヘルペス':{
     care:['患部を触らない。触れた場合は直後に手洗いを徹底する','処方された抗ウイルス薬外用を早期から使用する','水疱を潰さない'],
@@ -10077,7 +10122,7 @@ function build(){
   /* 年齢・用量（薬剤ごと＋体重換算） */
   if(window.AGE){
     AGE.DRUGS.forEach(function(d){
-      add('age','👶',d.n,d.gen+'・'+AGE.ageText(d),[d.cat,d.form,d.rt,d.notes,d.hold,d.specs,'使用可能年齢 年齢制限 小児 何歳から'],function(){ switchTab('age'); ageGo(d.id); });
+      add('age','👶',d.n,d.gen+'・'+AGE.ageText(d),[d.cat,d.form,d.rt,d.notes,d.imp,d.hold,d.specs,'使用可能年齢 年齢制限 小児 何歳から'],function(){ switchTab('age'); ageGo(d.id); });
     });
     add('age','⚖️','年齢・用量 › 体重換算の計算',AGE.DRUGS.filter(function(d){ return d.kg; }).map(function(d){ return d.n; }).join('・'),
       ['体重換算 mg/kg 小児用量 計算 規格換算'],function(){ switchTab('age'); ageGo('calc'); });
