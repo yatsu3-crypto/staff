@@ -3816,6 +3816,15 @@ td.num{text-align:right;white-space:nowrap}
 details{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
 summary{cursor:pointer;font-weight:500}
 .confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.85rem}
+.guide{border-left:6px solid var(--matsuba)}
+.guide summary{font-family:var(--mincho);font-weight:700;font-size:1.05rem;min-height:44px;display:flex;align-items:center}
+.guide h4{font-size:.85rem;color:var(--matsuba);margin:12px 0 4px;font-weight:700}
+.guide h4 small{color:var(--sub);font-weight:500}
+.guide ul,.guide ol{margin:0;padding-left:1.3em;font-size:.9rem}
+.guide li+li{margin-top:4px}
+.guide p{margin:0;font-size:.9rem}
+.guide .must{background:var(--shu-soft);border-radius:8px;padding:2px 12px 10px;margin-top:12px}
+.guide .must h4{color:var(--shu)}
 @media (prefers-reduced-motion:no-preference){.stage,.card{transition:border-color .2s}}
 </style>
 </head>
@@ -3848,6 +3857,35 @@ if(!Array.isArray(db))db=sample();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
 let view={id:null,confirmDel:false,io:false};
 const find=id=>db.find(c=>c.id===id);
+
+/* チームの手順（表示だけ。台帳 pdca-cho-v1 には保存しない）。
+   どちらの入口で開いたかは親の iframe の id で見分ける（receptionPdcaFrame＝受付、staffPdcaFrame＝看護師） */
+const TEAM=(()=>{try{const id=frameElement&&frameElement.id;return id==='receptionPdcaFrame'?'reception':id==='staffPdcaFrame'?'nurse':''}catch(e){return ''}})();
+const GUIDE={
+  nurse:{name:'看護師チーム',
+    todo:['爪を切るとき、濁った爪や厚い爪があれば削りかすを採り、KOHで標本を作って先生に回す',
+          '靴下を脱いだら足の裏も見て、硬いところがあれば「削りもありそうです」と先生に伝える'],
+    countWhere:'処置室の紙に正の字で4つ',
+    count:['爪切りをした人数','検鏡の標本を作った人数','足の裏を見た人数','削りにつながった人数'],
+    rules:['検鏡は必要がある人にだけ行う。全員に機械的には行わない','検鏡の判定は先生が行い、カルテに記載する','処置は部位と内容をカルテに残す']},
+  reception:{name:'受付チーム',
+    todo:['カルテかお会計票に「NV」の印がある人に、必ずサンプルと商品カードを渡す','その場でQRコードからオンライン登録まで一緒にする'],
+    countWhere:'受付の紙に正の字で3つ',
+    count:['声をかけた人数','その場で買った人数','オンライン登録した人数'],
+    rules:[]}
+};
+const MEETING='毎月第2週の昼休みに15分のミーティング。前月の数字を見て、来月変えることを1つだけ決める。';
+let guideOpen=true;
+function guide(){
+  const g=GUIDE[TEAM];if(!g)return '';
+  const li=a=>a.map(t=>`<li>${esc(t)}</li>`).join('');
+  return `<details class="guide" id="guide" ${guideOpen?'open':''}><summary>${g.name}の手順</summary>
+    <h4>やること</h4><ul>${li(g.todo)}</ul>
+    <h4>数えること <small>（${esc(g.countWhere)}）</small></h4><ol>${li(g.count)}</ol>
+    ${g.rules.length?`<div class="must"><h4>【重要】守ること</h4><ul>${li(g.rules)}</ul></div>`:''}
+    <h4>ふりかえり <small>（受付・看護師で共通）</small></h4><p>${esc(MEETING)}</p>
+  </details>`;
+}
 
 function hyp(c){
   if(!c.action&&!c.metric)return '（仮説を入力してください）';
@@ -3885,6 +3923,7 @@ function home(){
   };
   return `<header><div><h1>PDCA帳</h1><p class="lead">仮説を数値で立て、評価日に必ず振り返る</p></div>
     <button class="btn main" id="new">＋ 新しいサイクル</button></header>
+    ${guide()}
     ${act.length>3?`<div class="note warn">進行中が${act.length}件あります。同時に回すのは2〜3件までにすると評価が甘くなりません。</div>`:''}
     ${overdue.length?`<div class="note">評価日を迎えたサイクルが${overdue.length}件あります。Checkに進みましょう。</div>`:''}
     <div class="list">${act.map(card).join('')||'<p class="hint">進行中のサイクルはありません。</p>'}</div>
@@ -3965,6 +4004,7 @@ function detail(c){
 function bind(){
   const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
   $$('[data-open]').forEach(e=>e.onclick=()=>{view={id:e.dataset.open};render();scrollTo(0,0)});
+  const gd=$('#guide');if(gd)gd.ontoggle=()=>{guideOpen=gd.open};
   const nb=$('#new');if(nb)nb.onclick=()=>{const c={id:uid(),title:'新しいテーマ',round:1,parent:null,stage:'P',action:'',metric:'',unit:'',dir:'down',baseline:'',target:'',start:today(),check:addDays(today(),14),logs:[],judge:'',learn:'',act:'',actNote:''};db.unshift(c);save();view={id:c.id};render();scrollTo(0,0)};
   const exp=$('#exp');if(exp){
     exp.onclick=()=>{const t=JSON.stringify(db);const io=$('#io');io.value=t;
@@ -6584,7 +6624,7 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '3.2';
+var APP_VERSION = '3.3';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-11-18', check:'各疾患の最新ガイドライン',
@@ -6601,9 +6641,9 @@ var DATA_META = {
   joge:     {updated:'2026-11-16', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）・新薬の投薬期間制限（薬価収載日）'},
   age:      {updated:'2026-11-18', check:'添付文書（使用可能年齢・小児用量・規格）'},
   biojak:   {updated:'2026-11-18', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
-  reception:{updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。看護師 › PDCA帳と同じ台帳）'},
+  reception:{updated:'2026-11-19', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。看護師 › PDCA帳と同じ台帳）'},
   kasan:    {updated:'2026-11-16', check:'令和8年度診療報酬点数表・院内の比較表（2026-11-16 作成）・医事／レセコンの扱い'},
-  pdca:     {updated:'2026-10-17', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
+  pdca:     {updated:'2026-11-19', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
   airmat:   {updated:'2026-10-28', check:'モルテン エアマットレスの取扱説明（設定・設置・困ったとき）'}
 };
 function metaAgeText(ymd){
