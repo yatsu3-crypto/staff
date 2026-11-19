@@ -3818,13 +3818,26 @@ summary{cursor:pointer;font-weight:500}
 .confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.85rem}
 .guide{border-left:6px solid var(--matsuba)}
 .guide summary{font-family:var(--mincho);font-weight:700;font-size:1.05rem;min-height:44px;display:flex;align-items:center}
-.guide h4{font-size:.85rem;color:var(--matsuba);margin:12px 0 4px;font-weight:700}
-.guide h4 small{color:var(--sub);font-weight:500}
+.guide h4{font-size:.95rem;margin:0 0 6px;font-weight:700;display:flex;align-items:baseline;gap:6px}
+.guide h4 small{color:var(--sub);font-weight:500;font-size:.8rem}
+.guide h4 b{font-family:var(--mincho);font-size:1.3rem;width:1.1em}
 .guide ul,.guide ol{margin:0;padding-left:1.3em;font-size:.9rem}
 .guide li+li{margin-top:4px}
-.guide p{margin:0;font-size:.9rem}
-.guide .must{background:var(--shu-soft);border-radius:8px;padding:2px 12px 10px;margin-top:12px}
-.guide .must h4{color:var(--shu)}
+.guide p{margin:0 0 4px;font-size:.9rem}
+.gs{border-left:4px solid var(--line);padding:4px 0 4px 12px;margin-top:14px}
+.gP{border-left-color:var(--ai)} .gP h4 b{color:var(--ai)}
+.gD{border-left-color:var(--matsuba)} .gD h4 b{color:var(--matsuba)}
+.gC{border-left-color:var(--kincha)} .gC h4 b{color:var(--kincha)}
+.gA{border-left-color:var(--shu)} .gA h4 b{color:var(--shu)}
+.guide .must{background:var(--shu-soft);border-radius:8px;padding:8px 12px 10px;margin-top:10px}
+.guide .must h5{color:var(--shu);font-size:.85rem;margin:0 0 4px}
+.ifthen .if{font-weight:700;display:block}
+.ifthen .then{display:block;color:var(--sub)}
+.meet{background:var(--matsuba-soft);border-radius:10px;padding:10px 12px;margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.meet .btn{align-self:flex-start;min-height:44px}
+.rec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;scroll-margin-top:8px}
+.rec-h h2{font-size:1.25rem}
+#new{min-height:44px}
 @media (prefers-reduced-motion:no-preference){.stage,.card{transition:border-color .2s}}
 </style>
 </head>
@@ -3861,29 +3874,48 @@ const find=id=>db.find(c=>c.id===id);
 /* チームの手順（表示だけ。台帳 pdca-cho-v1 には保存しない）。
    どちらの入口で開いたかは親の iframe の id で見分ける（receptionPdcaFrame＝受付、staffPdcaFrame＝看護師） */
 const TEAM=(()=>{try{const id=frameElement&&frameElement.id;return id==='receptionPdcaFrame'?'reception':id==='staffPdcaFrame'?'nurse':''}catch(e){return ''}})();
+/* P・D・C・A の4段。D は数える場所（where）と数える項目（count）、A は [こうなったら, こうする] の組 */
 const GUIDE={
   nurse:{name:'看護師チーム',
-    todo:['爪を切るとき、濁った爪や厚い爪があれば削りかすを採り、KOHで標本を作って先生に回す',
-          '靴下を脱いだら足の裏も見て、硬いところがあれば「削りもありそうです」と先生に伝える'],
-    countWhere:'処置室の紙に正の字で4つ',
-    count:['爪切りをした人数','検鏡の標本を作った人数','足の裏を見た人数','削りにつながった人数'],
-    rules:['検鏡は必要がある人にだけ行う。全員に機械的には行わない','検鏡の判定は先生が行い、カルテに記載する','処置は部位と内容をカルテに残す']},
+    P:['爪を切るとき、濁った爪や厚い爪があれば削りかすを採り、KOHで標本を作って先生に回す',
+       '靴下を脱いだら足の裏も見て、硬いところがあれば「削りもありそうです」と先生に伝える'],
+    D:{where:'処置室の紙に正の字で4つ数える',
+       count:['爪切りをした人数','検鏡の標本を作った人数','足の裏を見た人数','削りにつながった人数']},
+    rules:['検鏡は必要がある人にだけ行う。全員に機械的には行わない','検鏡の判定は先生が行い、カルテに記載する','処置は部位と内容をカルテに残す'],
+    C:['爪切りをした人のうち、検鏡をした割合を見る',
+       '爪切りをした人のうち、削りになった割合を見る',
+       '件数を前年同月と比べる（数字は経営記録アプリで見る）'],
+    A:[['検鏡の割合が低い','標本を採る目安を写真で共有する'],
+       ['検鏡の陽性が多い','先生が外用・内服の治療につなげる'],
+       ['削りが少ない','足の裏を見る対象を、高齢者と糖尿病の方に絞る']]},
   reception:{name:'受付チーム',
-    todo:['カルテかお会計票に「NV」の印がある人に、必ずサンプルと商品カードを渡す','その場でQRコードからオンライン登録まで一緒にする'],
-    countWhere:'受付の紙に正の字で3つ',
-    count:['声をかけた人数','その場で買った人数','オンライン登録した人数'],
-    rules:[]}
+    P:['カルテかお会計票に「NV」の印がある人に、必ずサンプルと商品カードを渡す',
+       'その場でQRコードからオンライン登録まで一緒にする'],
+    D:{where:'受付の紙に正の字で3つ数える',
+       count:['声をかけた人数','その場で買った人数','オンライン登録した人数']},
+    rules:[],
+    C:['声をかけた人のうち、買った人の割合を見る',
+       '声をかけた人のうち、登録した人の割合を見る'],
+    A:[['割合が低い','言い方を変える（「先生のおすすめで」「試供品だけでも」など）'],
+       ['印のある人自体が少ない','院長に印を増やしてもらう']]}
 };
-const MEETING='毎月第2週の昼休みに15分のミーティング。前月の数字を見て、来月変えることを1つだけ決める。';
+const MEETING=['毎月第2週の昼休みに15分。',
+  '前月を振り返り、来月変えることを1つだけ決める。',
+  '決めたことは下の記録欄に1行書き、翌月に結果を確認する。',
+  'Actで決めたことが、翌月のPlanになる。'];
 let guideOpen=true;
 function guide(){
   const g=GUIDE[TEAM];if(!g)return '';
   const li=a=>a.map(t=>`<li>${esc(t)}</li>`).join('');
-  return `<details class="guide" id="guide" ${guideOpen?'open':''}><summary>${g.name}の手順</summary>
-    <h4>やること</h4><ul>${li(g.todo)}</ul>
-    <h4>数えること <small>（${esc(g.countWhere)}）</small></h4><ol>${li(g.count)}</ol>
-    ${g.rules.length?`<div class="must"><h4>【重要】守ること</h4><ul>${li(g.rules)}</ul></div>`:''}
-    <h4>ふりかえり <small>（受付・看護師で共通）</small></h4><p>${esc(MEETING)}</p>
+  const st=(s,en,ja,body)=>`<div class="gs g${s}"><h4><b>${s}</b>${en}<small>（${ja}）</small></h4>${body}</div>`;
+  return `<details class="guide" id="guide" ${guideOpen?'open':''}><summary>${g.name}のPDCA</summary>
+    ${st('P','Plan','計画',`<ul>${li(g.P)}</ul>`)}
+    ${st('D','Do','実行',`<p>${esc(g.D.where)}</p><ol>${li(g.D.count)}</ol>
+      ${g.rules.length?`<div class="must"><h5>【重要】守ること</h5><ul>${li(g.rules)}</ul></div>`:''}`)}
+    ${st('C','Check','評価',`<ul>${li(g.C)}</ul>`)}
+    ${st('A','Act','改善',`<ul class="ifthen">${g.A.map(([c,a])=>`<li><span class="if">${esc(c)}</span><span class="then">→ ${esc(a)}</span></li>`).join('')}</ul>`)}
+    <div class="meet"><h4>毎月のふりかえり <small>（受付・看護師で共通）</small></h4><ul>${li(MEETING)}</ul>
+      <button class="btn" id="torec" type="button">↓ 記録欄に書く</button></div>
   </details>`;
 }
 
@@ -3921,9 +3953,10 @@ function home(){
       <span class="${due?'due':''}">評価日 ${esc(c.check||'未設定')}${due?'（到来）':''}</span>
       ${c.sample?'<span class="sample">例</span>':''}</div></button>`;
   };
-  return `<header><div><h1>PDCA帳</h1><p class="lead">仮説を数値で立て、評価日に必ず振り返る</p></div>
-    <button class="btn main" id="new">＋ 新しいサイクル</button></header>
+  return `<header><div><h1>PDCA帳</h1><p class="lead">仮説を数値で立て、評価日に必ず振り返る</p></div></header>
     ${guide()}
+    <div class="rec-h" id="rec"><div><h2>記録欄</h2>${GUIDE[TEAM]?'<p class="hint">Actで決めたことを1行書き、翌月のPlanとして回す</p>':''}</div>
+      <button class="btn main" id="new">＋ 新しいサイクル</button></div>
     ${act.length>3?`<div class="note warn">進行中が${act.length}件あります。同時に回すのは2〜3件までにすると評価が甘くなりません。</div>`:''}
     ${overdue.length?`<div class="note">評価日を迎えたサイクルが${overdue.length}件あります。Checkに進みましょう。</div>`:''}
     <div class="list">${act.map(card).join('')||'<p class="hint">進行中のサイクルはありません。</p>'}</div>
@@ -4005,6 +4038,7 @@ function bind(){
   const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
   $$('[data-open]').forEach(e=>e.onclick=()=>{view={id:e.dataset.open};render();scrollTo(0,0)});
   const gd=$('#guide');if(gd)gd.ontoggle=()=>{guideOpen=gd.open};
+  const tr=$('#torec');if(tr)tr.onclick=()=>{const r=$('#rec');if(r)scrollTo(0,r.getBoundingClientRect().top+scrollY-8)};
   const nb=$('#new');if(nb)nb.onclick=()=>{const c={id:uid(),title:'新しいテーマ',round:1,parent:null,stage:'P',action:'',metric:'',unit:'',dir:'down',baseline:'',target:'',start:today(),check:addDays(today(),14),logs:[],judge:'',learn:'',act:'',actNote:''};db.unshift(c);save();view={id:c.id};render();scrollTo(0,0)};
   const exp=$('#exp');if(exp){
     exp.onclick=()=>{const t=JSON.stringify(db);const io=$('#io');io.value=t;
@@ -6674,7 +6708,7 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '3.4';
+var APP_VERSION = '3.5';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-11-18', check:'各疾患の最新ガイドライン',
