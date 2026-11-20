@@ -2901,6 +2901,12 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 90px}
 .acc summary .gn{margin-left:auto;font-size:11px;color:var(--sumi2);font-weight:600}
 .acc .ac-body{padding:0 12px 10px}
 
+.kenlink{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;margin-top:20px;padding:10px 12px;text-align:left;
+  background:#fff;border:1px solid var(--line);border-radius:10px;font-family:inherit;cursor:pointer}
+.kenlink .kt{flex:1;min-width:0}
+.kenlink .kn{display:block;font-size:14px;font-weight:700;color:var(--ai);line-height:1.5}
+.kenlink .kd{display:block;font-size:12.5px;color:var(--sumi2);line-height:1.6}
+.kenlink .ka{flex:none;font-size:18px;color:var(--ai)}
 .disc{font-size:11.5px;color:var(--sumi2);border-top:1px dashed var(--line);margin-top:24px;padding-top:14px;line-height:1.6}
 .foot{text-align:center;font-size:11px;color:var(--sumi2);margin-top:18px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--sumi);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:80;pointer-events:none}
@@ -2983,6 +2989,11 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 90px}
   <section class="view" id="view-list">
     <div id="listBody"></div>
   </section>
+
+  <!-- 検査パネル › 紅皮症 への相互リンク（親ページの kensaGo で開く） -->
+  <button type="button" class="kenlink" onclick="try{parent.switchTab('kensa');parent.kensaGo('erythro');}catch(e){}">
+    <span class="kt"><span class="kn">関連：検査パネル › 紅皮症</span><span class="kd">紅皮症の初診時検査。接触皮膚炎・薬疹を疑うときのパッチテストは軽快後に行う</span></span><span class="ka">›</span>
+  </button>
 
   <div class="disc">
     ※ 本アプリは診療補助の参照ツールです。掲載成分・濃度・基剤は代表的な目安で、製品ごとに配合は異なります。実際のパッチテスト施行・判定・読み替えは施行医の判断と最新の文献・学会基準（日本皮膚アレルギー・接触皮膚炎学会）に基づいてください。
@@ -4817,7 +4828,8 @@ sections:[
   '光パッチテストはUVA照射装置が必要。院内／紹介の分岐を明記しておく'
  ]},
  {h:'関連パネル', kind:'links', items:[
-  {id:'dle', n:'DLE（円板状エリテマトーデス）', d:'確定診断の手順と、SLE合併・移行のスクリーニング'}
+  {id:'dle', n:'DLE（円板状エリテマトーデス）', d:'確定診断の手順と、SLE合併・移行のスクリーニング'},
+  {id:'erythro', n:'紅皮症', d:'紅皮症の初診時検査。皮膚筋炎の検索（CK、アルドラーゼ）が重複'}
  ]}
 ]},
 
@@ -5125,7 +5137,67 @@ sections:[
   'DLEの最大約28%がSLEへ進行しうる'
  ]},
  {h:'関連パネル', kind:'links', items:[
-  {id:'photo', n:'光線過敏', d:'光線過敏の原因検索と、検査の段階分け'}
+  {id:'photo', n:'光線過敏', d:'光線過敏の原因検索と、検査の段階分け'},
+  {id:'erythro', n:'紅皮症', d:'紅皮症の初診時検査。抗核抗体（ANA）と追加の抗体が重複'}
+ ]}
+]},
+
+/* ---------------- 10. 紅皮症 ---------------- */
+{
+id:'erythro', name:'紅皮症', type:'cause',
+kw:'CBC ENA 抗Ro SSA SSB 抗La DIF IIF 紅皮症 erythroderma 剥脱性皮膚炎 セザリー症候群 Sezary CTCL 皮膚T細胞リンパ腫 菌状息肉症 DIHS DRESS 薬剤性過敏症症候群 疥癬 角化型疥癬 ノルウェー疥癬 TARC sIL-2R HTLV-1 TCR遺伝子再構成 フローサイトメトリー',
+summary:'最初に紹介・入院の要否と、施設入所者・高齢者の角化型（ノルウェー）疥癬を判断する。皮膚生検は可能ならステロイド全身投与の前に複数部位から。原因不明例は再生検とフローサイトメトリーを定期的にやり直す。',
+sections:[
+ {kind:'stop', t:'最初に判断すること：紹介・入院を考える目安', items:[
+  'バイタル不安定',
+  '高熱または低体温',
+  '電解質異常・脱水',
+  '全身状態不良',
+  '感染徴候',
+  '発熱があれば血液培養を取る'
+ ]},
+ {kind:'stop', t:'【重要】施設入所者・高齢者では角化型（ノルウェー）疥癬を必ず鑑別する', items:[
+  '疑った時点で接触予防策を開始し、確認を待たない',
+  '院内・施設内に広がる'
+ ]},
+ {h:'初診時に出すもの：採血', kind:'tests', items:[
+  {n:'血算（白血球分画を含む）', d:'異型リンパ球の有無も見る'},
+  {n:'生化学（電解質・腎・肝・アルブミン・CK）'},
+  {n:'LDH、総IgE、TARC、sIL-2R'},
+  {n:'抗HTLV-1抗体'},
+  {n:'HIV', d:'同意を取得してから'}
+ ]},
+ {h:'初診時に出すもの：鏡検', kind:'tests', items:[
+  {n:'直接鏡検（KOH）', d:'疥癬・白癬。施設入所者では特に念入りに'}
+ ]},
+ {h:'初診時に出すもの：皮膚生検', kind:'stop', t:'【重要】可能ならステロイドの全身投与を始める前に行う', items:[
+  '開始後は組織像が変わり、後から取り返せない'
+ ]},
+ {kind:'bullets', items:[
+  '複数部位から同時に採る',
+  '1検体はTCR遺伝子再構成に回す'
+ ]},
+ {kind:'warn', t:'要確認：TCR遺伝子再構成の提出方法（未確認）', items:[
+  'ホルマリン可か、未固定・凍結が必要かは検査会社に要確認'
+ ]},
+ {h:'疑い別の追加', kind:'branch', items:[
+  {c:'CTCL／セザリー症候群', a:'末梢血フローサイトメトリー（CD4/CD8比、CD4+CD7−、CD4+CD26−）。血液と皮膚のクローナリティ。同一クローンなら意義が大きい。クローナリティ単独では診断しない'},
+  {c:'DIHS／DRESS', a:'肝機能と好酸球の推移を追う。HHV-6はペア血清（急性期と2〜3週後）。被疑薬を中止する。DLSTは急性期を避け、後日行う'},
+  {c:'自己免疫性水疱症', a:'抗デスモグレイン抗体、抗BP180抗体、蛍光抗体直接法（DIF、皮膚）。必要に応じて間接法（IIF、血清）'},
+  {c:'膠原病・皮膚筋炎', a:'抗核抗体（ANA）、抗Sm抗体、抗RNP抗体、抗SS-A/Ro抗体、抗SS-B/La抗体、CK、アルドラーゼ、筋炎特異抗体（抗ARS抗体、抗MDA5抗体）'},
+  {c:'接触皮膚炎・薬疹', a:'パッチテストは軽快後に行う'}
+ ]},
+ {h:'画像・リンパ節', kind:'bullets', items:[
+  '初回のリンパ節生検は原則不要（反応性腫大が多い）',
+  'CTCLの病期分類や、腫瘍随伴が疑われる原因不明例ではCT（連携先で）'
+ ]},
+ {h:'経過観察', kind:'bullets', items:[
+  '原因不明例は、定期的に再生検とフローサイトメトリーをやり直す。後からCTCLと判明する例がある'
+ ]},
+ {h:'関連パネル', kind:'links', items:[
+  {id:'dle', n:'DLE（円板状エリテマトーデス）', d:'抗核抗体（ANA）陽性時の追加抗体と、SLE合併・移行のスクリーニング'},
+  {id:'photo', n:'光線過敏', d:'光線過敏の原因検索。皮膚筋炎（CK、アルドラーゼ）の項目が重複'},
+  {tab:'patch', n:'パッチテスト（医師タブ）', d:'接触皮膚炎・薬疹の原因アレルゲン。パッチテストは軽快後に行う'}
  ]}
 ]}
 ];
@@ -5273,6 +5345,8 @@ function renderDetail(){
     b.addEventListener('click', function(){
       var a=b.getAttribute('data-age');
       if(a){ try{ window.parent.switchTab('age'); window.parent.ageGo(a); }catch(e){} return; }   // 年齢・用量タブの薬カードへ
+      var tb=b.getAttribute('data-tab');
+      if(tb){ try{ window.parent.switchTab(tb); }catch(e){} return; }   // 親ページのタブへ（医師 › パッチ など）
       open(b.getAttribute('data-go'), true);
     });
   });
@@ -5342,10 +5416,10 @@ function renderSection(sec, si){
     return h;
   }
 
-  if(k==='links'){   /* 関連パネルへのリンク。items は {id:開くパネルの id, n:表示名, d:説明} */
+  if(k==='links'){   /* 関連パネルへのリンク。items は {id:開くパネルの id, n:表示名, d:説明}。親ページのタブへは {tab:'patch'} */
     var h = '<div class="xlinks">';
     (sec.items||[]).forEach(function(x){
-      h += '<button type="button" class="xlink" data-go="'+esc(x.id)+'"><span class="xt"><span class="xn">'+esc(x.n)+'</span>'
+      h += '<button type="button" class="xlink" '+(x.tab?'data-tab="'+esc(x.tab)+'"':'data-go="'+esc(x.id)+'"')+'><span class="xt"><span class="xn">'+esc(x.n)+'</span>'
         + (x.d?'<span class="xd">'+esc(x.d)+'</span>':'') + '</span><span class="xa">›</span></button>';
     });
     return h + '</div>';
@@ -5411,7 +5485,7 @@ qEl.addEventListener('input', function(){
    ============================================================ */
 document.getElementById('ft').innerHTML =
   '院内参照用。添付文書・ガイドラインは改訂があり得るため、検査頻度と算定要件は最新版で確認してください。検査の選択を含め、最終判断は医師が行います。<br>'
-  + '最終更新 2026-11-19／'+DATA.length+'項目';
+  + '最終更新 2026-11-20／'+DATA.length+'項目';
 renderHome();
 /* 親ページ（横断検索・URL ハッシュ）から参照する */
 window.KENSA = {
@@ -6708,7 +6782,7 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '3.5';
+var APP_VERSION = '3.6';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-11-18', check:'各疾患の最新ガイドライン',
@@ -6721,7 +6795,7 @@ var DATA_META = {
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
   findings: {updated:'2026-09-18', check:'各製品の添付資料・ざ瘡/酒皶ガイドライン'},
-  kensa:    {updated:'2026-11-19', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
+  kensa:    {updated:'2026-11-20', check:'添付文書・各疾患の診療ガイドライン・算定要件'},
   joge:     {updated:'2026-11-16', check:'院内の外用薬 処方上限表・内服薬の処方日数ルール・査定事例（半年ごとに見直し）・新薬の投薬期間制限（薬価収載日）'},
   age:      {updated:'2026-11-18', check:'添付文書（使用可能年齢・小児用量・規格）'},
   biojak:   {updated:'2026-11-18', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
