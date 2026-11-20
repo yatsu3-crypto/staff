@@ -123,6 +123,17 @@ body.gs-on .gs-results{display:block;}
 .staff-policy .sp-h{font-size:12px;font-weight:700;color:var(--tx);margin:8px 0 4px;}
 .staff-policy .sp-steps{margin:0 0 6px;padding:0 0 0 1.5em;font-size:12.5px;line-height:1.65;color:var(--tx);}
 .staff-policy .sp-steps li{margin-bottom:3px;}
+.prod-warn{background:var(--wbg);border:1px solid var(--wbd);border-left:4px solid #c0392b;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12.5px;line-height:1.65;color:var(--wtx);}
+.prod-warn b{display:block;margin-bottom:3px;color:#a5281b;}
+.prod-warn .pw-row{padding-left:1em;text-indent:-1em;}
+.prod-warn .pw-row::before{content:"・";}
+.prod-ol{margin:0;padding:0 0 0 1.5em;font-size:12.5px;line-height:1.65;color:var(--tx);}
+.prod-ol li{margin-bottom:4px;}
+.prod-link{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;margin:0 0 14px;padding:10px 12px;text-align:left;background:var(--card);border:1px solid var(--bd);border-radius:10px;font-family:inherit;cursor:pointer;}
+.prod-link .pl-t{flex:1;min-width:0;}
+.prod-link .pl-n{display:block;font-size:13.5px;font-weight:700;color:var(--g);line-height:1.5;}
+.prod-link .pl-d{display:block;font-size:12px;color:var(--tx2);line-height:1.6;}
+.prod-link .pl-a{flex:none;font-size:18px;color:var(--g);}
 .prod-name{font-size:16px;font-weight:700;color:var(--g);margin-bottom:4px;}
 .prod-sub{font-size:11.5px;color:var(--tx2);margin-bottom:12px;line-height:1.5;}
 
@@ -2994,6 +3005,10 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 90px}
   <button type="button" class="kenlink" onclick="try{parent.switchTab('kensa');parent.kensaGo('erythro');}catch(e){}">
     <span class="kt"><span class="kn">関連：検査パネル › 紅皮症</span><span class="kd">紅皮症の初診時検査。接触皮膚炎・薬疹を疑うときのパッチテストは軽快後に行う</span></span><span class="ka">›</span>
   </button>
+  <!-- 当院製品 › ネイルアクト への相互リンク（親ページの showProduct で開く。製品側の links から硫酸ニッケルへ来る） -->
+  <button type="button" class="kenlink" style="margin-top:10px" onclick="try{parent.switchTab('products');parent.showProduct('nailact');}catch(e){}">
+    <span class="kt"><span class="kn">関連：当院製品 › ネイルアクト</span><span class="kd">巻き爪矯正具（ステンレス製）。ステンレス（ニッケル）アレルギーの既往がある患者で装着を判断するとき</span></span><span class="ka">›</span>
+  </button>
 
   <div class="disc">
     ※ 本アプリは診療補助の参照ツールです。掲載成分・濃度・基剤は代表的な目安で、製品ごとに配合は異なります。実際のパッチテスト施行・判定・読み替えは施行医の判断と最新の文献・学会基準（日本皮膚アレルギー・接触皮膚炎学会）に基づいてください。
@@ -4238,6 +4253,7 @@ var CANON_RULES=[
   {k:['黄金の薬湯'],                        sec:'products', id:'ougon_yaku'},
   {k:['銀の薬湯'],                          sec:'products', id:'gin_yaku'},
   {k:['銅の薬湯'],                          sec:'products', id:'do_yaku'},
+  {k:['ネイルアクト'],                      sec:'products', id:'nailact'},
   /* 保険外用薬（外用薬一覧のカード名で指定） */
   {k:['プロトピック','タクロリムス'],       sec:'topical', name:'プロトピック軟膏'},
   {k:['コレクチム','デルゴシチニブ'],       sec:'topical', name:'コレクチム軟膏'},
@@ -6782,12 +6798,12 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '3.6';
+var APP_VERSION = '3.7';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-11-18', check:'各疾患の最新ガイドライン',
              parts:[{n:'疾患別の生活指導', updated:'2026-11-18'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'}]},
-  products: {updated:'2026-10-01', check:'各製品の添付資料・メーカー情報'},
+  products: {updated:'2026-11-20', check:'各製品の添付資料・メーカー情報'},
   staff:    {updated:'2026-11-16', check:'添付文書・最適使用推進ガイドライン'},
   topical:  {updated:'2026-11-16', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
              parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-11-04'},{n:'塗り方・塗布量計算・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-16'}]},
@@ -7868,6 +7884,97 @@ var PRODUCTS = [
       'ハイドロキノンとの違い：HQはメラニン産生を強く抑える治療的な位置づけ、VCローションは予防・土台づくり寄り',
     ],
   },
+  /* ネイルアクト：任意の欄 sections（{h, items, warn, ol, top}。top:true は特長の直後、それ以外は recommend の直後に出す）と
+     recTitle（recommend の見出し。省略時は「こんな方におすすめ」）、
+     links（{n, d, go}。go は prodLinkGo の行き先）、kw（横断検索だけに使う語）を持つ。
+     仕入れ値・粗利・他院の価格例・混合診療の扱い・消費税の処理は公開URLに出るため書かない */
+  {
+    id: 'nailact',
+    icon: '🦶',
+    name: 'ネイルアクト',
+    sub: 'マルホ　セルフ装着型・巻き爪矯正具（一般医療機器）\n1箱2個入り　5,500円（税込）／自費・S・M・Lの3サイズ',
+    tags: ['巻き爪','矯正','マルホ','自費'],
+    recTitle: '適している患者さん',
+    kw: 'ネイルアクト 巻き爪 陥入爪 矯正 矯正具 マルホ 爪幅 フットケア リネイルゲル 巻き爪マイスター ステンレス ニッケル',
+    features: [
+      'マルホのセルフ装着型・巻き爪矯正具（一般医療機器）',
+      'ばねの弾性力で矯正する。軽度〜中等度の巻き爪に1〜2か月装着する',
+      '巻き爪マイスターなどで矯正した後の形状維持にも使える',
+      '1箱2個入り（同じサイズ）。S・M・Lの3サイズ',
+      '保険適用なし（自費）',
+      'リネイルゲルと併用できる',
+    ],
+    sections: [
+      {h:'💴 価格', top:true, items:[
+        '1箱（2個入り）5,500円（税込）',
+        '交換目安が4週、治療期間が1〜2か月なので、1箱で1本の指の治療1クール分',
+        '患者さんには「1箱で約2か月分」と説明する',
+      ]},
+      {h:'📏 サイズの選び方', top:true, items:[
+        '14〜17mm → S ／ 18〜21mm → M ／ 22〜25mm → L',
+        '爪幅は爪のカーブに沿って測る（直線距離ではない）',
+        '14〜25mmから大きく外れる爪には装着できない',
+      ]},
+      {h:'【重要】サイズが境目のとき', top:true, warn:true, items:[
+        '境目のときは常に小さい方を選ぶ（17〜18mm前後ならS、21〜22mm前後ならM）',
+      ]},
+      {h:'✅ 装着できる条件', top:true, items:[
+        '爪の両角が残っていて、遊離縁（白い部分）が3mm程度伸びていること',
+        '深爪の人はまず伸ばしてもらう',
+      ]},
+      {h:'⚠ 無理に装着しないケース', top:true, items:[
+        'バイアスカット、深爪',
+        '重度の巻き爪（巻きが強すぎると装着できない）',
+        '爪が厚すぎる、または薄すぎる（肥厚爪は要注意）',
+        '爪が前方に向かって丸まっている（器具が浮いて外れやすい）',
+      ]},
+      {h:'【重要】禁忌', top:true, warn:true, items:[
+        'ステンレスへのアレルギー',
+        'ひび割れた爪、もろい爪',
+        '爪の周りに強い炎症や傷がある',
+      ]},
+      {h:'🗣 患者さんに伝えること', items:[
+        '装着後は医療用テープで指または爪全体を巻いて必ず固定する。テープは定期的に替える',
+        '外すときはテープをゆっくりはがし、器具を押さえながら前へずらす',
+        '入浴前には外す（紛失防止）',
+        '交換の目安は4週間。平らな面に置いて5mm以上の高低差がある、破損・変形・変色がある場合は、4週間たっていなくても交換する',
+      ]},
+      {h:'🏥 院内の流れ', ol:true, items:[
+        '診察で適応を判断し、爪幅を測る（境目は小さい方）',
+        '窓口で1箱購入',
+        '初回は看護師が院内でまえ装着し、テープ固定まで一緒に練習',
+        '4週後に受診し、2個目に交換して経過を確認',
+        '2か月で効果を判定し、継続・よこ装着への移行・巻き爪マイスターなど他の治療を検討',
+      ]},
+      {h:'📦 在庫', items:[
+        'S・M・Lを数箱ずつ',
+        '各サイズ1箱は見本・試着用として開封しておくとサイズ選びが早い',
+      ]},
+      {h:'【重要】フットケア外来との関係', warn:true, items:[
+        'フットケア外来の主対象は爪甲肥厚で、ネイルアクトは肥厚爪が要注意ケース。別のものとして扱う',
+        'フットケア外来で装着指導と4週ごとの交換を受け持つが、フットケアの対象者が自動的にネイルアクトの対象にはならない',
+      ]},
+    ],
+    usage: [
+      'まえ装着（簡単）：片方のフックを爪の前縁にかけ、跳ねないように指で押さえながら、もう片方も前縁にかけて奥まで押し込む',
+      'よこ装着（矯正効果が高い）：片方のフックを爪の側縁にかけ、もう片方をいったん前縁にかけてから、指でゆっくり側縁へずらす',
+      'まずはまえ装着から始め、爪がある程度矯正されて角がしっかり伸びてきたら、よこ装着に切り替える',
+    ],
+    recommend: [
+      '軽度〜中等度の巻き爪の方',
+      '巻き爪マイスターなどで矯正した後、形状を維持したい方',
+    ],
+    points: [
+      '価格は「1箱で約2か月分」と説明する（交換目安4週 × 2個）',
+      'サイズが境目のときは常に小さい方。爪幅は爪のカーブに沿って測る',
+      'ステンレス（ニッケル）アレルギーの既往がある患者は、医師 › パッチで確認して判断する（下のリンク）',
+      'フットケアの対象者が自動的にネイルアクトの対象にはならない。適応は診察で判断する',
+      '最終判断は医師が行います',
+    ],
+    links: [
+      {n:'関連：医師 › パッチ（硫酸ニッケル）', d:'ステンレス（ニッケル）アレルギーの既往がある患者で、装着の判断が要るとき', go:'patch-nickel'},
+    ],
+  },
 ];
 
 // ==============================================
@@ -8056,23 +8163,43 @@ function showProduct(id) {
   p.tags.forEach(function(t) { html += '<span class="prod-tag">' + esc(t) + '</span>'; });
   html += '<div style="margin-bottom:14px;"></div>';
 
+  /* 任意の欄 sections（ネイルアクトなど）。warn:true は注意の枠、ol:true は番号付きの手順 */
+  function extraSecs(top) {
+    (p.sections || []).forEach(function(s) {
+      if (!!s.top !== top) return;
+      if (s.warn) {
+        html += '<div class="prod-warn"><b>' + esc(s.h) + '</b>' + s.items.map(function(t) { return '<div class="pw-row">' + esc(t) + '</div>'; }).join('') + '</div>';
+      } else if (s.ol) {
+        html += '<div class="prod-section"><div class="prod-section-ttl">' + esc(s.h) + '</div><ol class="prod-ol">' + s.items.map(function(t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ol></div>';
+      } else {
+        html += '<div class="prod-section"><div class="prod-section-ttl">' + esc(s.h) + '</div>' + s.items.map(function(t) { return '<div class="prod-item">' + esc(t) + '</div>'; }).join('') + '</div>';
+      }
+    });
+  }
+
   html += '<div class="prod-section"><div class="prod-section-ttl">✨ 特長・成分</div>';
   p.features.forEach(function(f) { html += '<div class="prod-item">' + esc(f) + '</div>'; });
   html += '</div>';
+  extraSecs(true);
 
   html += '<div class="prod-section"><div class="prod-section-ttl">📋 使い方</div>';
   p.usage.forEach(function(u) { html += '<div class="prod-item">' + esc(u) + '</div>'; });
   html += '</div>';
 
-  html += '<div class="prod-section"><div class="prod-section-ttl">👤 こんな方におすすめ</div>';
+  html += '<div class="prod-section"><div class="prod-section-ttl">👤 ' + esc(p.recTitle || 'こんな方におすすめ') + '</div>';
   p.recommend.forEach(function(r) { html += '<div class="prod-item">' + esc(r) + '</div>'; });
   html += '</div>';
+  extraSecs(false);
 
   html += '<div class="add-box"><div class="add-ttl">💬 スタッフへのポイント</div>';
   p.points.forEach(function(pt) {
     html += '<div class="add-row"><span class="badge">POINT</span><span>' + esc(pt) + '</span></div>';
   });
   html += '</div>';
+
+  (p.links || []).forEach(function(l) {
+    html += '<button type="button" class="prod-link" onclick="prodLinkGo(\'' + l.go + '\')"><span class="pl-t"><span class="pl-n">' + esc(l.n) + '</span><span class="pl-d">' + esc(l.d) + '</span></span><span class="pl-a">›</span></button>';
+  });
 
   if(window.canonLinks) html += canonSelfNote() + canonLinks(html, 'products:'+p.id);
   document.getElementById('prod-detail-body').innerHTML = html;
@@ -8083,6 +8210,21 @@ function showProduct(id) {
 }
 
 function goBackProd() { routeBack('products'); }
+
+/* 当院製品の links の行き先。patch-nickel：医師 › パッチのアレルゲン一覧を「ニッケル」で絞り込む（iframe が未読込なら読込後に） */
+function prodLinkGo(go) {
+  if (go !== 'patch-nickel') return;
+  switchTab('patch');
+  var f = document.querySelector('#pg-patch iframe');
+  function apply() {
+    try {
+      var cw = f.contentWindow; if (!cw || !cw.switchView) return false;
+      cw.switchView('allergens'); cw.document.getElementById('asearch').value = 'ニッケル'; cw.renderAllergens();
+      return true;
+    } catch (e) { return true; }
+  }
+  if (f && !apply()) f.addEventListener('load', function once() { f.removeEventListener('load', once); apply(); });
+}
 
 // ==============================================
 // 薬剤データベース（医師・看護師向け）
@@ -10413,7 +10555,7 @@ function build(){
   });
   /* 当院製品 */
   if(window.PRODUCTS) PRODUCTS.forEach(function(p){
-    add('products',p.icon||'🌿',p.name,String(p.sub||'').split('\n')[0],[p.sub,p.tags,p.features,p.usage,p.recommend,p.points],function(){ switchTab('products'); showProduct(p.id); });
+    add('products',p.icon||'🌿',p.name,String(p.sub||'').split('\n')[0],[p.sub,p.tags,p.kw,p.features,(p.sections||[]).map(function(s){ return [s.h,s.items]; }),p.usage,p.recommend,p.points],function(){ switchTab('products'); showProduct(p.id); });
   });
   /* ビタミン剤 */
   if(window.VIT_AGENTS) VIT_AGENTS.forEach(function(a){
