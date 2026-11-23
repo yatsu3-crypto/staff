@@ -1537,6 +1537,194 @@ footer .disc{font-size:8pt;line-height:1.5;color:var(--usu)}
 
     </script>
   </section>
+  <!-- ===== 汗で痒くなる方へ 食べもの早見表（コリン性蕁麻疹・汗で悪化するタイプ）。見た目は上の diet-css（.gd-ch / .ch-* / .pamph-wrap）を共用 ===== -->
+  <section class="gd-ch" id="sweat-ch">
+    <div class="ch-ttl">💧 汗で痒くなる方へ 食べもの早見表<small>コリン性蕁麻疹・汗で悪化するタイプ</small></div>
+
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>指導のポイント（スタッフ用）</div>
+      <div class="card-body">
+        <ul class="ch-pts">
+          <li><span class="n">1</span><span><b>対象はコリン性蕁麻疹・汗で悪化するタイプ</b><span class="s">抗炎症の食事ガイド（乾癬・アトピー）とは別のもの。</span></span></li>
+          <li class="top"><span class="n">2</span><span><b>「控えめに」は除去や禁止ではない</b><span class="s">抗炎症の食事ガイドは「特定の食品の除去は原則不要」が方針。こちらの「控えめに」は症状の強い時期に限った一時的な調整で、除去や禁止ではない。両方を渡すときはこの違いを説明する。</span></span></li>
+          <li><span class="n">3</span><span><b>アプリのURL</b><span class="s">https://yatsu3-crypto.github.io/sweat</span></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>患者配布用パンフレット（A4・1枚）</div>
+      <div class="card-body">
+        <button class="print-btn" id="sweatPrint">🖨 食べもの早見表を印刷（A4・1ページ）</button>
+        <div class="pamph-wrap" id="sweatWrap"><iframe id="sweatFrame" title="汗で痒くなる方へ 食べもの早見表（患者用パンフレット）"></iframe></div>
+        <p class="ch-hint">プレビューは縮小表示です。印刷ダイアログで<strong>「背景のグラフィック」をON</strong>、<strong>余白は「なし」</strong>に設定してください。QRコードから食べもの早見表アプリ（https://yatsu3-crypto.github.io/sweat）が開きます。</p>
+        <p class="ch-note">本アプリは医学的助言の参考資料であり、診断・治療に代わるものではありません。最終判断は医師が行います。</p>
+      </div>
+    </div>
+    <!-- 患者パンフレット（A4・1ページ）の本体。読み込み時に上の iframe の srcdoc へ流し込む。
+         文言は院長の原稿のまま（2026-11-23）。QR は https://yatsu3-crypto.github.io/sweat を一度だけ生成した静的 SVG（食事ガイドと同じ作法）。
+         本体内に </script> を書く場合は <\/script> とする。 -->
+    <script type="text/html" id="sweat-src">
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汗で痒くなる方へ 食べもの早見表|やまもと皮膚科・漢方クリニック</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --washi:#f7f2e7; --sumi:#3a3229;
+  --shu:#b93a26; --kincha:#b8863b; --matsuba:#43604a; --ai:#2b4a6f;
+  --line:#d8cbb0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  background:#6d6459;color:var(--sumi);line-height:1.6;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+
+/* ===== A4本体 ===== */
+.sheet{
+  width:210mm;min-height:296mm;margin:0 auto;padding:10mm 15mm 8mm;
+  background:var(--washi);
+  background-image:
+    radial-gradient(ellipse at 15% 8%, rgba(184,134,59,.05), transparent 55%),
+    radial-gradient(ellipse at 88% 92%, rgba(67,96,74,.05), transparent 55%);
+  display:flex;flex-direction:column;
+}
+header{border-bottom:3px double var(--kincha);padding-bottom:3mm;margin-bottom:3.5mm;text-align:center}
+.clinic{font-size:9.5pt;letter-spacing:.3em;color:var(--kincha);font-weight:700}
+h1{font-size:23pt;font-weight:800;letter-spacing:.14em;margin-top:1mm;line-height:1.3}
+h1 .accent{color:var(--shu)}
+.sub{display:inline-block;margin-top:1.5mm;font-size:13pt;font-weight:800;letter-spacing:.3em;color:var(--ai);
+  border-top:1px solid var(--ai);border-bottom:1px solid var(--ai);padding:.5mm 4mm .5mm 5mm}
+
+h2{
+  font-size:13pt;font-weight:800;letter-spacing:.1em;
+  padding-left:3mm;border-left:4px solid var(--shu);margin:4.5mm 0 2mm;
+}
+
+/* リード文 */
+.lead{font-size:11pt;line-height:1.7;text-align:center;letter-spacing:.03em}
+.lead b{color:var(--shu)}
+
+/* 使い方＋QR */
+.use{display:flex;gap:6mm;align-items:center;margin-top:3.5mm;
+  background:#fffdf7;border:1px solid var(--line);border-radius:2.5mm;padding:3.5mm 5mm}
+.use .steps-col{flex:1}
+.use h2{margin-top:0}
+.steps{list-style:none}
+.steps li{display:flex;gap:3mm;align-items:center;font-size:11pt;padding:1.4mm 0;border-bottom:1px dashed var(--line)}
+.steps li:last-child{border-bottom:none}
+.steps .n{flex:none;width:7mm;height:7mm;border-radius:50%;background:var(--shu);color:#fffdf7;
+  font-size:11pt;font-weight:800;display:flex;align-items:center;justify-content:center}
+.qr-col{flex:none;text-align:center}
+.qr-box{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:2mm;padding:2mm}
+.qr-box svg{display:block;width:38mm;height:38mm}
+.qr-url{font-family:"Hiragino Sans","Yu Gothic",sans-serif;font-size:8pt;color:var(--ai);margin-top:1mm;letter-spacing:.02em}
+
+/* 3つの判定区分 */
+.judge{display:flex;gap:3mm}
+.jcol{flex:1;border:1px solid var(--line);border-radius:2mm;overflow:hidden;background:#fffdf7}
+.jhead{color:#fffdf7;font-weight:800;font-size:12pt;letter-spacing:.12em;text-align:center;padding:1.5mm 0}
+.j-ok .jhead{background:var(--matsuba)}
+.j-care .jhead{background:var(--kincha)}
+.j-less .jhead{background:var(--shu)}
+.jbody{padding:2.2mm 1.5mm;font-size:9.5pt;line-height:1.5;text-align:center;white-space:nowrap}
+
+/* 機能 */
+.feat{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:1.6mm 4mm}
+.feat li{display:flex;gap:2.5mm;align-items:center;font-size:10.5pt;
+  background:#fffdf7;border:1px solid var(--line);border-radius:2mm;padding:1.4mm 3mm}
+.feat li::before{content:"✓";flex:none;width:5.5mm;height:5.5mm;border-radius:50%;background:var(--matsuba);color:#fffdf7;
+  font-size:8.5pt;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+/* たとえば */
+.example{background:#fbeeea;border:1px solid var(--shu);border-radius:2.5mm;padding:3mm 5mm;font-size:10.5pt;line-height:1.7}
+.example .when{font-weight:800;color:var(--shu)}
+.bubbles{display:flex;gap:4mm;margin:1.5mm 0}
+.bubble{background:#fffdf7;border:1px solid var(--line);border-radius:5mm;padding:.8mm 4mm;font-weight:700;font-size:11pt}
+
+footer{
+  margin-top:auto;border-top:3px double var(--kincha);padding-top:2.5mm;text-align:center;
+}
+footer .kanshu{font-size:10.5pt;font-weight:800;letter-spacing:.15em}
+footer .disc{font-size:8.5pt;color:#6a5f4e;margin-top:.5mm}
+
+/* ===== 印刷設定 ===== */
+@page{size:A4;margin:0}
+@media print{
+  body{background:none}
+  body>*:not(.sheet){display:none!important}
+  .sheet{box-shadow:none;margin:0;width:210mm;height:297mm}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <div class="clinic">やまもと皮膚科・漢方クリニック</div>
+    <h1>汗で<span class="accent">痒く</span>なる方へ</h1>
+    <div class="sub">食べもの早見表</div>
+  </header>
+
+  <p class="lead">
+    <b>コリン性蕁麻疹・汗アレルギー</b>でお悩みの方へ。<br>
+    日々の食事の「これは食べていい？」を、症状の観点から<br>
+    確認できる検索アプリをご用意しました。
+  </p>
+
+  <div class="use">
+    <div class="steps-col">
+      <h2>使い方</h2>
+      <ol class="steps">
+        <li><span class="n">1</span><span>スマートフォンのカメラでQRコードを読み取り</span></li>
+        <li><span class="n">2</span><span>気になる食べ物の名前を入力して検索</span></li>
+        <li><span class="n">3</span><span>判定・理由・食べ方のヒントが表示されます</span></li>
+      </ol>
+    </div>
+    <div class="qr-col">
+      <div class="qr-box"><svg role="img" aria-label="食べもの早見表アプリのQRコード（https://yatsu3-crypto.github.io/sweat）" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" preserveAspectRatio="xMinYMin meet"><rect width="100%" height="100%" fill="white"/><path d="M2,2l4,0 0,4 -4,0 0,-4z M6,2l4,0 0,4 -4,0 0,-4z M10,2l4,0 0,4 -4,0 0,-4z M14,2l4,0 0,4 -4,0 0,-4z M18,2l4,0 0,4 -4,0 0,-4z M22,2l4,0 0,4 -4,0 0,-4z M26,2l4,0 0,4 -4,0 0,-4z M34,2l4,0 0,4 -4,0 0,-4z M38,2l4,0 0,4 -4,0 0,-4z M42,2l4,0 0,4 -4,0 0,-4z M46,2l4,0 0,4 -4,0 0,-4z M58,2l4,0 0,4 -4,0 0,-4z M66,2l4,0 0,4 -4,0 0,-4z M74,2l4,0 0,4 -4,0 0,-4z M78,2l4,0 0,4 -4,0 0,-4z M82,2l4,0 0,4 -4,0 0,-4z M90,2l4,0 0,4 -4,0 0,-4z M94,2l4,0 0,4 -4,0 0,-4z M98,2l4,0 0,4 -4,0 0,-4z M102,2l4,0 0,4 -4,0 0,-4z M106,2l4,0 0,4 -4,0 0,-4z M110,2l4,0 0,4 -4,0 0,-4z M114,2l4,0 0,4 -4,0 0,-4z M2,6l4,0 0,4 -4,0 0,-4z M26,6l4,0 0,4 -4,0 0,-4z M34,6l4,0 0,4 -4,0 0,-4z M38,6l4,0 0,4 -4,0 0,-4z M46,6l4,0 0,4 -4,0 0,-4z M66,6l4,0 0,4 -4,0 0,-4z M74,6l4,0 0,4 -4,0 0,-4z M82,6l4,0 0,4 -4,0 0,-4z M90,6l4,0 0,4 -4,0 0,-4z M114,6l4,0 0,4 -4,0 0,-4z M2,10l4,0 0,4 -4,0 0,-4z M10,10l4,0 0,4 -4,0 0,-4z M14,10l4,0 0,4 -4,0 0,-4z M18,10l4,0 0,4 -4,0 0,-4z M26,10l4,0 0,4 -4,0 0,-4z M38,10l4,0 0,4 -4,0 0,-4z M50,10l4,0 0,4 -4,0 0,-4z M54,10l4,0 0,4 -4,0 0,-4z M66,10l4,0 0,4 -4,0 0,-4z M74,10l4,0 0,4 -4,0 0,-4z M82,10l4,0 0,4 -4,0 0,-4z M90,10l4,0 0,4 -4,0 0,-4z M98,10l4,0 0,4 -4,0 0,-4z M102,10l4,0 0,4 -4,0 0,-4z M106,10l4,0 0,4 -4,0 0,-4z M114,10l4,0 0,4 -4,0 0,-4z M2,14l4,0 0,4 -4,0 0,-4z M10,14l4,0 0,4 -4,0 0,-4z M14,14l4,0 0,4 -4,0 0,-4z M18,14l4,0 0,4 -4,0 0,-4z M26,14l4,0 0,4 -4,0 0,-4z M34,14l4,0 0,4 -4,0 0,-4z M62,14l4,0 0,4 -4,0 0,-4z M70,14l4,0 0,4 -4,0 0,-4z M78,14l4,0 0,4 -4,0 0,-4z M90,14l4,0 0,4 -4,0 0,-4z M98,14l4,0 0,4 -4,0 0,-4z M102,14l4,0 0,4 -4,0 0,-4z M106,14l4,0 0,4 -4,0 0,-4z M114,14l4,0 0,4 -4,0 0,-4z M2,18l4,0 0,4 -4,0 0,-4z M10,18l4,0 0,4 -4,0 0,-4z M14,18l4,0 0,4 -4,0 0,-4z M18,18l4,0 0,4 -4,0 0,-4z M26,18l4,0 0,4 -4,0 0,-4z M38,18l4,0 0,4 -4,0 0,-4z M42,18l4,0 0,4 -4,0 0,-4z M46,18l4,0 0,4 -4,0 0,-4z M54,18l4,0 0,4 -4,0 0,-4z M58,18l4,0 0,4 -4,0 0,-4z M62,18l4,0 0,4 -4,0 0,-4z M66,18l4,0 0,4 -4,0 0,-4z M78,18l4,0 0,4 -4,0 0,-4z M82,18l4,0 0,4 -4,0 0,-4z M90,18l4,0 0,4 -4,0 0,-4z M98,18l4,0 0,4 -4,0 0,-4z M102,18l4,0 0,4 -4,0 0,-4z M106,18l4,0 0,4 -4,0 0,-4z M114,18l4,0 0,4 -4,0 0,-4z M2,22l4,0 0,4 -4,0 0,-4z M26,22l4,0 0,4 -4,0 0,-4z M38,22l4,0 0,4 -4,0 0,-4z M42,22l4,0 0,4 -4,0 0,-4z M58,22l4,0 0,4 -4,0 0,-4z M78,22l4,0 0,4 -4,0 0,-4z M82,22l4,0 0,4 -4,0 0,-4z M90,22l4,0 0,4 -4,0 0,-4z M114,22l4,0 0,4 -4,0 0,-4z M2,26l4,0 0,4 -4,0 0,-4z M6,26l4,0 0,4 -4,0 0,-4z M10,26l4,0 0,4 -4,0 0,-4z M14,26l4,0 0,4 -4,0 0,-4z M18,26l4,0 0,4 -4,0 0,-4z M22,26l4,0 0,4 -4,0 0,-4z M26,26l4,0 0,4 -4,0 0,-4z M34,26l4,0 0,4 -4,0 0,-4z M42,26l4,0 0,4 -4,0 0,-4z M50,26l4,0 0,4 -4,0 0,-4z M58,26l4,0 0,4 -4,0 0,-4z M66,26l4,0 0,4 -4,0 0,-4z M74,26l4,0 0,4 -4,0 0,-4z M82,26l4,0 0,4 -4,0 0,-4z M90,26l4,0 0,4 -4,0 0,-4z M94,26l4,0 0,4 -4,0 0,-4z M98,26l4,0 0,4 -4,0 0,-4z M102,26l4,0 0,4 -4,0 0,-4z M106,26l4,0 0,4 -4,0 0,-4z M110,26l4,0 0,4 -4,0 0,-4z M114,26l4,0 0,4 -4,0 0,-4z M34,30l4,0 0,4 -4,0 0,-4z M54,30l4,0 0,4 -4,0 0,-4z M58,30l4,0 0,4 -4,0 0,-4z M66,30l4,0 0,4 -4,0 0,-4z M70,30l4,0 0,4 -4,0 0,-4z M74,30l4,0 0,4 -4,0 0,-4z M78,30l4,0 0,4 -4,0 0,-4z M2,34l4,0 0,4 -4,0 0,-4z M10,34l4,0 0,4 -4,0 0,-4z M14,34l4,0 0,4 -4,0 0,-4z M22,34l4,0 0,4 -4,0 0,-4z M26,34l4,0 0,4 -4,0 0,-4z M30,34l4,0 0,4 -4,0 0,-4z M38,34l4,0 0,4 -4,0 0,-4z M46,34l4,0 0,4 -4,0 0,-4z M50,34l4,0 0,4 -4,0 0,-4z M54,34l4,0 0,4 -4,0 0,-4z M58,34l4,0 0,4 -4,0 0,-4z M66,34l4,0 0,4 -4,0 0,-4z M70,34l4,0 0,4 -4,0 0,-4z M74,34l4,0 0,4 -4,0 0,-4z M90,34l4,0 0,4 -4,0 0,-4z M102,34l4,0 0,4 -4,0 0,-4z M110,34l4,0 0,4 -4,0 0,-4z M114,34l4,0 0,4 -4,0 0,-4z M6,38l4,0 0,4 -4,0 0,-4z M10,38l4,0 0,4 -4,0 0,-4z M18,38l4,0 0,4 -4,0 0,-4z M22,38l4,0 0,4 -4,0 0,-4z M34,38l4,0 0,4 -4,0 0,-4z M42,38l4,0 0,4 -4,0 0,-4z M46,38l4,0 0,4 -4,0 0,-4z M66,38l4,0 0,4 -4,0 0,-4z M78,38l4,0 0,4 -4,0 0,-4z M82,38l4,0 0,4 -4,0 0,-4z M90,38l4,0 0,4 -4,0 0,-4z M94,38l4,0 0,4 -4,0 0,-4z M98,38l4,0 0,4 -4,0 0,-4z M114,38l4,0 0,4 -4,0 0,-4z M18,42l4,0 0,4 -4,0 0,-4z M22,42l4,0 0,4 -4,0 0,-4z M26,42l4,0 0,4 -4,0 0,-4z M30,42l4,0 0,4 -4,0 0,-4z M34,42l4,0 0,4 -4,0 0,-4z M38,42l4,0 0,4 -4,0 0,-4z M46,42l4,0 0,4 -4,0 0,-4z M58,42l4,0 0,4 -4,0 0,-4z M66,42l4,0 0,4 -4,0 0,-4z M70,42l4,0 0,4 -4,0 0,-4z M74,42l4,0 0,4 -4,0 0,-4z M82,42l4,0 0,4 -4,0 0,-4z M86,42l4,0 0,4 -4,0 0,-4z M98,42l4,0 0,4 -4,0 0,-4z M106,42l4,0 0,4 -4,0 0,-4z M110,42l4,0 0,4 -4,0 0,-4z M6,46l4,0 0,4 -4,0 0,-4z M30,46l4,0 0,4 -4,0 0,-4z M38,46l4,0 0,4 -4,0 0,-4z M42,46l4,0 0,4 -4,0 0,-4z M46,46l4,0 0,4 -4,0 0,-4z M54,46l4,0 0,4 -4,0 0,-4z M58,46l4,0 0,4 -4,0 0,-4z M62,46l4,0 0,4 -4,0 0,-4z M78,46l4,0 0,4 -4,0 0,-4z M82,46l4,0 0,4 -4,0 0,-4z M86,46l4,0 0,4 -4,0 0,-4z M90,46l4,0 0,4 -4,0 0,-4z M114,46l4,0 0,4 -4,0 0,-4z M2,50l4,0 0,4 -4,0 0,-4z M6,50l4,0 0,4 -4,0 0,-4z M18,50l4,0 0,4 -4,0 0,-4z M22,50l4,0 0,4 -4,0 0,-4z M26,50l4,0 0,4 -4,0 0,-4z M50,50l4,0 0,4 -4,0 0,-4z M62,50l4,0 0,4 -4,0 0,-4z M66,50l4,0 0,4 -4,0 0,-4z M70,50l4,0 0,4 -4,0 0,-4z M82,50l4,0 0,4 -4,0 0,-4z M86,50l4,0 0,4 -4,0 0,-4z M94,50l4,0 0,4 -4,0 0,-4z M102,50l4,0 0,4 -4,0 0,-4z M106,50l4,0 0,4 -4,0 0,-4z M2,54l4,0 0,4 -4,0 0,-4z M14,54l4,0 0,4 -4,0 0,-4z M18,54l4,0 0,4 -4,0 0,-4z M30,54l4,0 0,4 -4,0 0,-4z M50,54l4,0 0,4 -4,0 0,-4z M54,54l4,0 0,4 -4,0 0,-4z M62,54l4,0 0,4 -4,0 0,-4z M66,54l4,0 0,4 -4,0 0,-4z M78,54l4,0 0,4 -4,0 0,-4z M86,54l4,0 0,4 -4,0 0,-4z M90,54l4,0 0,4 -4,0 0,-4z M106,54l4,0 0,4 -4,0 0,-4z M110,54l4,0 0,4 -4,0 0,-4z M114,54l4,0 0,4 -4,0 0,-4z M2,58l4,0 0,4 -4,0 0,-4z M22,58l4,0 0,4 -4,0 0,-4z M26,58l4,0 0,4 -4,0 0,-4z M34,58l4,0 0,4 -4,0 0,-4z M38,58l4,0 0,4 -4,0 0,-4z M50,58l4,0 0,4 -4,0 0,-4z M58,58l4,0 0,4 -4,0 0,-4z M78,58l4,0 0,4 -4,0 0,-4z M90,58l4,0 0,4 -4,0 0,-4z M106,58l4,0 0,4 -4,0 0,-4z M110,58l4,0 0,4 -4,0 0,-4z M114,58l4,0 0,4 -4,0 0,-4z M2,62l4,0 0,4 -4,0 0,-4z M6,62l4,0 0,4 -4,0 0,-4z M10,62l4,0 0,4 -4,0 0,-4z M14,62l4,0 0,4 -4,0 0,-4z M34,62l4,0 0,4 -4,0 0,-4z M38,62l4,0 0,4 -4,0 0,-4z M46,62l4,0 0,4 -4,0 0,-4z M50,62l4,0 0,4 -4,0 0,-4z M54,62l4,0 0,4 -4,0 0,-4z M74,62l4,0 0,4 -4,0 0,-4z M90,62l4,0 0,4 -4,0 0,-4z M94,62l4,0 0,4 -4,0 0,-4z M98,62l4,0 0,4 -4,0 0,-4z M110,62l4,0 0,4 -4,0 0,-4z M6,66l4,0 0,4 -4,0 0,-4z M10,66l4,0 0,4 -4,0 0,-4z M18,66l4,0 0,4 -4,0 0,-4z M22,66l4,0 0,4 -4,0 0,-4z M26,66l4,0 0,4 -4,0 0,-4z M46,66l4,0 0,4 -4,0 0,-4z M50,66l4,0 0,4 -4,0 0,-4z M66,66l4,0 0,4 -4,0 0,-4z M74,66l4,0 0,4 -4,0 0,-4z M98,66l4,0 0,4 -4,0 0,-4z M102,66l4,0 0,4 -4,0 0,-4z M110,66l4,0 0,4 -4,0 0,-4z M6,70l4,0 0,4 -4,0 0,-4z M14,70l4,0 0,4 -4,0 0,-4z M22,70l4,0 0,4 -4,0 0,-4z M30,70l4,0 0,4 -4,0 0,-4z M38,70l4,0 0,4 -4,0 0,-4z M54,70l4,0 0,4 -4,0 0,-4z M62,70l4,0 0,4 -4,0 0,-4z M74,70l4,0 0,4 -4,0 0,-4z M82,70l4,0 0,4 -4,0 0,-4z M94,70l4,0 0,4 -4,0 0,-4z M102,70l4,0 0,4 -4,0 0,-4z M106,70l4,0 0,4 -4,0 0,-4z M110,70l4,0 0,4 -4,0 0,-4z M2,74l4,0 0,4 -4,0 0,-4z M10,74l4,0 0,4 -4,0 0,-4z M18,74l4,0 0,4 -4,0 0,-4z M26,74l4,0 0,4 -4,0 0,-4z M30,74l4,0 0,4 -4,0 0,-4z M42,74l4,0 0,4 -4,0 0,-4z M46,74l4,0 0,4 -4,0 0,-4z M50,74l4,0 0,4 -4,0 0,-4z M62,74l4,0 0,4 -4,0 0,-4z M66,74l4,0 0,4 -4,0 0,-4z M82,74l4,0 0,4 -4,0 0,-4z M90,74l4,0 0,4 -4,0 0,-4z M94,74l4,0 0,4 -4,0 0,-4z M98,74l4,0 0,4 -4,0 0,-4z M106,74l4,0 0,4 -4,0 0,-4z M14,78l4,0 0,4 -4,0 0,-4z M46,78l4,0 0,4 -4,0 0,-4z M62,78l4,0 0,4 -4,0 0,-4z M66,78l4,0 0,4 -4,0 0,-4z M70,78l4,0 0,4 -4,0 0,-4z M74,78l4,0 0,4 -4,0 0,-4z M82,78l4,0 0,4 -4,0 0,-4z M86,78l4,0 0,4 -4,0 0,-4z M94,78l4,0 0,4 -4,0 0,-4z M106,78l4,0 0,4 -4,0 0,-4z M6,82l4,0 0,4 -4,0 0,-4z M10,82l4,0 0,4 -4,0 0,-4z M14,82l4,0 0,4 -4,0 0,-4z M18,82l4,0 0,4 -4,0 0,-4z M26,82l4,0 0,4 -4,0 0,-4z M30,82l4,0 0,4 -4,0 0,-4z M38,82l4,0 0,4 -4,0 0,-4z M50,82l4,0 0,4 -4,0 0,-4z M54,82l4,0 0,4 -4,0 0,-4z M62,82l4,0 0,4 -4,0 0,-4z M66,82l4,0 0,4 -4,0 0,-4z M70,82l4,0 0,4 -4,0 0,-4z M74,82l4,0 0,4 -4,0 0,-4z M82,82l4,0 0,4 -4,0 0,-4z M86,82l4,0 0,4 -4,0 0,-4z M90,82l4,0 0,4 -4,0 0,-4z M94,82l4,0 0,4 -4,0 0,-4z M98,82l4,0 0,4 -4,0 0,-4z M102,82l4,0 0,4 -4,0 0,-4z M106,82l4,0 0,4 -4,0 0,-4z M34,86l4,0 0,4 -4,0 0,-4z M42,86l4,0 0,4 -4,0 0,-4z M54,86l4,0 0,4 -4,0 0,-4z M58,86l4,0 0,4 -4,0 0,-4z M74,86l4,0 0,4 -4,0 0,-4z M78,86l4,0 0,4 -4,0 0,-4z M82,86l4,0 0,4 -4,0 0,-4z M98,86l4,0 0,4 -4,0 0,-4z M102,86l4,0 0,4 -4,0 0,-4z M106,86l4,0 0,4 -4,0 0,-4z M110,86l4,0 0,4 -4,0 0,-4z M114,86l4,0 0,4 -4,0 0,-4z M2,90l4,0 0,4 -4,0 0,-4z M6,90l4,0 0,4 -4,0 0,-4z M10,90l4,0 0,4 -4,0 0,-4z M14,90l4,0 0,4 -4,0 0,-4z M18,90l4,0 0,4 -4,0 0,-4z M22,90l4,0 0,4 -4,0 0,-4z M26,90l4,0 0,4 -4,0 0,-4z M34,90l4,0 0,4 -4,0 0,-4z M54,90l4,0 0,4 -4,0 0,-4z M66,90l4,0 0,4 -4,0 0,-4z M78,90l4,0 0,4 -4,0 0,-4z M82,90l4,0 0,4 -4,0 0,-4z M90,90l4,0 0,4 -4,0 0,-4z M98,90l4,0 0,4 -4,0 0,-4z M102,90l4,0 0,4 -4,0 0,-4z M110,90l4,0 0,4 -4,0 0,-4z M2,94l4,0 0,4 -4,0 0,-4z M26,94l4,0 0,4 -4,0 0,-4z M34,94l4,0 0,4 -4,0 0,-4z M38,94l4,0 0,4 -4,0 0,-4z M42,94l4,0 0,4 -4,0 0,-4z M46,94l4,0 0,4 -4,0 0,-4z M62,94l4,0 0,4 -4,0 0,-4z M82,94l4,0 0,4 -4,0 0,-4z M98,94l4,0 0,4 -4,0 0,-4z M102,94l4,0 0,4 -4,0 0,-4z M110,94l4,0 0,4 -4,0 0,-4z M114,94l4,0 0,4 -4,0 0,-4z M2,98l4,0 0,4 -4,0 0,-4z M10,98l4,0 0,4 -4,0 0,-4z M14,98l4,0 0,4 -4,0 0,-4z M18,98l4,0 0,4 -4,0 0,-4z M26,98l4,0 0,4 -4,0 0,-4z M38,98l4,0 0,4 -4,0 0,-4z M46,98l4,0 0,4 -4,0 0,-4z M58,98l4,0 0,4 -4,0 0,-4z M70,98l4,0 0,4 -4,0 0,-4z M74,98l4,0 0,4 -4,0 0,-4z M82,98l4,0 0,4 -4,0 0,-4z M86,98l4,0 0,4 -4,0 0,-4z M90,98l4,0 0,4 -4,0 0,-4z M94,98l4,0 0,4 -4,0 0,-4z M98,98l4,0 0,4 -4,0 0,-4z M106,98l4,0 0,4 -4,0 0,-4z M2,102l4,0 0,4 -4,0 0,-4z M10,102l4,0 0,4 -4,0 0,-4z M14,102l4,0 0,4 -4,0 0,-4z M18,102l4,0 0,4 -4,0 0,-4z M26,102l4,0 0,4 -4,0 0,-4z M34,102l4,0 0,4 -4,0 0,-4z M38,102l4,0 0,4 -4,0 0,-4z M50,102l4,0 0,4 -4,0 0,-4z M54,102l4,0 0,4 -4,0 0,-4z M58,102l4,0 0,4 -4,0 0,-4z M62,102l4,0 0,4 -4,0 0,-4z M66,102l4,0 0,4 -4,0 0,-4z M86,102l4,0 0,4 -4,0 0,-4z M94,102l4,0 0,4 -4,0 0,-4z M98,102l4,0 0,4 -4,0 0,-4z M102,102l4,0 0,4 -4,0 0,-4z M114,102l4,0 0,4 -4,0 0,-4z M2,106l4,0 0,4 -4,0 0,-4z M10,106l4,0 0,4 -4,0 0,-4z M14,106l4,0 0,4 -4,0 0,-4z M18,106l4,0 0,4 -4,0 0,-4z M26,106l4,0 0,4 -4,0 0,-4z M34,106l4,0 0,4 -4,0 0,-4z M38,106l4,0 0,4 -4,0 0,-4z M42,106l4,0 0,4 -4,0 0,-4z M50,106l4,0 0,4 -4,0 0,-4z M54,106l4,0 0,4 -4,0 0,-4z M58,106l4,0 0,4 -4,0 0,-4z M70,106l4,0 0,4 -4,0 0,-4z M74,106l4,0 0,4 -4,0 0,-4z M78,106l4,0 0,4 -4,0 0,-4z M94,106l4,0 0,4 -4,0 0,-4z M106,106l4,0 0,4 -4,0 0,-4z M114,106l4,0 0,4 -4,0 0,-4z M2,110l4,0 0,4 -4,0 0,-4z M26,110l4,0 0,4 -4,0 0,-4z M42,110l4,0 0,4 -4,0 0,-4z M54,110l4,0 0,4 -4,0 0,-4z M58,110l4,0 0,4 -4,0 0,-4z M62,110l4,0 0,4 -4,0 0,-4z M74,110l4,0 0,4 -4,0 0,-4z M78,110l4,0 0,4 -4,0 0,-4z M82,110l4,0 0,4 -4,0 0,-4z M86,110l4,0 0,4 -4,0 0,-4z M94,110l4,0 0,4 -4,0 0,-4z M98,110l4,0 0,4 -4,0 0,-4z M102,110l4,0 0,4 -4,0 0,-4z M110,110l4,0 0,4 -4,0 0,-4z M2,114l4,0 0,4 -4,0 0,-4z M6,114l4,0 0,4 -4,0 0,-4z M10,114l4,0 0,4 -4,0 0,-4z M14,114l4,0 0,4 -4,0 0,-4z M18,114l4,0 0,4 -4,0 0,-4z M22,114l4,0 0,4 -4,0 0,-4z M26,114l4,0 0,4 -4,0 0,-4z M34,114l4,0 0,4 -4,0 0,-4z M46,114l4,0 0,4 -4,0 0,-4z M54,114l4,0 0,4 -4,0 0,-4z M62,114l4,0 0,4 -4,0 0,-4z M74,114l4,0 0,4 -4,0 0,-4z M78,114l4,0 0,4 -4,0 0,-4z M82,114l4,0 0,4 -4,0 0,-4z M86,114l4,0 0,4 -4,0 0,-4z M90,114l4,0 0,4 -4,0 0,-4z M94,114l4,0 0,4 -4,0 0,-4z M98,114l4,0 0,4 -4,0 0,-4z M102,114l4,0 0,4 -4,0 0,-4z M110,114l4,0 0,4 -4,0 0,-4z" stroke="transparent" fill="black"/></svg></div>
+      <div class="qr-url">https://yatsu3-crypto.github.io/sweat</div>
+    </div>
+  </div>
+
+  <h2>3つの判定区分</h2>
+  <div class="judge">
+    <div class="jcol j-ok"><div class="jhead">食べてOK</div><div class="jbody">毎日の食事に取り入れやすい食品</div></div>
+    <div class="jcol j-care"><div class="jhead">注意して</div><div class="jbody">量や調理法を工夫したい食品</div></div>
+    <div class="jcol j-less"><div class="jhead">控えめに</div><div class="jbody">症状の強い時期は避けたい食品</div></div>
+  </div>
+
+  <h2>こんな機能があります</h2>
+  <ul class="feat">
+    <li>220品目以上の食品を収載</li>
+    <li>判定の医学的な理由を解説</li>
+    <li>カテゴリ別に食品を一覧表示</li>
+    <li>「食べてOK」食品リストを印刷可能</li>
+    <li>iPhone・iPad・パソコンで利用可</li>
+    <li>登録・ログイン不要・無料</li>
+  </ul>
+
+  <h2>たとえばこんな使い方</h2>
+  <div class="example">
+    <div class="when">夏の暑い日、患者さんの食卓で。</div>
+    <div class="bubbles"><span class="bubble">「今日はそうめんでいいかな？」</span><span class="bubble">「冷やし中華は？」</span></div>
+    と気になったら、検索窓に入力するだけ。なぜ気をつけたほうがいいのか、どう工夫すれば食べやすいかを、その場で確認できます。
+  </div>
+
+  <footer>
+    <div class="kanshu">監修　やまもと皮膚科・漢方クリニック</div>
+    <div class="disc">※本アプリは医学的助言の参考資料です。症状でお悩みの際は診察をご利用ください。</div>
+  </footer>
+</div>
+</body>
+</html>
+
+    </script>
+  </section>
 </div>
 
 <!-- 製品一覧ページ -->
@@ -6816,12 +7004,12 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '3.8';
+var APP_VERSION = '3.9';
 var STALE_MONTHS = 12;
 var DATA_META = {
-  guidance: {updated:'2026-11-18', check:'各疾患の最新ガイドライン',
-             parts:[{n:'疾患別の生活指導', updated:'2026-11-18'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'}]},
-  products: {updated:'2026-11-20', check:'各製品の添付資料・メーカー情報'},
+  guidance: {updated:'2026-11-23', check:'各疾患の最新ガイドライン',
+             parts:[{n:'疾患別の生活指導', updated:'2026-11-23'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'},{n:'食べもの早見表（汗で痒くなる方へ）', updated:'2026-11-23'}]},
+  products: {updated:'2026-11-23', check:'各製品の添付資料・メーカー情報'},
   staff:    {updated:'2026-11-21', check:'添付文書・最適使用推進ガイドライン'},
   topical:  {updated:'2026-11-16', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
              parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-11-04'},{n:'塗り方・塗布量計算・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-16'}]},
@@ -7005,7 +7193,12 @@ var DB = {
     life:['原因食物（魚介・ナッツ・卵等）を特定し除去する。食物日記をつけると有用','アルコール・香辛料は血管拡張作用があり悪化させることがある','ストレス・過労・睡眠不足は誘発因子。十分な休息をとる'],
     night:['就寝時は抗ヒスタミン薬を服用すると夜間の痒みを軽減できる'],
     env:['タイト・化学繊維の衣類は機械的刺激となる。綿素材・ゆったりした服装を選ぶ'],
-    add:[{b:'内服',t:'非鎮静性抗ヒスタミン薬（ビラノア等）の定期内服を継続'},{b:'内服',t:'慢性じんましんにはオマリズマブ（ゾレア）・デュピルマブ（デュピクセント）の適応を検討'},{b:'検査',t:'原因検索：血液検査（IgE・好酸球等）'},{b:'漢方',t:'補中益気湯：疲労で悪化する場合に考慮'},{b:'漢方',t:'加味逍遙散：月経前後に悪化する場合に考慮'},{b:'漢方',t:'茵蔯五苓散：水滞が関与する場合に考慮'},{b:'漢方',t:'麻黄附子細辛湯：寒冷蕁麻疹に考慮'}]
+    add:[{b:'内服',t:'非鎮静性抗ヒスタミン薬（ビラノア等）の定期内服を継続'},{b:'内服',t:'慢性じんましんにはオマリズマブ（ゾレア）・デュピルマブ（デュピクセント）の適応を検討'},{b:'検査',t:'原因検索：血液検査（IgE・好酸球等）'},{b:'漢方',t:'補中益気湯：疲労で悪化する場合に考慮'},{b:'漢方',t:'加味逍遙散：月経前後に悪化する場合に考慮'},{b:'漢方',t:'茵蔯五苓散：水滞が関与する場合に考慮'},{b:'漢方',t:'麻黄附子細辛湯：寒冷蕁麻疹に考慮'}],
+    /* 病型ごとの項目（結果画面に枠で出し、配布物の章へリンクする。go は guideChGo の章名） */
+    types:[{h:'コリン性蕁麻疹・汗で悪化するタイプ',
+            t:['食べものの「これは食べていい？」は、配布物のQRコードから開く検索アプリで確認できる（食べてOK／注意して／控えめに）',
+               '「控えめに」は症状の強い時期に限った一時的な調整で、除去や禁止ではない'],
+            go:'sweat', n:'汗で痒くなる方へ 食べもの早見表', d:'生活指導 › 患者配布用パンフレット（A4・1枚）'}]
   },
   '水虫':{
     care:['毎日入浴・足洗いを行い、指の間まで丁寧に洗い完全に乾燥させる','抗真菌外用薬は症状が消えても4週間以上継続する（再発予防）','患部に触れた後は手洗いを徹底する'],
@@ -7320,6 +7513,15 @@ function generate(){
   html += sec('🏃','生活習慣', dedup(life).slice(0,5));
   html += sec('🏠','環境調整', dedup(env).slice(0,5));
 
+  // 病型ごとの項目（DB の types。配布物の章へのリンクつき。スタッフ用なので印刷には出さない＝add-box）
+  disList.forEach(function(d){
+    (DB[d].types || []).forEach(function(ty){
+      html += '<div class="add-box"><div class="add-ttl">🔎 '+esc(ty.h)+'</div>';
+      ty.t.forEach(function(x){ html += '<div class="add-row"><span class="badge">要点</span><span>'+esc(x)+'</span></div>'; });
+      html += '<button type="button" class="prod-link" style="margin:10px 0 0" onclick="guideChGo(\''+ty.go+'\')"><span class="pl-t"><span class="pl-n">'+esc(ty.n)+'</span><span class="pl-d">'+esc(ty.d)+'</span></span><span class="pl-a">›</span></button></div>';
+    });
+  });
+
   // 追加治療（重複除去）
   var addKeys = []; var addDedup = [];
   add.forEach(function(a){
@@ -7506,6 +7708,9 @@ var PRODUCTS = [
       'デイリーと極の2タイプの違いを説明する（生薬量15g vs 30g）',
       '価格：お試し1包330円／10包セット3,000円（極は550円／5,000円）',
       '冷蔵保存が必須であることを必ず伝える',
+    ],
+    links: [
+      {n:'関連：生活指導 › 汗で痒くなる方へ 食べもの早見表', d:'コリン性蕁麻疹・汗で悪化するタイプの患者さんに渡す配布物（A4・1枚）', go:'sweat'},
     ],
   },
   {
@@ -8009,6 +8214,7 @@ var PRODUCTS = [
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #guidance/diet         生活指導タブ内「抗炎症の食事ガイド」の章
 //   #guidance/walk         生活指導タブ内「インターバル速歩」の章
+//   #guidance/sweat        生活指導タブ内「汗で痒くなる方へ 食べもの早見表」の章
 //   #search/<語>           横断検索
 //   ハッシュが無い起動（ホーム画面アイコン等）は最後に開いた画面を localStorage から復元する
 // ==============================================
@@ -8083,7 +8289,7 @@ function routeApply(path){
     else if(tab === 'topical' && window.__topical){ __topical.jump(sub); }
     else if(tab === 'vitamin'){ var vb=document.querySelector('#pg-vitamin .vit-seg button:nth-child('+({agents:1,dis:2,table:3}[sub]||1)+')'); if(vb) vitView(sub, vb); }
     else if(tab === 'allergy'){ var ab=document.querySelector('#pg-allergy > .alg-seg button:nth-child('+({avoid:1,view39:2,topics:3}[sub]||1)+')'); if(ab) algView(sub, ab); }
-    else if(tab === 'guidance' && (sub === 'diet' || sub === 'walk')){ guideChGo(sub); }
+    else if(tab === 'guidance' && (sub === 'diet' || sub === 'walk' || sub === 'sweat')){ guideChGo(sub); }
     /* guidance/result は選択内容を持たないので入力画面のまま */
   } finally { ROUTE.applying = false; ROUTE.cur = path; }
 }
@@ -8227,8 +8433,10 @@ function showProduct(id) {
 
 function goBackProd() { routeBack('products'); }
 
-/* 当院製品の links の行き先。patch-nickel：医師 › パッチのアレルゲン一覧を「ニッケル」で絞り込む（iframe が未読込なら読込後に） */
+/* 当院製品の links の行き先。patch-nickel：医師 › パッチのアレルゲン一覧を「ニッケル」で絞り込む（iframe が未読込なら読込後に）
+   sweat：生活指導 › 汗で痒くなる方へ 食べもの早見表の章 */
 function prodLinkGo(go) {
+  if (go === 'sweat') { guideChGo('sweat'); return; }
   if (go !== 'patch-nickel') return;
   switchTab('patch');
   var f = document.querySelector('#pg-patch iframe');
@@ -9859,7 +10067,7 @@ function guidePamph(key, html, naturalH){
     catch(e){ var w=window.open("","_blank"); if(w){ w.document.write(html); w.document.close(); setTimeout(function(){w.focus();w.print();},400); } }
   };
 }
-/* 生活指導タブの章へスクロール（#guidance/diet・#guidance/walk） */
+/* 生活指導タブの章へスクロール（#guidance/diet・#guidance/walk・#guidance/sweat） */
 function guideChGo(sub){
   switchTab('guidance');
   routeSet('guidance/'+sub);
@@ -9873,6 +10081,10 @@ function guideChGo(sub){
 var WALK_HTML = embeddedHTML('walk-src');
 function walkGo(){ guideChGo('walk'); }
 guidePamph('walk', WALK_HTML, 2*(1123+16));
+/* ---------- 汗で痒くなる方へ 食べもの早見表（生活指導タブの章。じんましん・黄金の薬湯からリンク） ---------- */
+var SWEAT_HTML = embeddedHTML('sweat-src');
+function sweatGo(){ guideChGo('sweat'); }
+guidePamph('sweat', SWEAT_HTML, 1123);
 /* ---------- 外用薬の塗り方（外用薬タブ › 塗り方の基本） ---------- */
 var NURI_HTML = embeddedHTML('nuri-src');
 var NURI_TEXT = '';   // パンフ本文（横断検索用）
@@ -10653,7 +10865,7 @@ function build(){
   /* 生活指導（疾患） */
   if(window.DB) Object.keys(DB).forEach(function(name){
     var d=DB[name];
-    add('guidance','⚕',name,'生活指導・患者指導を表示',[d.care,d.life,d.night,d.env,d.add],function(){
+    add('guidance','⚕',name,'生活指導・患者指導を表示',[d.care,d.life,d.night,d.env,d.add,(d.types||[]).map(function(ty){ return [ty.h,ty.t,ty.n]; })],function(){
       switchTab('guidance');
       Object.keys(selected).forEach(function(k){ delete selected[k]; });
       selected[name]=true;
@@ -10674,6 +10886,11 @@ function build(){
   if(window.walkGo){
     add('guidance','🚶','インターバル速歩（運動指導）','速歩き3分＋ゆっくり歩き3分を1セット・1日5セット（30分）・週4日以上',
       ['運動 運動指導 速歩 速歩き インターバル速歩 ウォーキング 歩く 散歩 体力 筋力 持久力 関節痛 息は弾むが会話はできる 朝2セット 夕3セット 5か月 10% パンフレット 印刷 A4 能勢博 信州大学'], walkGo);
+  }
+  /* 生活指導 › 汗で痒くなる方へ 食べもの早見表 */
+  if(window.sweatGo){
+    add('guidance','💧','汗で痒くなる方へ 食べもの早見表（コリン性蕁麻疹・汗で悪化するタイプ）','指導のポイント・A4・1枚の配布物（検索アプリのQRコード）印刷',
+      ['コリン性蕁麻疹 汗アレルギー 汗 発汗 食べもの早見表 食べもの 食べ物 早見表 食事 じんましん 蕁麻疹 検索アプリ 食べてOK 注意して 控えめに 220品目 そうめん 冷やし中華 パンフレット 印刷 A4 QR'], sweatGo);
   }
   /* 所見別ナビ */
   if(window.__fn){
