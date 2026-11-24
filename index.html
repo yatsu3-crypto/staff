@@ -7004,7 +7004,7 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '3.9';
+var APP_VERSION = '3.10';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-11-23', check:'各疾患の最新ガイドライン',
@@ -10009,11 +10009,53 @@ var PAMPH_HTML = embeddedHTML('pamph-src');
   frame.addEventListener("load",fit);
   setTimeout(fit,60);
   var btn=document.getElementById("pamphPrint");
-  if(btn) btn.onclick=function(){
-    try{ frame.contentWindow.focus(); frame.contentWindow.print(); }
-    catch(e){ var w=window.open("","_blank"); if(w){ w.document.write(PAMPH_HTML); w.document.close(); setTimeout(function(){w.focus();w.print();},400); } }
-  };
+  if(btn) btn.onclick=function(){ pamphPrint(PAMPH_HTML); };
 })();
+/* 患者用配布物の印刷（食事ガイド・インターバル速歩・食べもの早見表・塗り方・プロアクティブのパンフ共通）。
+   新しいウィンドウに配布物の文書だけを入れて、そのウィンドウで印刷する。iframe のまま印刷すると、ブラウザによっては
+   （iPhone の Safari など）配布物の @page{margin:0} を使わず、親ページ＝スタッフアプリの URL・日付を紙に刷り込むため。
+   document.write は使わない（書き込んだウィンドウの URL が親ページの URL になり、同じことが起きる）。
+   新しいウィンドウは about:blank のまま、DOM を移して作る。
+   ポップアップが止められてウィンドウが開けないときは、iframe の印刷に戻さず（戻すと URL がまた出て、しかも気づけない）、
+   メッセージを出してそこで止める */
+var PAMPH_PRINT_NG="印刷用の画面を開けませんでした。ブラウザの設定でポップアップを許可してください";
+function pamphPrint(html){
+  var w=null;
+  try{ w=window.open('','_blank'); }catch(e){}
+  if(!w){ alert(PAMPH_PRINT_NG); return; }
+  try{
+    var d=w.document;
+    var src=new DOMParser().parseFromString(html,'text/html');
+    d.replaceChild(d.importNode(src.documentElement,true), d.documentElement);
+    var st=d.createElement('style');
+    st.textContent='#pp-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:10px 12px;'+
+      'background:#3d3a35;color:#e6ddcc;font:13px/1.5 "Zen Kaku Gothic New",sans-serif}'+
+      '#pp-bar button{font:inherit;font-size:16px;font-weight:700;min-height:44px;padding:0 20px;border:none;border-radius:8px;cursor:pointer}'+
+      '#pp-print{background:#b8432f;color:#fff}#pp-close{background:#e6ddcc;color:#3d3a35}'+
+      '@media print{#pp-bar{display:none!important}}';
+    d.head.appendChild(st);
+    var bar=d.createElement('div'); bar.id='pp-bar';
+    bar.innerHTML='<button type="button" id="pp-print">🖨 印刷する</button><button type="button" id="pp-close">閉じる</button>'+
+      '<span>印刷画面が開かないときは「印刷する」を押してください</span>';
+    d.body.insertBefore(bar, d.body.firstChild);
+    /* 印刷は新しいウィンドウの中で行う（親ページは裏に回ると止まることがあるため）。スタイルとフォントを待ってから開く */
+    var sc=d.createElement('script');
+    sc.text='(function(){'+
+      'document.getElementById("pp-print").onclick=function(){window.print();};'+
+      'document.getElementById("pp-close").onclick=function(){window.close();};'+
+      'var links=[].slice.call(document.querySelectorAll("link[rel=stylesheet]")),n=links.length,done=false;'+
+      'function go(){if(done)return;done=true;'+
+        'var f=document.fonts&&document.fonts.ready;'+
+        '(f?Promise.race([f,new Promise(function(r){setTimeout(r,2500);})]):Promise.resolve()).then(function(){setTimeout(function(){window.focus();window.print();},200);});}'+
+      'links.forEach(function(l){function one(){if(--n<=0)go();}l.addEventListener("load",one);l.addEventListener("error",one);});'+
+      'if(!n)go();setTimeout(go,3000);'+
+    '})();';
+    d.body.appendChild(sc);
+  }catch(e){
+    try{ w.close(); }catch(e2){}
+    alert(PAMPH_PRINT_NG);
+  }
+}
 /* ---------- 抗炎症の食事ガイド（生活指導タブの章） ---------- */
 var DIET_HTML = embeddedHTML('diet-src');
 /* 食品ガイドはパンフ本体の .foods から読む（パンフと画面の内容を一致させるため）。横断検索もこれを使う */
@@ -10042,7 +10084,7 @@ function dietGo(){ guideChGo('diet'); }
   }).join('');
   guidePamph('diet', DIET_HTML, 1123);
 })();
-/* 章の A4 パンフ（生活指導タブ・外用薬タブ）：iframe の srcdoc に流し込んで縮小プレビューし、印刷ボタンで iframe の中身だけを印刷する。
+/* 章の A4 パンフ（生活指導タブ・外用薬タブ）：iframe の srcdoc に流し込んで縮小プレビューし、印刷ボタンは pamphPrint() で配布物の文書だけを新しいウィンドウで印刷する。
    key は id の接頭辞（<key>Frame / <key>Wrap / <key>Print）、naturalH は原寸（794px 幅）での全ページの高さ */
 function guidePamph(key, html, naturalH){
   var frame=document.getElementById(key+"Frame");
@@ -10062,10 +10104,7 @@ function guidePamph(key, html, naturalH){
   setTimeout(fit,60);
   if(window.ResizeObserver) new ResizeObserver(fit).observe(wrap);   // 別タブから戻ったとき（幅0→実幅）も合わせ直す
   var btn=document.getElementById(key+"Print");
-  if(btn) btn.onclick=function(){
-    try{ frame.contentWindow.focus(); frame.contentWindow.print(); }
-    catch(e){ var w=window.open("","_blank"); if(w){ w.document.write(html); w.document.close(); setTimeout(function(){w.focus();w.print();},400); } }
-  };
+  if(btn) btn.onclick=function(){ pamphPrint(html); };
 }
 /* 生活指導タブの章へスクロール（#guidance/diet・#guidance/walk・#guidance/sweat） */
 function guideChGo(sub){
