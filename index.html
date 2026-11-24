@@ -1036,6 +1036,13 @@ body.kbar-on{padding-bottom:76px;}
         <p class="ch-note">本紙は一般的な生活指導であり、診断・治療に代わるものではありません。最終判断は医師が行います。</p>
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>あわせて使う記録用紙</div>
+      <div class="card-body">
+        <button type="button" class="prod-link" style="margin:0" onclick="guideChGo('kiroku')"><span class="pl-t"><span class="pl-n">1週間の食事とかゆみの記録</span><span class="pl-d">患者さんが記入する記録用紙（A4・1枚）。食事と症状の関係を診察で一緒に見るためのもの</span></span><span class="pl-a">›</span></button>
+      </div>
+    </div>
     <!-- 患者パンフレット（A4・1ページ）の本体。読み込み時に上の iframe の srcdoc へ流し込む。
          上の「食品ガイド」もここの .foods から組み立てるので、食品を直すときはここだけ直せばよい。
          QR は https://yatsu3-crypto.github.io/diet/ を一度だけ生成した静的 SVG。本体内に </script> を書く場合は <\/script> とする。 -->
@@ -1235,6 +1242,183 @@ footer{
   <footer>
     やまもと皮膚科・漢方クリニック 監修|本紙は一般的な生活指導であり、診断・治療に代わるものではありません。
   </footer>
+</div>
+</body>
+</html>
+
+    </script>
+  </section>
+
+  <!-- ===== 1週間の食事とかゆみの記録（患者さんが記入する記録用紙）。見た目は上の diet-css（.gd-ch / .ch-* / .pamph-wrap）を共用 ===== -->
+  <section class="gd-ch" id="kiroku-ch">
+    <div class="ch-ttl">📝 1週間の食事とかゆみの記録<small>記録用紙</small></div>
+
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>指導のポイント（スタッフ用）</div>
+      <div class="card-body">
+        <ul class="ch-pts">
+          <li class="top"><span class="n">1</span><span><b>渡すときに「1週間だけ」と期限を区切る</b></span></li>
+          <li><span class="n">2</span><span><b>次の診察日を記入してから渡す</b></span></li>
+          <li><span class="n">3</span><span><b>記録を見るときは、かゆみが強かった日の前日までさかのぼって見る</b></span></li>
+          <li><span class="n">4</span><span><b>食事で原因が特定できることは多くない</b><span class="s">見つからなくても、記録自体が生活の見直しにつながる。</span></span></li>
+          <li><span class="n">5</span><span><b>除去を始めている患者さんには、食事ガイドの「除去は原則不要」と合わせて説明する</b></span></li>
+        </ul>
+        <button type="button" class="prod-link" style="margin:12px 0 0" onclick="guideChGo('diet')"><span class="pl-t"><span class="pl-n">関連：抗炎症の食事ガイド</span><span class="pl-d">指導のポイント「特定食品の除去は原則不要」・食品ガイド・A4パンフ</span></span><span class="pl-a">›</span></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><span class="dot"></span>患者さんに渡す記録用紙（A4・1枚）</div>
+      <div class="card-body">
+        <button class="print-btn" id="kirokuPrint">🖨 記録用紙を印刷（A4・1ページ）</button>
+        <div class="pamph-wrap" id="kirokuWrap"><iframe id="kirokuFrame" title="1週間の食事とかゆみの記録（患者さんが記入する記録用紙）"></iframe></div>
+        <p class="ch-hint">プレビューは縮小表示です。印刷ダイアログで<strong>「背景のグラフィック」をON</strong>、<strong>余白は「なし」</strong>に設定してください。</p>
+        <p class="ch-note">記録は診察で食事と症状の関係を一緒に見るためのもので、食品の除去を勧めるものではありません。最終判断は医師が行います。</p>
+      </div>
+    </div>
+    <!-- 記録用紙（A4・1ページ）の本体。読み込み時に上の iframe の srcdoc へ流し込む。
+         読み物ではなく患者さんが書き込む用紙。地中海食の内容は書かず、下部の1行で「抗炎症の食事ガイド」へ案内するだけにする。
+         表は7行（1行＝1日、高さ20mm）。罫線は書き込みの邪魔にならない薄さで、印刷で消えない濃さにする。本体内に </script> を書く場合は <\/script> とする。 -->
+    <script type="text/html" id="shoku-kiroku-src">
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1週間の食事とかゆみの記録|やまもと皮膚科・漢方クリニック</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --washi:#f7f2e7; --sumi:#3a3229;
+  --shu:#b93a26; --kincha:#b8863b; --matsuba:#43604a; --ai:#2b4a6f;
+  --line:#d8cbb0;
+  --rule:#a8987c;      /* 表の内側の罫線（薄いが印刷で消えない濃さ） */
+  --rule-out:#7d6e56;  /* 表の外枠・見出し行の下 */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  background:#6d6459;color:var(--sumi);line-height:1.6;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+
+/* ===== A4本体 ===== */
+.sheet{
+  width:210mm;height:297mm;margin:0 auto;padding:10mm 12mm 9mm;overflow:hidden;
+  background:var(--washi);
+  background-image:
+    radial-gradient(ellipse at 15% 6%, rgba(184,134,59,.05), transparent 55%),
+    radial-gradient(ellipse at 88% 96%, rgba(67,96,74,.05), transparent 55%);
+  display:flex;flex-direction:column;
+}
+header{border-bottom:3px double var(--kincha);padding-bottom:2.5mm;margin-bottom:4mm;text-align:center}
+.clinic{font-size:9.5pt;letter-spacing:.3em;color:var(--kincha);font-weight:700}
+h1{font-size:21pt;font-weight:800;letter-spacing:.12em;margin-top:.5mm;line-height:1.3}
+h1 .accent{color:var(--shu)}
+
+/* 記入欄（お名前・日付） */
+.info{font-size:11.5pt;font-weight:700}
+.info .row{display:flex;align-items:flex-end;gap:8mm;margin-bottom:3mm}
+.info .f{display:flex;align-items:flex-end;white-space:nowrap}
+.info .f.grow{flex:1}
+.info .lb{margin-right:2.5mm}
+.info .ln{display:inline-block;border-bottom:1px solid var(--rule-out);height:7mm}
+.info .f.grow .ln{flex:1}
+.info .ln.s{width:13mm}
+.info .u{margin:0 1mm}
+
+/* 書き方・かゆみの目安 */
+.howto{background:#fffdf7;border:1px solid var(--line);border-radius:2mm;padding:2.2mm 5mm;margin-top:1mm}
+.howto ul{list-style:none}
+.howto li{font-size:10.5pt;line-height:1.65;padding-left:4mm;position:relative}
+.howto li::before{content:"・";position:absolute;left:0}
+.scale{display:flex;align-items:center;gap:2.5mm;margin-top:1.5mm;padding-top:1.5mm;border-top:1px dashed var(--line);font-size:10.5pt;font-weight:700;white-space:nowrap}
+.scale .ttl{color:var(--ai);margin-right:1mm}
+.scale .pt{display:inline-flex;align-items:center;gap:1.5mm}
+.scale .num{display:inline-flex;align-items:center;justify-content:center;min-width:6.5mm;height:6.5mm;padding:0 1mm;border-radius:3.25mm;color:#fffdf7;font-size:10pt;font-weight:800}
+.scale .n0{background:var(--matsuba)} .scale .n5{background:var(--kincha)} .scale .n10{background:var(--shu)}
+.scale .sep{color:#9a8b72;font-weight:500}
+
+/* 記録の表（7行・1行＝1日） */
+table.rec{width:100%;border-collapse:collapse;table-layout:fixed;margin:4mm 0 4mm;background:#fffefa;border:.4mm solid var(--rule-out)}
+table.rec th{font-size:10pt;font-weight:800;letter-spacing:.05em;line-height:1.3;background:#efe5cf;color:var(--sumi);
+  height:10mm;padding:0 1mm;text-align:center;vertical-align:middle;
+  border-left:.25mm solid var(--rule);border-bottom:.4mm solid var(--rule-out)}
+table.rec th small{display:block;font-size:8pt;font-weight:600;letter-spacing:0}
+table.rec td{height:20mm;border-left:.25mm solid var(--rule);border-top:.25mm solid var(--rule)}
+table.rec th:first-child, table.rec td:first-child{border-left:none}
+table.rec td.itch{background:#fbf3ef}
+
+/* 下部の注意・案内 */
+.note{margin-top:auto;border:1.2px solid var(--shu);border-radius:2.5mm;background:#fffdf7;padding:2.5mm 5mm;font-size:10.5pt;line-height:1.7;font-weight:600}
+.note b{color:var(--shu)}
+.guide{margin-top:2.5mm;text-align:center;font-size:10.5pt;font-weight:700}
+.guide .g{color:var(--matsuba)}
+
+/* ===== 印刷設定 ===== */
+@page{size:A4;margin:0}
+@media print{
+  body{background:none}
+  body>*:not(.sheet){display:none!important}
+  .sheet{box-shadow:none;margin:0;width:210mm;height:297mm}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <div class="clinic">やまもと皮膚科・漢方クリニック</div>
+    <h1>1週間の<span class="accent">食事</span>と<span class="accent">かゆみ</span>の記録</h1>
+  </header>
+
+  <div class="info">
+    <div class="row">
+      <div class="f grow"><span class="lb">お名前</span><span class="ln"></span></div>
+      <div class="f"><span class="lb">記録を始めた日</span><span class="ln s"></span><span class="u">月</span><span class="ln s"></span><span class="u">日</span></div>
+    </div>
+    <div class="row">
+      <div class="f"><span class="lb">次の診察日</span><span class="ln s"></span><span class="u">月</span><span class="ln s"></span><span class="u">日</span></div>
+    </div>
+  </div>
+
+  <div class="howto">
+    <ul>
+      <li>思い出せる範囲で構いません。完璧でなくて大丈夫です</li>
+      <li>飲みもの・おやつ・お酒も書いてください</li>
+      <li>かゆみは1日の中で一番強かったときの数字を書いてください</li>
+    </ul>
+    <div class="scale">
+      <span class="ttl">かゆみの目安</span>
+      <span class="pt"><span class="num n0">0</span>なし</span><span class="sep">／</span>
+      <span class="pt"><span class="num n5">5</span>気になる</span><span class="sep">／</span>
+      <span class="pt"><span class="num n10">10</span>眠れない</span>
+    </div>
+  </div>
+
+  <table class="rec">
+    <colgroup>
+      <col style="width:16mm"><col><col><col><col style="width:33mm"><col style="width:16mm"><col style="width:35mm">
+    </colgroup>
+    <thead>
+      <tr><th>日付<small>曜日</small></th><th>朝</th><th>昼</th><th>夕</th><th>間食・飲みもの</th><th>かゆみ<small>（0〜10）</small></th><th>気づいたこと</th></tr>
+    </thead>
+    <tbody>
+      <tr><td></td><td></td><td></td><td></td><td></td><td class="itch"></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td class="itch"></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td class="itch"></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td class="itch"></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td class="itch"></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td class="itch"></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td class="itch"></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    この記録は、食事と症状の関係を<b>一緒に見る</b>ためのものです。<br>
+    気になる食べ物が見つかっても、<b>自分でやめる必要はありません。</b><br>
+    やめるかどうかは診察で相談しましょう。
+  </div>
+  <p class="guide">食事の基本は「<span class="g">抗炎症の食事ガイド</span>」をご覧ください。</p>
 </div>
 </body>
 </html>
@@ -7004,11 +7188,11 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '3.10';
+var APP_VERSION = '3.11';
 var STALE_MONTHS = 12;
 var DATA_META = {
-  guidance: {updated:'2026-11-23', check:'各疾患の最新ガイドライン',
-             parts:[{n:'疾患別の生活指導', updated:'2026-11-23'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'},{n:'食べもの早見表（汗で痒くなる方へ）', updated:'2026-11-23'}]},
+  guidance: {updated:'2026-11-24', check:'各疾患の最新ガイドライン',
+             parts:[{n:'疾患別の生活指導', updated:'2026-11-23'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'},{n:'食べもの早見表（汗で痒くなる方へ）', updated:'2026-11-23'},{n:'1週間の食事とかゆみの記録', updated:'2026-11-24'}]},
   products: {updated:'2026-11-23', check:'各製品の添付資料・メーカー情報'},
   staff:    {updated:'2026-11-21', check:'添付文書・最適使用推進ガイドライン'},
   topical:  {updated:'2026-11-16', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
@@ -8213,6 +8397,7 @@ var PRODUCTS = [
 //                          PDCA帳（受付）の画面の名前は 'reception' のまま（ハッシュ上の小タブ名だけ SUB_NAME で 'pdca' にする）。旧形式 #reception は #reception/pdca に置き換える
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #guidance/diet         生活指導タブ内「抗炎症の食事ガイド」の章
+//   #guidance/kiroku       生活指導タブ内「1週間の食事とかゆみの記録」（記録用紙）の章
 //   #guidance/walk         生活指導タブ内「インターバル速歩」の章
 //   #guidance/sweat        生活指導タブ内「汗で痒くなる方へ 食べもの早見表」の章
 //   #search/<語>           横断検索
@@ -8289,7 +8474,7 @@ function routeApply(path){
     else if(tab === 'topical' && window.__topical){ __topical.jump(sub); }
     else if(tab === 'vitamin'){ var vb=document.querySelector('#pg-vitamin .vit-seg button:nth-child('+({agents:1,dis:2,table:3}[sub]||1)+')'); if(vb) vitView(sub, vb); }
     else if(tab === 'allergy'){ var ab=document.querySelector('#pg-allergy > .alg-seg button:nth-child('+({avoid:1,view39:2,topics:3}[sub]||1)+')'); if(ab) algView(sub, ab); }
-    else if(tab === 'guidance' && (sub === 'diet' || sub === 'walk' || sub === 'sweat')){ guideChGo(sub); }
+    else if(tab === 'guidance' && (sub === 'diet' || sub === 'kiroku' || sub === 'walk' || sub === 'sweat')){ guideChGo(sub); }
     /* guidance/result は選択内容を持たないので入力画面のまま */
   } finally { ROUTE.applying = false; ROUTE.cur = path; }
 }
@@ -10106,7 +10291,7 @@ function guidePamph(key, html, naturalH){
   var btn=document.getElementById(key+"Print");
   if(btn) btn.onclick=function(){ pamphPrint(html); };
 }
-/* 生活指導タブの章へスクロール（#guidance/diet・#guidance/walk・#guidance/sweat） */
+/* 生活指導タブの章へスクロール（#guidance/diet・#guidance/kiroku・#guidance/walk・#guidance/sweat） */
 function guideChGo(sub){
   switchTab('guidance');
   routeSet('guidance/'+sub);
@@ -10124,6 +10309,10 @@ guidePamph('walk', WALK_HTML, 2*(1123+16));
 var SWEAT_HTML = embeddedHTML('sweat-src');
 function sweatGo(){ guideChGo('sweat'); }
 guidePamph('sweat', SWEAT_HTML, 1123);
+/* ---------- 1週間の食事とかゆみの記録（生活指導タブの章。患者さんが記入する記録用紙。食事ガイドの章と相互リンク） ---------- */
+var KIROKU_HTML = embeddedHTML('shoku-kiroku-src');
+function kirokuGo(){ guideChGo('kiroku'); }
+guidePamph('kiroku', KIROKU_HTML, 1123);
 /* ---------- 外用薬の塗り方（外用薬タブ › 塗り方の基本） ---------- */
 var NURI_HTML = embeddedHTML('nuri-src');
 var NURI_TEXT = '';   // パンフ本文（横断検索用）
@@ -10920,6 +11109,11 @@ function build(){
     DIET_FOODS.forEach(function(c){ c.items.forEach(function(it){
       add('guidance','🥗','食事ガイド：'+it.n,c.head+'｜'+it.d,['食事 地中海食'], dietGo);
     }); });
+  }
+  /* 生活指導 › 1週間の食事とかゆみの記録（記録用紙） */
+  if(window.kirokuGo){
+    add('guidance','📝','1週間の食事とかゆみの記録（記録用紙）','患者さんが記入するA4・1枚の用紙。指導のポイント・印刷',
+      ['食事記録 食事日誌 記録用紙 記録 日誌 かゆみ 痒み かゆみの記録 食べたもの 食べた物 食事 1週間 間食 飲みもの おやつ お酒 除去 パンフレット 印刷 A4'], kirokuGo);
   }
   /* 生活指導 › インターバル速歩 */
   if(window.walkGo){
