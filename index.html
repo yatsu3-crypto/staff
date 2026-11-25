@@ -344,6 +344,13 @@ body.gs-on .gs-results{display:block;}
 #moistcost .mc-v{display:block;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
 #moistcost .mc-s{display:block;font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap;}
 #moistcost #mc-links{margin-top:14px;}
+#moistcost .mc-ref{font-size:11.5px;line-height:1.6;color:var(--ink-soft);margin-top:7px;}
+#moistcost .mc-rx{background:#fbeeea;border:2px solid #b6483a;border-radius:13px;padding:11px 14px;margin:-2px 0 12px;color:#7a2e24;font-size:13px;line-height:1.65;}
+#moistcost .mc-rxh{font-size:14.5px;font-weight:700;color:#b6483a;margin-bottom:6px;}
+#moistcost .mc-rx ul{margin:0;padding:0 0 0 1.2em;}
+#moistcost .mc-rx li{padding:3px 0;}
+#moistcost .mc-rx li span{display:block;}
+#moistcost .mc-rxs{font-size:11.5px;margin-top:8px;padding-top:7px;border-top:1px dashed #e2b3a8;}
 #topguide .block p{margin:7px 0;font-size:14px;}
 #topguide .block ul{margin:7px 0;padding-left:20px;font-size:14px;}
 #topguide .block li{margin:5px 0;}
@@ -752,6 +759,7 @@ body.kbar-on{padding-bottom:76px;}
 #pg-sentei li{padding:3px 0;}
 #pg-sentei li small{display:block;font-size:12px;opacity:.9;}
 #pg-sentei .st-sub{margin-top:8px;padding-top:7px;border-top:1px dashed #e2b3a8;}
+#pg-sentei .canon-xref.st-rx{border:1.5px solid #b6483a;background:#fbeeea;color:#7a2e24;font-size:12.5px;}
 #pg-sentei .st-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
 /* ===== 年齢・用量 ===== */
 #pg-age{--r-ext:var(--g);--r-ora:#2f4a63;--r-inj:#a87d35;}
@@ -4053,6 +4061,7 @@ window.PTD_DATA={PRODUCTS:PRODUCTS,A:A,GROUPS:GROUPS};
       <li><b>生活保護</b>を受給している患者には、好みであっても後発品を処方・調剤することになるため、<b>特別の料金を徴収するケースは生じない</b></li>
     </ul>
   </div>
+  <div class="canon-xref st-rx"><span><b>【重要】処方の書き方（規格）で、選定療養の対象かどうかが変わる薬があります</b>（例：ヘパリン類似物質スプレー 92g／100g）。患者さんに金額を聞かれたときは、処方の規格を確認してください。くわしくは <b>外用薬 › 保湿剤の負担比較</b> にあります。</span><button type="button" onclick="moistGo('rx')">開く ›</button></div>
   <div class="canon-xref"><span>保湿剤（ヒルドイド・後発品・セタフィル）の負担の比較は <b>外用薬 › 保湿剤の負担比較</b> にあります。</span><button type="button" onclick="switchTab('topical');__topical.jump('moistcost')">開く ›</button></div>
   <div class="canon-xref"><span>処置・検査と外来管理加算の点数は <b>受付 › 加算</b> にあります。</span><button type="button" onclick="switchTab('kasan')">開く ›</button></div>
   <div class="st-foot">出典：厚生労働省リーフレット「先発医薬品を希望した場合の自己負担の仕組み～長期収載品の選定療養について～」（令和8年6月から）。<br>会計の説明・確認用のページです。実際の扱いは最新の通知と医事担当の確認を優先してください。最終判断は医師が行います。</div>
@@ -4218,9 +4227,11 @@ var MOIST_COST = (function(){
     {id:'cetaphil', n:'セタフィル モイスチャライジングローション', sub:'院内販売・自費（表では473mLを473gとして並べています）', prod:'cetaphil'},
     {id:'generic',  n:'後発品（ヘパリン類似物質）', sub:'油性クリーム・クリーム・ローション・泡', yakka:6.3, sentei:false, r3:[1.89, 894], r1:[0.63, 298]},
     {id:'hirudoid', n:'ヒルドイド', sub:'ソフト軟膏0.3%・クリーム0.3%・ローション0.3%', yakka:17.7, sentei:true, r3:[9.87, 4669], r1:[7.47, 3533]},
-    /* chk：要確認の行。金額（薬価・3割・1割）は出さず、本文だけを出す。確認できたら chk を消して sentei・r3・r1 を院長の確定値で入れる */
-    {id:'foam',     n:'ヒルドイドフォーム0.3%（泡）', sub:'',
-     chk:'選定療養の対象かどうか未確認。同じ規格の後発品がないため対象外の可能性がある。厚生労働省の対象品目リストで確認すること。確認まで金額は表示しない'},
+    /* フォームは1本92g。pack：{g:1本の量, r3:1本の円, r1:同}。r3・r1 の2つ目（473g換算）は他の行と並べるための参考値。
+       rx:true の行の直後に「処方の書き方で患者負担が変わります」（RX）の枠を出す（受付 › 選定療養から moistGo('rx') でリンク）。
+       chk を持つ行は「要確認」として金額を出さない（今は該当なし） */
+    {id:'foam',     n:'ヒルドイドフォーム0.3%（泡）92g', sub:'選定療養の対象外（同じ規格の後発品がないため）', yakka:18.2, sentei:false,
+     pack:{g:92, r3:502, r1:167}, r3:[5.46, 2583], r1:[1.82, 861], rx:true},
     {id:'hirudoid_need', n:'ヒルドイド（医療上の必要あり）', sub:'特別の料金を徴収しない場合（受付 › 選定療養の①〜④）', sentei:false, r3:[5.31, 2512], r1:[1.77, 837]}
   ];
   var NOTES = [
@@ -4229,13 +4240,23 @@ var MOIST_COST = (function(){
     '薬剤料のみの概算。点数の端数処理、診察料・処方箋料・調剤料などは含まない',
     '子ども医療費助成の対象者は、保険処方の自己負担がさらに小さいかゼロ'
   ];
+  /* 処方の書き方（規格）で選定療養の対象かどうかが変わる例。出典はマルホへの確認（2026年11月）。最終的な根拠は厚労省の対象品目リスト */
+  var RX = {
+    h:'【重要】処方の書き方で患者負担が変わります',
+    items:[
+      {t:'【般】ヘパリン類似物質スプレー0.3% 92g', d:'ヒルドイドフォーム92gしか調剤できないため、選定療養の対象外'},
+      {t:'【般】ヘパリン類似物質スプレー0.3% 100g', d:'先発・後発ともに調剤可能なため、選定療養の対象'},
+      {t:'ヒルドイドフォーム92gの処方は、ヘパリン類似物質外用スプレー100g または泡状スプレー100g に変更可能'}
+    ],
+    src:'出典：マルホへの確認（2026年11月）。選定療養の対象かどうかの最終的な根拠は、厚生労働省の対象品目リスト'
+  };
   function asOf(id){ return PRICE_AS_OF.hasOwnProperty(id) ? PRICE_AS_OF[id] : PRICE_AS_OF['']; }
   /* 当院製品の価格（PRODUCTS の price）。未登録なら null */
   function prodPrice(id){
     var p=null; (window.PRODUCTS||[]).forEach(function(x){ if(x.id===id) p=x; });
     return p && p.price ? p.price : null;
   }
-  return {PRICE_AS_OF:PRICE_AS_OF, BASIS:BASIS, ROWS:ROWS, NOTES:NOTES, asOf:asOf, prodPrice:prodPrice};
+  return {PRICE_AS_OF:PRICE_AS_OF, BASIS:BASIS, ROWS:ROWS, NOTES:NOTES, RX:RX, asOf:asOf, prodPrice:prodPrice};
 })();
 
 (function(){
@@ -4257,8 +4278,31 @@ var MOIST_COST = (function(){
     if(r.yakka) h+='<div class="mc-yk">薬価 '+r.yakka+'円/g</div>';
     var own=MOIST_COST.PRICE_AS_OF.hasOwnProperty(r.id);
     if(own) h+='<div class="mc-yk">薬価の時点：'+e(MOIST_COST.asOf(r.id))+'</div>';
-    return h+'<div class="mc-nums">'+cell('3割', r.r3)+cell('1割', r.r1)+'</div></div>';
+    if(r.pack){
+      var B=MOIST_COST.BASIS, g=r.pack.g;
+      function pcell(lbl, a, one){ return '<div><span class="mc-lbl">'+lbl+'</span><span class="mc-v">'+perg(a[0])+'</span><span class="mc-s">1本'+g+'gで 約'+yen(one)+'</span></div>'; }
+      h+='<div class="mc-nums">'+pcell('3割', r.r3, r.pack.r3)+pcell('1割', r.r1, r.pack.r1)+'</div>'
+        +'<div class="mc-ref">※ 比較量'+B+'g換算：3割 約'+yen(r.r3[1])+'／1割 約'+yen(r.r1[1])+'（他の行と並べるための参考値。1本は'+g+'gです）</div></div>';
+    } else {
+      h+='<div class="mc-nums">'+cell('3割', r.r3)+cell('1割', r.r1)+'</div></div>';
+    }
+    return h+(r.rx?rxBox():'');
   }
+  function rxBox(){
+    var R=MOIST_COST.RX;
+    return '<div class="mc-rx" id="mc-rx"><div class="mc-rxh">'+e(R.h)+'</div><ul>'
+      +R.items.map(function(it){ return '<li><b>'+e(it.t)+'</b>'+(it.d?'<span>→ '+e(it.d)+'</span>':'')+'</li>'; }).join('')
+      +'</ul><div class="mc-rxs">'+e(R.src)+'</div></div>';
+  }
+  /* 外用薬 › 保湿剤の負担比較を開き、mc-<sub> の位置まで下げる（受付 › 選定療養の「処方の書き方」から 'rx'） */
+  window.moistGo=function(sub){
+    switchTab('topical'); __topical.jump('moistcost');
+    var el=sub && document.getElementById('mc-'+sub); if(!el) return;
+    setTimeout(function(){
+      var hdr=document.querySelector('.hdr'); var off=(hdr?hdr.offsetHeight:0)+10;
+      window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off, behavior:'smooth'});
+    },60);
+  };
   function render(){
     var box=document.getElementById('mc-list'); if(!box) return;
     document.getElementById('mc-asof').textContent='薬価の時点：'+MOIST_COST.asOf('');
@@ -11231,7 +11275,7 @@ function build(){
      ['proactive','プロアクティブ療法','週2回 週2〜3回 土日 維持 再燃 寛解 プロアクティブ リアクティブ'],
      ['pamph','患者パンフ（プロアクティブ）','ザラザラ 印刷 A4 パンフレット 患者説明'],
      ['azelaic','アゼライン酸 判定フロー','AZAクリア セラム ざ瘡 にきび 酒皶 マラセチア 色素沈着 妊娠'],
-     ['moistcost','保湿剤の負担比較（ヒルドイド・後発品・セタフィル）','保湿剤 保湿 負担 費用 自己負担 窓口負担 薬剤料 3割 1割 薬価 ヒルドイド ヘパリン類似物質 後発品 ジェネリック セタフィル 選定療養 長期収載品 特別の料金 先発品 '+(window.MOIST_COST?MOIST_COST.NOTES.join(' '):'')]
+     ['moistcost','保湿剤の負担比較（ヒルドイド・後発品・セタフィル）','保湿剤 保湿 負担 費用 自己負担 窓口負担 薬剤料 3割 1割 薬価 ヒルドイド ヘパリン類似物質 後発品 ジェネリック セタフィル 選定療養 長期収載品 特別の料金 先発品 ヒルドイドフォーム フォーム 泡 スプレー 泡状スプレー 92g 100g 規格 処方の書き方 '+(window.MOIST_COST?MOIST_COST.NOTES.join(' ')+' '+MOIST_COST.RX.items.map(function(it){ return it.t+' '+(it.d||''); }).join(' '):'')]
     ].forEach(function(r){
       add('topical','📑','外用薬 › '+r[1],'',[r[2]],function(){ switchTab('topical'); __topical.jump(r[0]); });
     });
