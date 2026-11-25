@@ -50,7 +50,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-s
 
 /* タブナビ：9タブを 3列×3段 で常時全表示（横スクロールにしない）。
    医師タブ（検査パネル／パッチ／食物アレルギー／バイオ・JAK／新薬・専門薬剤／ビタミン剤。3列×2段）、
-   受付タブ（PDCA帳／加算。2列×1段）、看護師タブ（PDCA帳／エアマットレス。2列×1段）は小タブで切り替える（.staff-sub, TAB_GROUP） */
+   受付タブ（PDCA帳／加算／選定療養。3列×1段）、看護師タブ（PDCA帳／エアマットレス。2列×1段）は小タブで切り替える（.staff-sub, TAB_GROUP） */
 .tab-nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--gd);padding:0 8px;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:6px 2px 4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:0;white-space:nowrap;font-family:inherit;line-height:1.2;}
 .tab-btn .tab-ic{font-size:15px;line-height:1;}
@@ -325,6 +325,25 @@ body.gs-on .gs-results{display:block;}
 #azelaic .aza-talk{background:var(--gl);border:1px dashed var(--g2);border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.75;white-space:pre-wrap;}
 #azelaic .aza-btn{font-family:inherit;font-size:12.5px;padding:8px 15px;border-radius:8px;border:1px solid var(--bd);background:#fff;color:var(--tx2);cursor:pointer;}
 #azelaic .aza-btn.pri{background:var(--g);border-color:var(--g);color:#fff;}
+/* 外用薬 › 保湿剤の負担比較（#moistcost） */
+#moistcost .mc-asof{font-size:12px;color:var(--ink-soft);margin:0 2px 10px;}
+#moistcost .mc-row{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow);}
+#moistcost .mc-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+#moistcost .mc-name{font-size:15px;font-weight:700;line-height:1.4;}
+#moistcost .mc-name small{display:block;font-size:11.5px;font-weight:500;color:var(--ink-soft);margin-top:2px;}
+#moistcost .mc-tag{flex-shrink:0;font-size:11px;font-weight:700;border-radius:7px;padding:2px 8px;white-space:nowrap;border:1px solid var(--line);background:#f4efe4;color:var(--ink-soft);}
+#moistcost .mc-tag.on{background:#fbeeea;border-color:#e2b3a8;color:#9a3a2c;}
+#moistcost .mc-tag.self{background:#eef3ea;border-color:#bcd0b4;color:#3f6b45;}
+#moistcost .mc-tag.mc-unk{background:#fdf0d8;border-color:#e6c98a;color:#7a5a12;}
+#moistcost .mc-why{font-size:12.5px;line-height:1.65;color:#7a5a12;background:#fffaf0;border:1px dashed #e6c98a;border-radius:9px;padding:8px 11px;margin-top:8px;}
+#moistcost .mc-yk{font-size:12.5px;color:var(--ink-soft);margin-top:6px;}
+#moistcost .mc-nums{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+#moistcost .mc-nums.one{grid-template-columns:1fr;}
+#moistcost .mc-nums > div{background:#f0ece4;border-radius:9px;padding:6px 10px;}
+#moistcost .mc-lbl{display:block;font-size:10.5px;font-weight:600;color:var(--ink-soft);}
+#moistcost .mc-v{display:block;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+#moistcost .mc-s{display:block;font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap;}
+#moistcost #mc-links{margin-top:14px;}
 #topguide .block p{margin:7px 0;font-size:14px;}
 #topguide .block ul{margin:7px 0;padding-left:20px;font-size:14px;}
 #topguide .block li{margin:5px 0;}
@@ -720,6 +739,20 @@ body.kbar-on{padding-bottom:76px;}
 #pg-kasan ul{margin:0;padding:0 0 0 1.3em;}
 #pg-kasan li{padding:2px 0;}
 #pg-kasan .ks-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
+#pg-kasan .canon-xref{margin-top:12px;}
+/* ===== 受付 › 選定療養（長期収載品の選定療養） ===== */
+#pg-sentei .st-box{background:var(--card);border:1px solid var(--g2);border-radius:13px;padding:11px 14px;margin-bottom:12px;box-shadow:0 1px 5px rgba(0,0,0,.06);font-size:13.5px;line-height:1.7;color:var(--tx);}
+#pg-sentei .st-box b{color:var(--gd);}
+#pg-sentei .st-h{font-size:12px;font-weight:700;color:var(--g);margin-bottom:5px;}
+#pg-sentei .st-danger{background:#fbeeea;border:2px solid #b6483a;border-radius:13px;padding:11px 14px;margin-bottom:12px;color:#7a2e24;font-size:13.5px;line-height:1.7;}
+#pg-sentei .st-dh{font-size:15px;font-weight:700;color:#b6483a;margin-bottom:6px;}
+#pg-sentei p{margin:0;}
+#pg-sentei p + p{margin-top:6px;}
+#pg-sentei ol,#pg-sentei ul{margin:0;padding:0 0 0 1.4em;}
+#pg-sentei li{padding:3px 0;}
+#pg-sentei li small{display:block;font-size:12px;opacity:.9;}
+#pg-sentei .st-sub{margin-top:8px;padding-top:7px;border-top:1px dashed #e2b3a8;}
+#pg-sentei .st-foot{font-size:11px;line-height:1.7;color:var(--tx3);margin-top:14px;padding:10px 4px 0;border-top:.5px solid var(--bd);}
 /* ===== 年齢・用量 ===== */
 #pg-age{--r-ext:var(--g);--r-ora:#2f4a63;--r-inj:#a87d35;}
 #pg-age .ag-intro{font-size:12px;line-height:1.65;color:var(--tx2);background:var(--card);border:1px solid var(--g2);border-radius:13px;padding:10px 14px;margin-bottom:12px;}
@@ -934,9 +967,10 @@ body.kbar-on{padding-bottom:76px;}
   <button type="button" data-sub="staff" onclick="switchTab('staff')">💉 新薬・専門薬剤</button>
   <button type="button" data-sub="vitamin" onclick="switchTab('vitamin')">🟡 ビタミン剤</button>
 </div>
-<div class="staff-sub two" id="reception-sub" hidden>
+<div class="staff-sub" id="reception-sub" hidden>
   <button type="button" data-sub="reception" onclick="switchTab('reception')">📒 PDCA帳</button>
   <button type="button" data-sub="kasan" onclick="switchTab('kasan')">🧾 加算</button>
+  <button type="button" data-sub="sentei" onclick="switchTab('sentei')">💊 選定療養</button>
 </div>
 <div class="staff-sub nurse" id="nurse-sub" hidden>
   <button type="button" data-sub="pdca" onclick="switchTab('pdca')">📒 PDCA帳</button>
@@ -1997,6 +2031,7 @@ footer .disc{font-size:8.5pt;color:#6a5f4e;margin-top:.5mm}
   <button class="tab" data-tab="site">部位別ガイド</button>
   <button class="tab" data-tab="mix">当院製剤</button>
   <button class="tab" data-tab="azelaic">アゼライン酸</button>
+  <button class="tab" data-tab="moistcost">保湿剤の負担比較</button>
 </nav>
 
 <main>
@@ -2976,6 +3011,21 @@ footer .r{margin-left:auto;letter-spacing:.06em}
         <li><strong>脂漏性皮膚炎・マラセチア</strong>：十味敗毒湯／黄連解毒湯／茵蔯蒿湯</li>
       </ul>
     </div>
+  </section>
+
+  <!-- ===== 保湿剤の負担比較（#topical/moistcost）。データは MOIST_COST（受付 › 加算の KASAN の下）。
+       セタフィルの価格は当院製品 › セタフィル（PRODUCTS の price）から読み込む（ここに書かない）。入力欄は置かない（確定した表） ===== -->
+  <section class="panel" id="moistcost">
+    <div class="sectitle">保湿剤の負担比較</div>
+    <div class="lead">患者さんに保湿剤の費用を聞かれたときに見る表です。<strong>薬剤料のみの概算</strong>で、1gあたりと473gあたりの金額を並べています。</div>
+    <div class="mc-asof" id="mc-asof"></div>
+    <div id="mc-list"></div>
+    <div class="block">
+      <h3>注記</h3>
+      <ul id="mc-notes"></ul>
+    </div>
+    <div id="mc-links"></div>
+    <div class="disclaimer">※ 会計の説明のための概算です。実際の窓口負担は会計全体で計算するため、一致しないことがあります。処方内容の最終判断は医師が行います。</div>
   </section>
 
 </main>
@@ -3973,7 +4023,39 @@ window.PTD_DATA={PRODUCTS:PRODUCTS,A:A,GROUPS:GROUPS};
   <div id="ks-list"></div>
   <div class="ks-sec" id="ks-memo-h">メモ</div>
   <div id="ks-memo"></div>
+  <div class="canon-xref"><span>先発品（長期収載品）を希望されたときの<b>特別の料金</b>は <b>受付 › 選定療養</b> にあります。</span><button type="button" onclick="switchTab('sentei')">開く ›</button></div>
   <div class="ks-foot" id="ks-foot"></div>
+</div>
+
+<!-- 受付 › 選定療養（長期収載品の選定療養。#reception/sentei）。閲覧専用の静的ページ。
+     出典は厚生労働省リーフレット「先発医薬品を希望した場合の自己負担の仕組み～長期収載品の選定療養について～」（令和8年6月から）。
+     【重要】の2つの枠（徴収しない場合／受付が間違えやすいところ）は外さない。受付 › 加算・外用薬 › 保湿剤の負担比較と相互リンク -->
+<div class="page" id="pg-sentei">
+  <div class="st-box">
+    <div class="st-h">制度の要点（長期収載品の選定療養）</div>
+    <p><b>長期収載品</b>（後発品のある先発医薬品）を<b>希望した場合</b>、通常の一部負担金（1〜3割）に加えて<b>「特別の料金」</b>を徴収する。</p>
+    <p>特別の料金は、<b>令和8年6月から</b>、先発品と後発品の<b>価格差の2分の1相当</b>（<b>消費税がかかる</b>）。</p>
+  </div>
+  <div class="st-danger">
+    <div class="st-dh">【重要】特別の料金を徴収しない場合（医療上の必要がある）</div>
+    <ol>
+      <li>長期収載品と後発品で承認された効能・効果に差異があり、その患者の治療に必要な場合</li>
+      <li>後発品で副作用があった、または先発品との間で治療効果に差異があったと判断し、安全性の観点等から必要な場合</li>
+      <li>学会のガイドラインで、長期収載品を使用している患者に後発品へ切り替えないことが推奨されている場合</li>
+      <li>後発品の剤形では飲みにくい、吸湿性により一包化できない等の場合<small>（単に剤形の好みという理由は認められない。この判断は薬剤師が行うこともできる）</small></li>
+    </ol>
+    <p class="st-sub">※ 流通の問題等で後発品の在庫がない場合も徴収不要</p>
+  </div>
+  <div class="st-danger">
+    <div class="st-dh">【重要】受付が間違えやすいところ</div>
+    <ul>
+      <li><b>公費負担医療</b>で一部負担金の助成を受けている患者でも、使用感や味など<b>単なる好み</b>で長期収載品を希望した場合は、<b>特別の料金を徴収する</b></li>
+      <li><b>生活保護</b>を受給している患者には、好みであっても後発品を処方・調剤することになるため、<b>特別の料金を徴収するケースは生じない</b></li>
+    </ul>
+  </div>
+  <div class="canon-xref"><span>保湿剤（ヒルドイド・後発品・セタフィル）の負担の比較は <b>外用薬 › 保湿剤の負担比較</b> にあります。</span><button type="button" onclick="switchTab('topical');__topical.jump('moistcost')">開く ›</button></div>
+  <div class="canon-xref"><span>処置・検査と外来管理加算の点数は <b>受付 › 加算</b> にあります。</span><button type="button" onclick="switchTab('kasan')">開く ›</button></div>
+  <div class="st-foot">出典：厚生労働省リーフレット「先発医薬品を希望した場合の自己負担の仕組み～長期収載品の選定療養について～」（令和8年6月から）。<br>会計の説明・確認用のページです。実際の扱いは最新の通知と医事担当の確認を優先してください。最終判断は医師が行います。</div>
 </div>
 
 <script>
@@ -4116,6 +4198,78 @@ var KASAN = (function(){
     },50);
   };
   render();
+})();
+
+/* ==============================================
+   外用薬 › 保湿剤の負担比較（#topical/moistcost）。閲覧専用（入力欄なし・localStorage に保存しない）
+   ★ 患者さんに費用を聞かれたときに見る表。「おすすめ」「お得」のような言い方は使わない。
+   ★ 薬剤料のみの概算。院長が確定した値をそのまま持つ（3割・1割の 円/g と、BASIS g あたりの円）。
+     セタフィルだけは当院製品 › セタフィル（PRODUCTS の price：{yen, vol, unit, tax}）から読み込んで計算する（二重管理しない）。
+   PRICE_AS_OF：薬価の時点（バイオ・JAKの PRICE_AS_OF と同じ持ち方）。'' は既定。行の id をキーにすると、その行だけ別の時点にできる。
+   ROWS：{id, n, sub, yakka:薬価（円/g）, sentei:true/false（選定療養あり／なし）, r3:[円/g, BASIS gの円], r1:[同], prod:当院製品の id（自費）}
+   直したら DATA_META.topical の「保湿剤の負担比較」の updated を今日の日付にする。
+   ============================================== */
+var MOIST_COST = (function(){
+  var PRICE_AS_OF = {
+    '':'2026年4月改定／選定療養 令和8年6月〜'
+  };
+  var BASIS = 473;
+  var ROWS = [
+    {id:'cetaphil', n:'セタフィル モイスチャライジングローション', sub:'院内販売・自費（表では473mLを473gとして並べています）', prod:'cetaphil'},
+    {id:'generic',  n:'後発品（ヘパリン類似物質）', sub:'油性クリーム・クリーム・ローション・泡', yakka:6.3, sentei:false, r3:[1.89, 894], r1:[0.63, 298]},
+    {id:'hirudoid', n:'ヒルドイド', sub:'ソフト軟膏0.3%・クリーム0.3%・ローション0.3%', yakka:17.7, sentei:true, r3:[9.87, 4669], r1:[7.47, 3533]},
+    /* chk：要確認の行。金額（薬価・3割・1割）は出さず、本文だけを出す。確認できたら chk を消して sentei・r3・r1 を院長の確定値で入れる */
+    {id:'foam',     n:'ヒルドイドフォーム0.3%（泡）', sub:'',
+     chk:'選定療養の対象かどうか未確認。同じ規格の後発品がないため対象外の可能性がある。厚生労働省の対象品目リストで確認すること。確認まで金額は表示しない'},
+    {id:'hirudoid_need', n:'ヒルドイド（医療上の必要あり）', sub:'特別の料金を徴収しない場合（受付 › 選定療養の①〜④）', sentei:false, r3:[5.31, 2512], r1:[1.77, 837]}
+  ];
+  var NOTES = [
+    '薬価は2026年4月改定後。後発品は主要品の6.3円/gで計算（銘柄により異なる場合がある）',
+    '選定療養は令和8年6月から、価格差の2分の1が特別料金（消費税課税）。残りに1〜3割負担',
+    '薬剤料のみの概算。点数の端数処理、診察料・処方箋料・調剤料などは含まない',
+    '子ども医療費助成の対象者は、保険処方の自己負担がさらに小さいかゼロ'
+  ];
+  function asOf(id){ return PRICE_AS_OF.hasOwnProperty(id) ? PRICE_AS_OF[id] : PRICE_AS_OF['']; }
+  /* 当院製品の価格（PRODUCTS の price）。未登録なら null */
+  function prodPrice(id){
+    var p=null; (window.PRODUCTS||[]).forEach(function(x){ if(x.id===id) p=x; });
+    return p && p.price ? p.price : null;
+  }
+  return {PRICE_AS_OF:PRICE_AS_OF, BASIS:BASIS, ROWS:ROWS, NOTES:NOTES, asOf:asOf, prodPrice:prodPrice};
+})();
+
+(function(){
+  function e(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function yen(n){ return Math.round(n).toLocaleString('ja-JP')+'円'; }
+  function perg(n){ return n.toFixed(2)+'円/g'; }
+  function cell(lbl, a){ return '<div><span class="mc-lbl">'+lbl+'</span><span class="mc-v">'+perg(a[0])+'</span><span class="mc-s">'+MOIST_COST.BASIS+'gで '+yen(a[1])+'</span></div>'; }
+  function row(r){
+    var h='<div class="mc-row" id="mc-'+r.id+'"><div class="mc-hd"><div class="mc-name">'+e(r.n)+(r.sub?'<small>'+e(r.sub)+'</small>':'')+'</div>';
+    if(r.prod){
+      h+='<span class="mc-tag self">自費</span></div>';
+      var pr=MOIST_COST.prodPrice(r.prod);
+      if(!pr) return h+'<div class="mc-yk">価格 未登録（当院製品タブで確認）</div></div>';
+      h+='<div class="mc-yk">'+e(pr.vol+pr.unit)+'　'+yen(pr.yen)+'（'+e(pr.tax)+'）・当院製品 › セタフィルの価格</div>';
+      return h+'<div class="mc-nums one">'+cell('1割・3割とも同じ', [pr.yen/pr.vol, pr.yen*MOIST_COST.BASIS/pr.vol])+'</div></div>';
+    }
+    if(r.chk) return h+'<span class="mc-tag mc-unk">⚠ 要確認</span></div><div class="mc-why">'+e(r.chk)+'</div></div>';
+    h+='<span class="mc-tag'+(r.sentei?' on':'')+'">選定療養'+(r.sentei?'あり':'なし')+'</span></div>';
+    if(r.yakka) h+='<div class="mc-yk">薬価 '+r.yakka+'円/g</div>';
+    var own=MOIST_COST.PRICE_AS_OF.hasOwnProperty(r.id);
+    if(own) h+='<div class="mc-yk">薬価の時点：'+e(MOIST_COST.asOf(r.id))+'</div>';
+    return h+'<div class="mc-nums">'+cell('3割', r.r3)+cell('1割', r.r1)+'</div></div>';
+  }
+  function render(){
+    var box=document.getElementById('mc-list'); if(!box) return;
+    document.getElementById('mc-asof').textContent='薬価の時点：'+MOIST_COST.asOf('');
+    box.innerHTML=MOIST_COST.ROWS.map(row).join('');
+    document.getElementById('mc-notes').innerHTML=MOIST_COST.NOTES.map(function(t){ return '<li>'+e(t)+'</li>'; }).join('');
+    document.getElementById('mc-links').innerHTML=
+        '<div class="canon-xref"><span>特別の料金を徴収しない場合・受付が間違えやすいところは <b>受付 › 選定療養</b> にあります。</span><button type="button" onclick="switchTab(\'sentei\')">開く ›</button></div>'
+      + '<div class="canon-xref"><span>セタフィルの内容量・価格は <b>当院製品 › セタフィル</b> にあります。</span><button type="button" onclick="switchTab(\'products\');showProduct(\'cetaphil\')">開く ›</button></div>';
+  }
+  /* PRODUCTS はこの下のスクリプトで定義されるため、読み込み後に描く */
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', render); else render();
 })();
 </script>
 <div class="page" id="pg-pdca">
@@ -4626,6 +4780,7 @@ var CANON_RULES=[
   {k:['銀の薬湯'],                          sec:'products', id:'gin_yaku'},
   {k:['銅の薬湯'],                          sec:'products', id:'do_yaku'},
   {k:['ネイルアクト'],                      sec:'products', id:'nailact'},
+  {k:['セタフィル'],                        sec:'products', id:'cetaphil'},
   /* 保険外用薬（外用薬一覧のカード名で指定） */
   {k:['プロトピック','タクロリムス'],       sec:'topical', name:'プロトピック軟膏'},
   {k:['コレクチム','デルゴシチニブ'],       sec:'topical', name:'コレクチム軟膏'},
@@ -5961,7 +6116,7 @@ var JOGE = (function(){
     {id:'antebate',  g:'seb', n:'アンテベートローション', size:'10g',  per:'頭皮で約2週', lim:'1か月2本・最大6本', note:'寛解したら減量するか、ニゾラールでの維持に切り替える。顔には使わない'},
     {id:'nizoral',   g:'seb', n:'ニゾラールローション',   size:'10g',  per:'頭皮で約2週', lim:'1か月2〜3本・最大6本', note:'維持療法として長期処方可'},
     {id:'myser',     g:'steroid', n:'マイザー軟膏',       size:'―',    per:'範囲による', lim:'1か月50g（広範囲なら100g）', note:'顔・陰部には原則使わない。100gを超える場合は症状詳記を書く'},
-    {id:'hirudoid',  g:'moist', n:'ヒルドイド系',         size:'―',    per:'―', lim:'1回500g（1000gまで可）', note:'皮膚疾患名と部位が必須。美容目的は不可。500gを超える場合は範囲を記載'},
+    {id:'hirudoid',  g:'moist', n:'ヒルドイド系',         size:'―',    per:'―', lim:'1回500g（1000gまで可）', note:'皮膚疾患名と部位が必須。美容目的は不可。500gを超える場合は範囲を記載', xref:'moistcost'},
     {id:'frozin',    g:'alopecia', n:'フロジン外用液',    size:'30mL', per:'2〜4週', lim:'1か月2本・最大6本', note:'適応病名が必須。AGAは保険適用外', chk:'dx'},
     {id:'lulicon',   g:'tinea', n:'ルリコンクリーム',     size:'10g',  per:'両足で2〜3週', lim:'1か月2本・最大6本', note:'真菌検査の記録が必須', chk:'test'},
     {id:'clenafin',  g:'tinea', n:'クレナフィン爪外用液', size:'3.56g', per:'母趾1〜2本で約1か月', lim:'1か月1〜2本・最大4本', note:'確定診断の記録と、治療する爪の数の記載が必須', chk:'test'}
@@ -5995,6 +6150,8 @@ var JOGE = (function(){
     h += '<div class="jg-kv"><div><span class="jg-lbl">規格（1本）</span><span class="v">'+e(d.size)+'</span></div>'
        + '<div><span class="jg-lbl">1本の使用期間の目安</span><span class="v">'+e(d.per)+'</span></div></div>';
     h += '<div class="jg-note"><span class="jg-lbl">注意点</span>'+e(d.note)+'</div>';
+    /* xref:'moistcost' … 外用薬 › 保湿剤の負担比較へのリンク（ヒルドイド系） */
+    if(d.xref === 'moistcost') h += '<div class="canon-xref" style="margin:8px 0 0"><span>患者さんの負担（選定療養・後発品・セタフィルとの比較）は <b>外用薬 › 保湿剤の負担比較</b> にあります。</span><button type="button" onclick="switchTab(\'topical\');__topical.jump(\'moistcost\')">開く ›</button></div>';
     return h + '</div>';
   }
   function render(){
@@ -7188,15 +7345,15 @@ function kensaGo(id, sec){
 //   ★ 各タブのデータ（薬剤・用量・製品・説明文）を直したら、そのタブの updated を必ず今日の日付にする。
 //   updated から STALE_MONTHS か月を超えたタブには「更新なし」の注意が自動で出る。
 // ==============================================
-var APP_VERSION = '3.11';
+var APP_VERSION = '3.12';
 var STALE_MONTHS = 12;
 var DATA_META = {
   guidance: {updated:'2026-11-24', check:'各疾患の最新ガイドライン',
              parts:[{n:'疾患別の生活指導', updated:'2026-11-23'},{n:'抗炎症の食事ガイド', updated:'2026-10-05'},{n:'インターバル速歩', updated:'2026-10-05'},{n:'食べもの早見表（汗で痒くなる方へ）', updated:'2026-11-23'},{n:'1週間の食事とかゆみの記録', updated:'2026-11-24'}]},
-  products: {updated:'2026-11-23', check:'各製品の添付資料・メーカー情報'},
+  products: {updated:'2026-11-25', check:'各製品の添付資料・メーカー情報'},
   staff:    {updated:'2026-11-21', check:'添付文書・最適使用推進ガイドライン'},
-  topical:  {updated:'2026-11-16', check:'添付文書・アトピー性皮膚炎診療ガイドライン',
-             parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-11-04'},{n:'塗り方・塗布量計算・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-16'}]},
+  topical:  {updated:'2026-11-25', check:'添付文書・アトピー性皮膚炎診療ガイドライン・薬価基準と選定療養の制度（保湿剤の負担比較。薬価は毎年4月改定）',
+             parts:[{n:'外用薬一覧・当院製剤・部位別', updated:'2026-11-04'},{n:'塗り方・塗布量計算・プロアクティブ', updated:'2026-11-04'},{n:'アゼライン酸ナビ', updated:'2026-09-07'},{n:'患者パンフ', updated:'2026-11-16'},{n:'保湿剤の負担比較', updated:'2026-11-25'}]},
   vitamin:  {updated:'2026-06-24', check:'添付文書・日本人の食事摂取基準'},
   patch:    {updated:'2026-09-07', check:'日本皮膚アレルギー・接触皮膚炎学会の標準アレルゲン一覧'},
   allergy:  {updated:'2026-07-15', check:'食物アレルギー診療ガイドライン・消費者庁の表示対象品目'},
@@ -7207,6 +7364,7 @@ var DATA_META = {
   biojak:   {updated:'2026-11-21', check:'薬価基準（毎年4月改定）・添付文書・院内採用薬リスト'},
   reception:{updated:'2026-11-19', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。看護師 › PDCA帳と同じ台帳）'},
   kasan:    {updated:'2026-11-16', check:'令和8年度診療報酬点数表・院内の比較表（2026-11-16 作成）・医事／レセコンの扱い'},
+  sentei:   {updated:'2026-11-25', check:'厚生労働省リーフレット「先発医薬品を希望した場合の自己負担の仕組み～長期収載品の選定療養について～」（令和8年6月から）'},
   pdca:     {updated:'2026-11-19', check:'PDCA帳（記録は各端末の localStorage：pdca-cho-v1。受付タブと同じ台帳）'},
   airmat:   {updated:'2026-10-28', check:'モルテン エアマットレスの取扱説明（設定・設置・困ったとき）'}
 };
@@ -8380,6 +8538,30 @@ var PRODUCTS = [
       {n:'関連：医師 › パッチ（硫酸ニッケル）', d:'ステンレス（ニッケル）アレルギーの既往がある患者で、装着の判断が要るとき', go:'patch-nickel'},
     ],
   },
+  /* セタフィル：price（{yen, vol, unit, tax}）は 外用薬 › 保湿剤の負担比較（MOIST_COST）が読み込む正本。価格はここだけに書く。
+     usage・recommend が空の欄は表示しない */
+  {
+    id: 'cetaphil',
+    icon: '🧴',
+    name: 'セタフィル モイスチャライジングローション',
+    sub: '保湿剤（ローション）　473mL\n自費・院内販売',
+    price: {yen:1500, vol:473, unit:'mL', tax:'税込'},
+    tags: ['保湿','自費','院内販売'],
+    kw: 'セタフィル モイスチャライジングローション ローション 保湿剤 保湿 自費 院内販売 負担 費用 ヒルドイド ヘパリン類似物質 後発品 選定療養',
+    features: [
+      'セタフィル モイスチャライジングローション（保湿剤）',
+      '内容量：473mL',
+      '区分：自費・院内販売（保険は使えません）',
+    ],
+    usage: [],
+    recommend: [],
+    points: [
+      '費用を聞かれたときは、外用薬 › 保湿剤の負担比較で、保険で処方する保湿剤（ヘパリン類似物質）と薬剤料を並べて見られる（下のリンク）',
+    ],
+    links: [
+      {n:'関連：外用薬 › 保湿剤の負担比較', d:'セタフィル・後発品・ヒルドイドの1gあたり・473gあたりの負担（薬剤料のみの概算）', go:'moistcost'},
+    ],
+  },
 ];
 
 // ==============================================
@@ -8393,7 +8575,7 @@ var PRODUCTS = [
 //                          （#doctor/staff/<薬剤id> は新薬・専門薬剤の詳細）
 //   #nurse/<小タブ>        看護師タブの小タブ。#nurse/pdca, #nurse/airmat
 //                          旧形式（#kensa/… #staff/… #biojak/… #vitamin/… #allergy/… #patch #pdca #airmat）は routeNorm() が新形式に置き換える
-//   #reception/<小タブ>    受付タブの小タブ。#reception/pdca（PDCA帳。#nurse/pdca と同じ台帳）、#reception/kasan（加算）、#reception/kasan/<項目id>
+//   #reception/<小タブ>    受付タブの小タブ。#reception/pdca（PDCA帳。#nurse/pdca と同じ台帳）、#reception/kasan（加算）、#reception/kasan/<項目id>、#reception/sentei（選定療養）
 //                          PDCA帳（受付）の画面の名前は 'reception' のまま（ハッシュ上の小タブ名だけ SUB_NAME で 'pdca' にする）。旧形式 #reception は #reception/pdca に置き換える
 //   #guidance/result       生活指導の結果（選択内容は保存しないので、リロード時は入力に戻る）
 //   #guidance/diet         生活指導タブ内「抗炎症の食事ガイド」の章
@@ -8496,11 +8678,11 @@ function routeInit(){
 
 var TAB_PAGES = {guidance:'pg-input', products:'pg-products', staff:'pg-staff', topical:'pg-topical',
   vitamin:'pg-vitamin', patch:'pg-patch', allergy:'pg-allergy', findings:'pg-findings', kensa:'pg-kensa', joge:'pg-joge', age:'pg-age', biojak:'pg-biojak',
-  reception:'pg-reception', kasan:'pg-kasan', pdca:'pg-pdca', airmat:'pg-airmat'};
+  reception:'pg-reception', kasan:'pg-kasan', sentei:'pg-sentei', pdca:'pg-pdca', airmat:'pg-airmat'};
 // タブバーに出さず、親タブ（医師＝doctor、受付＝reception、看護師＝nurse）の小タブとして開く画面（switchTab('biojak') 等はそのまま使える）
 // 'staff' は医師タブの小タブ「新薬・専門薬剤」の画面。'reception' は受付タブの小タブ「PDCA帳」の画面
 var TAB_GROUP = {kensa:'doctor', patch:'doctor', allergy:'doctor', biojak:'doctor', staff:'doctor', vitamin:'doctor',
-  reception:'reception', kasan:'reception', pdca:'nurse', airmat:'nurse'};
+  reception:'reception', kasan:'reception', sentei:'reception', pdca:'nurse', airmat:'nurse'};
 // ハッシュ上の小タブ名が画面の名前と違うもの（#reception/pdca → 画面 'reception'。看護師の 'pdca' と同じ台帳）
 var SUB_NAME = {reception:'pdca'};
 // iframe で埋め込んだ画面（高さは fitEmbedFrame で画面下端に合わせる）
@@ -8587,15 +8769,21 @@ function showProduct(id) {
   html += '<div class="prod-section"><div class="prod-section-ttl">✨ 特長・成分</div>';
   p.features.forEach(function(f) { html += '<div class="prod-item">' + esc(f) + '</div>'; });
   html += '</div>';
+  /* price（{yen, vol, unit, tax}）を持つ製品は価格の欄を出す（セタフィル。保湿剤の負担比較もこの値を読む） */
+  if (p.price) html += '<div class="prod-section"><div class="prod-section-ttl">💴 価格</div><div class="prod-item">' + esc(p.price.vol + p.price.unit) + '　' + p.price.yen.toLocaleString('ja-JP') + '円（' + esc(p.price.tax) + '）</div></div>';
   extraSecs(true);
 
-  html += '<div class="prod-section"><div class="prod-section-ttl">📋 使い方</div>';
-  p.usage.forEach(function(u) { html += '<div class="prod-item">' + esc(u) + '</div>'; });
-  html += '</div>';
+  if (p.usage.length) {
+    html += '<div class="prod-section"><div class="prod-section-ttl">📋 使い方</div>';
+    p.usage.forEach(function(u) { html += '<div class="prod-item">' + esc(u) + '</div>'; });
+    html += '</div>';
+  }
 
-  html += '<div class="prod-section"><div class="prod-section-ttl">👤 適している患者さん</div>';
-  p.recommend.forEach(function(r) { html += '<div class="prod-item">' + esc(r) + '</div>'; });
-  html += '</div>';
+  if (p.recommend.length) {
+    html += '<div class="prod-section"><div class="prod-section-ttl">👤 適している患者さん</div>';
+    p.recommend.forEach(function(r) { html += '<div class="prod-item">' + esc(r) + '</div>'; });
+    html += '</div>';
+  }
   extraSecs(false);
 
   html += '<div class="add-box"><div class="add-ttl">💬 スタッフへのポイント</div>';
@@ -8619,9 +8807,11 @@ function showProduct(id) {
 function goBackProd() { routeBack('products'); }
 
 /* 当院製品の links の行き先。patch-nickel：医師 › パッチのアレルゲン一覧を「ニッケル」で絞り込む（iframe が未読込なら読込後に）
-   sweat：生活指導 › 汗で痒くなる方へ 食べもの早見表の章 */
+   sweat：生活指導 › 汗で痒くなる方へ 食べもの早見表の章
+   moistcost：外用薬 › 保湿剤の負担比較 */
 function prodLinkGo(go) {
   if (go === 'sweat') { guideChGo('sweat'); return; }
+  if (go === 'moistcost') { switchTab('topical'); __topical.jump('moistcost'); return; }
   if (go !== 'patch-nickel') return;
   switchTab('patch');
   var f = document.querySelector('#pg-patch iframe');
@@ -9240,7 +9430,8 @@ var drugs=[
    point:"スキンケアの基盤。毎日継続が再燃予防の核。入浴後早めに。剤形は季節・部位で使い分け（夏はローション/フォーム、冬は軟膏/クリーム）。",
    caution:"尿素はびらん・亀裂部にしみる",
    tags:["毎日","土台","プロアクティブの基本"],
-   nurse:["『薬を塗らない日も保湿だけは毎日』を最重要メッセージに。","入浴後すぐ、乾く前に塗ると効果的。","ケチらずたっぷり、を具体量（FTU）で示す。"]}
+   nurse:["『薬を塗らない日も保湿だけは毎日』を最重要メッセージに。","入浴後すぐ、乾く前に塗ると効果的。","ケチらずたっぷり、を具体量（FTU）で示す。"],
+   xref:{go:"moistcost", t:"費用を聞かれたときの比較（ヒルドイド・後発品・セタフィル。選定療養を含む）は <b>外用薬 › 保湿剤の負担比較</b> にあります。"}}
 ];
 
 /* ---------- 当院製剤 ---------- */
@@ -9298,6 +9489,7 @@ function renderDrugs(filter){
     +   (d.caution?'<div class="row"><div class="k">注意</div><div class="v">'+rr(d.caution)+'</div></div>':'')
     +   '<div class="tags">'+d.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join("")+'</div>'
     +   '<div class="nursebox"><div class="nh">患者説明ポイント</div><ul>'+d.nurse.map(function(n){return '<li>'+n+'</li>';}).join("")+'</ul></div>'
+    +   (d.xref?'<div class="canon-xref" style="margin-top:10px"><span>'+d.xref.t+'</span><button type="button" onclick="__topical.jump(\''+d.xref.go+'\')">開く ›</button></div>':'')
     +   (window.ageXref?ageXref('topical', d.name):'')
     + '</div>'
     +'</div>';
@@ -9431,6 +9623,8 @@ tabs.forEach(function(t){
     t.classList.add("active");
     document.getElementById(t.dataset.tab).classList.add("active");
     document.getElementById("searchwrap").style.display=(t.dataset.tab==="drugs")?"block":"none";
+    /* 小タブの並びは横スクロール。右端の小タブ（保湿剤の負担比較など）を開いたときも、選んだ小タブが見えるように寄せる */
+    var nv=t.parentNode; nv.scrollLeft+=t.getBoundingClientRect().left-nv.getBoundingClientRect().left-16;
     window.scrollTo(0,0);
     if(window.routeSet) routeSet("topical/"+t.dataset.tab);
   };
@@ -10977,10 +11171,10 @@ if(!input||!box) return;
 
 var INDEX=null;          // [{sec, icon, title, sub, raw, hay, go}]
 var MAX_PER_SEC=15;
-var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch','kasan','reception','pdca','airmat'];
+var SEC_ORDER=['topical','joge','staff','age','biojak','kensa','products','vitamin','guidance','findings','allergy','patch','kasan','sentei','reception','pdca','airmat'];
 var SEC_LABEL={topical:'外用薬', joge:'処方上限', staff:'医師 › 新薬・専門薬剤', age:'年齢・用量', biojak:'医師 › バイオ・JAK', kensa:'医師 › 検査パネル', products:'当院製品', vitamin:'医師 › ビタミン剤（内服）',
   guidance:'生活指導', findings:'所見別ナビ', allergy:'医師 › 食物アレルギー', patch:'医師 › パッチテスト',
-  kasan:'受付 › 加算', reception:'受付 › PDCA帳', pdca:'看護師 › PDCA帳', airmat:'看護師 › エアマットレス'};
+  kasan:'受付 › 加算', sentei:'受付 › 選定療養', reception:'受付 › PDCA帳', pdca:'看護師 › PDCA帳', airmat:'看護師 › エアマットレス'};
 
 /* ひらがな→カタカナ・全角→半角・小文字化して比較する。
    1文字→1文字の変換に限定し、元文字列と長さを揃える（ハイライト位置計算のため） */
@@ -11036,7 +11230,8 @@ function build(){
      ['calc','塗布量 計算','FTU フィンガーチップユニット 口径 1円玉 ローション フォーム チューブ 全身 小児 処方量 g 本数 日数 部位 計算'],
      ['proactive','プロアクティブ療法','週2回 週2〜3回 土日 維持 再燃 寛解 プロアクティブ リアクティブ'],
      ['pamph','患者パンフ（プロアクティブ）','ザラザラ 印刷 A4 パンフレット 患者説明'],
-     ['azelaic','アゼライン酸 判定フロー','AZAクリア セラム ざ瘡 にきび 酒皶 マラセチア 色素沈着 妊娠']
+     ['azelaic','アゼライン酸 判定フロー','AZAクリア セラム ざ瘡 にきび 酒皶 マラセチア 色素沈着 妊娠'],
+     ['moistcost','保湿剤の負担比較（ヒルドイド・後発品・セタフィル）','保湿剤 保湿 負担 費用 自己負担 窓口負担 薬剤料 3割 1割 薬価 ヒルドイド ヘパリン類似物質 後発品 ジェネリック セタフィル 選定療養 長期収載品 特別の料金 先発品 '+(window.MOIST_COST?MOIST_COST.NOTES.join(' '):'')]
     ].forEach(function(r){
       add('topical','📑','外用薬 › '+r[1],'',[r[2]],function(){ switchTab('topical'); __topical.jump(r[0]); });
     });
@@ -11175,6 +11370,11 @@ function build(){
           function(){ switchTab('kasan'); kasanGo(it.id); });
     });
   }
+  /* 受付 › 選定療養（静的ページ。本文はページの文字から読む） */
+  var stPg=document.getElementById('pg-sentei');
+  add('sentei','💊','長期収載品の選定療養（特別の料金）','受付 › 選定療養。徴収しない場合・受付が間違えやすいところ',
+      ['選定療養 長期収載品 特別の料金 後発品 先発品 先発医薬品 ジェネリック 一部負担金 価格差 2分の1 消費税 公費 生活保護 医療上の必要 在庫 ヒルドイド', stPg?stPg.textContent:''],
+      function(){ switchTab('sentei'); });
   add('pdca','📒','PDCA帳（看護師）','受付タブと同じ台帳',pdcaHay,function(){ switchTab('pdca'); });
   /* エアマットレス（静的ページ。概要1件＋見出しごとに引けるようにする。本文はページの文字から読む） */
   add('airmat','🛏','エアマットレス 設定ガイド','往診先で設定を確認（動作切替×身体保持モード）',
